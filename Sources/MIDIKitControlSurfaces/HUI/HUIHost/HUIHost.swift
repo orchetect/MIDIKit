@@ -26,22 +26,18 @@ internal import MIDIKitInternals
 @Observable public final class HUIHost: Sendable {
     /// HUI banks that are configured for this HUI host instance.
     public internal(set) var banks: [HUIHostBank] {
-        get { accessQueue.sync { _banks } }
-        set { accessQueue.sync { _banks = newValue } }
+        get { _banks.wrappedValue }
+        _modify { yield &_banks.wrappedValue }
+        set { _banks.wrappedValue = newValue }
     }
-
-    private nonisolated(unsafe) var _banks: [HUIHostBank] = []
+    private let _banks: ThreadSynchronizedPThreadMutex<[HUIHostBank]> = .init(wrappedValue: [])
     
     /// A HUI host transmits a ping message every 1 second to each of the remote surfaces that are
     /// configured to connect to it. So each bank will receive pings individually. HUI surfaces
     /// should respond with a ping-reply after each ping so that the host can maintain connection
     /// presence.
-    @ObservationIgnored
-    nonisolated(unsafe)
+    @ObservationIgnored nonisolated(unsafe)
     var pingTimer: SafeDispatchTimer!
-    
-    @ObservationIgnored
-    let accessQueue = DispatchQueue(label: "HUIHost", target: .global())
     
     // MARK: - Init
     

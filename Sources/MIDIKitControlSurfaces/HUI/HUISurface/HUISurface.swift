@@ -78,18 +78,15 @@ internal import MIDIKitInternals
         set { _remotePresenceTimer.value = newValue }
     }
 
-    @ObservationIgnored
-    private nonisolated(unsafe) var _remotePresenceTimer = PThreadMutexValue<Task<Void, any Error>?>(nil)
+    @ObservationIgnored nonisolated(unsafe)
+    private var _remotePresenceTimer = PThreadMutexValue<Task<Void, any Error>?>(nil)
     
     func restartRemotePresenceTimer() {
         remotePresenceTimer?.cancel()
         remotePresenceTimer = Task { [weak self] in
             while let self, !Task.isCancelled {
                 try await Task.sleep(for: .seconds(remotePresenceTimeout))
-                // make changes on main actor in case it results in UI updates
-                Task { @MainActor in
-                    self.isRemotePresent = false
-                }
+                setIsRemotePresent(false)
             }
         }
     }
@@ -101,27 +98,28 @@ internal import MIDIKitInternals
     /// Ping timeout can be set to a custom value by setting the ``remotePresenceTimeout`` property.
     ///
     /// This property is observable with Combine/SwiftUI and can trigger UI updates upon changes.
-    public internal(set) var isRemotePresent: Bool {
-        get { _isRemotePresent.value }
-        _modify { yield &_isRemotePresent.value }
-        set { _isRemotePresent.value = newValue }
+    @MainActor
+    public internal(set) var isRemotePresent: Bool = false
+    
+    func setIsRemotePresent(_ newValue: Bool) {
+        Task { @MainActor in isRemotePresent = newValue }
     }
-
-    private nonisolated(unsafe) var _isRemotePresent = PThreadMutexValue(false)
     
     private func receivedPing() {
-        restartRemotePresenceTimer()
-        
-        let oldValue = isRemotePresent
-        // note that we want to make observable property changes on main, but this method
-        // is only ever called from the main actor so we don't need to push it to main here
-        isRemotePresent = true
-        if !oldValue {
-            remotePresenceChangedHandler?(true)
+        Task {
+            restartRemotePresenceTimer()
+            
+            let oldValue = await isRemotePresent
+            // note that we want to make observable property changes on main, but this method
+            // is only ever called from the main actor so we don't need to push it to main here
+            setIsRemotePresent(true)
+            if !oldValue {
+                remotePresenceChangedHandler?(true)
+            }
+            
+            // send ping-reply if ping request is received
+            transmitPing()
         }
-        
-        // send ping-reply if ping request is received
-        transmitPing()
     }
     
     // MARK: - Init

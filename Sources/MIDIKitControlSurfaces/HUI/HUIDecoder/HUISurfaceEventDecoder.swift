@@ -13,8 +13,8 @@ public final class HUISurfaceEventDecoder: HUIDecoder, Sendable {
     
     public typealias Event = HUISurfaceEvent
     
-    public nonisolated(unsafe)
-    var eventHandler: EventHandler?
+    nonisolated(unsafe)
+    public var eventHandler: EventHandler?
     
     public init() {
         decoder = HUICoreDecoder(role: .surface) { [weak self] coreEvent in

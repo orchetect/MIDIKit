@@ -13,9 +13,9 @@ public final class HUIHostEventDecoder: HUIDecoder {
     
     public typealias Event = HUIHostEvent
     
-    public nonisolated(unsafe)
-    var eventHandler: EventHandler?
-    
+    nonisolated(unsafe)
+    public var eventHandler: EventHandler?
+
     public init() {
         decoder = HUICoreDecoder(role: .host) { [weak self] coreEvent in
             let huiEvent = Event(from: coreEvent)
