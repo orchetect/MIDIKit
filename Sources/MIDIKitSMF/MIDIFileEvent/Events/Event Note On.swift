@@ -65,40 +65,45 @@ extension MIDIFileEvent {
 extension MIDIEvent.NoteOn: MIDIFileEventPayload {
     public static let smfEventType: MIDIFileEventType = .noteOn
     
-    public init(midi1SMFRawBytes rawBytes: some DataProtocol) throws {
+    public init(midi1SMFRawBytes rawBytes: some DataProtocol) throws(MIDIFile.DecodeError) {
         guard rawBytes.count == Self.midi1SMFFixedRawBytesLength else {
-            throw MIDIFile.DecodeError.malformed(
+            throw .malformed(
                 "Invalid number of bytes. Expected \(Self.midi1SMFFixedRawBytesLength) but got \(rawBytes.count)"
             )
         }
         
         let (
             readStatus, readChannel, readNoteNum, readVelocity
-        ) = try rawBytes.withDataReader { dataReader -> (UInt8, UInt8, UInt8, UInt8) in
-            let byte0 = try dataReader.readByte()
-            
-            return try (
-                readStatus: (byte0 & 0xF0) >> 4,
-                readChannel: byte0 & 0x0F,
-                readNoteNum: dataReader.readByte(),
-                readPressure: dataReader.readByte()
-            )
+        ) = try rawBytes.withDataReader { dataReader throws(MIDIFile.DecodeError) -> (UInt8, UInt8, UInt8, UInt8) in
+            do {
+                let byte0 = try dataReader.readByte()
+                let noteNum = try dataReader.readByte()
+                let velocity = try dataReader.readByte()
+                return (
+                    readStatus: (byte0 & 0xF0) >> 4,
+                    readChannel: byte0 & 0x0F,
+                    readNoteNum: noteNum,
+                    readVelocity: velocity
+                )
+            } catch {
+                throw .malformed("Not enough bytes.")
+            }
         }
         
         guard readStatus == 0x9 else {
-            throw MIDIFile.DecodeError.malformed(
+            throw .malformed(
                 "Invalid status nibble: \(readStatus.hexString(padTo: 1, prefix: true))."
             )
         }
         
         guard (0 ... 127).contains(readNoteNum) else {
-            throw MIDIFile.DecodeError.malformed(
+            throw .malformed(
                 "Note number is out of bounds: \(readNoteNum)"
             )
         }
         
         guard (0 ... 127).contains(readVelocity) else {
-            throw MIDIFile.DecodeError.malformed(
+            throw .malformed(
                 "Note velocity is out of bounds: \(readVelocity)"
             )
         }
@@ -107,7 +112,7 @@ extension MIDIEvent.NoteOn: MIDIFileEventPayload {
               let noteNum = readNoteNum.toUInt7Exactly,
               let velocity = readVelocity.toUInt7Exactly
         else {
-            throw MIDIFile.DecodeError.malformed(
+            throw .malformed(
                 "Value(s) out of bounds."
             )
         }
@@ -118,7 +123,7 @@ extension MIDIEvent.NoteOn: MIDIFileEventPayload {
             channel: channel
         )
         guard case let .noteOn(unwrapped) = newEvent else {
-            throw MIDIFile.DecodeError.malformed(
+            throw .malformed(
                 "Could not unwrap enum case."
             )
         }
@@ -136,13 +141,11 @@ extension MIDIEvent.NoteOn: MIDIFileEventPayload {
     
     public static func initFrom(
         midi1SMFRawBytesStream stream: some DataProtocol
-    ) throws -> StreamDecodeResult {
+    ) throws(MIDIFile.DecodeError) -> StreamDecodeResult {
         let requiredData = stream.prefix(midi1SMFFixedRawBytesLength)
         
         guard requiredData.count == midi1SMFFixedRawBytesLength else {
-            throw MIDIFile.DecodeError.malformed(
-                "Unexpected byte length."
-            )
+            throw .malformed("Unexpected byte length.")
         }
         
         let newInstance = try Self(midi1SMFRawBytes: requiredData)

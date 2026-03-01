@@ -32,13 +32,14 @@ extension MIDIFileEvent {
         delta: DeltaTime = .none,
         manufacturer: MIDIEvent.SysExManufacturer,
         data: [UInt8]
-    ) throws -> Self {
-        try .sysEx7(
+    ) throws(MIDIEvent.ParseError) -> Self {
+        let event: SysEx7 = try .init(
+            manufacturer: manufacturer,
+            data: data
+        )
+        return .sysEx7(
             delta: delta,
-            event: .init(
-                manufacturer: manufacturer,
-                data: data
-            )
+            event: event
         )
     }
     
@@ -49,12 +50,13 @@ extension MIDIFileEvent {
         manufacturer: MIDIEvent.SysExManufacturer,
         data: [UInt7]
     ) -> Self {
-        .sysEx7(
+        let event: SysEx7 = .init(
+            manufacturer: manufacturer,
+            data: data
+        )
+        return .sysEx7(
             delta: delta,
-            event: .init(
-                manufacturer: manufacturer,
-                data: data
-            )
+            event: event
         )
     }
 }
@@ -64,16 +66,16 @@ extension MIDIFileEvent {
 extension MIDIEvent.SysEx7: MIDIFileEventPayload {
     public static let smfEventType: MIDIFileEventType = .sysEx7
     
-    public init(midi1SMFRawBytes rawBytes: some DataProtocol) throws {
-        let parsedSysEx = try MIDIEvent.sysEx7(midi1SMFRawBytes: rawBytes)
+    public init(midi1SMFRawBytes rawBytes: some DataProtocol) throws(MIDIFile.DecodeError) {
+        let parsedEvent = try MIDIEvent.sysEx7(midi1SMFRawBytes: rawBytes)
         
-        switch parsedSysEx {
+        switch parsedEvent {
         case let .sysEx7(sysEx):
             self = sysEx
         case .universalSysEx7:
-            throw MIDIEvent.ParseError.invalidType
+            throw .malformed("Invalid SysEx type. Expected SysEx7 and found Universal SysEx7.")
         default:
-            throw MIDIEvent.ParseError.invalidType
+            throw .malformed("Invalid data. Expected Universal SysEx7 data and parsed \(parsedEvent) instead.")
         }
     }
     
@@ -94,11 +96,9 @@ extension MIDIEvent.SysEx7: MIDIFileEventPayload {
     
     public static func initFrom(
         midi1SMFRawBytesStream stream: some DataProtocol
-    ) throws -> StreamDecodeResult {
+    ) throws(MIDIFile.DecodeError) -> StreamDecodeResult {
         guard stream.count >= 3 else {
-            throw MIDIFile.DecodeError.malformed(
-                "Byte length too short."
-            )
+            throw .malformed("Byte length too short.")
         }
         
         let newInstance = try Self(midi1SMFRawBytes: stream)
@@ -163,16 +163,17 @@ extension MIDIFileEvent {
         subID1: UInt7,
         subID2: UInt7,
         data: [UInt8]
-    ) throws -> Self {
-        try .universalSysEx7(
+    ) throws(MIDIEvent.ParseError) -> Self {
+        let event: UniversalSysEx7 = try .init(
+            universalType: universalType,
+            deviceID: deviceID,
+            subID1: subID1,
+            subID2: subID2,
+            data: data
+        )
+        return .universalSysEx7(
             delta: delta,
-            event: .init(
-                universalType: universalType,
-                deviceID: deviceID,
-                subID1: subID1,
-                subID2: subID2,
-                data: data
-            )
+            event: event
         )
     }
     
@@ -193,15 +194,16 @@ extension MIDIFileEvent {
         subID2: UInt7,
         data: [UInt7]
     ) -> Self {
-        .universalSysEx7(
+        let event: UniversalSysEx7 = .init(
+            universalType: universalType,
+            deviceID: deviceID,
+            subID1: subID1,
+            subID2: subID2,
+            data: data
+        )
+        return .universalSysEx7(
             delta: delta,
-            event: .init(
-                universalType: universalType,
-                deviceID: deviceID,
-                subID1: subID1,
-                subID2: subID2,
-                data: data
-            )
+            event: event
         )
     }
 }
@@ -211,17 +213,17 @@ extension MIDIFileEvent {
 extension MIDIEvent.UniversalSysEx7: MIDIFileEventPayload {
     public static let smfEventType: MIDIFileEventType = .universalSysEx7
     
-    public init(midi1SMFRawBytes rawBytes: some DataProtocol) throws {
+    public init(midi1SMFRawBytes rawBytes: some DataProtocol) throws(MIDIFile.DecodeError) {
         let rawBytesArray = [UInt8](rawBytes)
-        let parsedSysEx = try MIDIEvent.sysEx7(midi1SMFRawBytes: rawBytesArray)
+        let parsedEvent = try MIDIEvent.sysEx7(midi1SMFRawBytes: rawBytesArray)
         
-        switch parsedSysEx {
-        case .sysEx7:
-            throw MIDIEvent.ParseError.invalidType
+        switch parsedEvent {
         case let .universalSysEx7(universalSysEx):
             self = universalSysEx
+        case .sysEx7:
+            throw .malformed("Invalid SysEx type. Expected Universal SysEx7 and found SysEx7.")
         default:
-            throw MIDIEvent.ParseError.invalidType
+            throw .malformed("Invalid data. Expected Universal SysEx7 data and parsed \(parsedEvent) instead.")
         }
     }
     
@@ -239,11 +241,9 @@ extension MIDIEvent.UniversalSysEx7: MIDIFileEventPayload {
     
     public static func initFrom(
         midi1SMFRawBytesStream stream: some DataProtocol
-    ) throws -> StreamDecodeResult {
+    ) throws(MIDIFile.DecodeError) -> StreamDecodeResult {
         guard stream.count >= 3 else {
-            throw MIDIFile.DecodeError.malformed(
-                "Byte length too short."
-            )
+            throw .malformed("Byte length too short.")
         }
         
         let newInstance = try Self(midi1SMFRawBytes: stream)
@@ -278,54 +278,62 @@ extension MIDIEvent {
     static func sysEx7(
         midi1SMFRawBytes rawBytes: some DataProtocol,
         group: UInt4 = 0
-    ) throws -> Self {
+    ) throws(MIDIFile.DecodeError) -> Self {
         guard rawBytes.count >= 3 else {
-            throw MIDIFile.DecodeError.malformed(
-                "Not enough bytes."
-            )
+            throw .malformed("Not enough bytes.")
         }
         
-        return try rawBytes.withDataReader { dataReader in
+        return try rawBytes.withDataReader { dataReader throws(MIDIFile.DecodeError) in
             // 1-byte preamble
             guard (try? dataReader.readByte()) == 0xF0 else {
-                throw MIDIFile.DecodeError.malformed(
+                throw .malformed(
                     "Event is not a SysEx event."
                 )
             }
             
             let readAheadCount = dataReader.remainingByteCount.clamped(to: 1 ... 4)
-            guard let length = try MIDIFile
-                .decodeVariableLengthValue(from: dataReader.nonAdvancingRead(bytes: readAheadCount))
+            let lengthBytes = try dataReader.toMIDIFileDecodeError(
+                malformedReason: "Could not extract variable length.",
+                try dataReader.nonAdvancingRead(bytes: readAheadCount)
+            )
+            guard let length = MIDIFile.decodeVariableLengthValue(from: lengthBytes)
             else {
-                throw MIDIFile.DecodeError.malformed(
+                throw .malformed(
                     "Could not extract variable length."
                 )
             }
             dataReader.advanceBy(length.byteLength)
             
             guard dataReader.remainingByteCount >= length.value else {
-                throw MIDIFile.DecodeError.malformed(
+                throw .malformed(
                     "Fewer bytes are available (\(rawBytes.count)) than are expected (\(length.value))."
                 )
             }
             
-            let sysExBodySlice = try dataReader.read(bytes: length.value)
+            let sysExBodySlice = try dataReader.toMIDIFileDecodeError(
+                malformedReason: "SysEx data was empty when attempting to read termination byte.",
+                try dataReader.read(bytes: length.value)
+            )
             
             guard let lastByte = sysExBodySlice.last else {
-                throw MIDIFile.DecodeError.malformed(
+                throw .malformed(
                     "SysEx data was empty when attempting to read termination byte."
                 )
             }
             
             guard lastByte == 0xF7 else {
-                throw MIDIFile.DecodeError.malformed(
+                throw .malformed(
                     "Expected SysEx termination byte 0xF7 but found \(lastByte.hexString(padTo: 2, prefix: true)) instead."
                 )
             }
             
             let sysExFullSlice = [0xF0] + sysExBodySlice
             
-            return try MIDIEvent.sysEx7(rawBytes: sysExFullSlice)
+            do throws(MIDIEvent.ParseError) {
+                return try MIDIEvent.sysEx7(rawBytes: sysExFullSlice)
+            } catch {
+                throw .malformed(error.localizedDescription)
+            }
         }
     }
 }

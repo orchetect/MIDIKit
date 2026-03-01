@@ -46,7 +46,7 @@ extension MIDIFileEvent {
 extension MIDIEvent.NRPN: MIDIFileEventPayload {
     public static let smfEventType: MIDIFileEventType = .nrpn
     
-    public init(midi1SMFRawBytes rawBytes: some DataProtocol) throws {
+    public init(midi1SMFRawBytes rawBytes: some DataProtocol) throws(MIDIFile.DecodeError) {
         let newEvent = try Self.initFrom(midi1SMFRawBytesStream: rawBytes)
         self = newEvent.newEvent
     }
@@ -57,7 +57,7 @@ extension MIDIEvent.NRPN: MIDIFileEventPayload {
     
     public static func initFrom(
         midi1SMFRawBytesStream stream: some DataProtocol
-    ) throws -> StreamDecodeResult {
+    ) throws(MIDIFile.DecodeError) -> StreamDecodeResult {
         let result = try MIDIParameterNumberUtils.initFrom(
             midi1SMFRawBytesStream: stream,
             expectedType: .assignable

@@ -97,44 +97,46 @@ extension MIDIFile.Chunk {
 
 extension MIDIFile.Chunk.Track {
     /// Init from MIDI file data stream.
-    public init<D: MutableDataProtocol>(midi1SMFRawBytesStream stream: D) throws
+    public init<D: MutableDataProtocol>(midi1SMFRawBytesStream stream: D) throws(MIDIFile.DecodeError)
         where D.SubSequence: MutableDataProtocol
     {
         guard stream.count >= 8 else {
-            throw MIDIFile.DecodeError.malformed(
+            throw .malformed(
                 "There was a problem reading chunk header. Encountered end of file early."
             )
         }
         
         // track header
         
-        let remainingData: D.SubSequence = try stream.withDataReader { dataReader in
-            let chunkTypeString = try dataReader.read(bytes: 4)
-                .asciiDataToString() ?? "????"
+        let remainingData: D.SubSequence = try stream.withDataReader { dataReader throws(MIDIFile.DecodeError) in
+            let chunkTypeString = try dataReader.toMIDIFileDecodeError(
+                malformedReason: "Missing chunk type bytes.",
+                try dataReader.read(bytes: 4).asciiDataToString() ?? "????"
+            )
         
             guard let chunkLengthInt32 = (try? dataReader.read(bytes: 4))?
                 .data.toUInt32(from: .bigEndian)
             else {
-                throw MIDIFile.DecodeError.malformed(
+                throw .malformed(
                     "There was a problem reading chunk length."
                 )
             }
             let chunkLength = Int(chunkLengthInt32)
             
             guard chunkTypeString == Self.staticIdentifier else {
-                throw MIDIFile.DecodeError.malformed(
+                throw .malformed(
                     "Chunk header does not contain track header identifier. Found \(chunkTypeString.quoted) instead."
                 )
             }
         
             guard dataReader.remainingByteCount >= chunkLength else {
-                throw MIDIFile.DecodeError.malformed(
+                throw .malformed(
                     "There was a problem reading track data blob. Encountered end of data early."
                 )
             }
             
             guard let readChunk = try? dataReader.read(bytes: chunkLength) else {
-                throw MIDIFile.DecodeError.malformed(
+                throw .malformed(
                     "There was a problem reading track data blob. Encountered end of data early."
                 )
             }
@@ -145,10 +147,10 @@ extension MIDIFile.Chunk.Track {
     }
     
     /// Init from raw data stream, excluding the header identifier and length.
-    init<D: MutableDataProtocol>(midi1SMFRawBytes rawData: D) throws {
+    init<D: MutableDataProtocol>(midi1SMFRawBytes rawData: D) throws(MIDIFile.DecodeError) {
         // chunk data
         
-        try rawData.withDataReader { dataReader in
+        try rawData.withDataReader { dataReader throws(MIDIFile.DecodeError) in
             // events
         
             var eventsCounted = 0
@@ -161,20 +163,18 @@ extension MIDIFile.Chunk.Track {
         
             while !endOfChunk {
                 eventsCounted += 1
-            
+                
                 // delta time
-            
-                guard let eventDeltaTimeRead = try? dataReader.nonAdvancingRead(bytes: 4)
-                else {
-                    throw MIDIFile.DecodeError.malformed(
-                        "Encountered end of file early."
-                    )
-                }
-            
+                
+                let eventDeltaTimeRead = try dataReader.toMIDIFileDecodeError(
+                    malformedReason: "Encountered end of file early.",
+                    try dataReader.nonAdvancingRead(bytes: 4)
+                )
+                
                 guard let eventDeltaTime = MIDIFile
                     .decodeVariableLengthValue(from: eventDeltaTimeRead)
                 else {
-                    throw MIDIFile.DecodeError.malformed(
+                    throw .malformed(
                         "Delta time variable length value could not be read and may be malformed."
                     )
                 }
@@ -185,12 +185,10 @@ extension MIDIFile.Chunk.Track {
                 
                 // TODO: an effort to improve performance when reading large MIDI files, but parser needs to be rewritten to vastly improve efficiency
                 let readAheadCount = dataReader.remainingByteCount.clamped(to: 1 ... 512)
-                guard var readBuffer = try? dataReader.nonAdvancingRead(bytes: readAheadCount)
-                else {
-                    throw MIDIFile.DecodeError.malformed(
-                        "Encountered end of file early."
-                    )
-                }
+                var readBuffer = try dataReader.toMIDIFileDecodeError(
+                    malformedReason: "Encountered end of file early.",
+                    try dataReader.nonAdvancingRead(bytes: readAheadCount)
+                )
             
                 // first check for end of track
             
@@ -281,7 +279,7 @@ extension MIDIFile.Chunk.Track {
                         }
                         .hexString(padEachTo: 2, prefixes: true)
                 
-                    throw MIDIFile.DecodeError.malformed(
+                    throw .malformed(
                         "Unexpected data encountered before end of track at track data byte offset \(byteOffsetString) (\(sampleBytes) ...)."
                     )
                 }
@@ -295,7 +293,7 @@ extension MIDIFile.Chunk.Track {
 extension MIDIFile.Chunk.Track {
     func midi1SMFRawBytes<D: MutableDataProtocol>(
         using timeBase: MIDIFile.TimeBase
-    ) throws -> D {
+    ) throws(MIDIFile.EncodeError) -> D {
         // assemble chunk body without header or length
         
         var bodyData = D()
@@ -322,7 +320,7 @@ extension MIDIFile.Chunk.Track {
         } else {
             // track length overflows max length integer size
             // maximum track data size is 4.294967296 GB (UInt32.max bytes)
-            throw MIDIFile.EncodeError.internalInconsistency(
+            throw .internalInconsistency(
                 "Chunk length overflowed maximum size."
             )
         }

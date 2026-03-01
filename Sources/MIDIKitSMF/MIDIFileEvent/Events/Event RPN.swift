@@ -46,7 +46,7 @@ extension MIDIFileEvent {
 extension MIDIEvent.RPN: MIDIFileEventPayload {
     public static let smfEventType: MIDIFileEventType = .rpn
     
-    public init(midi1SMFRawBytes rawBytes: some DataProtocol) throws {
+    public init(midi1SMFRawBytes rawBytes: some DataProtocol) throws(MIDIFile.DecodeError) {
         let newEvent = try Self.initFrom(midi1SMFRawBytesStream: rawBytes)
         self = newEvent.newEvent
     }
@@ -57,7 +57,7 @@ extension MIDIEvent.RPN: MIDIFileEventPayload {
     
     public static func initFrom(
         midi1SMFRawBytesStream stream: some DataProtocol
-    ) throws -> StreamDecodeResult {
+    ) throws(MIDIFile.DecodeError) -> StreamDecodeResult {
         let result = try MIDIParameterNumberUtils.initFrom(
             midi1SMFRawBytesStream: stream,
             expectedType: .registered
@@ -86,14 +86,14 @@ extension MIDIParameterNumberUtils {
     public static func initFrom(
         midi1SMFRawBytesStream stream: some DataProtocol,
         expectedType: MIDIParameterNumberType
-    ) throws -> (
+    ) throws(MIDIFile.DecodeError) -> (
         param: UInt7Pair,
         dataMSB: UInt7,
         dataLSB: UInt7?,
         channel: UInt4,
         byteLength: Int
     ) {
-        try stream.withDataReader { dataReader in
+        try stream.withDataReader { dataReader throws(MIDIFile.DecodeError) in
             var runningStatus: UInt8?
             
             func runningStatusChannel() -> UInt4? {
@@ -107,13 +107,11 @@ extension MIDIParameterNumberUtils {
                 return nextByte < 0x80
             }
             
-            func readValue(for cc: MIDIEvent.CC.Controller) throws -> MIDIFileEvent.CC.StreamDecodeResult {
-                let prefixBytes: [UInt8] = try {
+            func readValue(for cc: MIDIEvent.CC.Controller) throws(MIDIFile.DecodeError) -> MIDIFileEvent.CC.StreamDecodeResult {
+                let prefixBytes: [UInt8] = try { () throws(MIDIFile.DecodeError) in
                     if needsRunningStatus() {
                         guard let runningStatus else {
-                            throw MIDIFile.DecodeError.malformed(
-                                "Missing running status byte."
-                            )
+                            throw .malformed("Missing running status byte.")
                         }
                         return [runningStatus]
                     } else {
@@ -130,14 +128,14 @@ extension MIDIParameterNumberUtils {
                             )
                     )
                 } catch {
-                    throw MIDIFile.DecodeError.malformed(
+                    throw .malformed(
                         "Expected CC message with controller number \(cc.number). \(error.localizedDescription)"
                     )
                 }
                 
                 guard result.newEvent.controller == cc
                 else {
-                    throw MIDIFile.DecodeError.malformed(
+                    throw .malformed(
                         "Expected CC message with controller number \(cc.number) but found controller number \(result.newEvent.controller.number) instead."
                     )
                 }
@@ -145,7 +143,7 @@ extension MIDIParameterNumberUtils {
                 if let runningStatus {
                     // only allow continuing if running status doesn't change
                     guard runningStatus.nibbles.low == result.newEvent.channel else {
-                        throw MIDIFile.DecodeError.malformed(
+                        throw .malformed(
                             "CC message has different channel number."
                         )
                     }
@@ -188,7 +186,7 @@ extension MIDIParameterNumberUtils {
             
             guard let channel = runningStatusChannel() else {
                 // this shouldn't happen, but we need to handle it any way
-                throw MIDIFile.DecodeError.malformed(
+                throw .malformed(
                     "Channel could not be determined."
                 )
             }

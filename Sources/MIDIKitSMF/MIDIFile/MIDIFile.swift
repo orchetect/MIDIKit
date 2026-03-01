@@ -70,32 +70,34 @@ public struct MIDIFile {
     }
     
     /// Initialize by loading the contents of a MIDI file's raw data.
-    public init(rawData: Data) throws {
+    public init(rawData: Data) throws(DecodeError) {
         try decode(rawData: rawData)
     }
     
     /// Initialize by loading the contents of a MIDI file from disk.
-    public init(midiFile path: String) throws {
+    public init(midiFile path: String) throws(DecodeError) {
         guard FileManager.sendableDefault.fileExists(atPath: path) else {
-            throw DecodeError.fileNotFound
+            throw .fileNotFound
         }
         
         guard let url = URL(string: path) else {
-            throw DecodeError.malformedURL
+            throw .malformedURL
         }
         
         try self.init(midiFile: url)
     }
     
     /// Initialize by loading the contents of a MIDI file from disk.
-    public init(midiFile url: URL) throws {
-        let data = try Data(contentsOf: url)
+    public init(midiFile url: URL) throws(DecodeError) {
+        let data: Data
+        do { data = try Data(contentsOf: url) }
+        catch { throw .fileReadError }
         
         try decode(rawData: data)
     }
     
     /// Returns raw MIDI file data. Throws an error if a problem occurs.
-    public func rawData() throws -> Data {
+    public func rawData() throws(EncodeError) -> Data {
         try encode()
     }
 }

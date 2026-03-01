@@ -55,28 +55,34 @@ extension MIDIFileEvent {
 extension MIDIEvent.ProgramChange: MIDIFileEventPayload {
     public static let smfEventType: MIDIFileEventType = .programChange
     
-    public init(midi1SMFRawBytes rawBytes: some DataProtocol) throws {
+    public init(midi1SMFRawBytes rawBytes: some DataProtocol) throws(MIDIFile.DecodeError) {
         guard rawBytes.count == Self.midi1SMFFixedRawBytesLength else {
-            throw MIDIFile.DecodeError.malformed(
+            throw .malformed(
                 "Invalid number of bytes. Expected \(Self.midi1SMFFixedRawBytesLength) but got \(rawBytes.count)"
             )
         }
         
-        self = try rawBytes.withDataReader { dataReader in
-            let byte0 = try dataReader.readByte()
+        self = try rawBytes.withDataReader { dataReader throws(MIDIFile.DecodeError) in
+            let byte0 = try dataReader.toMIDIFileDecodeError(
+                malformedReason: "Status byte is missing.",
+                try dataReader.readByte()
+            )
             let readStatus = (byte0 & 0xF0) >> 4
             let readChannel = byte0 & 0x0F
             
-            let readProgramNumber = try dataReader.readByte()
+            let readProgramNumber = try dataReader.toMIDIFileDecodeError(
+                malformedReason: "Program number byte is missing.",
+                try dataReader.readByte()
+            )
         
             guard readStatus == 0xC else {
-                throw MIDIFile.DecodeError.malformed(
+                throw .malformed(
                     "Invalid status nibble: \(readStatus.hexString(padTo: 1, prefix: true))."
                 )
             }
         
             guard (0 ... 127).contains(readProgramNumber) else {
-                throw MIDIFile.DecodeError.malformed(
+                throw .malformed(
                     "Program Change program number is out of bounds: \(readProgramNumber)"
                 )
             }
@@ -84,7 +90,7 @@ extension MIDIEvent.ProgramChange: MIDIFileEventPayload {
             guard let channel = readChannel.toUInt4Exactly,
                   let programNumber = readProgramNumber.toUInt7Exactly
             else {
-                throw MIDIFile.DecodeError.malformed(
+                throw .malformed(
                     "Value(s) out of bounds."
                 )
             }
@@ -97,7 +103,7 @@ extension MIDIEvent.ProgramChange: MIDIFileEventPayload {
             )
             
             guard case let .programChange(unwrapped) = newEvent else {
-                throw MIDIFile.DecodeError.malformed(
+                throw .malformed(
                     "Could not unwrap enum case."
                 )
             }
@@ -116,13 +122,11 @@ extension MIDIEvent.ProgramChange: MIDIFileEventPayload {
     
     public static func initFrom(
         midi1SMFRawBytesStream stream: some DataProtocol
-    ) throws -> StreamDecodeResult {
+    ) throws(MIDIFile.DecodeError) -> StreamDecodeResult {
         let requiredData = stream.prefix(midi1SMFFixedRawBytesLength)
         
         guard requiredData.count == midi1SMFFixedRawBytesLength else {
-            throw MIDIFile.DecodeError.malformed(
-                "Unexpected byte length."
-            )
+            throw .malformed("Unexpected byte length.")
         }
         
         let newInstance = try Self(midi1SMFRawBytes: requiredData)

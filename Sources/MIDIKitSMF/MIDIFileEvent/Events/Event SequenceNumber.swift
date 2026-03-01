@@ -77,33 +77,32 @@ extension MIDIFileEvent {
 extension MIDIFileEvent.SequenceNumber: MIDIFileEventPayload {
     public static let smfEventType: MIDIFileEventType = .sequenceNumber
     
-    public init(midi1SMFRawBytes rawBytes: some DataProtocol) throws {
+    public init(midi1SMFRawBytes rawBytes: some DataProtocol) throws(MIDIFile.DecodeError) {
         guard rawBytes.count == Self.midi1SMFFixedRawBytesLength else {
-            throw MIDIFile.DecodeError.malformed(
+            throw .malformed(
                 "Invalid number of bytes. Expected \(Self.midi1SMFFixedRawBytesLength) but got \(rawBytes.count)"
             )
         }
         
-        try rawBytes.withDataReader { dataReader in
+        try rawBytes.withDataReader { dataReader throws(MIDIFile.DecodeError) in
             // 3-byte preamble
-            guard try dataReader.read(bytes: 3).elementsEqual(
-                MIDIFile.kEventHeaders[Self.smfEventType]!
-            ) else {
-                throw MIDIFile.DecodeError.malformed(
-                    "Event does not start with expected bytes."
-                )
+            let header = MIDIFile.kEventHeaders[Self.smfEventType]!
+            guard let headerBytes = try? dataReader.read(bytes: header.count),
+                  headerBytes.elementsEqual(header)
+            else {
+                throw .malformed("Event does not start with expected bytes.")
             }
         
             guard let readSequenceNumber = (try? dataReader.read(bytes: 2))?
                 .data.toUInt16(from: .bigEndian)
             else {
-                throw MIDIFile.DecodeError.malformed(
+                throw .malformed(
                     "Could not read sequence number as integer."
                 )
             }
         
             guard (0x0 ... 0x7FFF).contains(readSequenceNumber) else {
-                throw MIDIFile.DecodeError.malformed(
+                throw .malformed(
                     "Sequence number is out of bounds: \(readSequenceNumber)"
                 )
             }
@@ -123,13 +122,11 @@ extension MIDIFileEvent.SequenceNumber: MIDIFileEventPayload {
     
     public static func initFrom(
         midi1SMFRawBytesStream stream: some DataProtocol
-    ) throws -> StreamDecodeResult {
+    ) throws(MIDIFile.DecodeError) -> StreamDecodeResult {
         let requiredData = stream.prefix(midi1SMFFixedRawBytesLength)
         
         guard requiredData.count == midi1SMFFixedRawBytesLength else {
-            throw MIDIFile.DecodeError.malformed(
-                "Unexpected byte length."
-            )
+            throw .malformed("Unexpected byte length.")
         }
         
         let newInstance = try Self(midi1SMFRawBytes: requiredData)

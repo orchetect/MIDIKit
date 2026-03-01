@@ -75,39 +75,37 @@ extension MIDIFileEvent {
 extension MIDIFileEvent.ChannelPrefix: MIDIFileEventPayload {
     public static let smfEventType: MIDIFileEventType = .channelPrefix
     
-    public init(midi1SMFRawBytes rawBytes: some DataProtocol) throws {
+    public init(midi1SMFRawBytes rawBytes: some DataProtocol) throws(MIDIFile.DecodeError) {
         guard rawBytes.count == Self.midi1SMFFixedRawBytesLength else {
-            throw MIDIFile.DecodeError.malformed(
+            throw .malformed(
                 "Invalid number of bytes. Expected \(Self.midi1SMFFixedRawBytesLength) but got \(rawBytes.count)"
             )
         }
         
-        let readChannel: UInt8 = try rawBytes.withDataReader { dataReader in
+        try rawBytes.withDataReader { dataReader throws(MIDIFile.DecodeError) in
             // 3-byte preamble
-            guard try dataReader.read(bytes: 3).elementsEqual(
-                MIDIFile.kEventHeaders[Self.smfEventType]!
-            ) else {
-                throw MIDIFile.DecodeError.malformed(
-                    "Event does not start with expected bytes."
-                )
+            let header = MIDIFile.kEventHeaders[Self.smfEventType]!
+            guard let headerBytes = try? dataReader.read(bytes: header.count),
+                  headerBytes.elementsEqual(header)
+            else {
+                throw .malformed("Event does not start with expected bytes.")
             }
             
-            return try dataReader.readByte()
-        }
-        
-        guard (0x0 ... 0xF).contains(readChannel) else {
-            throw MIDIFile.DecodeError.malformed(
-                "Channel number is out of bounds: \(readChannel)"
+            let readChannel: UInt8 = try dataReader.toMIDIFileDecodeError(
+                malformedReason: "Missing channel byte.",
+                try dataReader.readByte()
             )
+            
+            guard (0x0 ... 0xF).contains(readChannel) else {
+                throw .malformed("Channel number is out of bounds: \(readChannel)")
+            }
+            
+            guard let channel = readChannel.toUInt4Exactly else {
+                throw .malformed("Value(s) out of bounds.")
+            }
+            
+            self.channel = channel
         }
-        
-        guard let channel = readChannel.toUInt4Exactly else {
-            throw MIDIFile.DecodeError.malformed(
-                "Value(s) out of bounds."
-            )
-        }
-        
-        self.channel = channel
     }
     
     public func midi1SMFRawBytes<D: MutableDataProtocol>() -> D {
@@ -121,13 +119,11 @@ extension MIDIFileEvent.ChannelPrefix: MIDIFileEventPayload {
 
     public static func initFrom(
         midi1SMFRawBytesStream stream: some DataProtocol
-    ) throws -> StreamDecodeResult {
+    ) throws(MIDIFile.DecodeError) -> StreamDecodeResult {
         let requiredData = stream.prefix(midi1SMFFixedRawBytesLength)
 
         guard requiredData.count == midi1SMFFixedRawBytesLength else {
-            throw MIDIFile.DecodeError.malformed(
-                "Unexpected byte length."
-            )
+            throw .malformed("Unexpected byte length.")
         }
 
         let newInstance = try Self(midi1SMFRawBytes: requiredData)

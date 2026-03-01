@@ -135,7 +135,7 @@ extension MIDIFileEvent {
 extension MIDIFileEvent.Text: MIDIFileEventPayload {
     public static let smfEventType: MIDIFileEventType = .text
     
-    public init(midi1SMFRawBytes rawBytes: some DataProtocol) throws {
+    public init(midi1SMFRawBytes rawBytes: some DataProtocol) throws(MIDIFile.DecodeError) {
         let result = try Self.initFrom(stream: rawBytes).newEvent
         
         textType = result.textType
@@ -156,47 +156,54 @@ extension MIDIFileEvent.Text: MIDIFileEventPayload {
 
     public static func initFrom(
         midi1SMFRawBytesStream stream: some DataProtocol
-    ) throws -> StreamDecodeResult {
+    ) throws(MIDIFile.DecodeError) -> StreamDecodeResult {
         try initFrom(stream: stream)
     }
 
     static func initFrom(
         stream rawBytes: some DataProtocol
-    ) throws -> StreamDecodeResult {
+    ) throws(MIDIFile.DecodeError) -> StreamDecodeResult {
         guard rawBytes.count >= 3 else {
-            throw MIDIFile.DecodeError.malformed(
-                "Not enough bytes."
-            )
+            throw .malformed("Not enough bytes.")
         }
         
-        return try rawBytes.withDataReader { dataReader in
+        return try rawBytes.withDataReader { dataReader throws(MIDIFile.DecodeError) in
             // 2-byte preambles
-            let headerBytes = try dataReader.read(bytes: 2)
+            let headerBytes = try dataReader.toMIDIFileDecodeError(
+                malformedReason: "Missing event header bytes.",
+                try dataReader.read(bytes: 2)
+            )
             guard let textTypeMatch = MIDIFile.kTextEventHeaders
                 .first(where: { headerBytes.elementsEqual($0.value) })
             else {
-                throw MIDIFile.DecodeError.malformed(
+                throw .malformed(
                     "Event is not a textual event."
                 )
             }
             
             let readAheadCount = dataReader.remainingByteCount.clamped(to: 1 ... 4)
-            let bodyBytes = try dataReader.nonAdvancingRead(bytes: readAheadCount)
+            let bodyBytes = try dataReader.toMIDIFileDecodeError(
+                malformedReason: "Could not extract variable length.",
+                try dataReader.nonAdvancingRead(bytes: readAheadCount)
+            )
             guard let length = MIDIFile.decodeVariableLengthValue(from: bodyBytes)
             else {
-                throw MIDIFile.DecodeError.malformed(
+                throw .malformed(
                     "Could not extract variable length."
                 )
             }
             dataReader.advanceBy(length.byteLength)
             
             guard dataReader.remainingByteCount >= length.value else {
-                throw MIDIFile.DecodeError.malformed(
+                throw .malformed(
                     "Fewer bytes are available (\(dataReader.remainingByteCount)) than are expected (\(length.value))."
                 )
             }
             
-            let byteSlice = try dataReader.read(bytes: length.value)
+            let byteSlice = try dataReader.toMIDIFileDecodeError(
+                malformedReason: "Not enough bytes.",
+                try dataReader.read(bytes: length.value)
+            )
             
             let formedText = byteSlice.asciiDataToStringLossy() // .removing(.newlines)
             

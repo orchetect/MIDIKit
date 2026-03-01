@@ -57,34 +57,43 @@ extension MIDIFileEvent {
 extension MIDIEvent.PitchBend: MIDIFileEventPayload {
     public static let smfEventType: MIDIFileEventType = .pitchBend
     
-    public init(midi1SMFRawBytes rawBytes: some DataProtocol) throws {
+    public init(midi1SMFRawBytes rawBytes: some DataProtocol) throws(MIDIFile.DecodeError) {
         guard rawBytes.count == Self.midi1SMFFixedRawBytesLength else {
-            throw MIDIFile.DecodeError.malformed(
+            throw .malformed(
                 "Invalid number of bytes. Expected \(Self.midi1SMFFixedRawBytesLength) but got \(rawBytes.count)"
             )
         }
         
-        self = try rawBytes.withDataReader { dataReader in
-            let byte0 = try dataReader.readByte()
+        self = try rawBytes.withDataReader { dataReader throws(MIDIFile.DecodeError) in
+            let byte0 = try dataReader.toMIDIFileDecodeError(
+                malformedReason: "Status byte is missing.",
+                try dataReader.readByte()
+            )
             let readStatus = (byte0 & 0xF0) >> 4
             let readChannel = byte0 & 0x0F
         
             guard readStatus == 0xE else {
-                throw MIDIFile.DecodeError.malformed(
+                throw .malformed(
                     "Invalid status nibble: \(readStatus.hexString(padTo: 1, prefix: true))."
                 )
             }
             
-            let byte1 = try dataReader.readByte()
+            let byte1 = try dataReader.toMIDIFileDecodeError(
+                malformedReason: "Pitch Bend LSB byte is missing.",
+                try dataReader.readByte()
+            )
             guard let lsb = byte1.toUInt7Exactly else {
-                throw MIDIFile.DecodeError.malformed(
+                throw .malformed(
                     "Pitch Bend LSB is out of bounds: \(byte1.hexString(padTo: 2, prefix: true))"
                 )
             }
             
-            let byte2 = try dataReader.readByte()
+            let byte2 = try dataReader.toMIDIFileDecodeError(
+                malformedReason: "Pitch Bend MSB byte is missing.",
+                try dataReader.readByte()
+            )
             guard let msb = byte2.toUInt7Exactly else {
-                throw MIDIFile.DecodeError.malformed(
+                throw .malformed(
                     "Pitch Bend MSB is out of bounds: \(byte2.hexString(padTo: 2, prefix: true))"
                 )
             }
@@ -92,7 +101,7 @@ extension MIDIEvent.PitchBend: MIDIFileEventPayload {
             let value = UInt7Pair(msb: msb, lsb: lsb).uInt14Value
         
             guard let channel = readChannel.toUInt4Exactly else {
-                throw MIDIFile.DecodeError.malformed(
+                throw .malformed(
                     "Value(s) out of bounds."
                 )
             }
@@ -103,7 +112,7 @@ extension MIDIEvent.PitchBend: MIDIFileEventPayload {
             )
             
             guard case let .pitchBend(unwrapped) = newEvent else {
-                throw MIDIFile.DecodeError.malformed(
+                throw .malformed(
                     "Could not unwrap enum case."
                 )
             }
@@ -122,13 +131,11 @@ extension MIDIEvent.PitchBend: MIDIFileEventPayload {
     
     public static func initFrom(
         midi1SMFRawBytesStream stream: some DataProtocol
-    ) throws -> StreamDecodeResult {
+    ) throws(MIDIFile.DecodeError) -> StreamDecodeResult {
         let requiredData = stream.prefix(midi1SMFFixedRawBytesLength)
         
         guard requiredData.count == midi1SMFFixedRawBytesLength else {
-            throw MIDIFile.DecodeError.malformed(
-                "Unexpected byte length."
-            )
+            throw .malformed("Unexpected byte length.")
         }
         
         let newInstance = try Self(midi1SMFRawBytes: requiredData)

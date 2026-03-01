@@ -9,11 +9,11 @@ import MIDIKitCore
 internal import MIDIKitInternals
 
 extension MIDIFile {
-    mutating func decode(rawData data: Data) throws {
+    mutating func decode(rawData data: Data) throws(DecodeError) {
         // basic checks
 
         guard !data.isEmpty else {
-            throw DecodeError.malformed(
+            throw .malformed(
                 "MIDI data is empty / contains no bytes."
             )
         }
@@ -25,13 +25,13 @@ extension MIDIFile {
 
         // begin parse
         
-        try data.withDataReader { dataReader in
+        try data.withDataReader { dataReader throws(DecodeError) in
             // ____ Header ____
 
             guard let readHeader = try? dataReader
                 .read(bytes: Chunk.Header.midi1SMFFixedRawBytesLength)
             else {
-                throw MIDIFile.DecodeError.malformed(
+                throw .malformed(
                     "Header is not correct. File may not be a MIDI file."
                 )
             }
@@ -49,7 +49,7 @@ extension MIDIFile {
                 // chunk header
 
                 guard let chunkType = try? dataReader.read(bytes: 4) else {
-                    throw DecodeError.malformed(
+                    throw .malformed(
                         "There was a problem reading chunk header at byte offset \(dataReader.readOffset). Encountered end of file early."
                     )
                 }
@@ -57,20 +57,20 @@ extension MIDIFile {
                 guard let chunkLength = (try? dataReader.read(bytes: 4))?
                     .toUInt32(from: .bigEndian)
                 else {
-                    throw DecodeError.malformed(
+                    throw .malformed(
                         "There was a problem reading chunk length at byte offset \(dataReader.readOffset). Encountered end of file early."
                     )
                 }
 
                 let chunkTypeString = chunkType.asciiDataToString() ?? "????"
             
-                try autoreleasepool {
+                try autoreleasepool { () throws(DecodeError) -> Void in
                     let newChunk: Chunk
                     
                     // chunk length
                     
                     guard let chunkData = try? dataReader.read(bytes: Int(chunkLength)) else {
-                        throw DecodeError.malformed(
+                        throw .malformed(
                             "There was a problem reading track data blob at byte offset \(dataReader.readOffset) for track \(tracksEncountered). Encountered end of file early."
                         )
                     }
@@ -94,14 +94,15 @@ extension MIDIFile {
                         // append some context for the error and rethrow it
                         switch error {
                         case let .malformed(verboseError):
-                            throw DecodeError.malformed(
-                                "There was a problem reading track data at byte offset \(dataReader.readOffset) for track \(tracksEncountered). " +
-                                    verboseError
+                            throw .malformed(
+                                "There was a problem reading track data at byte offset \(dataReader.readOffset) for track \(tracksEncountered). \(verboseError)"
                             )
                             
                         default:
                             throw error
                         }
+                    } catch {
+                        throw .malformed(error.localizedDescription)
                     }
                     
                     newChunks.append(newChunk)

@@ -14,7 +14,7 @@ public protocol MIDIFileEventPayload where Self: Sendable {
     
     /// Initialize from raw event bytes.
     /// Returns nil if data is malformed or cannot otherwise be used to construct the event.
-    init<D: DataProtocol>(midi1SMFRawBytes rawBytes: D) throws
+    init<D: DataProtocol>(midi1SMFRawBytes rawBytes: D) throws(MIDIFile.DecodeError)
     
     /// Raw data for the event.
     func midi1SMFRawBytes<D: MutableDataProtocol>() -> D
@@ -27,7 +27,7 @@ public protocol MIDIFileEventPayload where Self: Sendable {
     /// stream.
     static func initFrom(
         midi1SMFRawBytesStream stream: some DataProtocol
-    ) throws -> StreamDecodeResult
+    ) throws(MIDIFile.DecodeError) -> StreamDecodeResult
     
     /// Description for the event in a MIDI file context.
     var smfDescription: String { get }

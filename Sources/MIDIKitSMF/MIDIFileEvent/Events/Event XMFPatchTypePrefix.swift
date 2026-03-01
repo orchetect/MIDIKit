@@ -96,39 +96,43 @@ extension MIDIFileEvent {
 extension MIDIFileEvent.XMFPatchTypePrefix: MIDIFileEventPayload {
     public static let smfEventType: MIDIFileEventType = .xmfPatchTypePrefix
     
-    public init(midi1SMFRawBytes rawBytes: some DataProtocol) throws {
+    public init(midi1SMFRawBytes rawBytes: some DataProtocol) throws(MIDIFile.DecodeError) {
         guard rawBytes.count == Self.midi1SMFFixedRawBytesLength else {
-            throw MIDIFile.DecodeError.malformed(
+            throw .malformed(
                 "Invalid number of bytes. Expected \(Self.midi1SMFFixedRawBytesLength) but got \(rawBytes.count)"
             )
         }
         
-        try rawBytes.withDataReader { dataReader in
+        try rawBytes.withDataReader { dataReader throws(MIDIFile.DecodeError) in
             // 2-byte preamble
-            guard try dataReader.read(bytes: 2).elementsEqual(
-                MIDIFile.kEventHeaders[Self.smfEventType]!
-            ) else {
-                throw MIDIFile.DecodeError.malformed(
-                    "Event does not start with expected bytes."
-                )
+            let header = MIDIFile.kEventHeaders[Self.smfEventType]!
+            guard let headerBytes = try? dataReader.read(bytes: header.count),
+                  headerBytes.elementsEqual(header)
+            else {
+                throw .malformed("Event does not start with expected bytes.")
             }
-           
-            let readLength = try dataReader.readByte()
-        
+            
+            let readLength = try dataReader.toMIDIFileDecodeError(
+                malformedReason: "Param length byte is missing.",
+                try dataReader.readByte()
+            )
             guard readLength == 1 else {
-                throw MIDIFile.DecodeError.malformed(
+                throw .malformed(
                     "Param length should always be 1."
                 )
             }
-        
-            let readParam = try dataReader.readByte()
-        
+            
+            let readParam = try dataReader.toMIDIFileDecodeError(
+                malformedReason: "Param value byte is missing.",
+                try dataReader.readByte()
+            )
+            
             guard let selectParam = PatchSet(rawValue: readParam) else {
-                throw MIDIFile.DecodeError.malformed(
+                throw .malformed(
                     "Encountered unexpected param value: \(readParam). Param should be 0, 1 or 2."
                 )
             }
-        
+            
             patchSet = selectParam
         }
     }
@@ -144,13 +148,11 @@ extension MIDIFileEvent.XMFPatchTypePrefix: MIDIFileEventPayload {
     
     public static func initFrom(
         midi1SMFRawBytesStream stream: some DataProtocol
-    ) throws -> StreamDecodeResult {
+    ) throws(MIDIFile.DecodeError) -> StreamDecodeResult {
         let requiredData = stream.prefix(midi1SMFFixedRawBytesLength)
         
         guard requiredData.count == midi1SMFFixedRawBytesLength else {
-            throw MIDIFile.DecodeError.malformed(
-                "Unexpected byte length."
-            )
+            throw .malformed("Unexpected byte length.")
         }
         
         let newInstance = try Self(midi1SMFRawBytes: requiredData)
