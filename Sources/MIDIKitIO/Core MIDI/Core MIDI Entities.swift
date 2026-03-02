@@ -10,18 +10,19 @@ import Foundation
 internal import CoreMIDI
 
 /// Internal:
-/// List of MIDI entities in the system (computed property)
+/// Return the owning device of the entity.
 func getSystemDevice(
     for entity: CoreMIDI.MIDIEntityRef
 ) throws(MIDIIOError) -> MIDIDevice? {
-    var dev = MIDIDeviceRef()
+    let refPtr: UnsafeMutablePointer<MIDIDeviceRef>? = nil
     
-    try MIDIEntityGetDevice(entity, &dev)
+    try MIDIEntityGetDevice(entity, refPtr)
         .throwIfOSStatusErr()
     
-    guard dev != MIDIDeviceRef() else { return nil }
+    guard let refPtr else { return nil }
+    guard refPtr.pointee != MIDIDeviceRef() else { return nil }
     
-    return MIDIDevice(from: dev)
+    return MIDIDevice(from: refPtr.pointee)
 }
     
 /// Internal:
