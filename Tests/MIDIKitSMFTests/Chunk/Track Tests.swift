@@ -156,4 +156,56 @@ import Testing
         #expect(eventsAtBeatPositions[9].beat == 5.5) // cc
         #expect(eventsAtBeatPositions[10].beat == 5.625) // cc
     }
+    
+    /// Regression test: Test authoring and parsing a Standard MIDI File with very large events.
+    @Test(
+        .bug(
+            "https://github.com/orchetect/MIDIKit/issues/268",
+            "Read-ahead buffer truncates large meta/sequencer-specific events"
+        )
+    )
+    func largeEvents() async throws {
+        // text event
+        let textCharCount = Int.random(in: 10000 ... 20000)
+        let textString: String = String(
+            (0 ..< textCharCount)
+                .map { _ in "ABCDEFabcdef1234567890-_ ".randomElement()! }
+        )
+        #expect(textString.count == textCharCount)
+        let textEventPayload: MIDIFileEvent.Text = .init(text: textString)
+        let textEvent: MIDIFileEvent = .text(delta: .none, event: textEventPayload)
+        
+        // sequencer-specific event
+        let seqSpecificByteCount = Int.random(in: 10000 ... 20000)
+        let seqSpecificData: [UInt8] = (0 ..< seqSpecificByteCount)
+            .map { _ in UInt8.random(in: UInt8.min ... UInt8.max) }
+        #expect(seqSpecificData.count == seqSpecificByteCount)
+        let seqSpecificEventPayload: MIDIFileEvent.SequencerSpecific = .init(data: seqSpecificData)
+        let seqSpecificEvent: MIDIFileEvent = .sequencerSpecific(delta: .none, event: seqSpecificEventPayload)
+        
+        // author MIDI file
+        let events: [MIDIFileEvent] = [textEvent, seqSpecificEvent]
+        let track = MIDIFile.Chunk.Track(events: events)
+        let midiFile = MIDIFile(format: .singleTrack, timeBase: .musical(ticksPerQuarterNote: 480), chunks: [.track(track)])
+        
+        // encode and decode
+        let midiFileData = try midiFile.rawData()
+        let decodedMIDIFile = try MIDIFile(rawData: midiFileData)
+        
+        // compare events
+        let decodedTrack = try #require(decodedMIDIFile.tracks.first)
+        try #require(decodedTrack.events.count == 2)
+        
+        // extract events
+        let decodedTextEventPayload: MIDIFileEvent.Text = try #require(
+            decodedTrack.events[0].smfUnwrappedEvent.event as? MIDIFileEvent.Text
+        )
+        let decodedSeqSpecificEventPayload: MIDIFileEvent.SequencerSpecific = try #require(
+            decodedTrack.events[1].smfUnwrappedEvent.event as? MIDIFileEvent.SequencerSpecific
+        )
+        
+        // compare events
+        #expect(decodedTextEventPayload == textEventPayload)
+        #expect(decodedSeqSpecificEventPayload == seqSpecificEventPayload)
+    }
 }
