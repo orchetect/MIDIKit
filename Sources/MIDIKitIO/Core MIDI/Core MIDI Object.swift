@@ -8,27 +8,25 @@
 
 internal import CoreMIDI
 
+// TODO: This method works, but is not currently being used.
+
 /// Internal:
 /// Retrieves the object type for the given Core MIDI unique ID.
 /// Returns nil if no object exists with the given ID.
-func getSystemObjectType( // TODO: convert to throwing method instead of Optional
+func getSystemObjectType(
     of uniqueID: CoreMIDI.MIDIUniqueID
-) -> CoreMIDI.MIDIObjectType? {
+) throws(MIDIIOError) -> CoreMIDI.MIDIObjectType {
     var obj: CoreMIDI.MIDIObjectRef = .init()
     var objType: CoreMIDI.MIDIObjectType = .other
     
-    do throws(MIDIIOError) {
-        try MIDIObjectFindByUniqueID(
-            uniqueID,
-            &obj,
-            &objType
-        )
-        .throwIfOSStatusErr()
-        
-        return objType
-    } catch {
-        return nil
-    }
+    try MIDIObjectFindByUniqueID(
+        uniqueID,
+        &obj,
+        &objType
+    )
+    .throwIfOSStatusErr()
+    
+    return objType
 }
 
 #endif
