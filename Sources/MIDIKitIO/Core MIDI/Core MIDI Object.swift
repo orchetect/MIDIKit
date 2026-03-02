@@ -14,7 +14,7 @@ internal import CoreMIDI
 /// Retrieves the object type for the given Core MIDI unique ID.
 /// Returns nil if no object exists with the given ID.
 func getSystemObjectType(
-    of uniqueID: CoreMIDI.MIDIUniqueID
+    ofUniqueID uniqueID: CoreMIDI.MIDIUniqueID
 ) throws(MIDIIOError) -> CoreMIDI.MIDIObjectType {
     var obj: CoreMIDI.MIDIObjectRef = .init()
     var objType: CoreMIDI.MIDIObjectType = .other
