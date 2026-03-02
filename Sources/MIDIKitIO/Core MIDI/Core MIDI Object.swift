@@ -12,19 +12,23 @@ internal import CoreMIDI
 
 /// Internal:
 /// Retrieves the object type for the given Core MIDI unique ID.
-/// Returns nil if no object exists with the given ID.
 func getSystemObjectType(
     ofUniqueID uniqueID: CoreMIDI.MIDIUniqueID
 ) throws(MIDIIOError) -> CoreMIDI.MIDIObjectType {
-    var obj: CoreMIDI.MIDIObjectRef = .init()
-    var objType: CoreMIDI.MIDIObjectType = .other
+    let objPtr: UnsafeMutablePointer<MIDIObjectRef>? = nil
+    let objTypePtr: UnsafeMutablePointer<MIDIObjectType>? = nil
     
     try MIDIObjectFindByUniqueID(
         uniqueID,
-        &obj,
-        &objType
+        objPtr,
+        objTypePtr
     )
     .throwIfOSStatusErr()
+    
+    // discard the object ref, as we don't need it - we only care about the object type.
+    
+    guard let objTypePtr else { throw .osStatus(.objectNotFound) }
+    let objType = objTypePtr.pointee
     
     return objType
 }
