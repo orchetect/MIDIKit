@@ -130,19 +130,16 @@ func getSystemDestinationEndpoint(
 /// Returns a ``MIDIEntity`` instance of the endpoint's owning entity.
 func getSystemEntity(
     forEndpoint endpointRef: MIDIEndpointRef
-) throws(MIDIIOError) -> MIDIEntity {
-    var ent = MIDIEntityRef()
+) throws(MIDIIOError) -> MIDIEntity? {
+    let refPtr: UnsafeMutablePointer<MIDIEntityRef>? = nil
     
-    try MIDIEndpointGetEntity(endpointRef, &ent)
+    try MIDIEndpointGetEntity(endpointRef, refPtr)
         .throwIfOSStatusErr()
     
-    guard ent != MIDIEntityRef() else {
-        throw .internalInconsistency(
-            "Error getting entity ID for endpoint ref \(endpointRef)"
-        )
-    }
+    guard let refPtr else { return nil }
+    guard refPtr.pointee != MIDIEntityRef() else { return nil }
     
-    return MIDIEntity(from: ent)
+    return MIDIEntity(from: refPtr.pointee)
 }
 
 /// Internal:
