@@ -183,11 +183,9 @@ extension MIDIFile.Chunk.Track {
                 
                 // event
                 
-                // TODO: an effort to improve performance when reading large MIDI files, but parser needs to be rewritten to vastly improve efficiency
-                let readAheadCount = dataReader.remainingByteCount.clamped(to: 1 ... 512)
                 var readBuffer = try dataReader.toMIDIFileDecodeError(
                     malformedReason: "Encountered end of file early.",
-                    try dataReader.nonAdvancingRead(bytes: readAheadCount)
+                    try dataReader.nonAdvancingRead()
                 )
             
                 // first check for end of track
