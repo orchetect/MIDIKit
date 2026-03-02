@@ -27,7 +27,7 @@ func getSystemDevice(
     
 /// Internal:
 /// List of source endpoints for the entity (computed property)
-func getSystemSources(
+func getSystemSourceEndpoints(
     forEntity entityRef: CoreMIDI.MIDIEntityRef
 ) -> [MIDIOutputEndpoint] {
     let srcCount = MIDIEntityGetNumberOfSources(entityRef)
@@ -47,7 +47,7 @@ func getSystemSources(
     
 /// Internal:
 /// List of destination endpoints for the entity (computed property)
-func getSystemDestinations(
+func getSystemDestinationEndpoints(
     forEntity entityRef: CoreMIDI.MIDIEntityRef
 ) -> [MIDIInputEndpoint] {
     let srcCount = MIDIEntityGetNumberOfDestinations(entityRef)

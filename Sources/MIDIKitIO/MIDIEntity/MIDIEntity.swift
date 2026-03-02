@@ -90,12 +90,12 @@ extension MIDIEntity {
     
     /// Returns the input endpoints for the entity.
     public var inputs: [MIDIInputEndpoint] {
-        getSystemDestinations(forEntity: coreMIDIObjectRef)
+        getSystemDestinationEndpoints(forEntity: coreMIDIObjectRef)
     }
     
     /// Returns the output endpoints for the entity.
     public var outputs: [MIDIOutputEndpoint] {
-        getSystemSources(forEntity: coreMIDIObjectRef)
+        getSystemSourceEndpoints(forEntity: coreMIDIObjectRef)
     }
 }
 
