@@ -76,7 +76,7 @@ extension MIDIManager {
     /// - Returns: Number of deleted matching connections.
     @discardableResult
     public func removeAllUnmanagedPersistentThruConnections(ownerID: String) -> Int {
-        (try? removeAllSystemThruConnectionsPersistentEntries(matching: ownerID)) ?? 0
+        (try? removeAllSystemPersistentThruConnections(matching: ownerID)) ?? 0
     }
     
     /// Remove all managed MIDI endpoints and connections.

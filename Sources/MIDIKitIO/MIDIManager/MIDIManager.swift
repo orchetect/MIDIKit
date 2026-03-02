@@ -86,7 +86,7 @@ public class MIDIManager: @unchecked Sendable { // forced to use @unchecked sinc
     public func unmanagedPersistentThruConnections(
         ownerID: String
     ) throws(MIDIIOError) -> [CoreMIDIThruConnectionRef] {
-        try getSystemThruConnectionsPersistentEntries(matching: ownerID)
+        try getSystemPersistentThruConnectionRefs(matching: ownerID)
     }
     
     /// MIDI devices in the system.

@@ -14,11 +14,11 @@ internal import CoreMIDI
 ///
 /// To delete them all, see sister function `removeAllSystemThruConnectionsPersistentEntries(:)`.
 ///
-/// - Parameter persistentOwnerID: Reverse-DNS domain that was used when the connection was first
-///   made
+/// - Parameters:
+///   - persistentOwnerID: Reverse-DNS domain that was used when the connection was first made.
 ///
 /// - Throws: ``MIDIIOError/osStatus(_:)``
-func getSystemThruConnectionsPersistentEntries(
+func getSystemPersistentThruConnectionRefs(
     matching persistentOwnerID: String
 ) throws(MIDIIOError) -> [CoreMIDI.MIDIThruConnectionRef] {
     // set up empty unmanaged data pointer
@@ -57,17 +57,17 @@ func getSystemThruConnectionsPersistentEntries(
 /// Internal:
 /// Deletes all system-held Core MIDI MIDI play-thru connections matching an owner ID.
 ///
-/// - Parameter persistentOwnerID: Reverse-DNS domain that was used when the connection was first
-///   made.
+/// - Parameters:
+///   - persistentOwnerID: Reverse-DNS domain that was used when the connection was first made.
 ///
 /// - Throws: ``MIDIIOError/osStatus(_:)``
 ///
 /// - Returns: Number of deleted matching connections.
 @discardableResult
-func removeAllSystemThruConnectionsPersistentEntries(
+func removeAllSystemPersistentThruConnections(
     matching persistentOwnerID: String
 ) throws(MIDIIOError) -> Int {
-    let getList = try getSystemThruConnectionsPersistentEntries(matching: persistentOwnerID)
+    let getList = try getSystemPersistentThruConnectionRefs(matching: persistentOwnerID)
     
     var disposeCount = 0
     
