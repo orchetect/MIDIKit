@@ -42,7 +42,7 @@ extension _MIDIEndpoint {
     /// Returns the device that owns the endpoint, if present.
     public var device: MIDIDevice? {
         guard let entity else { return nil }
-        return try? getSystemDevice(for: entity.coreMIDIObjectRef)
+        return try? getSystemDevice(forEntity: entity.coreMIDIObjectRef)
     }
 }
 

@@ -85,17 +85,17 @@ extension MIDIEntity: CustomDebugStringConvertible {
 extension MIDIEntity {
     /// Returns the device that owns the entity, if present.
     public var device: MIDIDevice? {
-        try? getSystemDevice(for: coreMIDIObjectRef)
+        try? getSystemDevice(forEntity: coreMIDIObjectRef)
     }
     
     /// Returns the input endpoints for the entity.
     public var inputs: [MIDIInputEndpoint] {
-        getSystemDestinations(for: coreMIDIObjectRef)
+        getSystemDestinations(forEntity: coreMIDIObjectRef)
     }
     
     /// Returns the output endpoints for the entity.
     public var outputs: [MIDIOutputEndpoint] {
-        getSystemSources(for: coreMIDIObjectRef)
+        getSystemSources(forEntity: coreMIDIObjectRef)
     }
 }
 

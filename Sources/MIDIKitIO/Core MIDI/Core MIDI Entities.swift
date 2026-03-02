@@ -12,11 +12,11 @@ internal import CoreMIDI
 /// Internal:
 /// Return the owning device of the entity.
 func getSystemDevice(
-    for entity: CoreMIDI.MIDIEntityRef
+    forEntity entityRef: CoreMIDI.MIDIEntityRef
 ) throws(MIDIIOError) -> MIDIDevice? {
     let refPtr: UnsafeMutablePointer<MIDIDeviceRef>? = nil
     
-    try MIDIEntityGetDevice(entity, refPtr)
+    try MIDIEntityGetDevice(entityRef, refPtr)
         .throwIfOSStatusErr()
     
     guard let refPtr else { return nil }
@@ -28,15 +28,15 @@ func getSystemDevice(
 /// Internal:
 /// List of source endpoints for the entity (computed property)
 func getSystemSources(
-    for entity: CoreMIDI.MIDIEntityRef
+    forEntity entityRef: CoreMIDI.MIDIEntityRef
 ) -> [MIDIOutputEndpoint] {
-    let srcCount = MIDIEntityGetNumberOfSources(entity)
+    let srcCount = MIDIEntityGetNumberOfSources(entityRef)
     
     var endpoints: [MIDIOutputEndpoint] = []
     endpoints.reserveCapacity(srcCount)
     
     for i in 0 ..< srcCount {
-        let endpointRef = MIDIEntityGetSource(entity, i)
+        let endpointRef = MIDIEntityGetSource(entityRef, i)
         let endpoint = MIDIOutputEndpoint(from: endpointRef)
         guard endpoint.uniqueID != .invalidMIDIIdentifier else { continue }
         endpoints.append(endpoint)
@@ -48,15 +48,15 @@ func getSystemSources(
 /// Internal:
 /// List of destination endpoints for the entity (computed property)
 func getSystemDestinations(
-    for entity: CoreMIDI.MIDIEntityRef
+    forEntity entityRef: CoreMIDI.MIDIEntityRef
 ) -> [MIDIInputEndpoint] {
-    let srcCount = MIDIEntityGetNumberOfDestinations(entity)
+    let srcCount = MIDIEntityGetNumberOfDestinations(entityRef)
     
     var endpoints: [MIDIInputEndpoint] = []
     endpoints.reserveCapacity(srcCount)
     
     for i in 0 ..< srcCount {
-        let endpointRef = MIDIEntityGetDestination(entity, i)
+        let endpointRef = MIDIEntityGetDestination(entityRef, i)
         let endpoint = MIDIInputEndpoint(from: endpointRef)
         guard endpoint.uniqueID != .invalidMIDIIdentifier else { continue }
         endpoints.append(endpoint)
