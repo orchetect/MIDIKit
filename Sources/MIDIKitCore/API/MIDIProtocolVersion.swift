@@ -5,7 +5,7 @@
 //
 
 /// MIDI protocol version.
-public enum MIDIProtocolVersion: Equatable, Hashable {
+public enum MIDIProtocolVersion {
     /// MIDI 1.0
     ///
     /// MIDI 1.0 defines the original MIDI specification as ratified in the mid-1980s with minor
@@ -23,6 +23,10 @@ public enum MIDIProtocolVersion: Equatable, Hashable {
     /// > thorough understanding of MIDI 1.0 in order to implement MIDI 2.0.
     case midi2_0
 }
+
+extension MIDIProtocolVersion: Equatable { }
+
+extension MIDIProtocolVersion: Hashable { }
 
 extension MIDIProtocolVersion: CustomStringConvertible {
     public var description: String {

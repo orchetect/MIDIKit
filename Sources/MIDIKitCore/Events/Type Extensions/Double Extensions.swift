@@ -11,11 +11,13 @@ extension Double {
     ///
     /// Example:
     ///
-    ///     init(bipolarUnitInterval: -1.0) == 0.0
-    ///     init(bipolarUnitInterval: -0.5) == 0.25
-    ///     init(bipolarUnitInterval:  0.0) == 0.5
-    ///     init(bipolarUnitInterval:  0.5) == 0.75
-    ///     init(bipolarUnitInterval:  1.0) == 1.0
+    /// ```swift
+    /// Double(bipolarUnitInterval: -1.0) == 0.0
+    /// Double(bipolarUnitInterval: -0.5) == 0.25
+    /// Double(bipolarUnitInterval:  0.0) == 0.5
+    /// Double(bipolarUnitInterval:  0.5) == 0.75
+    /// Double(bipolarUnitInterval:  1.0) == 1.0
+    /// ```
     @_disfavoredOverload
     public init(bipolarUnitInterval: some BinaryFloatingPoint) {
         self = Double((bipolarUnitInterval / 2.0) + 0.5)
@@ -25,11 +27,13 @@ extension Double {
     ///
     /// Example:
     ///
-    ///     init(bipolarUnitInterval: -1.0) == 0.0
-    ///     init(bipolarUnitInterval: -0.5) == 0.25
-    ///     init(bipolarUnitInterval:  0.0) == 0.5
-    ///     init(bipolarUnitInterval:  0.5) == 0.75
-    ///     init(bipolarUnitInterval:  1.0) == 1.0
+    /// ```swift
+    /// Double(bipolarUnitInterval: -1.0) == 0.0
+    /// Double(bipolarUnitInterval: -0.5) == 0.25
+    /// Double(bipolarUnitInterval:  0.0) == 0.5
+    /// Double(bipolarUnitInterval:  0.5) == 0.75
+    /// Double(bipolarUnitInterval:  1.0) == 1.0
+    /// ```
     @_disfavoredOverload
     public init(bipolarUnitInterval: Double) {
         self = (bipolarUnitInterval / 2.0) + 0.5

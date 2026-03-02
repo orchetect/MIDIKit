@@ -8,15 +8,19 @@ import Foundation
 
 extension UInt32 {
     /// Converts from a bipolar floating-point unit interval (having a 0.0 neutral midpoint).
-    /// (`-1.0 ... 0.0 ... 1.0` == `0 ... 0x80000000 ... 0xFFFFFFFF`)
+    ///
+    /// - `-1.0 ... 0.0 ... 1.0` equates to:
+    /// - `0x00000000 ... 0x80000000 ... 0xFFFFFFFF`
     ///
     /// Example:
     ///
-    ///     init(bipolarUnitInterval: -1.0) == 0          == .min
-    ///     init(bipolarUnitInterval: -0.5)
-    ///     init(bipolarUnitInterval:  0.0) == 0x80000000 == .midpoint
-    ///     init(bipolarUnitInterval:  0.5)
-    ///     init(bipolarUnitInterval:  1.0) == 0xFFFFFFFF == .max
+    /// ```swift
+    /// UInt32(bipolarUnitInterval: -1.0) == 0x00000000 == .min
+    /// UInt32(bipolarUnitInterval: -0.5)
+    /// UInt32(bipolarUnitInterval:  0.0) == 0x80000000 == .midpoint
+    /// UInt32(bipolarUnitInterval:  0.5)
+    /// UInt32(bipolarUnitInterval:  1.0) == 0xFFFFFFFF == .max
+    /// ```
     @_disfavoredOverload
     public init(bipolarUnitInterval: some BinaryFloatingPoint) {
         let bipolarUnitInterval = bipolarUnitInterval.clamped(to: (-1.0) ... (1.0))
@@ -31,15 +35,19 @@ extension UInt32 {
     }
     
     /// Converts from a bipolar floating-point unit interval (having a 0.0 neutral midpoint).
-    /// (`-1.0 ... 0.0 ... 1.0` == `0 ... 0x80000000 ... 0xFFFFFFFF`)
+    ///
+    /// - `-1.0 ... 0.0 ... 1.0` equates to:
+    /// - `0x00000000 ... 0x80000000 ... 0xFFFFFFFF`
     ///
     /// Example:
     ///
-    ///     init(bipolarUnitInterval: -1.0) == 0          == .min
-    ///     init(bipolarUnitInterval: -0.5)
-    ///     init(bipolarUnitInterval:  0.0) == 0x80000000 == .midpoint
-    ///     init(bipolarUnitInterval:  0.5)
-    ///     init(bipolarUnitInterval:  1.0) == 0xFFFFFFFF == .max
+    /// ```swift
+    /// UInt32(bipolarUnitInterval: -1.0) == 0x00000000 == .min
+    /// UInt32(bipolarUnitInterval: -0.5)
+    /// UInt32(bipolarUnitInterval:  0.0) == 0x80000000 == .midpoint
+    /// UInt32(bipolarUnitInterval:  0.5)
+    /// UInt32(bipolarUnitInterval:  1.0) == 0xFFFFFFFF == .max
+    /// ```
     @_disfavoredOverload
     public init(bipolarUnitInterval: Double) {
         let bipolarUnitInterval = bipolarUnitInterval.clamped(to: (-1.0) ... (1.0))
@@ -55,7 +63,9 @@ extension UInt32 {
     
     /// Converts from integer to a bipolar floating-point unit interval (having a 0.0 neutral
     /// midpoint at 0x80000000).
-    /// (`0 ... 0x80000000 ... 0xFFFFFFFF` == `-1.0 ... 0.0 ... 1.0`)
+    ///
+    /// - `0x00000000 ... 0x80000000 ... 0xFFFFFFFF` equates to:
+    /// - `-1.0 ... 0.0 ... 1.0`
     @_disfavoredOverload
     public var bipolarUnitIntervalValue: Double {
         // Account for non-symmetry and round up.
