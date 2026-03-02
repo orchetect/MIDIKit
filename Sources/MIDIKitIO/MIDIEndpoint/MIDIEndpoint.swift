@@ -51,7 +51,7 @@ extension _MIDIEndpoint {
 extension MIDIEndpoint {
     /// Returns `true` if the object exists in the system by querying Core MIDI.
     public var exists: Bool {
-        getSystemDestinationEndpoint(matching: uniqueID) != nil
+        getSystemDestinationEndpointRef(matching: uniqueID) != nil
     }
     
     /// Returns endpoint identity criterium describing the endpoint.

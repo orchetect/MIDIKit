@@ -102,7 +102,7 @@ extension MIDIOutput {
             return nil
         }
     
-        if let endpoint = getSystemSourceEndpoint(matching: uniqueID) {
+        if let endpoint = getSystemSourceEndpointRef(matching: uniqueID) {
             return endpoint
         }
     

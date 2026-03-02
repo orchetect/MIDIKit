@@ -118,7 +118,7 @@ extension MIDIInput {
             return nil
         }
         
-        if let endpoint = getSystemDestinationEndpoint(matching: uniqueID) {
+        if let endpoint = getSystemDestinationEndpointRef(matching: uniqueID) {
             return endpoint
         }
         

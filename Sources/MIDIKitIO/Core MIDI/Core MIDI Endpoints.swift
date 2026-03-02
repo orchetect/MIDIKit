@@ -53,7 +53,7 @@ func getSystemDestinationEndpoints() -> [MIDIInputEndpoint] {
 ///
 /// - Parameters:
 ///   - name: MIDI port name to search for.
-func getSystemSourceEndpoints(
+func getSystemSourceEndpointRefs(
     matching name: String
 ) -> [CoreMIDI.MIDIEndpointRef] {
     var refs: [MIDIEndpointRef] = []
@@ -73,7 +73,7 @@ func getSystemSourceEndpoints(
 ///
 /// - Parameters:
 ///   - uniqueID: MIDI port unique ID to search for.
-func getSystemSourceEndpoint(
+func getSystemSourceEndpointRef(
     matching uniqueID: CoreMIDI.MIDIUniqueID
 ) -> CoreMIDI.MIDIEndpointRef? {
     guard uniqueID != .invalidMIDIIdentifier else { return nil }
@@ -92,7 +92,7 @@ func getSystemSourceEndpoint(
 ///
 /// - Parameters:
 ///   - name: MIDI port name to search for.
-func getSystemDestinationEndpoints(
+func getSystemDestinationEndpointRefs(
     matching name: String
 ) -> [CoreMIDI.MIDIEndpointRef] {
     var refs: [MIDIEndpointRef] = []
@@ -112,7 +112,7 @@ func getSystemDestinationEndpoints(
 ///
 /// - Parameters:
 ///   - uniqueID: MIDI port unique ID to search for.
-func getSystemDestinationEndpoint(
+func getSystemDestinationEndpointRef(
     matching uniqueID: CoreMIDI.MIDIUniqueID
 ) -> CoreMIDI.MIDIEndpointRef? {
     guard uniqueID != .invalidMIDIIdentifier else { return nil }
