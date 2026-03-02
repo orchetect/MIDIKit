@@ -36,7 +36,7 @@ protocol _MIDIEndpoint: MIDIEndpoint { }
 extension _MIDIEndpoint {
     /// Returns the entity that owns the endpoint, if present.
     public var entity: MIDIEntity? {
-        try? getSystemEntity(for: coreMIDIObjectRef)
+        try? getSystemEntity(forEndpoint: coreMIDIObjectRef)
     }
     
     /// Returns the device that owns the endpoint, if present.

@@ -129,16 +129,16 @@ func getSystemDestinationEndpoint(
 /// Internal:
 /// Returns a ``MIDIEntity`` instance of the endpoint's owning entity.
 func getSystemEntity(
-    for endpoint: MIDIEndpointRef
+    forEndpoint endpointRef: MIDIEndpointRef
 ) throws(MIDIIOError) -> MIDIEntity {
     var ent = MIDIEntityRef()
     
-    try MIDIEndpointGetEntity(endpoint, &ent)
+    try MIDIEndpointGetEntity(endpointRef, &ent)
         .throwIfOSStatusErr()
     
     guard ent != MIDIEntityRef() else {
         throw .internalInconsistency(
-            "Error getting entity ID for endpoint ref \(endpoint)"
+            "Error getting entity ID for endpoint ref \(endpointRef)"
         )
     }
     
@@ -147,15 +147,15 @@ func getSystemEntity(
 
 /// Internal:
 /// Makes a virtual endpoint in the system invisible to the user.
-func hide(endpoint: MIDIEndpointRef) throws(MIDIIOError) {
-    try MIDIObjectSetIntegerProperty(endpoint, kMIDIPropertyPrivate, 1)
+func hide(endpoint endpointRef: MIDIEndpointRef) throws(MIDIIOError) {
+    try MIDIObjectSetIntegerProperty(endpointRef, kMIDIPropertyPrivate, 1)
         .throwIfOSStatusErr()
 }
 
 /// Internal:
 /// Makes a virtual endpoint in the system visible to the user.
-func show(endpoint: MIDIEndpointRef) throws(MIDIIOError) {
-    try MIDIObjectSetIntegerProperty(endpoint, kMIDIPropertyPrivate, 0)
+func show(endpoint endpointRef: MIDIEndpointRef) throws(MIDIIOError) {
+    try MIDIObjectSetIntegerProperty(endpointRef, kMIDIPropertyPrivate, 0)
         .throwIfOSStatusErr()
 }
 
