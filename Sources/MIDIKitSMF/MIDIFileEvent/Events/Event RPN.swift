@@ -51,7 +51,7 @@ extension MIDIEvent.RPN: MIDIFileEventPayload {
         self = newEvent.newEvent
     }
     
-    public func midi1SMFRawBytes<D>() -> D where D: MutableDataProtocol {
+    public func midi1SMFRawBytes<D: MutableDataProtocol>() -> D {
         D(midi1RawBytes())
     }
     

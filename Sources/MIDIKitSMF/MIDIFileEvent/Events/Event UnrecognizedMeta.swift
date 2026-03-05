@@ -155,7 +155,7 @@ extension MIDIFileEvent.UnrecognizedMeta: MIDIFileEventPayload {
             )
             
             metaType = readMetaType
-            data = readData.data.toUInt8Bytes
+            data = readData.toUInt8Bytes()
         }
     }
     

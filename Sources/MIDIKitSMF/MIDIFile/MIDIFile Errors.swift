@@ -48,14 +48,14 @@ extension MIDIFile {
 
 internal import MIDIKitInternals
 
-extension PassiveDataReader {
+extension PointerDataReader {
     /// Utility:
-    /// Wrapper to convert thrown data read errors to `MIDIFile.DecodeError`.
+    /// Wrapper to convert thrown data read errors to `DataReaderError`.
     func toMIDIFileDecodeError<Result>(
         malformedReason: String? = nil,
-        _ block: @autoclosure () throws(ReadError) -> Result
+        _ block: @autoclosure () throws(DataReaderError) -> Result
     ) throws(MIDIFile.DecodeError) -> Result {
-        do throws(ReadError) { return try block() }
+        do throws(DataReaderError) { return try block() }
         catch { throw .malformed(malformedReason ?? error.localizedDescription) }
     }
 }

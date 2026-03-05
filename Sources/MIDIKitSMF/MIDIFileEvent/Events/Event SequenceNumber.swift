@@ -94,7 +94,7 @@ extension MIDIFileEvent.SequenceNumber: MIDIFileEventPayload {
             }
         
             guard let readSequenceNumber = (try? dataReader.read(bytes: 2))?
-                .data.toUInt16(from: .bigEndian)
+                .toUInt16(from: .bigEndian)
             else {
                 throw .malformed(
                     "Could not read sequence number as integer."

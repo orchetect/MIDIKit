@@ -119,14 +119,14 @@ extension MIDIFile.Chunk.UnrecognizedChunk {
         
         // track header
         
-        let (id, dataBody) = try stream.withDataReader { dataReader throws(MIDIFile.DecodeError) -> (String, D.SubSequence) in
-            let readChunkType: D.SubSequence = try dataReader.toMIDIFileDecodeError(
+        let (id, dataBody) = try stream.withDataReader { dataReader throws(MIDIFile.DecodeError) -> (String, Data) in
+            let readChunkType = try dataReader.toMIDIFileDecodeError(
                 malformedReason: "Missing chunk type identifier.",
                 try dataReader.read(bytes: 4)
             )
             
             guard let chunkLengthInt32 = (try? dataReader.read(bytes: 4))?
-                .data.toUInt32(from: .bigEndian)
+                .toUInt32(from: .bigEndian)
             else {
                 throw .malformed(
                     "There was a problem reading chunk length."
@@ -148,12 +148,14 @@ extension MIDIFile.Chunk.UnrecognizedChunk {
                 )
             }
             
-            return (id: chunkTypeString, dataBody)
+            // we can't pass pointer ranges outside of the data reader closure,
+            // so we must use them within the closure
+            return (id: chunkTypeString, dataBody.toData())
         }
         
         self.init(
             id: id,
-            rawData: dataBody.data
+            rawData: dataBody
         )
     }
     

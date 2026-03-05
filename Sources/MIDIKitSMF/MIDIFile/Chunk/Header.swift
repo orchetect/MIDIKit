@@ -116,7 +116,7 @@ extension MIDIFile.Chunk.Header {
 extension MIDIFile.Chunk.Header {
     static let midi1SMFFixedRawBytesLength = 14
     
-    init(midi1SMFRawBytes: Data) throws(MIDIFile.DecodeError) {
+    init<D: DataProtocol>(midi1SMFRawBytes: D) throws(MIDIFile.DecodeError) {
         guard midi1SMFRawBytes.count >= Self.midi1SMFFixedRawBytesLength else {
             throw .malformed(
                 "Header is not correct. File may not be a MIDI file."
@@ -126,15 +126,21 @@ extension MIDIFile.Chunk.Header {
         try midi1SMFRawBytes.withDataReader { dataReader throws(MIDIFile.DecodeError) in
             // Header descriptor
             
-            guard (try? dataReader.read(bytes: 4).toUInt8Bytes) == Self.staticIdentifier.toASCIIBytes()
+            guard (try? dataReader.read(bytes: 4).toUInt8Bytes()) == Self.staticIdentifier.toASCIIBytes()
             else {
                 throw .malformed(
                     "Header is not correct. File may not be a MIDI file."
                 )
             }
             
-            guard let headerLengthUInt32 = (try? dataReader.read(bytes: 4))?
-                .toInt32(from: .bigEndian)
+            guard let headerLengthUInt32Bytes = try? dataReader.read(bytes: 4)
+            else {
+                throw .malformed(
+                    "Not enough bytes found when attempting to read MIDI file header length."
+                )
+            }
+            
+            guard let headerLengthUInt32 = headerLengthUInt32Bytes.toInt32(from: .bigEndian)
             else {
                 throw .malformed(
                     "Could not read MIDI file header length."
@@ -177,7 +183,7 @@ extension MIDIFile.Chunk.Header {
                 )
             }
         
-            guard let timeBase = MIDIFile.TimeBase(rawBytes: timeDivision.toUInt8Bytes) else {
+            guard let timeBase = MIDIFile.TimeBase(rawBytes: timeDivision.toUInt8Bytes()) else {
                 throw .malformed(
                     "Could not decode timebase."
                 )

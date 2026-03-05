@@ -97,9 +97,7 @@ extension MIDIFile.Chunk {
 
 extension MIDIFile.Chunk.Track {
     /// Init from MIDI file data stream.
-    public init<D: MutableDataProtocol>(midi1SMFRawBytesStream stream: D) throws(MIDIFile.DecodeError)
-        where D.SubSequence: MutableDataProtocol
-    {
+    public init<D: MutableDataProtocol>(midi1SMFRawBytesStream stream: D) throws(MIDIFile.DecodeError) {
         guard stream.count >= 8 else {
             throw .malformed(
                 "There was a problem reading chunk header. Encountered end of file early."
@@ -108,14 +106,14 @@ extension MIDIFile.Chunk.Track {
         
         // track header
         
-        let remainingData: D.SubSequence = try stream.withDataReader { dataReader throws(MIDIFile.DecodeError) in
+        self = try stream.withDataReader { dataReader throws(MIDIFile.DecodeError) in
             let chunkTypeString = try dataReader.toMIDIFileDecodeError(
                 malformedReason: "Missing chunk type bytes.",
                 try dataReader.read(bytes: 4).asciiDataToString() ?? "????"
             )
         
             guard let chunkLengthInt32 = (try? dataReader.read(bytes: 4))?
-                .data.toUInt32(from: .bigEndian)
+                .toUInt32(from: .bigEndian)
             else {
                 throw .malformed(
                     "There was a problem reading chunk length."
@@ -140,14 +138,15 @@ extension MIDIFile.Chunk.Track {
                     "There was a problem reading track data blob. Encountered end of data early."
                 )
             }
-            return readChunk
+            
+            // we can't pass pointer ranges outside of the data reader closure,
+            // so we must use them within the closure
+            return try Self(midi1SMFRawBytes: readChunk)
         }
-        
-        try self.init(midi1SMFRawBytes: remainingData)
     }
     
     /// Init from raw data stream, excluding the header identifier and length.
-    init<D: MutableDataProtocol>(midi1SMFRawBytes rawData: D) throws(MIDIFile.DecodeError) {
+    init<D: DataProtocol>(midi1SMFRawBytes rawData: D) throws(MIDIFile.DecodeError) {
         // chunk data
         
         try rawData.withDataReader { dataReader throws(MIDIFile.DecodeError) in
@@ -183,11 +182,11 @@ extension MIDIFile.Chunk.Track {
                 
                 // event
                 
-                var readBuffer = try dataReader.toMIDIFileDecodeError(
+                let readBuffer = try dataReader.toMIDIFileDecodeError(
                     malformedReason: "Encountered end of file early.",
                     try dataReader.nonAdvancingRead()
                 )
-            
+                
                 // first check for end of track
             
                 if readBuffer.count == Self.chunkEnd.count,
@@ -204,30 +203,30 @@ extension MIDIFile.Chunk.Track {
                 if !readBuffer.isEmpty {
                     let testForRunningStatusByte = readBuffer[readBuffer.startIndex]
                     if (0x00 ... 0x7F).contains(testForRunningStatusByte) {
-                        if let bytes: D = runningStatus?.midi1SMFRawBytes(),
+                        if let bytes: Data = runningStatus?.midi1SMFRawBytes(),
                            !bytes.isEmpty
                         {
-                            let getRunningStatusByte: D.Element = bytes[bytes.startIndex]
+                            let getRunningStatusByte: UInt8 = bytes[bytes.startIndex]
                             runningStatusByte = getRunningStatusByte
                         }
                     }
                 }
-            
-                // if running status byte is present, inject it into the byte buffer
-                if let runningStatusByte {
-                    readBuffer.insert(runningStatusByte, at: readBuffer.startIndex)
-                }
-            
+                
                 // iterate through all known event initializers
             
                 var foundEvent: (newEvent: MIDIFileEventPayload, bufferLength: Int)?
             
                 autoreleasepool {
+                    // if running status byte is present, inject it into the byte buffer
+                    let prefix: [UInt8] = if let runningStatusByte {
+                        [runningStatusByte]
+                    } else { [] }
+                    
                     for eventDef in MIDIFile.Chunk.Track.eventDecodeOrder.concreteTypes {
                         if let success = try? eventDef
-                            .initFrom(midi1SMFRawBytesStream: readBuffer)
+                            .initFrom(midi1SMFRawBytesStream: prefix + readBuffer)
                         {
-                            foundEvent = success
+                            foundEvent = (newEvent: success.newEvent, bufferLength: success.bufferLength - prefix.count)
                             break // break for-loop lazily
                         }
                     }
@@ -235,23 +234,18 @@ extension MIDIFile.Chunk.Track {
                 
                 if let foundEvent {
                     // inject delta time into event
-                    let newEventDelta: MIDIFileEvent
-                        .DeltaTime = .ticks(UInt32(eventDeltaTime.value))
-                
-                    // offset buffer length if runningStatusByte is present
-                    let chunkBufferLength = runningStatusByte != nil
-                        ? foundEvent.bufferLength - 1
-                        : foundEvent.bufferLength
+                    let newEventDelta: MIDIFileEvent.DeltaTime = .ticks(UInt32(eventDeltaTime.value))
                 
                     // add new event to new track
                     newEvents.append(foundEvent.newEvent.smfWrappedEvent(delta: newEventDelta))
+                    let chunkBufferLength = foundEvent.bufferLength
                     dataReader.advanceBy(chunkBufferLength)
                 
                     // store event in running status
-                    let newEventBytes: D = foundEvent.newEvent.midi1SMFRawBytes()
+                    let newEventBytes: Data = foundEvent.newEvent.midi1SMFRawBytes()
                     if !newEventBytes.isEmpty {
                         let testForRunningStatusByte: D
-                            .Element = (foundEvent.newEvent.midi1SMFRawBytes() as D).first!
+                            .Element = (foundEvent.newEvent.midi1SMFRawBytes() as Data).first!
                         
                         if (0x80 ... 0xEF).contains(testForRunningStatusByte) {
                             runningStatus = foundEvent.newEvent

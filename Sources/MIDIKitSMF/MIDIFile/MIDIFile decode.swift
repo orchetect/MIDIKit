@@ -80,14 +80,14 @@ extension MIDIFile {
                         case MIDIFile.Chunk.Track.staticIdentifier:
                             tracksEncountered += 1
                             
-                            let newTrack = try Chunk.Track(midi1SMFRawBytes: chunkData.toUInt8Bytes)
+                            let newTrack = try Chunk.Track(midi1SMFRawBytes: chunkData)
                             newChunk = .track(newTrack)
                             
                         default:
                             // as per Standard MIDI File 1.0 Spec:
                             // unrecognized chunks should be skipped and not throw an error
                             
-                            let newUnrecognizedChunk = Chunk.UnrecognizedChunk(id: chunkTypeString, rawData: chunkData)
+                            let newUnrecognizedChunk = Chunk.UnrecognizedChunk(id: chunkTypeString, rawData: chunkData.toData())
                             newChunk = .other(newUnrecognizedChunk)
                         }
                     } catch {

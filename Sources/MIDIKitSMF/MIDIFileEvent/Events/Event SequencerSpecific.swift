@@ -101,7 +101,7 @@ extension MIDIFileEvent.SequencerSpecific: MIDIFileEventPayload {
                 try dataReader.read(bytes: length.value)
             )
             
-            data = readData.data.toUInt8Bytes
+            data = readData.toUInt8Bytes()
         }
     }
     
