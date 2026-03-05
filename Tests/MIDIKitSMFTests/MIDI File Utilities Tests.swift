@@ -4,6 +4,7 @@
 //  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
+import Foundation
 @testable import MIDIKitSMF
 import Testing
 
@@ -91,6 +92,80 @@ import Testing
             #expect(decode([0xFF, 0xFF, 0xFF, 0x7F])?.value == 268_435_455)
             #expect(decode([0xFF, 0xFF, 0xFF, 0x7F])?.byteLength == 4)
         }
+    }
+    
+    @Test
+    func decodeVariableLengthValue_data_pointer() throws {
+        // 1 byte: max 7-bit value
+        
+        try Data([0x7F, 0x00]).withContiguousStorageIfAvailable({
+            let result = try #require(MIDIFile.decodeVariableLengthValue(from: $0))
+            #expect(result.value == 127)
+            #expect(result.byteLength == 1)
+        })!
+        
+        // 2 bytes: max 14-bit value
+        
+        try Data([0x81, 0x00]).withContiguousStorageIfAvailable({
+            let result = try #require(MIDIFile.decodeVariableLengthValue(from: $0))
+            #expect(result.value == 128)
+            #expect(result.byteLength == 2)
+        })!
+        
+        // 3 bytes: max 21-bit value
+        
+        try Data([0x81, 0x80, 0x00]).withContiguousStorageIfAvailable({
+            let result = try #require(MIDIFile.decodeVariableLengthValue(from: $0))
+            #expect(result.value == 16384)
+            #expect(result.byteLength == 3)
+        })!
+        
+        // 4 bytes: max 28-bit value
+        
+        try Data([0xFF, 0xFF, 0xFF, 0x7F]).withContiguousStorageIfAvailable({
+            let result = try #require(MIDIFile.decodeVariableLengthValue(from: $0))
+            #expect(result.value == 268_435_455)
+            #expect(result.byteLength == 4)
+        })!
+    }
+    
+    @Test
+    func decodeVariableLengthValue_uInt8Array_pointer_slice() throws {
+        // 1 byte: max 7-bit value
+        
+        try Data([0x01, 0x7F, 0x00]).withContiguousStorageIfAvailable({
+            let slice = $0[1...]
+            let result = try #require(MIDIFile.decodeVariableLengthValue(from: slice))
+            #expect(result.value == 127)
+            #expect(result.byteLength == 1)
+        })!
+        
+        // 2 bytes: max 14-bit value
+        
+        try Data([0x01, 0x81, 0x00]).withContiguousStorageIfAvailable({
+            let slice = $0[1...]
+            let result = try #require(MIDIFile.decodeVariableLengthValue(from: slice))
+            #expect(result.value == 128)
+            #expect(result.byteLength == 2)
+        })!
+        
+        // 3 bytes: max 21-bit value
+        
+        try Data([0x01, 0x81, 0x80, 0x00]).withContiguousStorageIfAvailable({
+            let slice = $0[1...]
+            let result = try #require(MIDIFile.decodeVariableLengthValue(from: slice))
+            #expect(result.value == 16384)
+            #expect(result.byteLength == 3)
+        })!
+        
+        // 4 bytes: max 28-bit value
+        
+        try Data([0x01, 0xFF, 0xFF, 0xFF, 0x7F]).withContiguousStorageIfAvailable({
+            let slice = $0[1...]
+            let result = try #require(MIDIFile.decodeVariableLengthValue(from: slice))
+            #expect(result.value == 268_435_455)
+            #expect(result.byteLength == 4)
+        })!
     }
     
     @Test

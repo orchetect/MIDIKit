@@ -31,7 +31,7 @@ import Testing
         
         let generatedBytes = try track.midi1SMFRawBytes(
             using: .musical(ticksPerQuarterNote: 960)
-        ).toUInt8Bytes
+        ).toUInt8Bytes()
         
         #expect(generatedBytes == bytes)
         
@@ -51,7 +51,7 @@ import Testing
         
         let track = MIDIFile.Chunk.UnrecognizedChunk(
             id: id,
-            rawData: data.data
+            rawData: data.toData()
         )
         
         #expect(track.identifier == id)
@@ -65,7 +65,7 @@ import Testing
         
         let generatedBytes = try track.midi1SMFRawBytes(
             using: .musical(ticksPerQuarterNote: 960)
-        ).toUInt8Bytes
+        ).toUInt8Bytes()
         
         #expect(generatedBytes == bytes)
         

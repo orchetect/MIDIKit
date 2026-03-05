@@ -50,13 +50,15 @@ import Testing
             using: .musical(ticksPerQuarterNote: 960)
         )
         
-        #expect(generatedData.toUInt8Bytes == bytes)
+        #expect(generatedData.toUInt8Bytes() == bytes)
         
         // parse raw bytes
         
-        let parsedTrack = try MIDIFile.Chunk.Track(midi1SMFRawBytesStream: generatedData)
+        let parsedTrackA = try? MIDIFile.Chunk.Track(midi1SMFRawBytesStream: generatedData)
+        #expect(parsedTrackA == track)
         
-        #expect(parsedTrack == parsedTrack)
+        let parsedTrackB = try? MIDIFile.Chunk.Track(midi1SMFRawBytes: generatedData[8...]) // exclude header and length
+        #expect(parsedTrackB == track)
     }
     
     @Test
@@ -87,13 +89,15 @@ import Testing
             using: .musical(ticksPerQuarterNote: 960)
         )
         
-        #expect(generatedData.toUInt8Bytes == bytes)
+        #expect(generatedData.toUInt8Bytes() == bytes)
         
         // parse raw bytes
         
-        let parsedTrack = try MIDIFile.Chunk.Track(midi1SMFRawBytesStream: generatedData)
+        let parsedTrackA = try MIDIFile.Chunk.Track(midi1SMFRawBytesStream: generatedData)
+        #expect(parsedTrackA == track)
         
-        #expect(parsedTrack == parsedTrack)
+        let parsedTrackB = try MIDIFile.Chunk.Track(midi1SMFRawBytes: generatedData[8...]) // exclude header and length
+        #expect(parsedTrackB == track)
     }
     
     // MARK: - Events

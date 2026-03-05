@@ -17,7 +17,7 @@ import Testing
     /// Test parsing a MIDI file that contains an unrecognized chunk.
     @Test
     func customChunk() throws {
-        let midiFile = try MIDIFile(rawData: kMIDIFile.customChunk.data)
+        let midiFile = try MIDIFile(rawData: kMIDIFile.customChunk.toData())
         
         try #require(midiFile.chunks.count == 2)
         
@@ -41,7 +41,7 @@ import Testing
         
         #expect(unknownChunk.rawData.count == 35)
         #expect(
-            unknownChunk.rawData.toUInt8Bytes ==
+            unknownChunk.rawData.toUInt8Bytes() ==
                 [0x0D, 0x00, 0x00, 0x80, 0x3F, 0x10, 0x01, 0x22,
                  0x14, 0x0D, 0x00, 0x00, 0xF0, 0x41, 0x15, 0x00,
                  0x00, 0x48, 0x42, 0x1D, 0x00, 0x00, 0xA0, 0x41,
