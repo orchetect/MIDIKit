@@ -14,14 +14,23 @@ import protocol Foundation.DataProtocol
 
 /// Utility to facilitate sequential reading of bytes.
 ///
-/// This type is not meant to be initialized directly, but rather used within a call to `<data>.withPointerDataReader { reader in }`.
+/// > Warning: Do not pass pointers returned from reader methods outside of the `withPointerDataReader { reader in }` closure.
+/// >
+/// > Any data needed to be passed outside of the closure must be copied first.
+/// >
+/// > This can be done by constructing a `Data(pointer)` or `[UInt8](pointer)` instance from the `pointer`.
+///
+/// > Note:
+/// >
+/// > This type is not meant to be initialized directly, but rather used within a call to `<data>.withPointerDataReader { reader in }`.
 ///
 /// Usage with `Data`:
 ///
 /// ```swift
 /// let data = Data( ... )
-/// data.withPointerDataReader { reader in
-///     if let bytes = reader.read(bytes: 4) { ... }
+/// try data.withPointerDataReader { reader in
+///     let bytes = try reader.read(bytes: 4)
+///     // ...
 /// }
 /// ```
 ///
@@ -29,15 +38,17 @@ import protocol Foundation.DataProtocol
 ///
 /// ```swift
 /// let bytes: [UInt8] = [ ... ]
-/// bytes.withPointerDataReader { reader in
-///     if let bytes = reader.read(bytes: 4) { ... }
+/// try bytes.withPointerDataReader { reader in
+///     let bytes = try reader.read(bytes: 4)
+///     // ...
 /// }
 /// ```
 package struct PointerDataReader<DataType: DataProtocol>: _DataReaderProtocol {
     package typealias DataElement = DataType.Element
-    public typealias DataRange = UnsafeBufferPointer<UInt8>
+    package typealias DataRange = UnsafeBufferPointer<UInt8>
     
-    private let pointer: UnsafeBufferPointer<UInt8>
+    @usableFromInline
+    let pointer: UnsafeBufferPointer<UInt8>
     
     // MARK: - Init
     
@@ -51,40 +62,34 @@ package struct PointerDataReader<DataType: DataProtocol>: _DataReaderProtocol {
     
     // MARK: - Internal
     
-    @usableFromInline typealias DataIndex = Int
+    @usableFromInline
+    typealias DataIndex = Int
     
     func _dataSize() -> Int {
-        withData { $0.count }
+        pointer.count
     }
     
     @inlinable
     func _dataStartIndex() -> DataIndex {
-        withData { $0.startIndex }
+        pointer.startIndex
     }
     
     @inlinable
     func _dataReadOffsetIndex(offsetBy offset: Int) -> DataIndex {
-        withData { $0.indices.lowerBound.advanced(by: readOffset + offset) }
+        pointer.indices.lowerBound.advanced(by: readOffset + offset)
     }
     
     @inlinable
     func _dataByte(at dataIndex: DataIndex) throws(DataReaderError) -> DataElement {
-        withData { $0[dataIndex] }
+        pointer[dataIndex]
     }
     
     func _dataBytes(in dataIndexRange: Range<DataIndex>) throws(DataReaderError) -> DataRange {
-        withData { $0.extracting(dataIndexRange) }
+        pointer.extracting(dataIndexRange)
     }
     
     func _dataBytes(in dataIndexRange: ClosedRange<DataIndex>) throws(DataReaderError) -> DataRange {
-        withData { $0.extracting(dataIndexRange) }
-    }
-    
-    // MARK: - Helpers
-    
-    @inline(__always) @usableFromInline
-    func withData<T>(_ block: (UnsafeBufferPointer<UInt8>) -> T) -> T {
-        block(pointer)
+        pointer.extracting(dataIndexRange)
     }
 }
 
@@ -92,6 +97,12 @@ package struct PointerDataReader<DataType: DataProtocol>: _DataReaderProtocol {
 
 extension DataProtocol {
     /// Accesses the data by way of unsafe pointer access by providing a ``PointerDataReader`` instance to a closure.
+    ///
+    /// > Warning: Do not pass pointers returned from reader methods outside of the `withPointerDataReader { reader in }` closure.
+    /// >
+    /// > Any data needed to be passed outside of the closure must be copied first.
+    /// >
+    /// > This can be done by constructing a `Data(pointer)` or `[UInt8](pointer)` instance from the `pointer`.
     @discardableResult
     package func withPointerDataReader<T, E>(
         _ block: (_ reader: inout PointerDataReader<Self>) throws(E) -> T

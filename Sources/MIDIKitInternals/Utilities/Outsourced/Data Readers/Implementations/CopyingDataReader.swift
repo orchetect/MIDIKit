@@ -19,6 +19,7 @@ package struct CopyingDataReader<DataType: DataProtocol & Sendable>: _DataReader
     package typealias DataElement = DataType.Element
     package typealias DataRange = DataType.SubSequence
     
+    @usableFromInline
     let base: DataType
     
     init(data: DataType) {
@@ -31,29 +32,34 @@ package struct CopyingDataReader<DataType: DataProtocol & Sendable>: _DataReader
     
     // MARK: - Internal
     
+    @usableFromInline
     typealias DataIndex = DataType.Index
     
+    @inlinable
     func _dataSize() -> Int {
         base.count
     }
     
-    func _dataStartIndex() -> DataType.Index {
+    @inlinable
+    func _dataStartIndex() -> DataIndex {
         base.startIndex
     }
     
-    func _dataReadOffsetIndex(offsetBy offset: Int) -> DataType.Index {
+    @inlinable
+    func _dataReadOffsetIndex(offsetBy offset: Int) -> DataIndex {
         base.index(base.startIndex, offsetBy: readOffset + offset)
     }
     
-    func _dataByte(at dataIndex: DataType.Index) throws(DataReaderError) -> DataElement {
+    @inlinable
+    func _dataByte(at dataIndex: DataIndex) throws(DataReaderError) -> DataElement {
         base[dataIndex]
     }
     
-    func _dataBytes(in dataIndexRange: Range<DataType.Index>) throws(DataReaderError) -> DataRange {
+    func _dataBytes(in dataIndexRange: Range<DataIndex>) throws(DataReaderError) -> DataRange {
         base[dataIndexRange]
     }
     
-    func _dataBytes(in dataIndexRange: ClosedRange<DataType.Index>) throws(DataReaderError) -> DataRange {
+    func _dataBytes(in dataIndexRange: ClosedRange<DataIndex>) throws(DataReaderError) -> DataRange {
         base[dataIndexRange]
     }
 }

@@ -14,14 +14,23 @@ import protocol Foundation.DataProtocol
 /// Utility to facilitate sequential reading of bytes.
 /// Passing the data in as a mutable `inout` allows for passive memory reading. The data itself is never mutated.
 ///
-/// This type is not meant to be initialized directly, but rather used within a call to `<data>.withInoutDataReader { reader in }`.
+/// > Note:
+/// >
+/// > This type is less performant than the inout/pointer-based data readers, however the return types
+/// > are fully copy-on-write compliant and are safe to use as-is after being passed out of the
+/// >`withCopyingDataReader { reader in }` closure.
+///
+/// > Note:
+/// >
+/// > This type is not meant to be initialized directly, but rather used within a call to `<data>.withPointerDataReader { reader in }`.
 ///
 /// Usage with `Data`:
 ///
 /// ```swift
 /// let data = Data( ... )
-/// data.withInoutDataReader { reader in
-///     if let bytes = reader.read(bytes: 4) { ... }
+/// try data.withInoutDataReader { reader in
+///     let bytes = try reader.read(bytes: 4)
+///     // ...
 /// }
 /// ```
 ///
@@ -29,8 +38,9 @@ import protocol Foundation.DataProtocol
 ///
 /// ```swift
 /// let bytes: [UInt8] = [ ... ]
-/// bytes.withInoutDataReader { reader in
-///     if let bytes = reader.read(bytes: 4) { ... }
+/// try bytes.withInoutDataReader { reader in
+///     let bytes = try reader.read(bytes: 4)
+///     // ...
 /// }
 /// ```
 package struct InoutDataReader<DataType: DataProtocol>: _DataReaderProtocol {
@@ -54,29 +64,34 @@ package struct InoutDataReader<DataType: DataProtocol>: _DataReaderProtocol {
     
     // MARK: - Internal
     
+    @usableFromInline
     typealias DataIndex = DataType.Index
     
+    @inlinable
     func _dataSize() -> Int {
         withData { $0.count }
     }
     
-    func _dataStartIndex() -> DataType.Index {
+    @inlinable
+    func _dataStartIndex() -> DataIndex {
         withData { $0.startIndex }
     }
     
-    func _dataReadOffsetIndex(offsetBy offset: Int) -> DataType.Index {
+    @inlinable
+    func _dataReadOffsetIndex(offsetBy offset: Int) -> DataIndex {
         withData { $0.index($0.startIndex, offsetBy: readOffset + offset) }
     }
     
-    func _dataByte(at dataIndex: DataType.Index) throws(DataReaderError) -> DataElement {
+    @inlinable
+    func _dataByte(at dataIndex: DataIndex) throws(DataReaderError) -> DataElement {
         withData { $0[dataIndex] }
     }
     
-    func _dataBytes(in dataIndexRange: Range<DataType.Index>) throws(DataReaderError) -> DataRange {
+    func _dataBytes(in dataIndexRange: Range<DataIndex>) throws(DataReaderError) -> DataRange {
         withData { $0[dataIndexRange] }
     }
     
-    func _dataBytes(in dataIndexRange: ClosedRange<DataType.Index>) throws(DataReaderError) -> DataRange {
+    func _dataBytes(in dataIndexRange: ClosedRange<DataIndex>) throws(DataReaderError) -> DataRange {
         withData { $0[dataIndexRange] }
     }
     
@@ -97,6 +112,12 @@ package struct InoutDataReader<DataType: DataProtocol>: _DataReaderProtocol {
 
 extension DataProtocol {
     /// Accesses the data by providing an ``InoutDataReader`` instance to a closure.
+    ///
+    /// > Note:
+    /// >
+    /// > This type is less performant than the inout/pointer-based data readers, however the return types
+    /// > are fully copy-on-write compliant and are safe to use as-is after being passed out of the
+    /// >`withCopyingDataReader { reader in }` closure.
     @discardableResult
     package mutating func withInoutDataReader<T, E>(
         _ block: (_ reader: inout InoutDataReader<Self>) throws(E) -> T
