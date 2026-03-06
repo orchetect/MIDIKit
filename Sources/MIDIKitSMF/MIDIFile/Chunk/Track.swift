@@ -6,6 +6,7 @@
 
 import Foundation
 import MIDIKitCore
+internal import SwiftDataParsing
 
 // MARK: - Track
 
@@ -106,13 +107,13 @@ extension MIDIFile.Chunk.Track {
         
         // track header
         
-        self = try stream.withDataReader { dataReader throws(MIDIFile.DecodeError) in
-            let chunkTypeString = try dataReader.toMIDIFileDecodeError(
+        self = try stream.withDataParser { parser throws(MIDIFile.DecodeError) in
+            let chunkTypeString = try parser.toMIDIFileDecodeError(
                 malformedReason: "Missing chunk type bytes.",
-                try dataReader.read(bytes: 4).asciiDataToString() ?? "????"
+                try parser.read(bytes: 4).asciiDataToString() ?? "????"
             )
         
-            guard let chunkLengthInt32 = (try? dataReader.read(bytes: 4))?
+            guard let chunkLengthInt32 = (try? parser.read(bytes: 4))?
                 .toUInt32(from: .bigEndian)
             else {
                 throw .malformed(
@@ -127,13 +128,13 @@ extension MIDIFile.Chunk.Track {
                 )
             }
         
-            guard dataReader.remainingByteCount >= chunkLength else {
+            guard parser.remainingByteCount >= chunkLength else {
                 throw .malformed(
                     "There was a problem reading track data blob. Encountered end of data early."
                 )
             }
             
-            guard let readChunk = try? dataReader.read(bytes: chunkLength) else {
+            guard let readChunk = try? parser.read(bytes: chunkLength) else {
                 throw .malformed(
                     "There was a problem reading track data blob. Encountered end of data early."
                 )
@@ -149,7 +150,7 @@ extension MIDIFile.Chunk.Track {
     init<D: DataProtocol>(midi1SMFRawBytes rawData: D) throws(MIDIFile.DecodeError) {
         // chunk data
         
-        try rawData.withDataReader { dataReader throws(MIDIFile.DecodeError) in
+        try rawData.withDataParser { parser throws(MIDIFile.DecodeError) in
             // events
         
             var eventsCounted = 0
@@ -165,9 +166,9 @@ extension MIDIFile.Chunk.Track {
                 
                 // delta time
                 
-                let eventDeltaTimeRead = try dataReader.toMIDIFileDecodeError(
+                let eventDeltaTimeRead = try parser.toMIDIFileDecodeError(
                     malformedReason: "Encountered end of file early.",
-                    try dataReader.nonAdvancingRead(bytes: 4)
+                    try parser.read(bytes: 4, advance: false)
                 )
                 
                 guard let eventDeltaTime = MIDIFile
@@ -178,13 +179,13 @@ extension MIDIFile.Chunk.Track {
                     )
                 }
             
-                dataReader.advanceBy(eventDeltaTime.byteLength)
+                try parser.toMIDIFileDecodeError(try parser.seek(by: eventDeltaTime.byteLength))
                 
                 // event
                 
-                let readBuffer = try dataReader.toMIDIFileDecodeError(
+                let readBuffer = try parser.toMIDIFileDecodeError(
                     malformedReason: "Encountered end of file early.",
-                    try dataReader.nonAdvancingRead()
+                    try parser.read(advance: false)
                 )
                 
                 // first check for end of track
@@ -239,7 +240,7 @@ extension MIDIFile.Chunk.Track {
                     // add new event to new track
                     newEvents.append(foundEvent.newEvent.smfWrappedEvent(delta: newEventDelta))
                     let chunkBufferLength = foundEvent.bufferLength
-                    dataReader.advanceBy(chunkBufferLength)
+                    try parser.toMIDIFileDecodeError(try parser.seek(by: chunkBufferLength))
                 
                     // store event in running status
                     let newEventBytes: Data = foundEvent.newEvent.midi1SMFRawBytes()
@@ -258,13 +259,13 @@ extension MIDIFile.Chunk.Track {
                     // throw an error since no events could be decoded and there are still bytes
                     // remaining in the chunk
                 
-                    let byteOffsetString = dataReader.readOffset
+                    let byteOffsetString = parser.readOffset
                         .hexString(padTo: 1, prefix: true)
                 
                     let sampleBytes = (1 ... 8)
                         .reduce([UInt8]()) {
                             // read as many bytes as possible, up to range.count
-                            if let getBytes = try? dataReader.nonAdvancingRead(bytes: $1) {
+                            if let getBytes = try? parser.read(bytes: $1, advance: false) {
                                 return Array(getBytes)
                             }
                             return $0

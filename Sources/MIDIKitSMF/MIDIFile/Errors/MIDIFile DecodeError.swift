@@ -1,5 +1,5 @@
 //
-//  MIDIFile Errors.swift
+//  MIDIFile DecodeError.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
@@ -30,32 +30,20 @@ extension MIDIFile {
             }
         }
     }
-
-    public enum EncodeError: LocalizedError {
-        /// Internal Inconsistency. `verboseError` contains the specific reason.
-        case internalInconsistency(_ verboseError: String)
-        
-        public var errorDescription: String? {
-            switch self {
-            case let .internalInconsistency(verboseError):
-                "Internal inconsistency: \(verboseError)"
-            }
-        }
-    }
 }
 
 // MARK: - Helpers
 
-internal import MIDIKitInternals
+internal import SwiftDataParsing
 
-extension PointerDataReader {
+extension DataParserProtocol {
     /// Utility:
-    /// Wrapper to convert thrown data read errors to `DataReaderError`.
+    /// Wrapper to convert thrown data read errors to `DataParserError`.
     func toMIDIFileDecodeError<Result>(
         malformedReason: String? = nil,
-        _ block: @autoclosure () throws(DataReaderError) -> Result
+        _ block: @autoclosure () throws(DataParserError) -> Result
     ) throws(MIDIFile.DecodeError) -> Result {
-        do throws(DataReaderError) { return try block() }
+        do throws(DataParserError) { return try block() }
         catch { throw .malformed(malformedReason ?? error.localizedDescription) }
     }
 }

@@ -6,6 +6,7 @@
 
 import Foundation
 import MIDIKitCore
+internal import SwiftDataParsing
 
 // MARK: - RPN
 
@@ -93,7 +94,7 @@ extension MIDIParameterNumberUtils {
         channel: UInt4,
         byteLength: Int
     ) {
-        try stream.withDataReader { dataReader throws(MIDIFile.DecodeError) in
+        try stream.withDataParser { parser throws(MIDIFile.DecodeError) in
             var runningStatus: UInt8?
             
             func runningStatusChannel() -> UInt4? {
@@ -103,7 +104,7 @@ extension MIDIParameterNumberUtils {
             // since this is a sub-parser, we have to account for our own running status until we're
             // done parsing this event
             func needsRunningStatus() -> Bool {
-                guard let nextByte = try? dataReader.nonAdvancingReadByte() else { return false }
+                guard let nextByte = try? parser.readByte(advance: false) else { return false }
                 return nextByte < 0x80
             }
             
@@ -121,8 +122,9 @@ extension MIDIParameterNumberUtils {
                 
                 let result: MIDIFileEvent.CC.StreamDecodeResult
                 do {
-                    let residualBytes = try dataReader.nonAdvancingRead(
-                        bytes: MIDIEvent.CC.midi1SMFFixedRawBytesLength - prefixBytes.count
+                    let residualBytes = try parser.read(
+                        bytes: MIDIEvent.CC.midi1SMFFixedRawBytesLength - prefixBytes.count,
+                        advance: false
                     )
                     result = try MIDIFileEvent.CC.initFrom(
                         midi1SMFRawBytesStream: prefixBytes + residualBytes
@@ -155,7 +157,7 @@ extension MIDIParameterNumberUtils {
                 // remove prefix byte count (if any) from byte count
                 let actualByteCountRead = result.bufferLength - prefixBytes.count
                 
-                dataReader.advanceBy(actualByteCountRead)
+                try parser.toMIDIFileDecodeError(try parser.seek(by: actualByteCountRead))
                 
                 let newResult: MIDIFileEvent.CC.StreamDecodeResult = (
                     newEvent: result.newEvent,

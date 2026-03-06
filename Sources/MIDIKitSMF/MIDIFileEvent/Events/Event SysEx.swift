@@ -6,6 +6,7 @@
 
 import Foundation
 import MIDIKitCore
+internal import SwiftDataParsing
 
 // MARK: - SysEx7
 
@@ -283,36 +284,25 @@ extension MIDIEvent {
             throw .malformed("Not enough bytes.")
         }
         
-        return try rawBytes.withDataReader { dataReader throws(MIDIFile.DecodeError) in
+        return try rawBytes.withDataParser { parser throws(MIDIFile.DecodeError) in
             // 1-byte preamble
-            guard (try? dataReader.readByte()) == 0xF0 else {
+            guard (try? parser.readByte()) == 0xF0 else {
                 throw .malformed(
                     "Event is not a SysEx event."
                 )
             }
             
-            let readAheadCount = dataReader.remainingByteCount.clamped(to: 1 ... 4)
-            let lengthBytes = try dataReader.toMIDIFileDecodeError(
-                malformedReason: "Could not extract variable length.",
-                try dataReader.nonAdvancingRead(bytes: readAheadCount)
-            )
-            guard let length = MIDIFile.decodeVariableLengthValue(from: lengthBytes)
-            else {
-                throw .malformed(
-                    "Could not extract variable length."
-                )
-            }
-            dataReader.advanceBy(length.byteLength)
+            let length = try parser.decodeVariableLengthValue()
             
-            guard dataReader.remainingByteCount >= length.value else {
+            guard parser.remainingByteCount >= length else {
                 throw .malformed(
-                    "Fewer bytes are available (\(rawBytes.count)) than are expected (\(length.value))."
+                    "Fewer bytes are available (\(rawBytes.count)) than are expected (\(length))."
                 )
             }
             
-            let sysExBodySlice = try dataReader.toMIDIFileDecodeError(
+            let sysExBodySlice = try parser.toMIDIFileDecodeError(
                 malformedReason: "SysEx data was empty when attempting to read termination byte.",
-                try dataReader.read(bytes: length.value)
+                try parser.read(bytes: length)
             )
             
             guard let lastByte = sysExBodySlice.last else {

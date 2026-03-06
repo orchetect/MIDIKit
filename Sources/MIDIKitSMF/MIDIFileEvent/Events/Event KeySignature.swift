@@ -6,7 +6,7 @@
 
 import Foundation
 import MIDIKitCore
-internal import MIDIKitInternals
+internal import SwiftDataParsing
 
 // MARK: - KeySignature
 
@@ -95,26 +95,26 @@ extension MIDIFileEvent.KeySignature: MIDIFileEventPayload {
             )
         }
         
-        try rawBytes.withDataReader { dataReader throws(MIDIFile.DecodeError) in
+        try rawBytes.withDataParser { parser throws(MIDIFile.DecodeError) in
             // 3-byte preamble
             let header = MIDIFile.kEventHeaders[Self.smfEventType]!
-            guard let headerBytes = try? dataReader.read(bytes: header.count),
+            guard let headerBytes = try? parser.read(bytes: header.count),
                   headerBytes.elementsEqual(header)
             else {
                 throw .malformed("Event does not start with expected bytes.")
             }
             
             // flats/sharps - two's complement signed Int8
-            let readFlatsOrSharpsByte: UInt8 = try dataReader.toMIDIFileDecodeError(
+            let readFlatsOrSharpsByte: UInt8 = try parser.toMIDIFileDecodeError(
                 malformedReason: "Flats/sharps byte is missing.",
-                try dataReader.readByte()
+                try parser.readByte()
             )
             let readFlatsOrSharps: Int8 = Int8(bitPattern: readFlatsOrSharpsByte)
             
             // major/minor key - 1 or 0
-            let readMajMinKey: UInt8 = try dataReader.toMIDIFileDecodeError(
+            let readMajMinKey: UInt8 = try parser.toMIDIFileDecodeError(
                 malformedReason: "Maj/min key byte is missing.",
-                try dataReader.readByte()
+                try parser.readByte()
             )
             
             guard (-7 ... 7).contains(readFlatsOrSharps) else {

@@ -6,6 +6,7 @@
 
 import Foundation
 import MIDIKitCore
+internal import SwiftDataParsing
 
 // MARK: - PolyphonicPressure
 
@@ -89,11 +90,11 @@ extension MIDIEvent.NotePressure: MIDIFileEventPayload {
         
         let (
             readStatus, readChannel, readNoteNum, readPressure
-        ) = try rawBytes.withDataReader { dataReader throws(MIDIFile.DecodeError) -> (UInt8, UInt8, UInt8, UInt8) in
+        ) = try rawBytes.withDataParser { parser throws(MIDIFile.DecodeError) -> (UInt8, UInt8, UInt8, UInt8) in
             do {
-                let byte0 = try dataReader.readByte()
-                let noteNum = try dataReader.readByte()
-                let pressure = try dataReader.readByte()
+                let byte0 = try parser.readByte()
+                let noteNum = try parser.readByte()
+                let pressure = try parser.readByte()
                 
                 return (
                     readStatus: (byte0 & 0xF0) >> 4,

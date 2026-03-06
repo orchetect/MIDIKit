@@ -3,7 +3,7 @@
 /// OTCore/Extensions/Swift/String.swift
 /// OTCore/Extensions/Foundation/String and CharacterSet.swift
 ///
-/// Borrowed from OTCore 1.4.1 under MIT license.
+/// Borrowed from swift-extensions 1.4.1 under MIT license.
 /// https://github.com/orchetect/OTCore
 /// Methods herein are unit tested at their source
 /// so no unit tests are necessary.

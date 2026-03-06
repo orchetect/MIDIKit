@@ -6,6 +6,7 @@
 
 import Foundation
 import MIDIKitCore
+internal import SwiftDataParsing
 
 // MARK: - Channel Pressure
 
@@ -63,17 +64,17 @@ extension MIDIEvent.Pressure: MIDIFileEventPayload {
             )
         }
         
-        self = try rawBytes.withDataReader { dataReader throws(MIDIFile.DecodeError) in
-            let byte0 = try dataReader.toMIDIFileDecodeError(
+        self = try rawBytes.withDataParser { parser throws(MIDIFile.DecodeError) in
+            let byte0 = try parser.toMIDIFileDecodeError(
                 malformedReason: "Status byte is missing.",
-                try dataReader.readByte()
+                try parser.readByte()
             )
             let readStatus = (byte0 & 0xF0) >> 4
             let readChannel = byte0 & 0x0F
             
-            let readValue = try dataReader.toMIDIFileDecodeError(
+            let readValue = try parser.toMIDIFileDecodeError(
                 malformedReason: "Missing value byte.",
-                try dataReader.readByte()
+                try parser.readByte()
             )
             
             guard readStatus == 0xD else {

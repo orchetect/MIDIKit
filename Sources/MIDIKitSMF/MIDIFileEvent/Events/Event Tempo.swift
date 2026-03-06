@@ -6,6 +6,7 @@
 
 import Foundation
 import MIDIKitCore
+internal import SwiftDataParsing
 
 // MARK: - Tempo
 
@@ -97,19 +98,19 @@ extension MIDIFileEvent.Tempo: MIDIFileEventPayload {
             )
         }
         
-        try rawBytes.withDataReader { dataReader throws(MIDIFile.DecodeError) in
+        try rawBytes.withDataParser { parser throws(MIDIFile.DecodeError) in
             // 3-byte preamble
             let header = MIDIFile.kEventHeaders[Self.smfEventType]!
-            guard let headerBytes = try? dataReader.read(bytes: header.count),
+            guard let headerBytes = try? parser.read(bytes: header.count),
                   headerBytes.elementsEqual(header)
             else {
                 throw .malformed("Event does not start with expected bytes.")
             }
             
             do {
-                let byte3 = try UInt32(dataReader.readByte())
-                let byte4 = try UInt32(dataReader.readByte())
-                let byte5 = try UInt32(dataReader.readByte())
+                let byte3 = try UInt32(parser.readByte())
+                let byte4 = try UInt32(parser.readByte())
+                let byte5 = try UInt32(parser.readByte())
                 
                 let readUInt32 = (byte3 << 16)
                     + (byte4 << 8)

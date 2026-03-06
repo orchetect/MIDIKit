@@ -6,6 +6,7 @@
 
 import Foundation
 import MIDIKitCore
+internal import SwiftDataParsing
 
 // MARK: - PitchBend
 
@@ -64,10 +65,10 @@ extension MIDIEvent.PitchBend: MIDIFileEventPayload {
             )
         }
         
-        self = try rawBytes.withDataReader { dataReader throws(MIDIFile.DecodeError) in
-            let byte0 = try dataReader.toMIDIFileDecodeError(
+        self = try rawBytes.withDataParser { parser throws(MIDIFile.DecodeError) in
+            let byte0 = try parser.toMIDIFileDecodeError(
                 malformedReason: "Status byte is missing.",
-                try dataReader.readByte()
+                try parser.readByte()
             )
             let readStatus = (byte0 & 0xF0) >> 4
             let readChannel = byte0 & 0x0F
@@ -78,9 +79,9 @@ extension MIDIEvent.PitchBend: MIDIFileEventPayload {
                 )
             }
             
-            let byte1 = try dataReader.toMIDIFileDecodeError(
+            let byte1 = try parser.toMIDIFileDecodeError(
                 malformedReason: "Pitch Bend LSB byte is missing.",
-                try dataReader.readByte()
+                try parser.readByte()
             )
             guard let lsb = byte1.toUInt7Exactly else {
                 throw .malformed(
@@ -88,9 +89,9 @@ extension MIDIEvent.PitchBend: MIDIFileEventPayload {
                 )
             }
             
-            let byte2 = try dataReader.toMIDIFileDecodeError(
+            let byte2 = try parser.toMIDIFileDecodeError(
                 malformedReason: "Pitch Bend MSB byte is missing.",
-                try dataReader.readByte()
+                try parser.readByte()
             )
             guard let msb = byte2.toUInt7Exactly else {
                 throw .malformed(

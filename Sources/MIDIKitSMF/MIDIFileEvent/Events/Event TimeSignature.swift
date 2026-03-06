@@ -6,6 +6,7 @@
 
 import Foundation
 import MIDIKitCore
+internal import SwiftDataParsing
 
 // MARK: - TimeSignature
 
@@ -108,20 +109,20 @@ extension MIDIFileEvent.TimeSignature: MIDIFileEventPayload {
             )
         }
         
-        try rawBytes.withDataReader { dataReader throws(MIDIFile.DecodeError) in
+        try rawBytes.withDataParser { parser throws(MIDIFile.DecodeError) in
             // 3-byte preamble
             let header = MIDIFile.kEventHeaders[Self.smfEventType]!
-            guard let headerBytes = try? dataReader.read(bytes: header.count),
+            guard let headerBytes = try? parser.read(bytes: header.count),
                   headerBytes.elementsEqual(header)
             else {
                 throw .malformed("Event does not start with expected bytes.")
             }
             
             do {
-                numerator = try dataReader.readByte()
-                denominator = try dataReader.readByte()
-                midiClocksBetweenMetronomeClicks = try dataReader.readByte()
-                numberOf32ndNotesInAQuarterNote = try dataReader.readByte()
+                numerator = try parser.readByte()
+                denominator = try parser.readByte()
+                midiClocksBetweenMetronomeClicks = try parser.readByte()
+                numberOf32ndNotesInAQuarterNote = try parser.readByte()
             } catch {
                 throw .malformed("Not enough bytes.")
             }

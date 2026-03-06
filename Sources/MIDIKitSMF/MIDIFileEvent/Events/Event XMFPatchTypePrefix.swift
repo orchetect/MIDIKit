@@ -6,6 +6,7 @@
 
 import Foundation
 import MIDIKitCore
+internal import SwiftDataParsing
 
 // MARK: - XMFPatchTypePrefix
 
@@ -103,18 +104,18 @@ extension MIDIFileEvent.XMFPatchTypePrefix: MIDIFileEventPayload {
             )
         }
         
-        try rawBytes.withDataReader { dataReader throws(MIDIFile.DecodeError) in
+        try rawBytes.withDataParser { parser throws(MIDIFile.DecodeError) in
             // 2-byte preamble
             let header = MIDIFile.kEventHeaders[Self.smfEventType]!
-            guard let headerBytes = try? dataReader.read(bytes: header.count),
+            guard let headerBytes = try? parser.read(bytes: header.count),
                   headerBytes.elementsEqual(header)
             else {
                 throw .malformed("Event does not start with expected bytes.")
             }
             
-            let readLength = try dataReader.toMIDIFileDecodeError(
+            let readLength = try parser.toMIDIFileDecodeError(
                 malformedReason: "Param length byte is missing.",
-                try dataReader.readByte()
+                try parser.readByte()
             )
             guard readLength == 1 else {
                 throw .malformed(
@@ -122,9 +123,9 @@ extension MIDIFileEvent.XMFPatchTypePrefix: MIDIFileEventPayload {
                 )
             }
             
-            let readParam = try dataReader.toMIDIFileDecodeError(
+            let readParam = try parser.toMIDIFileDecodeError(
                 malformedReason: "Param value byte is missing.",
-                try dataReader.readByte()
+                try parser.readByte()
             )
             
             guard let selectParam = PatchSet(rawValue: readParam) else {

@@ -6,6 +6,7 @@
 
 import Foundation
 import MIDIKitCore
+internal import SwiftDataParsing
 
 // MARK: - CC
 
@@ -74,11 +75,11 @@ extension MIDIEvent.CC: MIDIFileEventPayload {
         
         let (
             readStatus, readChannel, readCCNum, readValue
-        ) = try rawBytes.withDataReader { dataReader throws(MIDIFile.DecodeError) -> (UInt8, UInt8, UInt8, UInt8) in
+        ) = try rawBytes.withDataParser { parser throws(MIDIFile.DecodeError) -> (UInt8, UInt8, UInt8, UInt8) in
             do {
-                let byte0 = try dataReader.readByte()
-                let noteNum = try dataReader.readByte()
-                let value = try dataReader.readByte()
+                let byte0 = try parser.readByte()
+                let noteNum = try parser.readByte()
+                let value = try parser.readByte()
                 return (
                     readStatus: (byte0 & 0xF0) >> 4,
                     readChannel: byte0 & 0x0F,

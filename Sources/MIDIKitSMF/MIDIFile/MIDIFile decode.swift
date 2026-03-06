@@ -7,6 +7,7 @@
 import Foundation
 import MIDIKitCore
 internal import MIDIKitInternals
+internal import SwiftDataParsing
 
 extension MIDIFile {
     mutating func decode(rawData data: Data) throws(DecodeError) {
@@ -25,10 +26,10 @@ extension MIDIFile {
 
         // begin parse
         
-        try data.withDataReader { dataReader throws(DecodeError) in
+        try data.withDataParser { parser throws(DecodeError) in
             // ____ Header ____
 
-            guard let readHeader = try? dataReader
+            guard let readHeader = try? parser
                 .read(bytes: Chunk.Header.midi1SMFFixedRawBytesLength)
             else {
                 throw .malformed(
@@ -48,17 +49,17 @@ extension MIDIFile {
             while !endOfFile {
                 // chunk header
 
-                guard let chunkType = try? dataReader.read(bytes: 4) else {
+                guard let chunkType = try? parser.read(bytes: 4) else {
                     throw .malformed(
-                        "There was a problem reading chunk header at byte offset \(dataReader.readOffset). Encountered end of file early."
+                        "There was a problem reading chunk header at byte offset \(parser.readOffset). Encountered end of file early."
                     )
                 }
 
-                guard let chunkLength = (try? dataReader.read(bytes: 4))?
+                guard let chunkLength = (try? parser.read(bytes: 4))?
                     .toUInt32(from: .bigEndian)
                 else {
                     throw .malformed(
-                        "There was a problem reading chunk length at byte offset \(dataReader.readOffset). Encountered end of file early."
+                        "There was a problem reading chunk length at byte offset \(parser.readOffset). Encountered end of file early."
                     )
                 }
 
@@ -69,9 +70,9 @@ extension MIDIFile {
                     
                     // chunk length
                     
-                    guard let chunkData = try? dataReader.read(bytes: Int(chunkLength)) else {
+                    guard let chunkData = try? parser.read(bytes: Int(chunkLength)) else {
                         throw .malformed(
-                            "There was a problem reading track data blob at byte offset \(dataReader.readOffset) for track \(tracksEncountered). Encountered end of file early."
+                            "There was a problem reading track data blob at byte offset \(parser.readOffset) for track \(tracksEncountered). Encountered end of file early."
                         )
                     }
                     
@@ -95,7 +96,7 @@ extension MIDIFile {
                         switch error {
                         case let .malformed(verboseError):
                             throw .malformed(
-                                "There was a problem reading track data at byte offset \(dataReader.readOffset) for track \(tracksEncountered). \(verboseError)"
+                                "There was a problem reading track data at byte offset \(parser.readOffset) for track \(tracksEncountered). \(verboseError)"
                             )
                             
                         default:
@@ -106,7 +107,7 @@ extension MIDIFile {
                     newChunks.append(newChunk)
                 }
                 
-                if dataReader.readOffset >= data.count {
+                if parser.readOffset >= data.count {
                     endOfFile = true
                 }
             }

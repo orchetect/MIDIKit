@@ -6,6 +6,7 @@
 
 import Foundation
 import MIDIKitCore
+internal import SwiftDataParsing
 
 extension MIDIFile.Chunk {
     /// Unrecognized MIDI File Chunk.
@@ -119,13 +120,13 @@ extension MIDIFile.Chunk.UnrecognizedChunk {
         
         // track header
         
-        let (id, dataBody) = try stream.withDataReader { dataReader throws(MIDIFile.DecodeError) -> (String, Data) in
-            let readChunkType = try dataReader.toMIDIFileDecodeError(
+        let (id, dataBody) = try stream.withDataParser { parser throws(MIDIFile.DecodeError) -> (String, Data) in
+            let readChunkType = try parser.toMIDIFileDecodeError(
                 malformedReason: "Missing chunk type identifier.",
-                try dataReader.read(bytes: 4)
+                try parser.read(bytes: 4)
             )
             
-            guard let chunkLengthInt32 = (try? dataReader.read(bytes: 4))?
+            guard let chunkLengthInt32 = (try? parser.read(bytes: 4))?
                 .toUInt32(from: .bigEndian)
             else {
                 throw .malformed(
@@ -142,7 +143,7 @@ extension MIDIFile.Chunk.UnrecognizedChunk {
                 )
             }
             
-            guard let dataBody = try? dataReader.read(bytes: chunkLength) else {
+            guard let dataBody = try? parser.read(bytes: chunkLength) else {
                 throw .malformed(
                     "There was a problem reading chunk data blob. Encountered end of data early."
                 )

@@ -6,6 +6,7 @@
 
 import Foundation
 import MIDIKitCore
+internal import SwiftDataParsing
 
 // MARK: - NoteOn
 
@@ -74,11 +75,11 @@ extension MIDIEvent.NoteOn: MIDIFileEventPayload {
         
         let (
             readStatus, readChannel, readNoteNum, readVelocity
-        ) = try rawBytes.withDataReader { dataReader throws(MIDIFile.DecodeError) -> (UInt8, UInt8, UInt8, UInt8) in
+        ) = try rawBytes.withDataParser { parser throws(MIDIFile.DecodeError) -> (UInt8, UInt8, UInt8, UInt8) in
             do {
-                let byte0 = try dataReader.readByte()
-                let noteNum = try dataReader.readByte()
-                let velocity = try dataReader.readByte()
+                let byte0 = try parser.readByte()
+                let noteNum = try parser.readByte()
+                let velocity = try parser.readByte()
                 return (
                     readStatus: (byte0 & 0xF0) >> 4,
                     readChannel: byte0 & 0x0F,

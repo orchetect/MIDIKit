@@ -6,7 +6,7 @@
 
 import Foundation
 import MIDIKitCore
-internal import MIDIKitInternals
+internal import SwiftDataParsing
 
 // MARK: - SequencerSpecific
 
@@ -68,37 +68,26 @@ extension MIDIFileEvent.SequencerSpecific: MIDIFileEventPayload {
             )
         }
         
-        try rawBytes.withDataReader { dataReader throws(MIDIFile.DecodeError) in
+        try rawBytes.withDataParser { parser throws(MIDIFile.DecodeError) in
             // 2-byte preamble
             let header = MIDIFile.kEventHeaders[Self.smfEventType]!
-            guard let headerBytes = try? dataReader.read(bytes: header.count),
+            guard let headerBytes = try? parser.read(bytes: header.count),
                   headerBytes.elementsEqual(header)
             else {
                 throw .malformed("Event does not start with expected bytes.")
             }
             
-            let readAheadCount = dataReader.remainingByteCount.clamped(to: 1 ... 4)
-            let lengthBytes = try dataReader.toMIDIFileDecodeError(
-                malformedReason: "Could not extract variable length.",
-                try dataReader.nonAdvancingRead(bytes: readAheadCount)
-            )
-            guard let length = MIDIFile.decodeVariableLengthValue(from: lengthBytes)
-            else {
-                throw .malformed(
-                    "Could not extract variable length."
-                )
-            }
-            dataReader.advanceBy(length.byteLength)
+            let length = try parser.decodeVariableLengthValue()
             
-            guard dataReader.remainingByteCount >= length.value else {
+            guard parser.remainingByteCount >= length else {
                 throw .malformed(
-                    "Fewer bytes are available (\(dataReader.remainingByteCount) than are expected (\(length.value))."
+                    "Fewer bytes are available (\(parser.remainingByteCount) than are expected (\(length))."
                 )
             }
             
-            let readData = try dataReader.toMIDIFileDecodeError(
+            let readData = try parser.toMIDIFileDecodeError(
                 malformedReason: "Not enough bytes in data block.",
-                try dataReader.read(bytes: length.value)
+                try parser.read(bytes: length)
             )
             
             data = readData.toUInt8Bytes()

@@ -6,6 +6,7 @@
 
 import Foundation
 import MIDIKitCore
+internal import SwiftDataParsing
 
 // MARK: - ChannelPrefix
 
@@ -82,18 +83,18 @@ extension MIDIFileEvent.ChannelPrefix: MIDIFileEventPayload {
             )
         }
         
-        try rawBytes.withDataReader { dataReader throws(MIDIFile.DecodeError) in
+        try rawBytes.withDataParser { parser throws(MIDIFile.DecodeError) in
             // 3-byte preamble
             let header = MIDIFile.kEventHeaders[Self.smfEventType]!
-            guard let headerBytes = try? dataReader.read(bytes: header.count),
+            guard let headerBytes = try? parser.read(bytes: header.count),
                   headerBytes.elementsEqual(header)
             else {
                 throw .malformed("Event does not start with expected bytes.")
             }
             
-            let readChannel: UInt8 = try dataReader.toMIDIFileDecodeError(
+            let readChannel: UInt8 = try parser.toMIDIFileDecodeError(
                 malformedReason: "Missing channel byte.",
-                try dataReader.readByte()
+                try parser.readByte()
             )
             
             guard (0x0 ... 0xF).contains(readChannel) else {

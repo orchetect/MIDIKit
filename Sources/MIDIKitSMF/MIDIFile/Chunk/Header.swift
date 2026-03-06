@@ -7,6 +7,7 @@
 import Foundation
 import MIDIKitCore
 internal import MIDIKitInternals
+internal import SwiftDataParsing
 
 // [Standard MIDI File 1.0 Spec]:
 //
@@ -123,17 +124,17 @@ extension MIDIFile.Chunk.Header {
             )
         }
         
-        try midi1SMFRawBytes.withDataReader { dataReader throws(MIDIFile.DecodeError) in
+        try midi1SMFRawBytes.withDataParser { parser throws(MIDIFile.DecodeError) in
             // Header descriptor
             
-            guard (try? dataReader.read(bytes: 4).toUInt8Bytes()) == Self.staticIdentifier.toASCIIBytes()
+            guard (try? parser.read(bytes: 4).toUInt8Bytes()) == Self.staticIdentifier.toASCIIBytes()
             else {
                 throw .malformed(
                     "Header is not correct. File may not be a MIDI file."
                 )
             }
             
-            guard let headerLengthUInt32Bytes = try? dataReader.read(bytes: 4)
+            guard let headerLengthUInt32Bytes = try? parser.read(bytes: 4)
             else {
                 throw .malformed(
                     "Not enough bytes found when attempting to read MIDI file header length."
@@ -156,7 +157,7 @@ extension MIDIFile.Chunk.Header {
         
             // MIDI Format Type specification - 0, 1, or 2 (2 bytes: big endian)
         
-            guard let midiFileFormatRawValue = (try? dataReader.read(bytes: 2))?
+            guard let midiFileFormatRawValue = (try? parser.read(bytes: 2))?
                 .toUInt16(from: .bigEndian),
                 (0 ... 2).contains(midiFileFormatRawValue),
                 let midiFileFormat = MIDIFile
@@ -169,7 +170,7 @@ extension MIDIFile.Chunk.Header {
         
             format = midiFileFormat
         
-            guard let numberOfTracks = (try? dataReader.read(bytes: 2))?
+            guard let numberOfTracks = (try? parser.read(bytes: 2))?
                 .toUInt16(from: .bigEndian)
             else {
                 throw .malformed(
@@ -177,7 +178,7 @@ extension MIDIFile.Chunk.Header {
                 )
             }
         
-            guard let timeDivision = try? dataReader.read(bytes: 2) else {
+            guard let timeDivision = try? parser.read(bytes: 2) else {
                 throw .malformed(
                     "Could not read division info; end of file encountered."
                 )

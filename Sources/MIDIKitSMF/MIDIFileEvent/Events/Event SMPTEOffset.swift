@@ -7,6 +7,7 @@
 import Foundation
 import MIDIKitCore
 import SwiftTimecodeCore
+internal import SwiftDataParsing
 
 // MARK: - SMPTEOffset
 
@@ -233,26 +234,26 @@ extension MIDIFileEvent.SMPTEOffset: MIDIFileEventPayload {
         
         let (
             readFrameRateBits, readHours, readMinutes, readSeconds, readFrames, readSubframes
-        ) = try rawBytes.withDataReader { dataReader throws(MIDIFile.DecodeError) -> (
+        ) = try rawBytes.withDataParser { parser throws(MIDIFile.DecodeError) -> (
             UInt8, UInt8, UInt8, UInt8, UInt8, UInt8
         ) in
             // 3-byte preamble
             let header = MIDIFile.kEventHeaders[Self.smfEventType]!
-            guard let headerBytes = try? dataReader.read(bytes: header.count),
+            guard let headerBytes = try? parser.read(bytes: header.count),
                   headerBytes.elementsEqual(header)
             else {
                 throw .malformed("Event does not start with expected bytes.")
             }
             
             do {
-                let readHoursByte = try dataReader.readByte()
+                let readHoursByte = try parser.readByte()
                 let readFrameRateBits = (readHoursByte & 0b1100000) >> 5
                 let readHours = readHoursByte & 0b0011111
                 
-                let readMinutes = try dataReader.readByte()
-                let readSeconds = try dataReader.readByte()
-                let readFrames = try dataReader.readByte()
-                let readSubframes = try dataReader.readByte()
+                let readMinutes = try parser.readByte()
+                let readSeconds = try parser.readByte()
+                let readFrames = try parser.readByte()
+                let readSubframes = try parser.readByte()
                 
                 return (
                     readFrameRateBits: readFrameRateBits,
