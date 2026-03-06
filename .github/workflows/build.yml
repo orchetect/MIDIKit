@@ -58,7 +58,7 @@ jobs:
     - name: Unit Tests
       run: xcodebuild test -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "$SCHEME" -destination "platform=macOS" | xcbeautify --renderer github-actions && exit ${PIPESTATUS[0]}
     
-  macOS-swift6:
+  macOS-swift6-2:
     name: macOS Sequoia (Swift 6.2)
     runs-on: macos-latest
     timeout-minutes: 20
