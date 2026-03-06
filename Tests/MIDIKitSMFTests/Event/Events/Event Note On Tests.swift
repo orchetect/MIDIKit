@@ -12,7 +12,7 @@ import Testing
     // swiftformat:disable spaceInsideParens spaceInsideBrackets spacearoundoperators
     
     @Test
-    func init_midi1SMFRawBytes_A() throws {
+    func init_midi1SMFRawBytes_A() async throws {
         let bytes: [UInt8] = [0x90, 0x01, 0x40]
         
         let event = try MIDIFileEvent.NoteOn(midi1SMFRawBytes: bytes)
@@ -23,7 +23,7 @@ import Testing
     }
     
     @Test
-    func midi1SMFRawBytes_A() {
+    func midi1SMFRawBytes_A() async {
         let event = MIDIFileEvent.NoteOn(
             note: 1,
             velocity: .midi1(0x40),
@@ -36,7 +36,7 @@ import Testing
     }
     
     @Test
-    func init_midi1SMFRawBytes_B() throws {
+    func init_midi1SMFRawBytes_B() async throws {
         let bytes: [UInt8] = [0x91, 0x3C, 0x7F]
         
         let event = try MIDIFileEvent.NoteOn(midi1SMFRawBytes: bytes)
@@ -47,7 +47,7 @@ import Testing
     }
     
     @Test
-    func midi1SMFRawBytes_B() {
+    func midi1SMFRawBytes_B() async {
         let event = MIDIFileEvent.NoteOn(
             note: 60,
             velocity: .midi1(0x7F),
@@ -62,7 +62,7 @@ import Testing
     // MARK: - Edge Cases
     
     @Test
-    func init_midi1SMFRawBytes_Velocity0() throws {
+    func init_midi1SMFRawBytes_Velocity0() async throws {
         let bytes: [UInt8] = [0x90, 0x3C, 0x00]
         
         let event = try MIDIFileEvent.NoteOn(midi1SMFRawBytes: bytes)
@@ -73,7 +73,7 @@ import Testing
     }
     
     @Test
-    func midi1SMFRawBytes_Velocity0_NoTranslation() {
+    func midi1SMFRawBytes_Velocity0_NoTranslation() async {
         let event = MIDIFileEvent.NoteOn(
             note: 60,
             velocity: .midi1(0x00),
@@ -87,7 +87,7 @@ import Testing
     }
     
     @Test
-    func midi1SMFRawBytes_Velocity0_TranslateOff() {
+    func midi1SMFRawBytes_Velocity0_TranslateOff() async {
         let event = MIDIFileEvent.NoteOn(
             note: 60,
             velocity: .midi1(0x00),
@@ -101,7 +101,7 @@ import Testing
     }
     
     @Test
-    func midi1SMFRawBytes_Velocity1_TranslateOff() {
+    func midi1SMFRawBytes_Velocity1_TranslateOff() async {
         let event = MIDIFileEvent.NoteOn(
             note: 60,
             velocity: .midi1(0x01),

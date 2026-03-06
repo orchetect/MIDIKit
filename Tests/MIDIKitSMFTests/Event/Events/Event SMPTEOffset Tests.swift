@@ -13,7 +13,7 @@ import SwiftTimecodeCore
     // swiftformat:disable spaceInsideParens spaceInsideBrackets spacearoundoperators
     
     @Test
-    func init_midi1SMFRawBytes() throws {
+    func init_midi1SMFRawBytes() async throws {
         let bytes: [UInt8] = [0xFF, 0x54, 0x05,
                               0b00100001, 2, 3, 4, 5]
         
@@ -28,7 +28,7 @@ import SwiftTimecodeCore
     }
     
     @Test
-    func midi1SMFRawBytes() {
+    func midi1SMFRawBytes() async {
         let event = MIDIFileEvent.SMPTEOffset(
             hr: 1,
             min: 2,
@@ -45,7 +45,7 @@ import SwiftTimecodeCore
     }
     
     @Test
-    func frameRates() throws {
+    func frameRates() async throws {
         do {
             let rawData: [UInt8] = [0xFF, 0x54, 0x05,
                                     0b00000001, 2, 3, 4, 5]
@@ -86,7 +86,7 @@ import SwiftTimecodeCore
     // MARK: Timecode methods
     
     @Test
-    func init_Timecode() {
+    func init_Timecode() async {
         // basic: four SMPTE Offset frame rates
         
         do {
@@ -159,7 +159,7 @@ import SwiftTimecodeCore
     }
     
     @Test
-    func timecode_scaledToMIDIFileSMPTEFrameRate() {
+    func timecode_scaledToMIDIFileSMPTEFrameRate() async {
         // basic: four SMPTE Offset frame rates
         
         do {

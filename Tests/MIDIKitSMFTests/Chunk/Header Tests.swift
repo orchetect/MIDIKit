@@ -15,7 +15,7 @@ import Testing
     // swiftformat:options --maxwidth none
     
     @Test
-    func init_Type0() throws {
+    func init_Type0() async throws {
         let header = MIDIFile.Chunk.Header(
             format: .singleTrack,
             timeBase: .musical(ticksPerQuarterNote: 720)
@@ -34,7 +34,7 @@ import Testing
     }
     
     @Test
-    func init_Type0_rawData() throws {
+    func init_Type0_rawData() async throws {
         let rawData: [UInt8] = [0x4D, 0x54, 0x68, 0x64, // MThd header
                                 0x00, 0x00, 0x00, 0x06, // length
                                 0x00, 0x00, // format
@@ -48,7 +48,7 @@ import Testing
     }
     
     @Test
-    func init_Type1() throws {
+    func init_Type1() async throws {
         let header = MIDIFile.Chunk.Header(
             format: .multipleTracksSynchronous,
             timeBase: .musical(ticksPerQuarterNote: 720)
@@ -67,7 +67,7 @@ import Testing
     }
     
     @Test
-    func init_Type1_rawData() throws {
+    func init_Type1_rawData() async throws {
         let rawData: [UInt8] = [0x4D, 0x54, 0x68, 0x64, // MThd header
                                 0x00, 0x00, 0x00, 0x06, // length
                                 0x00, 0x01, // format
@@ -81,7 +81,7 @@ import Testing
     }
     
     @Test
-    func init_Type2() throws {
+    func init_Type2() async throws {
         let header = MIDIFile.Chunk.Header(
             format: .multipleTracksAsynchronous,
             timeBase: .musical(ticksPerQuarterNote: 720)
@@ -100,7 +100,7 @@ import Testing
     }
     
     @Test
-    func init_Type2_rawData() throws {
+    func init_Type2_rawData() async throws {
         let rawData: [UInt8] = [0x4D, 0x54, 0x68, 0x64, // MThd header
                                 0x00, 0x00, 0x00, 0x06, // length
                                 0x00, 0x02, // format
@@ -116,7 +116,7 @@ import Testing
     // MARK: - Edge Cases
     
     @Test
-    func init_LengthIntTooShort() {
+    func init_LengthIntTooShort() async {
         let rawData: [UInt8] = [0x4D, 0x54, 0x68, 0x64, // MThd header
                                 0x00, 0x00, 0x00, 0x05, // length (wrong)
                                 0x00, 0x00, // format
@@ -128,7 +128,7 @@ import Testing
     }
     
     @Test
-    func init_LengthIntTooLong() {
+    func init_LengthIntTooLong() async {
         let rawData: [UInt8] = [0x4D, 0x54, 0x68, 0x64, // MThd header
                                 0x00, 0x00, 0x00, 0x07, // length (wrong)
                                 0x00, 0x00, // format
@@ -140,7 +140,7 @@ import Testing
     }
     
     @Test
-    func init_LengthTooShort() {
+    func init_LengthTooShort() async {
         let rawData: [UInt8] = [0x4D, 0x54, 0x68, 0x64, // MThd header
                                 0x00, 0x00, 0x00, 0x06, // length
                                 0x00, 0x00, // format
@@ -153,7 +153,7 @@ import Testing
     }
     
     @Test
-    func init_MoreBytesThanExpected() {
+    func init_MoreBytesThanExpected() async {
         // valid header chunk, with an additional unexpected subsequent byte
         
         let rawData: [UInt8] = [0x4D, 0x54, 0x68, 0x64, // MThd header

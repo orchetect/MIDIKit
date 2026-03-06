@@ -16,7 +16,7 @@ import Testing
     
     /// Ensure that event decode order contains all event types and that there are no duplicates.
     @Test
-    func eventDecodeOrder() {
+    func eventDecodeOrder() async {
         // check count matches since an array can contain more than one of the same identical element
         #expect(
             Set(MIDIFile.Chunk.Track.eventDecodeOrder).count ==
@@ -30,7 +30,7 @@ import Testing
     }
     
     @Test
-    func emptyEvents() throws {
+    func emptyEvents() async throws {
         let events: [MIDIFileEvent] = []
         
         let track = MIDIFile.Chunk.Track(events: events)
@@ -62,7 +62,7 @@ import Testing
     }
     
     @Test
-    func withEvents() throws {
+    func withEvents() async throws {
         let events: [MIDIFileEvent] = [
             .noteOn(delta: .none, note: 60, velocity: .midi1(64), channel: 0),
             .cc(delta: .ticks(240), controller: .expression, value: .midi1(20), channel: 1)
@@ -103,7 +103,7 @@ import Testing
     // MARK: - Events
     
     @Test
-    func eventsAtBeatPositions() throws {
+    func eventsAtBeatPositions() async throws {
         let ppq: UInt16 = 480
         var midiFile = MIDIFile(timeBase: .musical(ticksPerQuarterNote: UInt16(ppq)))
         
@@ -194,7 +194,7 @@ import Testing
         
         // encode and decode
         let midiFileData = try midiFile.rawData()
-        let decodedMIDIFile = try MIDIFile(rawData: midiFileData)
+        let decodedMIDIFile = try await MIDIFile(rawData: midiFileData)
         
         // compare events
         let decodedTrack = try #require(decodedMIDIFile.tracks.first)

@@ -14,10 +14,35 @@ import Testing
     // swiftformat:disable spaceInsideParens spaceInsideBrackets spacearoundoperators
     // swiftformat:options --maxwidth none
     
+    /// Test parsing using NON-ASYNC method.
+    /// Just ensure file parses successfully. Not testing contents in-depth.
+    @Test
+    func midiFileParse_NonAsync() throws { // DO NOT MARK THIS METHOD ASYNC!!!
+        // Note: It's ok if this throws a deprecation warning. We need to test this specific method.
+        let midiFile = try /* NOT AWAIT! */ MIDIFile(rawData: kMIDIFile.dp8Markers.toData())
+        
+        try #require(midiFile.chunks.count == 3)
+        
+        let encodedData = try midiFile.rawData()
+        #expect(encodedData.toUInt8Bytes() == kMIDIFile.dp8Markers)
+    }
+    
+    /// Test parsing using ASYNC method.
+    /// Just ensure file parses successfully. Not testing contents in-depth.
+    @Test
+    func midiFileParse_Async() async throws { // MUST BE MARKED ASYNC!!!
+        let midiFile = try await MIDIFile(rawData: kMIDIFile.dp8Markers.toData())
+        
+        try #require(midiFile.chunks.count == 3)
+        
+        let encodedData = try midiFile.rawData()
+        #expect(encodedData.toUInt8Bytes() == kMIDIFile.dp8Markers)
+    }
+    
     /// Test parsing a MIDI file that contains an unrecognized chunk.
     @Test
-    func customChunk() throws {
-        let midiFile = try MIDIFile(rawData: kMIDIFile.customChunk.toData())
+    func customChunk() async throws {
+        let midiFile = try await MIDIFile(rawData: kMIDIFile.customChunk.toData())
         
         try #require(midiFile.chunks.count == 2)
         

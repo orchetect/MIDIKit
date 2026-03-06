@@ -12,7 +12,7 @@ import Testing
     // swiftformat:disable spaceInsideParens spaceInsideBrackets spacearoundoperators
     
     @Test
-    func init_midi1SMFRawBytes() throws {
+    func init_midi1SMFRawBytes() async throws {
         let bytes: [UInt8] = [0xFF, 0x21, 0x01, 0x02]
         
         let event = try MIDIFileEvent.PortPrefix(midi1SMFRawBytes: bytes)
@@ -21,7 +21,7 @@ import Testing
     }
     
     @Test
-    func midi1SMFRawBytes() {
+    func midi1SMFRawBytes() async {
         let event = MIDIFileEvent.PortPrefix(port: 2)
         
         let bytes: [UInt8] = event.midi1SMFRawBytes()

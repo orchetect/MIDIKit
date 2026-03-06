@@ -12,7 +12,7 @@ import Testing
     // swiftformat:disable spaceInsideParens spaceInsideBrackets spacearoundoperators
     
     @Test
-    func init_midi1SMFRawBytes_EmptyData() throws {
+    func init_midi1SMFRawBytes_EmptyData() async throws {
         let bytes: [UInt8] = [
             0xFF, 0x30, // unknown/undefined meta type 0x30
             0x00        // length: 0 bytes to follow
@@ -25,7 +25,7 @@ import Testing
     }
     
     @Test
-    func midi1SMFRawBytes_EmptyData() {
+    func midi1SMFRawBytes_EmptyData() async {
         let event = MIDIFileEvent.UnrecognizedMeta(
             metaType: 0x30,
             data: []
@@ -40,7 +40,7 @@ import Testing
     }
     
     @Test
-    func init_midi1SMFRawBytes_WithData() throws {
+    func init_midi1SMFRawBytes_WithData() async throws {
         let bytes: [UInt8] = [
             0xFF, 0x30, // unknown/undefined meta type 0x30
             0x01,       // length: 1 bytes to follow
@@ -54,7 +54,7 @@ import Testing
     }
     
     @Test
-    func midi1SMFRawBytes_WithData() {
+    func midi1SMFRawBytes_WithData() async {
         let event = MIDIFileEvent.UnrecognizedMeta(
             metaType: 0x30,
             data: [0x12]
@@ -70,7 +70,7 @@ import Testing
     }
     
     @Test
-    func Init_midi1SMFRawBytes_127Bytes() throws {
+    func Init_midi1SMFRawBytes_127Bytes() async throws {
         let data: [UInt8] = .init(repeating: 0x12, count: 127)
         
         let bytes: [UInt8] =
@@ -85,7 +85,7 @@ import Testing
     }
     
     @Test
-    func MIDI1SMFRawBytes_127Bytes() {
+    func MIDI1SMFRawBytes_127Bytes() async {
         let data: [UInt8] = .init(repeating: 0x12, count: 127)
         
         let event = MIDIFileEvent.UnrecognizedMeta(
@@ -104,7 +104,7 @@ import Testing
     }
     
     @Test
-    func Init_midi1SMFRawBytes_128Bytes() throws {
+    func Init_midi1SMFRawBytes_128Bytes() async throws {
         let data: [UInt8] = .init(repeating: 0x12, count: 128)
         
         let bytes: [UInt8] =
@@ -119,7 +119,7 @@ import Testing
     }
     
     @Test
-    func MIDI1SMFRawBytes_128Bytes() {
+    func MIDI1SMFRawBytes_128Bytes() async {
         let data: [UInt8] = .init(repeating: 0x12, count: 128)
         
         let event = MIDIFileEvent.UnrecognizedMeta(

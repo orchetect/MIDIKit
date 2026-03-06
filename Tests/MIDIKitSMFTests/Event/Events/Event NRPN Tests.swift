@@ -14,7 +14,7 @@ import Testing
     // MARK: - With Data LSB
     
     @Test
-    func init_Event_init_midi1SMFRawBytes_SinglePacket_FullyFormedMessages() throws {
+    func init_Event_init_midi1SMFRawBytes_SinglePacket_FullyFormedMessages() async throws {
         let bytes: [UInt8] = [
             0xB1, 0x63, 0x00, // cc 99, chan 1
             0xB1, 0x62, 0x01, // cc 98, chan 1
@@ -32,7 +32,7 @@ import Testing
     }
     
     @Test
-    func init_Event_init_midi1SMFRawBytes_SinglePacket_RunningStatus() throws {
+    func init_Event_init_midi1SMFRawBytes_SinglePacket_RunningStatus() async throws {
         let bytes: [UInt8] = [
             0xB1, 0x63, 0x00, // cc 99, chan 1
             0x62, 0x01, // cc 98, chan 1, running status 0xB1
@@ -50,7 +50,7 @@ import Testing
     }
     
     @Test
-    func event_MIDI1SMFRawBytes_SinglePacket_FullyFormedMessages() {
+    func event_MIDI1SMFRawBytes_SinglePacket_FullyFormedMessages() async {
         let event = MIDIFileEvent.NRPN(
             .raw(parameter: .init(msb: 0x00, lsb: 0x01), dataEntryMSB: 0x02, dataEntryLSB: 0x03),
             change: .absolute,
@@ -70,7 +70,7 @@ import Testing
     // MARK: - No Data LSB
     
     @Test
-    func init_Event_init_midi1SMFRawBytes_SinglePacket_FullyFormedMessages_NoDataLSB() throws {
+    func init_Event_init_midi1SMFRawBytes_SinglePacket_FullyFormedMessages_NoDataLSB() async throws {
         let bytes: [UInt8] = [
             0xB2, 0x63, 0x05, // cc 99, chan 2
             0xB2, 0x62, 0x10, // cc 98, chan 2
@@ -87,7 +87,7 @@ import Testing
     }
     
     @Test
-    func init_Event_init_midi1SMFRawBytes_SinglePacket_RunningStatus_NoDataLSB() throws {
+    func init_Event_init_midi1SMFRawBytes_SinglePacket_RunningStatus_NoDataLSB() async throws {
         let bytes: [UInt8] = [
             0xB2, 0x63, 0x05, // cc 99, chan 2
             0x62, 0x10, // cc 98, chan 2, running status 0xB2
@@ -104,7 +104,7 @@ import Testing
     }
     
     @Test
-    func event_MIDI1SMFRawBytes_SinglePacket_FullyFormedMessages_NoDataLSB() {
+    func event_MIDI1SMFRawBytes_SinglePacket_FullyFormedMessages_NoDataLSB() async {
         let event = MIDIFileEvent.NRPN(
             .raw(parameter: .init(msb: 0x05, lsb: 0x10), dataEntryMSB: 0x08, dataEntryLSB: nil),
             change: .absolute,

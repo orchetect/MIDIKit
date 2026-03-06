@@ -15,7 +15,7 @@ import Testing
     // swiftformat:options --maxwidth none
     
     @Test
-    func emptyData() throws {
+    func emptyData() async throws {
         let id = "ABCD"
         
         let track = MIDIFile.Chunk.UnrecognizedChunk(id: id)
@@ -44,7 +44,7 @@ import Testing
     }
     
     @Test
-    func withData() throws {
+    func withData() async throws {
         let data: [UInt8] = [0x12, 0x34, 0x56, 0x78]
         
         let id = "ABCD"

@@ -11,7 +11,7 @@ import Testing
 
 @Suite struct TimeBase_Tests {
     @Test
-    func initMusical() {
+    func initMusical() async {
         let timeBase = MIDIFile.TimeBase.musical(ticksPerQuarterNote: 480)
         
         let rawData: [UInt8] = [0x01, 0xE0]
@@ -36,7 +36,7 @@ import Testing
     }
     
     @Test
-    func initTimecode() {
+    func initTimecode() async {
         let timeBase = MIDIFile.TimeBase.timecode(smpteFormat: .fps25, ticksPerFrame: 80)
         
         let rawData: [UInt8] = [0b11100111, 0x50]

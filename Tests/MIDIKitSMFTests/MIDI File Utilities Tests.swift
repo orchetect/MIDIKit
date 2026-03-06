@@ -10,7 +10,7 @@ import Testing
 
 @Suite struct MIDIFileUtilities_Tests {
     @Test
-    func encodeVariableLengthValue() {
+    func encodeVariableLengthValue() async {
         #expect(MIDIFile.encodeVariableLengthValue(0) == [0x00])
         #expect(MIDIFile.encodeVariableLengthValue(1) == [0x01])
         #expect(MIDIFile.encodeVariableLengthValue(64) == [0x40])
@@ -29,12 +29,12 @@ import Testing
     }
     
     @Test
-    func decodeVariableLengthValue_Empty() {
+    func decodeVariableLengthValue_Empty() async {
         #expect(MIDIFile.decodeVariableLengthValue(from: []) == nil)
     }
     
     @Test
-    func decodeVariableLengthValue() {
+    func decodeVariableLengthValue() async {
         // repeat the test for:
         //   1. empty trailing bytes (so input bytes comprise only the variable length value)
         //   2. one or more trailing bytes existing in the input buffer
@@ -95,7 +95,7 @@ import Testing
     }
     
     @Test
-    func decodeVariableLengthValue_data_pointer() throws {
+    func decodeVariableLengthValue_data_pointer() async throws {
         // 1 byte: max 7-bit value
         
         try Data([0x7F, 0x00]).withContiguousStorageIfAvailable({
@@ -130,7 +130,7 @@ import Testing
     }
     
     @Test
-    func decodeVariableLengthValue_uInt8Array_pointer_slice() throws {
+    func decodeVariableLengthValue_uInt8Array_pointer_slice() async throws {
         // 1 byte: max 7-bit value
         
         try Data([0x01, 0x7F, 0x00]).withContiguousStorageIfAvailable({
@@ -169,7 +169,7 @@ import Testing
     }
     
     @Test
-    func decodeVariableLengthValue_EdgeCase() {
+    func decodeVariableLengthValue_EdgeCase() async {
         // ensure setting the top bit with no bytes following does not crash
         
         #expect(MIDIFile.decodeVariableLengthValue(from: [0x80]) == nil)

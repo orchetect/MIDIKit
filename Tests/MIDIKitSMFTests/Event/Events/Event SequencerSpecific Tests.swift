@@ -12,7 +12,7 @@ import Testing
     // swiftformat:disable spaceInsideParens spaceInsideBrackets spacearoundoperators
     
     @Test
-    func init_midi1SMFRawBytes_Empty() throws {
+    func init_midi1SMFRawBytes_Empty() async throws {
         let bytes: [UInt8] = [0xFF, 0x7F, 0x00]
         
         let event = try MIDIFileEvent.SequencerSpecific(midi1SMFRawBytes: bytes)
@@ -21,7 +21,7 @@ import Testing
     }
     
     @Test
-    func midi1SMFRawBytes_Empty() {
+    func midi1SMFRawBytes_Empty() async {
         let event = MIDIFileEvent.SequencerSpecific(data: [])
         
         let bytes: [UInt8] = event.midi1SMFRawBytes()
@@ -30,7 +30,7 @@ import Testing
     }
     
     @Test
-    func init_midi1SMFRawBytes_OneByte() throws {
+    func init_midi1SMFRawBytes_OneByte() async throws {
         let bytes: [UInt8] = [0xFF, 0x7F, 0x01, 0x34]
         
         let event = try MIDIFileEvent.SequencerSpecific(midi1SMFRawBytes: bytes)
@@ -39,7 +39,7 @@ import Testing
     }
     
     @Test
-    func midi1SMFRawBytes_OneByte() {
+    func midi1SMFRawBytes_OneByte() async {
         let event = MIDIFileEvent.SequencerSpecific(data: [0x34])
         
         let bytes: [UInt8] = event.midi1SMFRawBytes()
@@ -48,7 +48,7 @@ import Testing
     }
     
     @Test
-    func init_midi1SMFRawBytes_127Bytes() throws {
+    func init_midi1SMFRawBytes_127Bytes() async throws {
         let data: [UInt8] = .init(repeating: 0x12, count: 127)
         
         let bytes: [UInt8] =
@@ -62,7 +62,7 @@ import Testing
     }
     
     @Test
-    func midi1SMFRawBytes_127Bytes() {
+    func midi1SMFRawBytes_127Bytes() async {
         let data: [UInt8] = .init(repeating: 0x12, count: 127)
         
         let event = MIDIFileEvent.SequencerSpecific(data: data)
@@ -78,7 +78,7 @@ import Testing
     }
     
     @Test
-    func init_midi1SMFRawBytes_128Bytes() throws {
+    func init_midi1SMFRawBytes_128Bytes() async throws {
         let data: [UInt8] = .init(repeating: 0x12, count: 128)
         
         let bytes: [UInt8] =
@@ -92,7 +92,7 @@ import Testing
     }
     
     @Test
-    func midi1SMFRawBytes_128Bytes() {
+    func midi1SMFRawBytes_128Bytes() async {
         let data: [UInt8] = .init(repeating: 0x12, count: 128)
         
         let event = MIDIFileEvent.SequencerSpecific(data: data)
