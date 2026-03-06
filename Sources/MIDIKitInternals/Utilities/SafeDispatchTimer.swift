@@ -7,6 +7,8 @@
 import Dispatch
 import Foundation
 
+// TODO: remove after refactoring timer used in package with Task
+
 /// Simple custom safe `DispatchSourceTimer` wrapper.
 ///
 /// Timer does not start automatically when initializing. Call ``start()`` after initialization to
