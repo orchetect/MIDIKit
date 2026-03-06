@@ -1,10 +1,10 @@
 /// ----------------------------------------------
 /// ----------------------------------------------
-/// OTCore/Extensions/Darwin/String.swift
-/// OTCore/Extensions/Foundation/String and CharacterSet.swift
+/// Extensions/Darwin/String.swift
+/// Extensions/Foundation/String and CharacterSet.swift
 ///
 /// Borrowed from swift-extensions 1.4.2 under MIT license.
-/// https://github.com/orchetect/OTCore
+/// https://github.com/orchetect/swift-extensions
 /// Methods herein are unit tested at their source
 /// so no unit tests are necessary.
 /// ----------------------------------------------

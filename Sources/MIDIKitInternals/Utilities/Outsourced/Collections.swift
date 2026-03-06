@@ -1,9 +1,9 @@
 /// ----------------------------------------------
 /// ----------------------------------------------
-/// OTCore/Extensions/Swift/Collections.swift
+/// Extensions/Swift/Collections.swift
 ///
 /// Borrowed from swift-extensions 1.4.1 under MIT license.
-/// https://github.com/orchetect/OTCore
+/// https://github.com/orchetect/swift-extensions
 /// Methods herein are unit tested at their source
 /// so no unit tests are necessary.
 /// ----------------------------------------------

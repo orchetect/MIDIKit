@@ -1,10 +1,10 @@
 /// ----------------------------------------------
 /// ----------------------------------------------
-/// OTCore/Extensions/Swift/String.swift
-/// OTCore/Extensions/Foundation/String and CharacterSet.swift
+/// Extensions/Swift/String.swift
+/// Extensions/Foundation/String and CharacterSet.swift
 ///
 /// Borrowed from swift-extensions 1.4.1 under MIT license.
-/// https://github.com/orchetect/OTCore
+/// https://github.com/orchetect/swift-extensions
 /// Methods herein are unit tested at their source
 /// so no unit tests are necessary.
 /// ----------------------------------------------
@@ -13,7 +13,7 @@
 import Foundation
 
 // ---------------------------------------------
-// MARK: - /OTCore/Extensions/Swift/String.swift
+// MARK: - Extensions/Swift/String.swift
 // ---------------------------------------------
 
 extension String {
@@ -67,7 +67,7 @@ extension Substring {
 }
 
 // -------------------------------------------------------------------
-// MARK: - /OTCore/Extensions/Foundation/String and CharacterSet.swift
+// MARK: - Extensions/Foundation/String and CharacterSet.swift
 // -------------------------------------------------------------------
 
 // MARK: - Character filters
