@@ -66,14 +66,20 @@ extension MIDIFile: Sendable { }
 extension MIDIFile {
     /// Initialize by loading the contents of a MIDI file's raw data.
     @available(*, deprecated, message: "This method is less performant than its async variant. Considering calling with await.")
-    public init(rawData: some DataProtocol & Sendable) throws(DecodeError) {
-        try decode(rawData: rawData)
+    public init(
+        rawData: some DataProtocol & Sendable,
+        options: DecodeOptions = .default()
+    ) throws(DecodeError) {
+        try decode(rawData: rawData, bundleParameterNumbers: options.contains(.bundleParameterNumbers))
     }
     
     /// Initialize by loading the contents of a MIDI file's raw data.
     @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
-    public init(rawData: some DataProtocol & Sendable) async throws(DecodeError) {
-        try await decode(rawData: rawData)
+    public init(
+        rawData: some DataProtocol & Sendable,
+        options: DecodeOptions = .default()
+    ) async throws(DecodeError) {
+        try await decode(rawData: rawData, bundleParameterNumbers: options.contains(.bundleParameterNumbers))
     }
 }
 
@@ -82,16 +88,22 @@ extension MIDIFile {
 extension MIDIFile {
     /// Initialize by loading the contents of a MIDI file from disk.
     @available(*, deprecated, message: "This method is less performant than its async variant. Considering calling with await.")
-    public init(midiFile path: String) throws(DecodeError) {
+    public init(
+        midiFile path: String,
+        options: DecodeOptions = .default()
+    ) throws(DecodeError) {
         let url = try Self.url(forFilePath: path)
-        try self.init(midiFile: url)
+        try self.init(midiFile: url, options: options)
     }
     
     /// Initialize by loading the contents of a MIDI file from disk.
     @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
-    public init(midiFile path: String) async throws(DecodeError) {
+    public init(
+        midiFile path: String,
+        options: DecodeOptions = .default()
+    ) async throws(DecodeError) {
         let url = try Self.url(forFilePath: path)
-        try await self.init(midiFile: url)
+        try await self.init(midiFile: url, options: options)
     }
     
     static func url(forFilePath path: String) throws(DecodeError) -> URL {
@@ -112,16 +124,22 @@ extension MIDIFile {
 extension MIDIFile {
     /// Initialize by loading the contents of a MIDI file from disk.
     @available(*, deprecated, message: "This method is less performant than its async variant. Considering calling with await.")
-    public init(midiFile url: URL) throws(DecodeError) {
+    public init(
+        midiFile url: URL,
+        options: DecodeOptions = .default()
+    ) throws(DecodeError) {
         let data = try Self.data(forFileURL: url)
-        try decode(rawData: data)
+        try decode(rawData: data, bundleParameterNumbers: options.contains(.bundleParameterNumbers))
     }
     
     /// Initialize by loading the contents of a MIDI file from disk.
     @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
-    public init(midiFile url: URL) async throws(DecodeError) {
+    public init(
+        midiFile url: URL,
+        options: DecodeOptions = .default()
+    ) async throws(DecodeError) {
         let data = try Self.data(forFileURL: url)
-        try await decode(rawData: data)
+        try await decode(rawData: data, bundleParameterNumbers: options.contains(.bundleParameterNumbers))
     }
     
     static func data(forFileURL url: URL) throws(DecodeError) -> Data {
