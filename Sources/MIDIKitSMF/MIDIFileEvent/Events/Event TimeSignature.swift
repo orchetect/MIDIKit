@@ -102,7 +102,15 @@ extension MIDIFileEvent {
 extension MIDIFileEvent.TimeSignature: MIDIFileEventPayload {
     public static let smfEventType: MIDIFileEventType = .timeSignature
     
-    public init(midi1SMFRawBytes rawBytes: some DataProtocol) throws(MIDIFile.DecodeError) {
+    public init(
+        midi1SMFRawBytes rawBytes: some DataProtocol,
+        runningStatus: UInt8?
+    ) throws(MIDIFile.DecodeError) {
+        if let runningStatus {
+            let rsString = runningStatus.hexString(prefix: true)
+            throw .malformed("Running status byte \(rsString) was passed to event parser that does not use running status.")
+        }
+        
         guard rawBytes.count == Self.midi1SMFFixedRawBytesLength else {
             throw .malformed(
                 "Invalid number of bytes. Expected \(Self.midi1SMFFixedRawBytesLength) but got \(rawBytes.count)"
@@ -129,6 +137,20 @@ extension MIDIFileEvent.TimeSignature: MIDIFileEventPayload {
         }
     }
     
+    public static func initFrom(
+        midi1SMFRawBytesStream stream: some DataProtocol,
+        runningStatus: UInt8?
+    ) throws(MIDIFile.DecodeError) -> StreamDecodeResult {
+        let rawBytes = stream.prefix(midi1SMFFixedRawBytesLength)
+        
+        let newInstance = try Self(midi1SMFRawBytes: rawBytes, runningStatus: runningStatus)
+        
+        return (
+            newEvent: newInstance,
+            bufferLength: midi1SMFFixedRawBytesLength
+        )
+    }
+    
     public func midi1SMFRawBytes<D: MutableDataProtocol>() -> D {
         // FF 58 04 nn dd cc bb
         
@@ -150,23 +172,6 @@ extension MIDIFileEvent.TimeSignature: MIDIFileEventPayload {
     }
     
     static let midi1SMFFixedRawBytesLength = 7
-
-    public static func initFrom(
-        midi1SMFRawBytesStream stream: some DataProtocol
-    ) throws(MIDIFile.DecodeError) -> StreamDecodeResult {
-        let requiredData = stream.prefix(midi1SMFFixedRawBytesLength)
-
-        guard requiredData.count == midi1SMFFixedRawBytesLength else {
-            throw .malformed("Unexpected byte length.")
-        }
-
-        let newInstance = try Self(midi1SMFRawBytes: requiredData)
-
-        return (
-            newEvent: newInstance,
-            bufferLength: midi1SMFFixedRawBytesLength
-        )
-    }
     
     public var smfDescription: String {
         let denom = pow(2 as Decimal, Int(denominator))

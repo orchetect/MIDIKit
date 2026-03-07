@@ -225,7 +225,15 @@ extension MIDIFileEvent {
 extension MIDIFileEvent.SMPTEOffset: MIDIFileEventPayload {
     public static let smfEventType: MIDIFileEventType = .smpteOffset
     
-    public init(midi1SMFRawBytes rawBytes: some DataProtocol) throws(MIDIFile.DecodeError) {
+    public init(
+        midi1SMFRawBytes rawBytes: some DataProtocol,
+        runningStatus: UInt8?
+    ) throws(MIDIFile.DecodeError) {
+        if let runningStatus {
+            let rsString = runningStatus.hexString(prefix: true)
+            throw .malformed("Running status byte \(rsString) was passed to event parser that does not use running status.")
+        }
+        
         guard rawBytes.count == Self.midi1SMFFixedRawBytesLength else {
             throw .malformed(
                 "Invalid number of bytes. Expected \(Self.midi1SMFFixedRawBytesLength) but got \(rawBytes.count)"
@@ -348,15 +356,12 @@ extension MIDIFileEvent.SMPTEOffset: MIDIFileEventPayload {
     static let midi1SMFFixedRawBytesLength = 8
     
     public static func initFrom(
-        midi1SMFRawBytesStream stream: some DataProtocol
+        midi1SMFRawBytesStream stream: some DataProtocol,
+        runningStatus: UInt8?
     ) throws(MIDIFile.DecodeError) -> StreamDecodeResult {
         let requiredData = stream.prefix(midi1SMFFixedRawBytesLength)
         
-        guard requiredData.count == midi1SMFFixedRawBytesLength else {
-            throw .malformed("Unexpected byte length.")
-        }
-        
-        let newInstance = try Self(midi1SMFRawBytes: requiredData)
+        let newInstance = try Self(midi1SMFRawBytes: requiredData, runningStatus: runningStatus)
         
         return (
             newEvent: newInstance,

@@ -98,7 +98,7 @@ extension MIDIFile.Chunk {
 
 extension MIDIFile.Chunk.Track {
     /// Init from MIDI file data stream.
-    public init<D: MutableDataProtocol>(midi1SMFRawBytesStream stream: D) throws(MIDIFile.DecodeError) {
+    public init<D: DataProtocol>(midi1SMFRawBytesStream stream: D) throws(MIDIFile.DecodeError) {
         guard stream.count >= 8 else {
             throw .malformed(
                 "There was a problem reading chunk header. Encountered end of file early."
@@ -149,6 +149,8 @@ extension MIDIFile.Chunk.Track {
     /// Init from raw data stream, excluding the header identifier and length.
     init<D: DataProtocol>(midi1SMFRawBytes rawData: D) throws(MIDIFile.DecodeError) {
         // chunk data
+        
+        let eventConcreteTypes = MIDIFile.Chunk.Track.eventDecodeOrder.concreteTypes
         
         try rawData.withDataParser { parser throws(MIDIFile.DecodeError) in
             // events
@@ -218,16 +220,11 @@ extension MIDIFile.Chunk.Track {
                 var foundEvent: (newEvent: MIDIFileEventPayload, bufferLength: Int)?
             
                 autoreleasepool {
-                    // if running status byte is present, inject it into the byte buffer
-                    let prefix: [UInt8] = if let runningStatusByte {
-                        [runningStatusByte]
-                    } else { [] }
-                    
-                    for eventDef in MIDIFile.Chunk.Track.eventDecodeOrder.concreteTypes {
-                        if let success = try? eventDef
-                            .initFrom(midi1SMFRawBytesStream: prefix + readBuffer)
+                    for concreteType in eventConcreteTypes {
+                        if let success = try? concreteType
+                            .initFrom(midi1SMFRawBytesStream: readBuffer, runningStatus: runningStatusByte)
                         {
-                            foundEvent = (newEvent: success.newEvent, bufferLength: success.bufferLength - prefix.count)
+                            foundEvent = (newEvent: success.newEvent, bufferLength: success.bufferLength)
                             break // break for-loop lazily
                         }
                     }

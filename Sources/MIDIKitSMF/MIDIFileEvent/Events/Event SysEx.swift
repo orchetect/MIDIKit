@@ -67,7 +67,15 @@ extension MIDIFileEvent {
 extension MIDIEvent.SysEx7: MIDIFileEventPayload {
     public static let smfEventType: MIDIFileEventType = .sysEx7
     
-    public init(midi1SMFRawBytes rawBytes: some DataProtocol) throws(MIDIFile.DecodeError) {
+    public init(
+        midi1SMFRawBytes rawBytes: some DataProtocol,
+        runningStatus: UInt8?
+    ) throws(MIDIFile.DecodeError) {
+        if let runningStatus {
+            let rsString = runningStatus.hexString(prefix: true)
+            throw .malformed("Running status byte \(rsString) was passed to event parser that does not use running status.")
+        }
+        
         let parsedEvent = try MIDIEvent.sysEx7(midi1SMFRawBytes: rawBytes)
         
         switch parsedEvent {
@@ -78,6 +86,26 @@ extension MIDIEvent.SysEx7: MIDIFileEventPayload {
         default:
             throw .malformed("Invalid data. Expected Universal SysEx7 data and parsed \(parsedEvent) instead.")
         }
+    }
+    
+    public static func initFrom(
+        midi1SMFRawBytesStream stream: some DataProtocol,
+        runningStatus: UInt8?
+    ) throws(MIDIFile.DecodeError) -> StreamDecodeResult {
+        guard stream.count >= 3 else {
+            throw .malformed("Byte length too short.")
+        }
+        
+        let newInstance = try Self(midi1SMFRawBytes: stream, runningStatus: runningStatus)
+        
+        // TODO: this is brittle but it may work
+        
+        let length = (newInstance.midi1SMFRawBytes() as Data).count
+        
+        return (
+            newEvent: newInstance,
+            bufferLength: length
+        )
     }
     
     public func midi1SMFRawBytes<D: MutableDataProtocol>() -> D {
@@ -93,25 +121,6 @@ extension MIDIEvent.SysEx7: MIDIFileEventPayload {
             + MIDIFile.encodeVariableLengthValue(msg.count + 1)
             + D(msg)
             + [0xF7]
-    }
-    
-    public static func initFrom(
-        midi1SMFRawBytesStream stream: some DataProtocol
-    ) throws(MIDIFile.DecodeError) -> StreamDecodeResult {
-        guard stream.count >= 3 else {
-            throw .malformed("Byte length too short.")
-        }
-        
-        let newInstance = try Self(midi1SMFRawBytes: stream)
-        
-        // TODO: this is brittle but it may work
-        
-        let length = (newInstance.midi1SMFRawBytes() as Data).count
-        
-        return (
-            newEvent: newInstance,
-            bufferLength: length
-        )
     }
     
     public var smfDescription: String {
@@ -214,7 +223,15 @@ extension MIDIFileEvent {
 extension MIDIEvent.UniversalSysEx7: MIDIFileEventPayload {
     public static let smfEventType: MIDIFileEventType = .universalSysEx7
     
-    public init(midi1SMFRawBytes rawBytes: some DataProtocol) throws(MIDIFile.DecodeError) {
+    public init(
+        midi1SMFRawBytes rawBytes: some DataProtocol,
+        runningStatus: UInt8?
+    ) throws(MIDIFile.DecodeError) {
+        if let runningStatus {
+            let rsString = runningStatus.hexString(prefix: true)
+            throw .malformed("Running status byte \(rsString) was passed to event parser that does not use running status.")
+        }
+        
         let rawBytesArray = [UInt8](rawBytes)
         let parsedEvent = try MIDIEvent.sysEx7(midi1SMFRawBytes: rawBytesArray)
         
@@ -228,6 +245,26 @@ extension MIDIEvent.UniversalSysEx7: MIDIFileEventPayload {
         }
     }
     
+    public static func initFrom(
+        midi1SMFRawBytesStream stream: some DataProtocol,
+        runningStatus: UInt8?
+    ) throws(MIDIFile.DecodeError) -> StreamDecodeResult {
+        guard stream.count >= 3 else {
+            throw .malformed("Byte length too short.")
+        }
+        
+        let newInstance = try Self(midi1SMFRawBytes: stream, runningStatus: runningStatus)
+        
+        // TODO: this is brittle but it may work
+        
+        let length = (newInstance.midi1SMFRawBytes() as Data).count
+        
+        return (
+            newEvent: newInstance,
+            bufferLength: length
+        )
+    }
+    
     public func midi1SMFRawBytes<D: MutableDataProtocol>() -> D {
         // F0 variable_length(of message including trailing F7) message
         // The system exclusive message:
@@ -238,25 +275,6 @@ extension MIDIEvent.UniversalSysEx7: MIDIFileEventPayload {
         let msg = midi1RawBytes(leadingF0: false, trailingF7: false)
         
         return [0xF0] + MIDIFile.encodeVariableLengthValue(msg.count + 1) + msg + [0xF7]
-    }
-    
-    public static func initFrom(
-        midi1SMFRawBytesStream stream: some DataProtocol
-    ) throws(MIDIFile.DecodeError) -> StreamDecodeResult {
-        guard stream.count >= 3 else {
-            throw .malformed("Byte length too short.")
-        }
-        
-        let newInstance = try Self(midi1SMFRawBytes: stream)
-        
-        // TODO: this is brittle but it may work
-        
-        let length = (newInstance.midi1SMFRawBytes() as Data).count
-        
-        return (
-            newEvent: newInstance,
-            bufferLength: length
-        )
     }
     
     public var smfDescription: String {

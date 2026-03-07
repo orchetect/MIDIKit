@@ -47,20 +47,21 @@ extension MIDIFileEvent {
 extension MIDIEvent.RPN: MIDIFileEventPayload {
     public static let smfEventType: MIDIFileEventType = .rpn
     
-    public init(midi1SMFRawBytes rawBytes: some DataProtocol) throws(MIDIFile.DecodeError) {
-        let newEvent = try Self.initFrom(midi1SMFRawBytesStream: rawBytes)
+    public init(
+        midi1SMFRawBytes rawBytes: some DataProtocol,
+        runningStatus: UInt8?
+    ) throws(MIDIFile.DecodeError) {
+        let newEvent = try Self.initFrom(midi1SMFRawBytesStream: rawBytes, runningStatus: runningStatus)
         self = newEvent.newEvent
     }
     
-    public func midi1SMFRawBytes<D: MutableDataProtocol>() -> D {
-        D(midi1RawBytes())
-    }
-    
     public static func initFrom(
-        midi1SMFRawBytesStream stream: some DataProtocol
+        midi1SMFRawBytesStream stream: some DataProtocol,
+        runningStatus: UInt8?
     ) throws(MIDIFile.DecodeError) -> StreamDecodeResult {
         let result = try MIDIParameterNumberUtils.initFrom(
             midi1SMFRawBytesStream: stream,
+            runningStatus: runningStatus,
             expectedType: .registered
         )
         
@@ -71,6 +72,10 @@ extension MIDIEvent.RPN: MIDIFileEventPayload {
         )
         
         return (newEvent: newEvent, bufferLength: result.byteLength)
+    }
+    
+    public func midi1SMFRawBytes<D: MutableDataProtocol>() -> D {
+        D(midi1RawBytes())
     }
     
     public var smfDescription: String {
@@ -86,6 +91,7 @@ extension MIDIParameterNumberUtils {
     // generic parser for RPN and NRPN messages since they are so similar in format
     public static func initFrom(
         midi1SMFRawBytesStream stream: some DataProtocol,
+        runningStatus: UInt8?,
         expectedType: MIDIParameterNumberType
     ) throws(MIDIFile.DecodeError) -> (
         param: UInt7Pair,
@@ -94,11 +100,13 @@ extension MIDIParameterNumberUtils {
         channel: UInt4,
         byteLength: Int
     ) {
-        try stream.withDataParser { parser throws(MIDIFile.DecodeError) in
-            var runningStatus: UInt8?
+        var initialRunningStatus = runningStatus
+        
+        return try stream.withDataParser { parser throws(MIDIFile.DecodeError) in
+            var internalRunningStatus: UInt8?
             
             func runningStatusChannel() -> UInt4? {
-                runningStatus?.nibbles.low
+                internalRunningStatus?.nibbles.low
             }
             
             // since this is a sub-parser, we have to account for our own running status until we're
@@ -109,25 +117,31 @@ extension MIDIParameterNumberUtils {
             }
             
             func readValue(for cc: MIDIEvent.CC.Controller) throws(MIDIFile.DecodeError) -> MIDIFileEvent.CC.StreamDecodeResult {
-                let prefixBytes: [UInt8] = try { () throws(MIDIFile.DecodeError) in
-                    if needsRunningStatus() {
-                        guard let runningStatus else {
+                let effectiveRunningStatus: UInt8? = try { () throws(MIDIFile.DecodeError) in
+                    if let rs = initialRunningStatus {
+                        initialRunningStatus = nil // consume it so we don't use it again
+                        return rs
+                    }
+                    else if needsRunningStatus() {
+                        guard let internalRunningStatus else {
                             throw .malformed("Missing running status byte.")
                         }
-                        return [runningStatus]
+                        return internalRunningStatus
                     } else {
-                        return []
+                        return nil
                     }
                 }()
+                let runningStatusByteCount: Int = effectiveRunningStatus != nil ? 1 : 0
                 
                 let result: MIDIFileEvent.CC.StreamDecodeResult
                 do {
                     let residualBytes = try parser.read(
-                        bytes: MIDIEvent.CC.midi1SMFFixedRawBytesLength - prefixBytes.count,
+                        bytes: MIDIEvent.CC.midi1SMFFixedRawBytesLength - runningStatusByteCount,
                         advance: false
                     )
                     result = try MIDIFileEvent.CC.initFrom(
-                        midi1SMFRawBytesStream: prefixBytes + residualBytes
+                        midi1SMFRawBytesStream: residualBytes,
+                        runningStatus: effectiveRunningStatus
                     )
                 } catch {
                     throw .malformed(
@@ -142,20 +156,20 @@ extension MIDIParameterNumberUtils {
                     )
                 }
                 
-                if let runningStatus {
+                if let internalRunningStatus {
                     // only allow continuing if running status doesn't change
-                    guard runningStatus.nibbles.low == result.newEvent.channel else {
+                    guard internalRunningStatus.nibbles.low == result.newEvent.channel else {
                         throw .malformed(
                             "CC message has different channel number."
                         )
                     }
                 } else {
                     // update internal running status for this sub-parser
-                    runningStatus = UInt8(high: 0xB, low: result.newEvent.channel)
+                    internalRunningStatus = UInt8(high: 0xB, low: result.newEvent.channel)
                 }
                 
                 // remove prefix byte count (if any) from byte count
-                let actualByteCountRead = result.bufferLength - prefixBytes.count
+                let actualByteCountRead = result.bufferLength - runningStatusByteCount
                 
                 try parser.toMIDIFileDecodeError(try parser.seek(by: actualByteCountRead))
                 
@@ -188,9 +202,7 @@ extension MIDIParameterNumberUtils {
             
             guard let channel = runningStatusChannel() else {
                 // this shouldn't happen, but we need to handle it any way
-                throw .malformed(
-                    "Channel could not be determined."
-                )
+                throw .malformed("Channel could not be determined.")
             }
             
             return (

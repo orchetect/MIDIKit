@@ -61,7 +61,15 @@ extension MIDIFileEvent {
 extension MIDIFileEvent.SequencerSpecific: MIDIFileEventPayload {
     public static let smfEventType: MIDIFileEventType = .sequencerSpecific
     
-    public init(midi1SMFRawBytes rawBytes: some DataProtocol) throws(MIDIFile.DecodeError) {
+    public init(
+        midi1SMFRawBytes rawBytes: some DataProtocol,
+        runningStatus: UInt8?
+    ) throws(MIDIFile.DecodeError) {
+        if let runningStatus {
+            let rsString = runningStatus.hexString(prefix: true)
+            throw .malformed("Running status byte \(rsString) was passed to event parser that does not use running status.")
+        }
+        
         guard rawBytes.count >= 3 else {
             throw .malformed(
                 "Too few bytes."
@@ -94,24 +102,15 @@ extension MIDIFileEvent.SequencerSpecific: MIDIFileEventPayload {
         }
     }
     
-    public func midi1SMFRawBytes<D: MutableDataProtocol>() -> D {
-        // FF 7F length data
-        
-        MIDIFile.kEventHeaders[.sequencerSpecific]! +
-            // length of data
-            MIDIFile.encodeVariableLengthValue(data.count) +
-            // data
-            data
-    }
-    
     public static func initFrom(
-        midi1SMFRawBytesStream stream: some DataProtocol
+        midi1SMFRawBytesStream stream: some DataProtocol,
+        runningStatus: UInt8?
     ) throws(MIDIFile.DecodeError) -> StreamDecodeResult {
         guard stream.count >= 3 else {
             throw .malformed("Byte length too short.")
         }
         
-        let newInstance = try Self(midi1SMFRawBytes: stream)
+        let newInstance = try Self(midi1SMFRawBytes: stream, runningStatus: runningStatus)
         
         // TODO: this is brittle but it may work
         
@@ -121,6 +120,16 @@ extension MIDIFileEvent.SequencerSpecific: MIDIFileEventPayload {
             newEvent: newInstance,
             bufferLength: length
         )
+    }
+    
+    public func midi1SMFRawBytes<D: MutableDataProtocol>() -> D {
+        // FF 7F length data
+        
+        MIDIFile.kEventHeaders[.sequencerSpecific]! +
+            // length of data
+            MIDIFile.encodeVariableLengthValue(data.count) +
+            // data
+            data
     }
     
     public var smfDescription: String {

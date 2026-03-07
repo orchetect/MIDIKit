@@ -112,7 +112,15 @@ extension MIDIFileEvent {
 extension MIDIFileEvent.UnrecognizedMeta: MIDIFileEventPayload {
     public static let smfEventType: MIDIFileEventType = .unrecognizedMeta
     
-    public init(midi1SMFRawBytes rawBytes: some DataProtocol) throws(MIDIFile.DecodeError) {
+    public init(
+        midi1SMFRawBytes rawBytes: some DataProtocol,
+        runningStatus: UInt8?
+    ) throws(MIDIFile.DecodeError) {
+        if let runningStatus {
+            let rsString = runningStatus.hexString(prefix: true)
+            throw .malformed("Running status byte \(rsString) was passed to event parser that does not use running status.")
+        }
+        
         guard rawBytes.count >= 3 else {
             throw .malformed("Not enough bytes.")
         }
@@ -148,25 +156,15 @@ extension MIDIFileEvent.UnrecognizedMeta: MIDIFileEventPayload {
         }
     }
     
-    public func midi1SMFRawBytes<D: MutableDataProtocol>() -> D {
-        // FF <type> <length> <bytes>
-        // type == UInt8 meta type (unrecognized)
-        
-        [0xFF, metaType] +
-            // length of data
-            MIDIFile.encodeVariableLengthValue(data.count) +
-            // data
-            data
-    }
-    
     public static func initFrom(
-        midi1SMFRawBytesStream stream: some DataProtocol
+        midi1SMFRawBytesStream stream: some DataProtocol,
+        runningStatus: UInt8?
     ) throws(MIDIFile.DecodeError) -> StreamDecodeResult {
         guard stream.count >= 3 else {
             throw .malformed("Byte length too length.")
         }
         
-        let newInstance = try Self(midi1SMFRawBytes: stream)
+        let newInstance = try Self(midi1SMFRawBytes: stream, runningStatus: runningStatus)
         
         // TODO: this is brittle but it may work
         
@@ -176,6 +174,17 @@ extension MIDIFileEvent.UnrecognizedMeta: MIDIFileEventPayload {
             newEvent: newInstance,
             bufferLength: length
         )
+    }
+    
+    public func midi1SMFRawBytes<D: MutableDataProtocol>() -> D {
+        // FF <type> <length> <bytes>
+        // type == UInt8 meta type (unrecognized)
+        
+        [0xFF, metaType] +
+            // length of data
+            MIDIFile.encodeVariableLengthValue(data.count) +
+            // data
+            data
     }
     
     public var smfDescription: String {

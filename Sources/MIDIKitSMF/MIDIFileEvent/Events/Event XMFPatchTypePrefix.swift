@@ -97,7 +97,15 @@ extension MIDIFileEvent {
 extension MIDIFileEvent.XMFPatchTypePrefix: MIDIFileEventPayload {
     public static let smfEventType: MIDIFileEventType = .xmfPatchTypePrefix
     
-    public init(midi1SMFRawBytes rawBytes: some DataProtocol) throws(MIDIFile.DecodeError) {
+    public init(
+        midi1SMFRawBytes rawBytes: some DataProtocol,
+        runningStatus: UInt8?
+    ) throws(MIDIFile.DecodeError) {
+        if let runningStatus {
+            let rsString = runningStatus.hexString(prefix: true)
+            throw .malformed("Running status byte \(rsString) was passed to event parser that does not use running status.")
+        }
+        
         guard rawBytes.count == Self.midi1SMFFixedRawBytesLength else {
             throw .malformed(
                 "Invalid number of bytes. Expected \(Self.midi1SMFFixedRawBytesLength) but got \(rawBytes.count)"
@@ -138,6 +146,24 @@ extension MIDIFileEvent.XMFPatchTypePrefix: MIDIFileEventPayload {
         }
     }
     
+    public static func initFrom(
+        midi1SMFRawBytesStream stream: some DataProtocol,
+        runningStatus: UInt8?
+    ) throws(MIDIFile.DecodeError) -> StreamDecodeResult {
+        let requiredData = stream.prefix(midi1SMFFixedRawBytesLength)
+        
+        guard requiredData.count == midi1SMFFixedRawBytesLength else {
+            throw .malformed("Unexpected byte length.")
+        }
+        
+        let newInstance = try Self(midi1SMFRawBytes: requiredData, runningStatus: runningStatus)
+        
+        return (
+            newEvent: newInstance,
+            bufferLength: midi1SMFFixedRawBytesLength
+        )
+    }
+    
     public func midi1SMFRawBytes<D: MutableDataProtocol>() -> D {
         // FF 60 <len> <param>
         // len should always be 1, param is always one byte
@@ -146,23 +172,6 @@ extension MIDIFileEvent.XMFPatchTypePrefix: MIDIFileEventPayload {
     }
     
     static let midi1SMFFixedRawBytesLength = 4
-    
-    public static func initFrom(
-        midi1SMFRawBytesStream stream: some DataProtocol
-    ) throws(MIDIFile.DecodeError) -> StreamDecodeResult {
-        let requiredData = stream.prefix(midi1SMFFixedRawBytesLength)
-        
-        guard requiredData.count == midi1SMFFixedRawBytesLength else {
-            throw .malformed("Unexpected byte length.")
-        }
-        
-        let newInstance = try Self(midi1SMFRawBytes: requiredData)
-        
-        return (
-            newEvent: newInstance,
-            bufferLength: midi1SMFFixedRawBytesLength
-        )
-    }
     
     public var smfDescription: String {
         "patchPrefix:\(patchSet)"

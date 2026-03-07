@@ -136,29 +136,31 @@ extension MIDIFileEvent {
 extension MIDIFileEvent.Text: MIDIFileEventPayload {
     public static let smfEventType: MIDIFileEventType = .text
     
-    public init(midi1SMFRawBytes rawBytes: some DataProtocol) throws(MIDIFile.DecodeError) {
+    public init(
+        midi1SMFRawBytes rawBytes: some DataProtocol,
+        runningStatus: UInt8?
+    ) throws(MIDIFile.DecodeError) {
+        if let runningStatus {
+            let rsString = runningStatus.hexString(prefix: true)
+            throw .malformed("Running status byte \(rsString) was passed to event parser that does not use running status.")
+        }
+        
         let result = try Self.initFrom(stream: rawBytes).newEvent
         
         textType = result.textType
         text = result.text
     }
     
-    public func midi1SMFRawBytes<D: MutableDataProtocol>() -> D {
-        // FF 01 length text
-        
-        let stringData = text.data(using: .nonLossyASCII) ?? Data()
-        
-        return MIDIFile.kTextEventHeaders[textType]! +
-            // length
-            MIDIFile.encodeVariableLengthValue(stringData.count) +
-            // text
-            stringData
-    }
-
     public static func initFrom(
-        midi1SMFRawBytesStream stream: some DataProtocol
+        midi1SMFRawBytesStream stream: some DataProtocol,
+        runningStatus: UInt8?
     ) throws(MIDIFile.DecodeError) -> StreamDecodeResult {
-        try initFrom(stream: stream)
+        if let runningStatus {
+            let rsString = runningStatus.hexString(prefix: true)
+            throw .malformed("Running status byte \(rsString) was passed to event parser that does not use running status.")
+        }
+        
+        return try initFrom(stream: stream)
     }
 
     static func initFrom(
@@ -207,6 +209,18 @@ extension MIDIFileEvent.Text: MIDIFileEventPayload {
                 bufferLength: parser.readOffset
             )
         }
+    }
+    
+    public func midi1SMFRawBytes<D: MutableDataProtocol>() -> D {
+        // FF 01 length text
+        
+        let stringData = text.data(using: .nonLossyASCII) ?? Data()
+        
+        return MIDIFile.kTextEventHeaders[textType]! +
+            // length
+            MIDIFile.encodeVariableLengthValue(stringData.count) +
+            // text
+            stringData
     }
     
     public var smfDescription: String {
