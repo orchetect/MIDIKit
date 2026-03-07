@@ -146,13 +146,13 @@ extension MIDIFileEvent.KeySignature: MIDIFileEventPayload {
         midi1SMFRawBytesStream stream: some DataProtocol,
         runningStatus: UInt8?
     ) throws(MIDIFile.DecodeError) -> StreamDecodeResult {
-        let requiredData = stream.prefix(midi1SMFFixedRawBytesLength)
+        let rawBytes = stream.prefix(midi1SMFFixedRawBytesLength)
         
-        let newInstance = try Self(midi1SMFRawBytes: requiredData, runningStatus: runningStatus)
+        let newInstance = try Self(midi1SMFRawBytes: rawBytes, runningStatus: runningStatus)
         
         return (
             newEvent: newInstance,
-            bufferLength: midi1SMFFixedRawBytesLength
+            bufferLength: rawBytes.count
         )
     }
     

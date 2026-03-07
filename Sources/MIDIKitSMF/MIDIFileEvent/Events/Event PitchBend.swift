@@ -140,7 +140,7 @@ extension MIDIEvent.PitchBend: MIDIFileEventPayload {
         
         return (
             newEvent: newInstance,
-            bufferLength: midi1SMFFixedRawBytesLength
+            bufferLength: rawBytes.count
         )
     }
     

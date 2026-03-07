@@ -150,17 +150,13 @@ extension MIDIFileEvent.XMFPatchTypePrefix: MIDIFileEventPayload {
         midi1SMFRawBytesStream stream: some DataProtocol,
         runningStatus: UInt8?
     ) throws(MIDIFile.DecodeError) -> StreamDecodeResult {
-        let requiredData = stream.prefix(midi1SMFFixedRawBytesLength)
+        let rawBytes = stream.prefix(midi1SMFFixedRawBytesLength)
         
-        guard requiredData.count == midi1SMFFixedRawBytesLength else {
-            throw .malformed("Unexpected byte length.")
-        }
-        
-        let newInstance = try Self(midi1SMFRawBytes: requiredData, runningStatus: runningStatus)
+        let newInstance = try Self(midi1SMFRawBytes: rawBytes, runningStatus: runningStatus)
         
         return (
             newEvent: newInstance,
-            bufferLength: midi1SMFFixedRawBytesLength
+            bufferLength: rawBytes.count
         )
     }
     

@@ -84,7 +84,7 @@ extension MIDIEvent.SysEx7: MIDIFileEventPayload {
         case .universalSysEx7:
             throw .malformed("Invalid SysEx type. Expected SysEx7 and found Universal SysEx7.")
         default:
-            throw .malformed("Invalid data. Expected Universal SysEx7 data and parsed \(parsedEvent) instead.")
+            throw .malformed("Invalid data. Expected SysEx7 data and parsed \(parsedEvent) instead.")
         }
     }
     
@@ -166,6 +166,8 @@ extension MIDIFileEvent {
     /// the official MIDI 1.0 and 2.0 specs for details.
     ///
     /// - `deviceID` of `0x7F` indicates "All Devices".
+    ///
+    /// - Throws: `MIDIEvent.ParseError` if any data bytes overflow 7 bits.
     public static func universalSysEx7(
         delta: DeltaTime = .none,
         universalType: MIDIEvent.UniversalSysExType,
@@ -193,8 +195,6 @@ extension MIDIFileEvent {
     /// the official MIDI 1.0 and 2.0 specs for details.
     ///
     /// - `deviceID` of `0x7F` indicates "All Devices".
-    ///
-    /// - Throws: `MIDIEvent.ParseError` if any data bytes overflow 7 bits.
     @_disfavoredOverload
     public static func universalSysEx7(
         delta: DeltaTime = .none,
@@ -232,8 +232,7 @@ extension MIDIEvent.UniversalSysEx7: MIDIFileEventPayload {
             throw .malformed("Running status byte \(rsString) was passed to event parser that does not use running status.")
         }
         
-        let rawBytesArray = [UInt8](rawBytes)
-        let parsedEvent = try MIDIEvent.sysEx7(midi1SMFRawBytes: rawBytesArray)
+        let parsedEvent = try MIDIEvent.sysEx7(midi1SMFRawBytes: rawBytes)
         
         switch parsedEvent {
         case let .universalSysEx7(universalSysEx):

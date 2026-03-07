@@ -165,7 +165,7 @@ extension MIDIEvent.NotePressure: MIDIFileEventPayload {
         
         return (
             newEvent: newInstance,
-            bufferLength: midi1SMFFixedRawBytesLength
+            bufferLength: rawBytes.count
         )
     }
     

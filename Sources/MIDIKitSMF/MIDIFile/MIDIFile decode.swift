@@ -12,18 +12,24 @@ internal import SwiftDataParsing
 // MARK: - Parse Entry-point Methods
 
 extension MIDIFile {
-    mutating func decode(rawData: some DataProtocol & Sendable) throws(MIDIFile.DecodeError) {
+    mutating func decode(
+        rawData: some DataProtocol & Sendable,
+        bundleParameterNumbers: Bool
+    ) throws(MIDIFile.DecodeError) {
         let parser = try Parser(data: rawData)
-        let parsedChunks = try parser.chunks()
+        let parsedChunks = try parser.chunks(bundleParameterNumbers: bundleParameterNumbers)
         header = parser.fileDescriptor.header
         chunks = parsedChunks
     }
     
     /// Concurrent version of `decode(rawData:)` method.
     @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
-    mutating func decode(rawData: some DataProtocol & Sendable) async throws(MIDIFile.DecodeError) {
+    mutating func decode(
+        rawData: some DataProtocol & Sendable,
+        bundleParameterNumbers: Bool
+    ) async throws(MIDIFile.DecodeError) {
         let parser = try Parser(data: rawData)
-        let parsedChunks = try await parser.chunks()
+        let parsedChunks = try await parser.chunks(bundleParameterNumbers: bundleParameterNumbers)
         header = parser.fileDescriptor.header
         chunks = parsedChunks
     }
@@ -40,16 +46,33 @@ extension MIDIFile {
         init(data: DataType) throws(MIDIFile.DecodeError) {
             self.data = data
             fileDescriptor = try Self.parseFileDescriptor(fileData: data)
+            
+            // print("Chunk descriptors:")
+            // print(
+            //     fileDescriptor.chunkDescriptors
+            //         .map { "\($0.typeString) @ \($0.startOffset) (\($0.bodyByteLength) body bytes)" }
+            //         .joined(separator: "\n")
+            // )
         }
         
-        func chunks() throws(MIDIFile.DecodeError) -> [MIDIFile.Chunk] {
-            try Self.parseChunks(chunkDescriptors: fileDescriptor.chunkDescriptors, in: data)
+        func chunks(bundleParameterNumbers: Bool) throws(MIDIFile.DecodeError) -> [MIDIFile.Chunk] {
+            try Self.parseChunks(
+                chunkDescriptors: fileDescriptor.chunkDescriptors,
+                timebase: fileDescriptor.header.timeBase,
+                bundleParameterNumbers: bundleParameterNumbers,
+                in: data
+            )
         }
         
         /// Concurrent version of `chunks` method.
         @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
-        func chunks() async throws(MIDIFile.DecodeError) -> [MIDIFile.Chunk] {
-            try await Self.parseChunks(chunkDescriptors: fileDescriptor.chunkDescriptors, in: data)
+        func chunks(bundleParameterNumbers: Bool) async throws(MIDIFile.DecodeError) -> [MIDIFile.Chunk] {
+            try await Self.parseChunks(
+                chunkDescriptors: fileDescriptor.chunkDescriptors,
+                timebase: fileDescriptor.header.timeBase,
+                bundleParameterNumbers: bundleParameterNumbers,
+                in: data
+            )
         }
     }
 }
@@ -156,6 +179,8 @@ extension MIDIFile.Parser {
     /// Serial chunk parser. Parses one chunk at a time.
     static func parseChunks(
         chunkDescriptors: [ChunkDescriptor],
+        timebase: MIDIFile.TimeBase,
+        bundleParameterNumbers: Bool,
         in fileData: some DataProtocol & Sendable,
     ) throws(MIDIFile.DecodeError) -> [MIDIFile.Chunk] {
         var newChunks: [MIDIFile.Chunk] = []
@@ -167,7 +192,13 @@ extension MIDIFile.Parser {
                 let chunkData = try parser.toMIDIFileDecodeError(
                     try parser.read(bytes: chunkDescriptor.bodyByteLength)
                 )
-                return try parseChunk(chunkDescriptor: chunkDescriptor, chunkIndex: index, in: chunkData)
+                return try parseChunk(
+                    chunkDescriptor: chunkDescriptor,
+                    chunkIndex: index,
+                    timebase: timebase,
+                    bundleParameterNumbers: bundleParameterNumbers,
+                    in: chunkData
+                )
             }
             
             newChunks.append(newChunk)
@@ -179,6 +210,8 @@ extension MIDIFile.Parser {
     @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
     static func parseChunks(
         chunkDescriptors: [ChunkDescriptor],
+        timebase: MIDIFile.TimeBase,
+        bundleParameterNumbers: Bool,
         in fileData: some DataProtocol & Sendable,
     ) async throws(MIDIFile.DecodeError) -> [MIDIFile.Chunk] {
         let result: Result<[MIDIFile.Chunk], MIDIFile.DecodeError> = await withTaskGroup(
@@ -197,7 +230,13 @@ extension MIDIFile.Parser {
                             let chunkData = try parser.toMIDIFileDecodeError(
                                 try parser.read(bytes: chunkDescriptor.bodyByteLength)
                             )
-                            return try parseChunk(chunkDescriptor: chunkDescriptor, chunkIndex: index, in: chunkData)
+                            return try parseChunk(
+                                chunkDescriptor: chunkDescriptor,
+                                chunkIndex: index,
+                                timebase: timebase,
+                                bundleParameterNumbers: bundleParameterNumbers,
+                                in: chunkData
+                            )
                         }
                         
                         return .success((index: index, chunk: chunk))
@@ -226,12 +265,18 @@ extension MIDIFile.Parser {
     static func parseChunk(
         chunkDescriptor: ChunkDescriptor,
         chunkIndex: Int,
+        timebase: MIDIFile.TimeBase,
+        bundleParameterNumbers: Bool,
         in chunkData: some DataProtocol
     ) throws(MIDIFile.DecodeError) -> MIDIFile.Chunk {
         do throws(MIDIFile.DecodeError) {
             switch chunkDescriptor.typeString {
             case MIDIFile.Chunk.Track.staticIdentifier:
-                let newTrack = try MIDIFile.Chunk.Track(midi1SMFRawBytes: chunkData)
+                let newTrack = try MIDIFile.Chunk.Track(
+                    midi1SMFRawBytes: chunkData,
+                    timebase: timebase,
+                    bundleParameterNumbers: bundleParameterNumbers
+                )
                 return .track(newTrack)
                 
             default:

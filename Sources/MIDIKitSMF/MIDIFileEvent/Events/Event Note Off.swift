@@ -148,7 +148,7 @@ extension MIDIEvent.NoteOff: MIDIFileEventPayload {
         
         return (
             newEvent: newInstance,
-            bufferLength: midi1SMFFixedRawBytesLength
+            bufferLength: rawBytes.count
         )
     }
     

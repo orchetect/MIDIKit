@@ -6,7 +6,6 @@
 
 import Foundation
 import MIDIKitCore
-internal import SwiftDataParsing
 
 // MARK: - RPN
 
@@ -59,23 +58,15 @@ extension MIDIEvent.RPN: MIDIFileEventPayload {
         midi1SMFRawBytesStream stream: some DataProtocol,
         runningStatus: UInt8?
     ) throws(MIDIFile.DecodeError) -> StreamDecodeResult {
-        let result = try MIDIParameterNumberUtils.initFrom(
-            midi1SMFRawBytesStream: stream,
-            runningStatus: runningStatus,
-            expectedType: .registered
-        )
-        
-        let newEvent = MIDIEvent.RPN(
-            .init(parameter: result.param, data: (msb: result.dataMSB, lsb: result.dataLSB)),
-            change: .absolute,
-            channel: result.channel
-        )
-        
-        return (newEvent: newEvent, bufferLength: result.byteLength)
+        // stream parsing is not supported since it involves multiple MIDI file events with delta times
+        throw .notImplemented
     }
     
     public func midi1SMFRawBytes<D: MutableDataProtocol>() -> D {
-        D(midi1RawBytes())
+        let events = parameter.midi1Events(channel: channel, group: group)
+            .map { $0.midi1RawBytes() }
+        let packed = events.joined(separator: [0x00]) // add delta time for all events after the first event
+        return D(packed)
     }
     
     public var smfDescription: String {
@@ -84,137 +75,5 @@ extension MIDIEvent.RPN: MIDIFileEventPayload {
     
     public var smfDebugDescription: String {
         "RPN(" + smfDescription + ")"
-    }
-}
-
-extension MIDIParameterNumberUtils {
-    // generic parser for RPN and NRPN messages since they are so similar in format
-    public static func initFrom(
-        midi1SMFRawBytesStream stream: some DataProtocol,
-        runningStatus: UInt8?,
-        expectedType: MIDIParameterNumberType
-    ) throws(MIDIFile.DecodeError) -> (
-        param: UInt7Pair,
-        dataMSB: UInt7,
-        dataLSB: UInt7?,
-        channel: UInt4,
-        byteLength: Int
-    ) {
-        var initialRunningStatus = runningStatus
-        
-        return try stream.withDataParser { parser throws(MIDIFile.DecodeError) in
-            var internalRunningStatus: UInt8?
-            
-            func runningStatusChannel() -> UInt4? {
-                internalRunningStatus?.nibbles.low
-            }
-            
-            // since this is a sub-parser, we have to account for our own running status until we're
-            // done parsing this event
-            func needsRunningStatus() -> Bool {
-                guard let nextByte = try? parser.readByte(advance: false) else { return false }
-                return nextByte < 0x80
-            }
-            
-            func readValue(for cc: MIDIEvent.CC.Controller) throws(MIDIFile.DecodeError) -> MIDIFileEvent.CC.StreamDecodeResult {
-                let effectiveRunningStatus: UInt8? = try { () throws(MIDIFile.DecodeError) in
-                    if let rs = initialRunningStatus {
-                        initialRunningStatus = nil // consume it so we don't use it again
-                        return rs
-                    }
-                    else if needsRunningStatus() {
-                        guard let internalRunningStatus else {
-                            throw .malformed("Missing running status byte.")
-                        }
-                        return internalRunningStatus
-                    } else {
-                        return nil
-                    }
-                }()
-                let runningStatusByteCount: Int = effectiveRunningStatus != nil ? 1 : 0
-                
-                let result: MIDIFileEvent.CC.StreamDecodeResult
-                do {
-                    let residualBytes = try parser.read(
-                        bytes: MIDIEvent.CC.midi1SMFFixedRawBytesLength - runningStatusByteCount,
-                        advance: false
-                    )
-                    result = try MIDIFileEvent.CC.initFrom(
-                        midi1SMFRawBytesStream: residualBytes,
-                        runningStatus: effectiveRunningStatus
-                    )
-                } catch {
-                    throw .malformed(
-                        "Expected CC message with controller number \(cc.number). \(error.localizedDescription)"
-                    )
-                }
-                
-                guard result.newEvent.controller == cc
-                else {
-                    throw .malformed(
-                        "Expected CC message with controller number \(cc.number) but found controller number \(result.newEvent.controller.number) instead."
-                    )
-                }
-                
-                if let internalRunningStatus {
-                    // only allow continuing if running status doesn't change
-                    guard internalRunningStatus.nibbles.low == result.newEvent.channel else {
-                        throw .malformed(
-                            "CC message has different channel number."
-                        )
-                    }
-                } else {
-                    // update internal running status for this sub-parser
-                    internalRunningStatus = UInt8(high: 0xB, low: result.newEvent.channel)
-                }
-                
-                // remove prefix byte count (if any) from byte count
-                let actualByteCountRead = result.bufferLength - runningStatusByteCount
-                
-                try parser.toMIDIFileDecodeError(try parser.seek(by: actualByteCountRead))
-                
-                let newResult: MIDIFileEvent.CC.StreamDecodeResult = (
-                    newEvent: result.newEvent,
-                    bufferLength: actualByteCountRead
-                )
-                
-                return newResult
-            }
-            
-            var totalByteCount = 0
-            
-            // CC msg #1 - param MSB
-            let paramMSBResult = try readValue(for: expectedType.controllers.msb)
-            totalByteCount += paramMSBResult.bufferLength
-            
-            // CC msg #2 - param LSB
-            let paramLSBResult = try readValue(for: expectedType.controllers.lsb)
-            totalByteCount += paramLSBResult.bufferLength
-            
-            // CC msg #3 - data MSB
-            let dataMSBResult = try readValue(for: .dataEntry)
-            totalByteCount += dataMSBResult.bufferLength
-            
-            let dataLSBResult = try? readValue(for: .lsb(for: .dataEntry))
-            if let dataLSBResult {
-                totalByteCount += dataLSBResult.bufferLength
-            }
-            
-            guard let channel = runningStatusChannel() else {
-                // this shouldn't happen, but we need to handle it any way
-                throw .malformed("Channel could not be determined.")
-            }
-            
-            return (
-                param: .init(
-                    msb: paramMSBResult.newEvent.value.midi1Value,
-                    lsb: paramLSBResult.newEvent.value.midi1Value
-                ),
-                dataMSB: dataMSBResult.newEvent.value.midi1Value,
-                dataLSB: dataLSBResult?.newEvent.value.midi1Value,
-                channel: channel,
-                byteLength: totalByteCount
-            )
-        }
     }
 }
