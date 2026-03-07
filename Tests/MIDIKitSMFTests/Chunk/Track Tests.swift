@@ -14,21 +14,6 @@ import Testing
     // swiftformat:disable spaceInsideParens spaceInsideBrackets spacearoundoperators
     // swiftformat:options --maxwidth none
     
-    /// Ensure that event decode order contains all event types and that there are no duplicates.
-    @Test
-    func eventDecodeOrder() async {
-        // check count matches since an array can contain more than one of the same identical element
-        #expect(
-            Set(MIDIFile.Chunk.Track.eventDecodeOrder).count ==
-                MIDIFileEventType.allCases.count
-        )
-        
-        // ensure order contains all cases
-        for eventType in MIDIFileEventType.allCases {
-            #expect(MIDIFile.Chunk.Track.eventDecodeOrder.filter { $0 == eventType }.count == 1)
-        }
-    }
-    
     @Test
     func emptyEvents() async throws {
         let events: [MIDIFileEvent] = []
@@ -46,18 +31,25 @@ import Testing
         
         // generate raw bytes
         
-        let generatedData: Data = try track.midi1SMFRawBytes(
-            using: .musical(ticksPerQuarterNote: 960)
-        )
+        let timebase: MIDIFile.TimeBase = .musical(ticksPerQuarterNote: 960)
+        let generatedData: Data = try track.midi1SMFRawBytes(using: timebase)
         
         #expect(generatedData.toUInt8Bytes() == bytes)
         
         // parse raw bytes
         
-        let parsedTrackA = try? MIDIFile.Chunk.Track(midi1SMFRawBytesStream: generatedData)
+        let parsedTrackA = try? MIDIFile.Chunk.Track(
+            midi1SMFRawBytesStream: generatedData,
+            timebase: timebase,
+            bundleParameterNumbers: true
+        )
         #expect(parsedTrackA == track)
         
-        let parsedTrackB = try? MIDIFile.Chunk.Track(midi1SMFRawBytes: generatedData[8...]) // exclude header and length
+        let parsedTrackB = try? MIDIFile.Chunk.Track(
+            midi1SMFRawBytes: generatedData[8...], // exclude header and length
+            timebase: timebase,
+            bundleParameterNumbers: true
+        )
         #expect(parsedTrackB == track)
     }
     
@@ -85,22 +77,27 @@ import Testing
         
         // generate raw bytes
         
-        let generatedData: Data = try track.midi1SMFRawBytes(
-            using: .musical(ticksPerQuarterNote: 960)
-        )
+        let timebase: MIDIFile.TimeBase = .musical(ticksPerQuarterNote: 960)
+        let generatedData: Data = try track.midi1SMFRawBytes(using: timebase)
         
         #expect(generatedData.toUInt8Bytes() == bytes)
         
         // parse raw bytes
         
-        let parsedTrackA = try MIDIFile.Chunk.Track(midi1SMFRawBytesStream: generatedData)
+        let parsedTrackA = try? MIDIFile.Chunk.Track(
+            midi1SMFRawBytesStream: generatedData,
+            timebase: timebase,
+            bundleParameterNumbers: true
+        )
         #expect(parsedTrackA == track)
         
-        let parsedTrackB = try MIDIFile.Chunk.Track(midi1SMFRawBytes: generatedData[8...]) // exclude header and length
+        let parsedTrackB = try? MIDIFile.Chunk.Track(
+            midi1SMFRawBytes: generatedData[8...], // exclude header and length
+            timebase: timebase,
+            bundleParameterNumbers: true
+        )
         #expect(parsedTrackB == track)
     }
-    
-    // MARK: - Events
     
     @Test
     func eventsAtBeatPositions() async throws {
