@@ -80,12 +80,13 @@ public class MIDIManager: @unchecked Sendable { // forced to use @unchecked sinc
     /// - Warning: Be careful when creating persistent thru connections, as they can become stale
     ///   and orphaned if the endpoints used to create them cease to be relevant at any point in time.
     ///
-    /// - Parameter ownerID: reverse-DNS domain that was used when the connection was first made
+    /// - Parameter ownerID: Reverse-DNS domain that was used when the connection was first made
+    ///
     /// - Throws: ``MIDIIOError``
     public func unmanagedPersistentThruConnections(
         ownerID: String
-    ) throws -> [CoreMIDIThruConnectionRef] {
-        try getSystemThruConnectionsPersistentEntries(matching: ownerID)
+    ) throws(MIDIIOError) -> [CoreMIDIThruConnectionRef] {
+        try getSystemPersistentThruConnectionRefs(matching: ownerID)
     }
     
     /// MIDI devices in the system.

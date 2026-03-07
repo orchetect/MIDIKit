@@ -9,7 +9,7 @@ import Testing
 
 @Suite struct MusicalTimeValueTests {
     @Test
-    func empty() throws {
+    func empty() async throws {
         let ppq = 480
         
         let mt = MusicalTimeValue(elapsedTicks: 0, beatsPerBar: 4, divisionsPerBeat: 0, ppq: ppq)
@@ -25,7 +25,7 @@ import Testing
     }
     
     @Test
-    func eighth() throws {
+    func eighth() async throws {
         let ppq = 480
         
         let mt = MusicalTimeValue(elapsedTicks: 240, beatsPerBar: 4, divisionsPerBeat: 0, ppq: ppq)
@@ -42,7 +42,7 @@ import Testing
     
     /// 0 beatsPerBar (invalid), but it internally clamps to 1
     @Test
-    func zeroBeatsPerBar() throws {
+    func zeroBeatsPerBar() async throws {
         let ppq = 480
         
         let mt = MusicalTimeValue(
@@ -64,7 +64,7 @@ import Testing
     
     /// 1 beatsPerBar (valid)
     @Test
-    func oneBeatsPerBar() throws {
+    func oneBeatsPerBar() async throws {
         let ppq = 480
         
         let elapsedTicks = (ppq * 9) + 240 + 60
@@ -86,7 +86,7 @@ import Testing
     }
     
     @Test
-    func negativeElapsedTicks() throws {
+    func negativeElapsedTicks() async throws {
         let ppq = 480
         
         let elapsedTicks = -((ppq * 9) + 240 + 60)
@@ -108,7 +108,7 @@ import Testing
     }
     
     @Test
-    func elapsedTicks() throws {
+    func elapsedTicks() async throws {
         let ppq = 480
         var midiFile = MIDIFile(timeBase: .musical(ticksPerQuarterNote: UInt16(ppq)))
         

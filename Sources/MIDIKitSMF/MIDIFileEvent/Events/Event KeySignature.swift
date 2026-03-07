@@ -6,7 +6,7 @@
 
 import Foundation
 import MIDIKitCore
-internal import MIDIKitInternals
+internal import SwiftDataParsing
 
 // MARK: - KeySignature
 
@@ -88,43 +88,72 @@ extension MIDIFileEvent {
 extension MIDIFileEvent.KeySignature: MIDIFileEventPayload {
     public static let smfEventType: MIDIFileEventType = .keySignature
     
-    public init(midi1SMFRawBytes rawBytes: some DataProtocol) throws {
+    public init(
+        midi1SMFRawBytes rawBytes: some DataProtocol,
+        runningStatus: UInt8?
+    ) throws(MIDIFile.DecodeError) {
+        if let runningStatus {
+            let rsString = runningStatus.hexString(prefix: true)
+            throw .malformed("Running status byte \(rsString) was passed to event parser that does not use running status.")
+        }
+        
         guard rawBytes.count == Self.midi1SMFFixedRawBytesLength else {
-            throw MIDIFile.DecodeError.malformed(
+            throw .malformed(
                 "Invalid number of bytes. Expected \(Self.midi1SMFFixedRawBytesLength) but got \(rawBytes.count)"
             )
         }
         
-        try rawBytes.withDataReader { dataReader in
+        try rawBytes.withDataParser { parser throws(MIDIFile.DecodeError) in
             // 3-byte preamble
-            guard try dataReader.read(bytes: 3).elementsEqual(
-                MIDIFile.kEventHeaders[Self.smfEventType]!
-            ) else {
-                throw MIDIFile.DecodeError.malformed(
-                    "Event does not start with expected bytes."
-                )
+            let header = MIDIFile.kEventHeaders[Self.smfEventType]!
+            guard let headerBytes = try? parser.read(bytes: header.count),
+                  headerBytes.elementsEqual(header)
+            else {
+                throw .malformed("Event does not start with expected bytes.")
             }
-        
+            
             // flats/sharps - two's complement signed Int8
-            let readFlatsOrSharps = try Int8(bitPattern: dataReader.readByte())
+            let readFlatsOrSharpsByte: UInt8 = try parser.toMIDIFileDecodeError(
+                malformedReason: "Flats/sharps byte is missing.",
+                try parser.readByte()
+            )
+            let readFlatsOrSharps: Int8 = Int8(bitPattern: readFlatsOrSharpsByte)
+            
             // major/minor key - 1 or 0
-            let readMajMinKey = try dataReader.readByte()
-        
+            let readMajMinKey: UInt8 = try parser.toMIDIFileDecodeError(
+                malformedReason: "Maj/min key byte is missing.",
+                try parser.readByte()
+            )
+            
             guard (-7 ... 7).contains(readFlatsOrSharps) else {
-                throw MIDIFile.DecodeError.malformed(
+                throw .malformed(
                     "Illegal value found when reading Key Signature event sharps/flats byte. Got \(readFlatsOrSharps) but value must be between -7 ... 7."
                 )
             }
-        
+            
             guard (0 ... 1).contains(readMajMinKey) else {
-                throw MIDIFile.DecodeError.malformed(
+                throw .malformed(
                     "Illegal value found when reading Key Signature event major/minor key byte. Got \(readFlatsOrSharps) but value must be between 0 ... 1."
                 )
             }
-        
+            
             flatsOrSharps = readFlatsOrSharps
             majorKey = readMajMinKey == 0
         }
+    }
+    
+    public static func initFrom(
+        midi1SMFRawBytesStream stream: some DataProtocol,
+        runningStatus: UInt8?
+    ) throws(MIDIFile.DecodeError) -> StreamDecodeResult {
+        let rawBytes = stream.prefix(midi1SMFFixedRawBytesLength)
+        
+        let newInstance = try Self(midi1SMFRawBytes: rawBytes, runningStatus: runningStatus)
+        
+        return (
+            newEvent: newInstance,
+            bufferLength: rawBytes.count
+        )
     }
     
     public func midi1SMFRawBytes<D: MutableDataProtocol>() -> D {
@@ -143,25 +172,6 @@ extension MIDIFileEvent.KeySignature: MIDIFileEventPayload {
     }
     
     static let midi1SMFFixedRawBytesLength = 5
-
-    public static func initFrom(
-        midi1SMFRawBytesStream stream: some DataProtocol
-    ) throws -> StreamDecodeResult {
-        let requiredData = stream.prefix(midi1SMFFixedRawBytesLength)
-
-        guard requiredData.count == midi1SMFFixedRawBytesLength else {
-            throw MIDIFile.DecodeError.malformed(
-                "Unexpected byte length."
-            )
-        }
-
-        let newInstance = try Self(midi1SMFRawBytes: requiredData)
-
-        return (
-            newEvent: newInstance,
-            bufferLength: midi1SMFFixedRawBytesLength
-        )
-    }
     
     public var smfDescription: String {
         stringValue

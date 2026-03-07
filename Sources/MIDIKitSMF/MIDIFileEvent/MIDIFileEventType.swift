@@ -4,6 +4,7 @@
 //  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
+import Foundation
 import MIDIKitCore
 
 /// Cases describing MIDI file event types.
@@ -40,6 +41,8 @@ extension MIDIFileEventType: CaseIterable { }
 
 extension MIDIFileEventType: Sendable { }
 
+// MARK: - Concrete Type
+
 extension MIDIFileEventType {
     /// Returns the concrete type associated with the MIDI file event.
     @inline(__always)
@@ -75,5 +78,102 @@ extension Collection<MIDIFileEventType> {
     /// Returns the collection mapped to concrete types.
     public var concreteTypes: [MIDIFileEventPayload.Type] {
         map(\.concreteType.self)
+    }
+}
+
+// MARK: - Parsing
+
+extension MIDIFileEventType {
+    static func eventType(
+        atStartOf data: some DataProtocol,
+        runningStatus: UInt8?,
+        detectParameterNumberSequence: Bool
+    ) -> Self? {
+        // event types here are checked in order of most commonly used first
+        
+        // status nibble (top 4 bits) of the event's status byte.
+        // running status only applies to events with a top nibble in `0x8 ... 0xE`
+        guard let statusNibble = (runningStatus ?? data.first)?.nibbles.high else { return nil }
+        
+        switch statusNibble {
+        case 0x8:
+            return .noteOff
+        case 0x9:
+            return .noteOn
+        case 0xA:
+            return .notePressure
+        case 0xB:
+            if detectParameterNumberSequence {
+                // (this could be the start of an RPN/NRPN message sequence)
+                let controllerByte: UInt8? = runningStatus != nil
+                    ? data.first
+                    : (data.count > 1 ? data[atOffset: 1] : nil)
+                if let controllerByte {
+                    if controllerByte == MIDIEvent.CC.Controller.rpnMSB { return .rpn }
+                    if controllerByte == MIDIEvent.CC.Controller.nrpnMSB { return .nrpn }
+                } else {
+                    return .cc
+                }
+            } else {
+                return .cc
+            }
+        case 0xC:
+            return .programChange
+        case 0xD:
+            return .pressure
+        case 0xE:
+            return .pitchBend
+        default:
+            break
+        }
+        
+        if data.starts(with: [0xF0]) { // (could be a sysex or universal sysex)
+            if let len = MIDIFile.decodeVariableLengthValue(from: data)?.byteLength {
+                let firstMsgByteOffset = len + 1
+                if firstMsgByteOffset < data.count {
+                    let manufacturerByte1 = data[atOffset: firstMsgByteOffset]
+                    if MIDIEvent.UniversalSysExType.allCases.map(\.rawValue.uInt8Value).contains(manufacturerByte1) {
+                        return .universalSysEx7
+                    } else {
+                        return .sysEx7
+                    }
+                }
+            } else {
+                // type of sysex could not be determined, which means it may be malformed.
+                // return the default sysEx7 type instead of returning nil.
+                return .sysEx7
+            }
+        }
+        
+        switch data.prefix(3) {
+        // 0xFF events
+        case let d where d.starts(with: MIDIFile.kEventHeaders[.sequenceNumber]!): return .sequenceNumber
+        case let d where d.starts(with: MIDIFile.kEventHeaders[.channelPrefix]!): return .channelPrefix
+        case let d where d.starts(with: MIDIFile.kEventHeaders[.portPrefix]!): return .portPrefix
+        case let d where d.starts(with: MIDIFile.kEventHeaders[.tempo]!): return .tempo
+        case let d where d.starts(with: MIDIFile.kEventHeaders[.smpteOffset]!): return .smpteOffset
+        case let d where d.starts(with: MIDIFile.kEventHeaders[.timeSignature]!): return .timeSignature
+        case let d where d.starts(with: MIDIFile.kEventHeaders[.keySignature]!): return .keySignature
+        case let d where d.starts(with: MIDIFile.kEventHeaders[.xmfPatchTypePrefix]!): return .xmfPatchTypePrefix
+        case let d where d.starts(with: MIDIFile.kEventHeaders[.sequencerSpecific]!): return .sequencerSpecific
+        // text events
+        case let d where d.starts(with: MIDIFile.kTextEventHeaders[.text]!): return .text
+        case let d where d.starts(with: MIDIFile.kTextEventHeaders[.copyright]!): return .text
+        case let d where d.starts(with: MIDIFile.kTextEventHeaders[.trackOrSequenceName]!): return .text
+        case let d where d.starts(with: MIDIFile.kTextEventHeaders[.instrumentName]!): return .text
+        case let d where d.starts(with: MIDIFile.kTextEventHeaders[.lyric]!): return .text
+        case let d where d.starts(with: MIDIFile.kTextEventHeaders[.marker]!): return .text
+        case let d where d.starts(with: MIDIFile.kTextEventHeaders[.cuePoint]!): return .text
+        case let d where d.starts(with: MIDIFile.kTextEventHeaders[.programName]!): return .text
+        case let d where d.starts(with: MIDIFile.kTextEventHeaders[.deviceName]!): return .text
+        default: break
+        }
+        
+        // this check should be last
+        if data.starts(with: [0xFF]) {
+            return .unrecognizedMeta
+        }
+        
+        return nil
     }
 }

@@ -12,20 +12,20 @@ import SwiftTimecodeCore
     @Test
     func global_mtcIsEqual() {
         #expect(
-            !mtcIsEqual(nil, nil)
+            !isMTCEqual(nil, nil)
         )
         
         // test all MTC rates
         for fRate in MTCFrameRate.allCases {
             #expect(
-                !mtcIsEqual(
+                !isMTCEqual(
                     (mtcComponents: .init(), mtcFrameRate: fRate),
                     nil
                 )
             )
             
             #expect(
-                !mtcIsEqual(
+                !isMTCEqual(
                     nil,
                     (mtcComponents: .init(), mtcFrameRate: fRate)
                 )
@@ -33,7 +33,7 @@ import SwiftTimecodeCore
             
             // == components, == frame rate
             #expect(
-                mtcIsEqual(
+                isMTCEqual(
                     (mtcComponents: .init(), mtcFrameRate: fRate),
                     (mtcComponents: .init(), mtcFrameRate: fRate)
                 )
@@ -41,7 +41,7 @@ import SwiftTimecodeCore
             
             // == components, == frame rate
             #expect(
-                mtcIsEqual(
+                isMTCEqual(
                     (mtcComponents: .init(h: 1, m: 02, s: 03, f: 04), mtcFrameRate: fRate),
                     (mtcComponents: .init(h: 1, m: 02, s: 03, f: 04), mtcFrameRate: fRate)
                 )
@@ -49,7 +49,7 @@ import SwiftTimecodeCore
             
             // != components, == frame rate
             #expect(
-                !mtcIsEqual(
+                !isMTCEqual(
                     (mtcComponents: .init(h: 1, m: 02, s: 03, f: 04), mtcFrameRate: fRate),
                     (mtcComponents: .init(h: 1, m: 02, s: 03, f: 05), mtcFrameRate: fRate)
                 )
@@ -58,7 +58,7 @@ import SwiftTimecodeCore
         
         // == components, != frame rate
         #expect(
-            !mtcIsEqual(
+            !isMTCEqual(
                 (mtcComponents: .init(h: 1, m: 02, s: 03, f: 04), mtcFrameRate: .mtc24),
                 (mtcComponents: .init(h: 1, m: 02, s: 03, f: 04), mtcFrameRate: .mtc25)
             )

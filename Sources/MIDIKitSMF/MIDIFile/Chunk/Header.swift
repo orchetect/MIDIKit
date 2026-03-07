@@ -7,6 +7,7 @@
 import Foundation
 import MIDIKitCore
 internal import MIDIKitInternals
+internal import SwiftDataParsing
 
 // [Standard MIDI File 1.0 Spec]:
 //
@@ -116,69 +117,75 @@ extension MIDIFile.Chunk.Header {
 extension MIDIFile.Chunk.Header {
     static let midi1SMFFixedRawBytesLength = 14
     
-    init(midi1SMFRawBytes: Data) throws {
+    init<D: DataProtocol>(midi1SMFRawBytes: D) throws(MIDIFile.DecodeError) {
         guard midi1SMFRawBytes.count >= Self.midi1SMFFixedRawBytesLength else {
-            throw MIDIFile.DecodeError.malformed(
+            throw .malformed(
                 "Header is not correct. File may not be a MIDI file."
             )
         }
         
-        try midi1SMFRawBytes.withDataReader { dataReader in
+        try midi1SMFRawBytes.withDataParser { parser throws(MIDIFile.DecodeError) in
             // Header descriptor
-        
-            guard try dataReader.read(bytes: 4).toUInt8Bytes == Self.staticIdentifier.toASCIIBytes()
+            
+            guard (try? parser.read(bytes: 4).toUInt8Bytes()) == Self.staticIdentifier.toASCIIBytes()
             else {
-                throw MIDIFile.DecodeError.malformed(
+                throw .malformed(
                     "Header is not correct. File may not be a MIDI file."
                 )
             }
-        
-            guard let headerLengthUInt32 = (try? dataReader.read(bytes: 4))?
-                .toInt32(from: .bigEndian)
+            
+            guard let headerLengthUInt32Bytes = try? parser.read(bytes: 4)
             else {
-                throw MIDIFile.DecodeError.malformed(
+                throw .malformed(
+                    "Not enough bytes found when attempting to read MIDI file header length."
+                )
+            }
+            
+            guard let headerLengthUInt32 = headerLengthUInt32Bytes.toInt32(from: .bigEndian)
+            else {
+                throw .malformed(
                     "Could not read MIDI file header length."
                 )
             }
             let headerLength = Int(headerLengthUInt32)
         
             guard headerLength == 6 else {
-                throw MIDIFile.DecodeError.malformed(
+                throw .malformed(
                     "Encountered unexpected header length header length."
                 )
             }
         
             // MIDI Format Type specification - 0, 1, or 2 (2 bytes: big endian)
         
-            guard let midiFileFormatRawValue = (try? dataReader.read(bytes: 2))?
+            guard let midiFileFormatRawValue = (try? parser.read(bytes: 2))?
                 .toUInt16(from: .bigEndian),
                 (0 ... 2).contains(midiFileFormatRawValue),
                 let midiFileFormat = MIDIFile
                     .Format(rawValue: UInt8(exactly: midiFileFormatRawValue) ?? 255)
             else {
-                throw MIDIFile.DecodeError.malformed(
+                throw .malformed(
                     "Could not read MIDI file format."
                 )
             }
         
             format = midiFileFormat
         
-            guard let numberOfTracks = (try? dataReader.read(bytes: 2))?
+            guard let numberOfTracks = (try? parser.read(bytes: 2))?
                 .toUInt16(from: .bigEndian)
             else {
-                throw MIDIFile.DecodeError.malformed(
+                throw .malformed(
                     "Could not read number of tracks; end of file encountered."
                 )
             }
         
-            guard let timeDivision = try? dataReader.read(bytes: 2) else {
-                throw MIDIFile.DecodeError.malformed(
+            guard let timeDivision = try? parser.read(bytes: 2) else {
+                throw .malformed(
                     "Could not read division info; end of file encountered."
                 )
             }
         
-            guard let timeBase = MIDIFile.TimeBase(rawBytes: timeDivision.toUInt8Bytes) else {
-                throw MIDIFile.DecodeError.malformed(
+            guard let timeBase = MIDIFile.TimeBase(rawBytes: timeDivision.toUInt8Bytes()) else {
+                throw .malformed(
                     "Could not decode timebase."
                 )
             }
@@ -190,7 +197,7 @@ extension MIDIFile.Chunk.Header {
             if midiFileFormat == .singleTrack,
                numberOfTracks != 1
             {
-                throw MIDIFile.DecodeError.malformed(
+                throw .malformed(
                     "MIDI file is Format 0 which can only contain a single track, but header reports a track count of \(numberOfTracks)."
                 )
             }
@@ -199,7 +206,7 @@ extension MIDIFile.Chunk.Header {
 }
 
 extension MIDIFile.Chunk.Header {
-    func midi1SMFRawBytes(withChunkCount: Int) throws -> Data {
+    func midi1SMFRawBytes(withChunkCount: Int) throws(MIDIFile.EncodeError) -> Data {
         // The header chunk appears at the beginning of the file:
         //   4D 54 68 64    ASCII "MThd".
         //   00 00 00 06    4-byte size of the header; this will always be 6
@@ -222,7 +229,7 @@ extension MIDIFile.Chunk.Header {
         // Track count as 16-bit number (2 bytes: big endian)
         if format == .singleTrack {
             guard withChunkCount == 1 else {
-                throw MIDIFile.EncodeError.internalInconsistency(
+                throw .internalInconsistency(
                     "MIDI file is Format 0 which can only contain a single track, but header reports a track count of \(withChunkCount)."
                 )
             }

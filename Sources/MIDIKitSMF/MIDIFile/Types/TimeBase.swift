@@ -76,7 +76,7 @@ extension MIDIFile.TimeBase {
             return nil
         }
         
-        self.init(rawBytes: Array(rawData.toUInt8Bytes.prefix(2)))
+        self.init(rawBytes: Array(rawData.prefix(2)))
     }
     
     /// Initialize from raw data.
@@ -121,7 +121,7 @@ extension MIDIFile.TimeBase {
                 smpteFormat.rawValue + 0b10000000,
                 ticksPerFrame
             ]
-                .data
+                .toData()
         }
     }
 }

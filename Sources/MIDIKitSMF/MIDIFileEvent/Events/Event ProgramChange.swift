@@ -6,6 +6,7 @@
 
 import Foundation
 import MIDIKitCore
+internal import SwiftDataParsing
 
 // MARK: - ProgramChange
 
@@ -55,55 +56,84 @@ extension MIDIFileEvent {
 extension MIDIEvent.ProgramChange: MIDIFileEventPayload {
     public static let smfEventType: MIDIFileEventType = .programChange
     
-    public init(midi1SMFRawBytes rawBytes: some DataProtocol) throws {
-        guard rawBytes.count == Self.midi1SMFFixedRawBytesLength else {
-            throw MIDIFile.DecodeError.malformed(
+    public init(
+        midi1SMFRawBytes rawBytes: some DataProtocol,
+        runningStatus: UInt8?
+    ) throws(MIDIFile.DecodeError) {
+        let rawBytesCountWithRunningStatus = rawBytes.count + (runningStatus != nil ? 1 : 0)
+        guard rawBytesCountWithRunningStatus == Self.midi1SMFFixedRawBytesLength else {
+            throw .malformed(
                 "Invalid number of bytes. Expected \(Self.midi1SMFFixedRawBytesLength) but got \(rawBytes.count)"
             )
         }
         
-        self = try rawBytes.withDataReader { dataReader in
-            let byte0 = try dataReader.readByte()
-            let readStatus = (byte0 & 0xF0) >> 4
-            let readChannel = byte0 & 0x0F
-            
-            let readProgramNumber = try dataReader.readByte()
-        
-            guard readStatus == 0xC else {
-                throw MIDIFile.DecodeError.malformed(
-                    "Invalid status nibble: \(readStatus.hexString(padTo: 1, prefix: true))."
+        let (
+            readStatus, readChannel, readProgramNumber
+        ) = try rawBytes.withDataParser { parser throws(MIDIFile.DecodeError) -> (UInt8, UInt8, UInt8) in
+            do {
+                let byte0 = try runningStatus ?? parser.readByte()
+                let readProgramNumber = try parser.readByte()
+                
+                return (
+                    readStatus: (byte0 & 0xF0) >> 4,
+                    readChannel: byte0 & 0x0F,
+                    readProgramNumber: readProgramNumber
                 )
+            } catch {
+                throw .malformed("Not enough bytes.")
             }
-        
-            guard (0 ... 127).contains(readProgramNumber) else {
-                throw MIDIFile.DecodeError.malformed(
-                    "Program Change program number is out of bounds: \(readProgramNumber)"
-                )
-            }
-        
-            guard let channel = readChannel.toUInt4Exactly,
-                  let programNumber = readProgramNumber.toUInt7Exactly
-            else {
-                throw MIDIFile.DecodeError.malformed(
-                    "Value(s) out of bounds."
-                )
-            }
-            
-            // TODO: Should this attempt to decode bank messages that may follow?
-            
-            let newEvent: MIDIEvent = .programChange(
-                program: programNumber,
-                channel: channel
-            )
-            
-            guard case let .programChange(unwrapped) = newEvent else {
-                throw MIDIFile.DecodeError.malformed(
-                    "Could not unwrap enum case."
-                )
-            }
-        
-            return unwrapped
         }
+        
+        guard readStatus == 0xC else {
+            throw .malformed(
+                "Invalid status nibble: \(readStatus.hexString(padTo: 1, prefix: true))."
+            )
+        }
+        
+        guard (0 ... 127).contains(readProgramNumber) else {
+            throw .malformed(
+                "Program Change program number is out of bounds: \(readProgramNumber)"
+            )
+        }
+        
+        guard let channel = readChannel.toUInt4Exactly,
+              let programNumber = readProgramNumber.toUInt7Exactly
+        else {
+            throw .malformed(
+                "Value(s) out of bounds."
+            )
+        }
+        
+        // TODO: Should this attempt to decode bank messages that may follow?
+        
+        let newEvent: MIDIEvent = .programChange(
+            program: programNumber,
+            channel: channel
+        )
+        
+        guard case let .programChange(unwrapped) = newEvent else {
+            throw .malformed(
+                "Could not unwrap enum case."
+            )
+        }
+        
+        self = unwrapped
+    }
+    
+    public static func initFrom(
+        midi1SMFRawBytesStream stream: some DataProtocol,
+        runningStatus: UInt8?
+    ) throws(MIDIFile.DecodeError) -> StreamDecodeResult {
+        let requiredByteCount = midi1SMFFixedRawBytesLength
+        let requiredStreamByteCount = requiredByteCount - (runningStatus != nil ? 1 : 0)
+        let rawBytes = stream.prefix(requiredStreamByteCount)
+        
+        let newInstance = try Self(midi1SMFRawBytes: rawBytes, runningStatus: runningStatus)
+        
+        return (
+            newEvent: newInstance,
+            bufferLength: rawBytes.count
+        )
     }
     
     public func midi1SMFRawBytes<D: MutableDataProtocol>() -> D {
@@ -113,25 +143,6 @@ extension MIDIEvent.ProgramChange: MIDIFileEventPayload {
     }
     
     static let midi1SMFFixedRawBytesLength = 2
-    
-    public static func initFrom(
-        midi1SMFRawBytesStream stream: some DataProtocol
-    ) throws -> StreamDecodeResult {
-        let requiredData = stream.prefix(midi1SMFFixedRawBytesLength)
-        
-        guard requiredData.count == midi1SMFFixedRawBytesLength else {
-            throw MIDIFile.DecodeError.malformed(
-                "Unexpected byte length."
-            )
-        }
-        
-        let newInstance = try Self(midi1SMFRawBytes: requiredData)
-        
-        return (
-            newEvent: newInstance,
-            bufferLength: midi1SMFFixedRawBytesLength
-        )
-    }
     
     public var smfDescription: String {
         let chanString = channel.uInt8Value.hexString(padTo: 1, prefix: true)

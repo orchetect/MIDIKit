@@ -18,9 +18,9 @@ public struct MIDIEntity: MIDIIOObject {
     
     public let objectType: MIDIIOObjectType = .entity
     
-    /// User-visible endpoint name.
-    /// (`kMIDIPropertyName`)
     public internal(set) var name: String = ""
+    
+    public internal(set) var displayName: String = ""
     
     /// System-global Unique ID.
     /// (`kMIDIPropertyUniqueID`)
@@ -48,9 +48,14 @@ public struct MIDIEntity: MIDIIOObject {
         if let name = try? MIDIKitIO.getName(of: coreMIDIObjectRef) {
             self.name = name
         }
+        
+        if let displayName = try? MIDIKitIO.getDisplayName(of: coreMIDIObjectRef) {
+            self.displayName = displayName
+        }
     
-        let uniqueID = MIDIKitIO.getUniqueID(of: coreMIDIObjectRef)
-        if uniqueID != .invalidMIDIIdentifier {
+        if let uniqueID = try? MIDIKitIO.getUniqueID(of: coreMIDIObjectRef),
+           uniqueID != .invalidMIDIIdentifier
+        {
             self.uniqueID = uniqueID
         }
     }
@@ -80,17 +85,17 @@ extension MIDIEntity: CustomDebugStringConvertible {
 extension MIDIEntity {
     /// Returns the device that owns the entity, if present.
     public var device: MIDIDevice? {
-        try? getSystemDevice(for: coreMIDIObjectRef)
+        try? getSystemDevice(forEntity: coreMIDIObjectRef)
     }
     
     /// Returns the input endpoints for the entity.
     public var inputs: [MIDIInputEndpoint] {
-        getSystemDestinations(for: coreMIDIObjectRef)
+        getSystemDestinationEndpoints(forEntity: coreMIDIObjectRef)
     }
     
     /// Returns the output endpoints for the entity.
     public var outputs: [MIDIOutputEndpoint] {
-        getSystemSources(for: coreMIDIObjectRef)
+        getSystemSourceEndpoints(forEntity: coreMIDIObjectRef)
     }
 }
 

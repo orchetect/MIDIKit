@@ -43,6 +43,7 @@ let package = Package(
         )
     ],
     dependencies: [
+        .package(url: "https://github.com/orchetect/swift-data-parsing", from: "0.1.0"),
         .package(url: "https://github.com/orchetect/swift-timecode", from: "3.0.0")
     ] + doccPluginDependency(),
     targets: [
@@ -90,6 +91,8 @@ let package = Package(
             name: "MIDIKitSMF",
             dependencies: [
                 .target(name: "MIDIKitCore"),
+                .target(name: "MIDIKitInternals"),
+                .product(name: "SwiftDataParsing", package: "swift-data-parsing"),
                 .product(name: "SwiftTimecodeCore", package: "swift-timecode")
             ],
             swiftSettings: [.define("DEBUG", .when(configuration: .debug))]

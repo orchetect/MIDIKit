@@ -26,7 +26,7 @@ public struct MIDINote: Equatable, Hashable {
     public init(
         _ number: some BinaryInteger,
         style: Style = .yamaha
-    ) throws {
+    ) throws(NoteError) {
         self.style = style
     
         guard let uint7 = UInt7(exactly: number) else {
@@ -49,7 +49,7 @@ public struct MIDINote: Equatable, Hashable {
         _ name: Name,
         octave: Int,
         style: Style = .yamaha
-    ) throws {
+    ) throws(NoteError) {
         self.style = style
         try setNoteNumber(
             name,
@@ -61,7 +61,7 @@ public struct MIDINote: Equatable, Hashable {
     public init(
         _ string: String,
         style: Style = .yamaha
-    ) throws {
+    ) throws(NoteError) {
         self.style = style
         try setNoteNumber(from: string)
     }
@@ -71,7 +71,7 @@ public struct MIDINote: Equatable, Hashable {
     public init(
         frequency: Double,
         style: Style = .yamaha
-    ) throws {
+    ) throws(NoteError) {
         self.style = style
         try setNoteNumber(frequency: frequency)
     }
@@ -143,18 +143,18 @@ extension MIDINote {
     mutating func setNoteNumber(
         _ source: Name,
         octave: Int
-    ) throws {
+    ) throws(NoteError) {
         let noteNum = ((octave - style.firstOctaveOffset) * 12) + source.scaleOffset
     
         guard let uInt7 = UInt7(exactly: noteNum) else {
-            throw NoteError.outOfBounds
+            throw .outOfBounds
         }
     
         number = uInt7
     }
     
     /// Set note number from a MIDI note name string.
-    mutating func setNoteNumber(from source: String) throws {
+    mutating func setNoteNumber(from source: String) throws(NoteError) {
         var noteString = ""
     
         let testCharSet = CharacterSet(charactersIn: "ABCDEFG")
@@ -163,7 +163,7 @@ extension MIDINote {
             options: [],
             range: source.startIndex ..< source.index(after: source.startIndex)
         ) else {
-            throw NoteError.malformedNoteName
+            throw .malformedNoteName
         }
     
         // test for # Sharp
@@ -186,7 +186,7 @@ extension MIDINote {
         }
     
         guard let noteName = Name(noteString) else {
-            throw NoteError.malformedNoteName
+            throw .malformedNoteName
         }
     
         let octaveString = String(
@@ -200,12 +200,12 @@ extension MIDINote {
     
         // must convert string to int
         guard let octave = Int(octaveString) else {
-            throw NoteError.outOfBounds
+            throw .outOfBounds
         }
     
         // must be within range
         guard (style.firstOctaveOffset ... 10 + style.firstOctaveOffset) ~= octave else {
-            throw NoteError.outOfBounds
+            throw .outOfBounds
         }
     
         try setNoteNumber(
@@ -218,14 +218,14 @@ extension MIDINote {
     mutating func setNoteNumber(
         frequency: Double,
         tuning: Double = 440.0
-    ) throws {
+    ) throws(NoteError) {
         let noteNum = Self.calculateMIDINoteNumber(
             frequency: frequency,
             tuning: tuning
         )
     
         guard let uInt7 = UInt7(exactly: noteNum) else {
-            throw NoteError.outOfBounds
+            throw .outOfBounds
         }
     
         number = uInt7

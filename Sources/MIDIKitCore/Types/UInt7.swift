@@ -82,7 +82,7 @@ extension UInt7 {
 
 // MARK: - Equatable
 
-extension UInt7 /*: Equatable */ {
+extension UInt7: Equatable {
     public static func == (lhs: Self, rhs: Self) -> Bool {
         lhs.storage == rhs.storage
     }
@@ -90,7 +90,7 @@ extension UInt7 /*: Equatable */ {
 
 // MARK: - Comparable
 
-extension UInt7 /*: Comparable */ {
+extension UInt7: Comparable {
     public static func < (lhs: Self, rhs: Self) -> Bool {
         lhs.storage < rhs.storage
     }
@@ -98,7 +98,7 @@ extension UInt7 /*: Comparable */ {
 
 // MARK: - Hashable
 
-extension UInt7 /*: Hashable */ {
+extension UInt7: Hashable {
     public func hash(into hasher: inout Hasher) {
         hasher.combine(storage)
     }
@@ -110,7 +110,7 @@ extension UInt7: Sendable { }
 
 // MARK: - Codable
 
-extension UInt7 /*: Codable */ {
+extension UInt7: Codable {
     public func encode(to encoder: Encoder) throws {
         var e = encoder.singleValueContainer()
         try e.encode(storage)
@@ -133,13 +133,13 @@ extension UInt7 /*: Codable */ {
 
 // MARK: - CustomStringConvertible
 
-extension UInt7 /* : CustomStringConvertible */ {
+extension UInt7: CustomStringConvertible {
     public var description: String {
         storage.description
     }
 }
 
-extension UInt7 /* : CustomDebugStringConvertible */ {
+extension UInt7: CustomDebugStringConvertible {
     public var debugDescription: String {
         "\(Self.integerName)(\(storage.description))"
     }
@@ -171,7 +171,8 @@ extension UInt7 {
 
 // MARK: - FixedWidthInteger
 
-extension UInt7 /*: FixedWidthInteger */ {
+// doesn't fully conform to FixedWidthInteger, as it's a bit overkill for our needs in MIDIKit
+extension UInt7 /* : FixedWidthInteger */ {
     public static var min: Self { Self(Self.min(as: Storage.self)) }
     
     public static var max: Self { Self(Self.max(as: Storage.self)) }
@@ -189,9 +190,9 @@ extension UInt7 /*: FixedWidthInteger */ {
 
 // MARK: - Numeric
 
-extension UInt7 /*: Numeric */ {
-    // public typealias Magnitude = Storage.Magnitude
+extension UInt7: Numeric {
     // Magnitude is already expressed as same-type constraint on MIDIUnsignedInteger
+    // public typealias Magnitude = Storage.Magnitude
     
     @inlinable
     public var magnitude: Storage.Magnitude {
@@ -219,34 +220,37 @@ extension UInt7 /*: Numeric */ {
 
 // MARK: - AdditiveArithmetic
 
-extension UInt7 /*: AdditiveArithmetic */ {
-    // static let zero synthesized by AdditiveArithmetic
+extension UInt7: AdditiveArithmetic {
+    // synthesized by AdditiveArithmetic
+    // static let zero
     
     public static func + (lhs: Self, rhs: Self) -> Self {
         Self(lhs.storage + rhs.storage)
     }
     
-    // += operator synthesized by AdditiveArithmetic
+    // synthesized by AdditiveArithmetic
+    // += operator
     
     public static func - (lhs: Self, rhs: Self) -> Self {
         Self(lhs.storage - rhs.storage)
     }
     
-    // -= operator synthesized by AdditiveArithmetic
+    // synthesized by AdditiveArithmetic
+    // -= operator
 }
 
 // MARK: - BinaryInteger
 
-extension UInt7 /*: BinaryInteger */ {
-    // public typealias Words = Storage.Words
+extension UInt7: BinaryInteger {
     // Words is already expressed as same-type constraint on MIDIUnsignedInteger
+    // public typealias Words = Storage.Words
     
     public var words: Storage.Words {
         storage.words
     }
     
     // synthesized?
-    //    public static var isSigned: Bool { false }
+    // public static var isSigned: Bool { false }
     
     public var bitWidth: Int { Self.bitWidth }
     

@@ -9,7 +9,7 @@ import Testing
 
 @Suite struct MIDIFileEncodeTests {
     @Test
-    func type0() {
+    func type0() async {
         var midiFile = MIDIFile()
         
         midiFile.format = .singleTrack // Type 1
@@ -27,7 +27,7 @@ import Testing
     }
     
     @Test
-    func encodeDP8Markers() throws {
+    func encodeDP8Markers() async throws {
         var midiFile = MIDIFile()
         
         midiFile.timeBase = .musical(ticksPerQuarterNote: 480)
@@ -118,12 +118,12 @@ import Testing
         
         // test if midiFile structs are equal by way of Equatable
         
-        let dp8MarkersRawData = try MIDIFile(rawData: kMIDIFile.dp8Markers.data)
+        let dp8MarkersRawData = try await MIDIFile(rawData: kMIDIFile.dp8Markers.toData())
         #expect(midiFile == dp8MarkersRawData)
         
         // test if raw data is equal
         
         let constructedData = try midiFile.rawData()
-        #expect(constructedData == kMIDIFile.dp8Markers.data)
+        #expect(constructedData == kMIDIFile.dp8Markers.toData())
     }
 }

@@ -21,7 +21,7 @@ func setString(
     forProperty: CFString,
     of ref: CoreMIDI.MIDIObjectRef,
     to string: String
-) throws {
+) throws(MIDIIOError) {
     try MIDIObjectSetStringProperty(
         ref,
         forProperty,
@@ -43,7 +43,7 @@ func setInteger(
     forProperty: CFString,
     of ref: CoreMIDI.MIDIObjectRef,
     to integer: Int32
-) throws {
+) throws(MIDIIOError) {
     try MIDIObjectSetIntegerProperty(
         ref,
         forProperty,
@@ -65,7 +65,7 @@ func setData(
     forProperty: CFString,
     of ref: CoreMIDI.MIDIObjectRef,
     to data: CFData
-) throws {
+) throws(MIDIIOError) {
     try MIDIObjectSetDataProperty(
         ref,
         forProperty,
@@ -87,7 +87,7 @@ func setDictionary(
     forProperty: CFString,
     of ref: CoreMIDI.MIDIObjectRef,
     to dictionary: CFDictionary
-) throws {
+) throws(MIDIIOError) {
     try MIDIObjectSetDictionaryProperty(
         ref,
         forProperty,
@@ -114,7 +114,7 @@ func setDictionary(
 func setName(
     of ref: CoreMIDI.MIDIObjectRef,
     to newValue: String
-) throws {
+) throws(MIDIIOError) {
     try setString(
         forProperty: kMIDIPropertyName,
         of: ref,
@@ -135,7 +135,7 @@ func setName(
 func setModel(
     of ref: CoreMIDI.MIDIObjectRef,
     to newValue: String
-) throws {
+) throws(MIDIIOError) {
     try setString(
         forProperty: kMIDIPropertyModel,
         of: ref,
@@ -156,7 +156,7 @@ func setModel(
 func setManufacturer(
     of ref: CoreMIDI.MIDIObjectRef,
     to newValue: String
-) throws {
+) throws(MIDIIOError) {
     try setString(
         forProperty: kMIDIPropertyManufacturer,
         of: ref,
@@ -175,7 +175,7 @@ func setManufacturer(
 func setUniqueID(
     of ref: CoreMIDI.MIDIObjectRef,
     to newValue: CoreMIDI.MIDIUniqueID
-) throws {
+) throws(MIDIIOError) {
     try setInteger(
         forProperty: kMIDIPropertyUniqueID,
         of: ref,

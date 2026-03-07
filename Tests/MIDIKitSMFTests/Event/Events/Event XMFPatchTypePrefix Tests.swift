@@ -12,7 +12,7 @@ import Testing
     // swiftformat:disable spaceInsideParens spaceInsideBrackets spacearoundoperators
     
     @Test
-    func init_midi1SMFRawBytes_A() throws {
+    func init_midi1SMFRawBytes_A() async throws {
         let bytes: [UInt8] = [
             0xFF, 0x60, // header
             0x01,       // length (always 1)
@@ -25,7 +25,7 @@ import Testing
     }
     
     @Test
-    func midi1SMFRawBytes_A() {
+    func midi1SMFRawBytes_A() async {
         let event = MIDIFileEvent.XMFPatchTypePrefix(patchSet: .generalMIDI1)
         
         let bytes: [UInt8] = event.midi1SMFRawBytes()
@@ -38,7 +38,7 @@ import Testing
     }
     
     @Test
-    func init_midi1SMFRawBytes_B() throws {
+    func init_midi1SMFRawBytes_B() async throws {
         let bytes: [UInt8] = [
             0xFF, 0x60, // header
             0x01,       // length (always 1)
@@ -51,7 +51,7 @@ import Testing
     }
     
     @Test
-    func midi1SMFRawBytes_B() {
+    func midi1SMFRawBytes_B() async {
         let event = MIDIFileEvent.XMFPatchTypePrefix(patchSet: .generalMIDI2)
         
         let bytes: [UInt8] = event.midi1SMFRawBytes()
@@ -66,7 +66,7 @@ import Testing
     // MARK: - Edge Cases
     
     @Test
-    func undefinedParam() {
+    func undefinedParam() async {
         let bytes: [UInt8] = [
             0xFF, 0x60, // header
             0x01,       // length (always 1)

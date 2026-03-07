@@ -31,7 +31,7 @@ env:
 
 jobs:
   macOS-14:
-    name: macOS 14 Sonoma
+    name: macOS 14 Sonoma (Xcode 16)
     runs-on: macos-14
     timeout-minutes: 20
     steps:
@@ -58,7 +58,7 @@ jobs:
     - name: Unit Tests
       run: xcodebuild test -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "$SCHEME" -destination "platform=macOS" | xcbeautify --renderer github-actions && exit ${PIPESTATUS[0]}
     
-  macOS-swift6:
+  macOS-swift-6-2:
     name: macOS Sequoia (Swift 6.2)
     runs-on: macos-latest
     timeout-minutes: 20
@@ -73,7 +73,7 @@ jobs:
       run: xcodebuild build -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "$SCHEME" -destination "generic/platform=macOS" | xcbeautify --renderer github-actions && exit ${PIPESTATUS[0]}
     - name: Unit Tests
       run: xcodebuild test -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "$SCHEME" -destination "platform=macOS" | xcbeautify --renderer github-actions && exit ${PIPESTATUS[0]}
-      
+  
   macCatalyst:
     name: macCatalyst
     runs-on: macos-latest

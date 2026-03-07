@@ -27,7 +27,7 @@ extension MIDIEndpoints {
     /// It is not necessary to call this method as the ``MIDIManager`` will automate updating device
     /// cache.
     public mutating func updateCachedProperties(manager: MIDIManager) {
-        let fetched = _fetchProperties(manager: manager)
+        let fetched = _fetchSystemEndpoints(for: manager)
         
         inputs = fetched.inputs
         

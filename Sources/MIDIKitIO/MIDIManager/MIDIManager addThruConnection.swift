@@ -50,7 +50,7 @@ extension MIDIManager {
         tag: String,
         lifecycle: MIDIThruConnection.Lifecycle = .nonPersistent,
         params: MIDIThruConnection.Parameters = .init()
-    ) throws {
+    ) throws(MIDIIOError) {
         let newCT = MIDIThruConnection(
             outputs: outputs,
             inputs: inputs,

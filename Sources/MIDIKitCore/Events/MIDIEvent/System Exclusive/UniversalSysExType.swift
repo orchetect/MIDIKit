@@ -28,6 +28,8 @@ extension MIDIEvent.UniversalSysExType: CustomStringConvertible {
     }
 }
 
+extension MIDIEvent.UniversalSysExType: CaseIterable { }
+
 extension MIDIEvent.UniversalSysExType: Identifiable {
     public var id: Self { self }
 }

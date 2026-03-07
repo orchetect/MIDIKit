@@ -22,13 +22,13 @@ extension MIDIEvent {
     public static func sysEx8(
         rawBytes: [UInt8],
         group: UInt4 = 0
-    ) throws -> Self {
+    ) throws(ParseError) -> Self {
         var readPos = rawBytes.startIndex
     
-        func readPosAdvance(by: Int) throws {
+        func readPosAdvance(by: Int) throws(ParseError) {
             let newPos = readPos + by
             guard readPos + by < rawBytes.endIndex else {
-                throw ParseError.malformed
+                throw .malformed
             }
             readPos = newPos
         }
@@ -39,12 +39,12 @@ extension MIDIEvent {
     
         // prevent zero-byte events from being formed
         guard !rawBytes.isEmpty else {
-            throw ParseError.rawBytesEmpty
+            throw .rawBytesEmpty
         }
     
         // minimum length
         guard rawBytes.count > 1 else {
-            throw ParseError.malformed
+            throw .malformed
         }
     
         let streamID = rawBytes[readPos]
@@ -111,7 +111,7 @@ extension MIDIEvent {
     
         default:
             // malformed
-            throw ParseError.malformed
+            throw .malformed
         }
     }
 }

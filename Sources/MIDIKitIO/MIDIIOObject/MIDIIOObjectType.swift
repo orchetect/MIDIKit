@@ -24,4 +24,15 @@ extension MIDIIOObjectType: CaseIterable { }
 
 extension MIDIIOObjectType: Sendable { }
 
+// MARK: - Properties
+
+extension MIDIIOObjectType {
+    /// Internal: returns relevant `MIDIIOObject.Property`s associated with the object type.
+    var relevantProperties: [MIDIIOObjectProperty] {
+        MIDIIOObjectProperty.allCases.filter {
+            $0.relevantObjects.contains(self)
+        }
+    }
+}
+
 #endif

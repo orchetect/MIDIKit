@@ -12,7 +12,7 @@ import Testing
     // swiftformat:disable spaceInsideParens spaceInsideBrackets spacearoundoperators
     
     @Test
-    func init_midi1SMFRawBytes_EmptyString() throws {
+    func init_midi1SMFRawBytes_EmptyString() async throws {
         let bytes: [UInt8] = [
             0xFF, 0x01, // header
             0x00        // length: 0 bytes
@@ -25,7 +25,7 @@ import Testing
     }
     
     @Test
-    func midi1SMFRawBytes_EmptyString() {
+    func midi1SMFRawBytes_EmptyString() async {
         let event = MIDIFileEvent.Text(type: .text, string: "")
         
         let bytes: [UInt8] = event.midi1SMFRawBytes()
@@ -37,7 +37,7 @@ import Testing
     }
     
     @Test
-    func init_midi1SMFRawBytes_WithString() throws {
+    func init_midi1SMFRawBytes_WithString() async throws {
         let bytes: [UInt8] = [
             0xFF, 0x01, // header
             0x04,       // length: 4 bytes
@@ -51,7 +51,7 @@ import Testing
     }
     
     @Test
-    func midi1SMFRawBytes_WithString() {
+    func midi1SMFRawBytes_WithString() async {
         let event = MIDIFileEvent.Text(type: .text, string: "abcd")
         
         let bytes: [UInt8] = event.midi1SMFRawBytes()
@@ -66,7 +66,7 @@ import Testing
     // MARK: Text Types
     
     @Test
-    func textHeaders() {
+    func textHeaders() async {
         // ensure all text event header IDs exist
         
         for eventType in MIDIFileEvent.Text.EventType.allCases {
@@ -75,7 +75,7 @@ import Testing
     }
     
     @Test
-    func textTypes() throws {
+    func textTypes() async throws {
         func textTypeTest(
             eventType: MIDIFileEvent.Text.EventType,
             eventID: UInt8
@@ -114,7 +114,7 @@ import Testing
     // swiftformat:options --maxwidth none
     
     @Test
-    func extendedCharacters() throws {
+    func extendedCharacters() async throws {
         let rawData: [UInt8] = [
             0xFF, 0x02, 0x22, 0x43, 0x6F, 0x70, 0x79, 0x72,
             0x69, 0x67, 0x68, 0x74, 0x20, 0xA9, 0x20, 0x32,
@@ -134,7 +134,7 @@ import Testing
     }
     
     @Test
-    func newlineCharacter() throws {
+    func newlineCharacter() async throws {
         let rawData: [UInt8] = [
             0xFF, 0x01, 0x1C, 0x53, 0x65, 0x71, 0x75, 0x65,
             0x6E, 0x63, 0x65, 0x64, 0x20, 0x62, 0x79, 0x20,

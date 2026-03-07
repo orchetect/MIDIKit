@@ -18,13 +18,13 @@ extension CoreMIDI.MIDIEventPacket {
     public init(
         words: [UInt32],
         timeStamp: UInt64 = mach_absolute_time()
-    ) throws {
+    ) throws(MIDIInternalError) {
         guard !words.isEmpty else {
-            throw MIDIInternalError.umpEmpty
+            throw .umpEmpty
         }
         
         guard words.count <= 64 else {
-            throw MIDIInternalError.umpTooLarge
+            throw .umpTooLarge
         }
         
         var packet = CoreMIDI.MIDIEventPacket()
@@ -53,13 +53,13 @@ extension CoreMIDI.MIDIEventPacket {
     package init(
         wordsUsingBuilder words: [UInt32],
         timeStamp: UInt64 = mach_absolute_time()
-    ) throws {
+    ) throws(MIDIInternalError) {
         guard !words.isEmpty else {
-            throw MIDIInternalError.umpEmpty
+            throw .umpEmpty
         }
         
         guard words.count <= 64 else {
-            throw MIDIInternalError.umpTooLarge
+            throw .umpTooLarge
         }
         
         let packetBuilder = CoreMIDI.MIDIEventPacket.Builder(
@@ -70,13 +70,23 @@ extension CoreMIDI.MIDIEventPacket {
         
         words.forEach { packetBuilder.append($0) }
         
-        let packet = try packetBuilder
-            .withUnsafePointer { unsafePtr -> Result<CoreMIDI.MIDIEventPacket, Error> in
-                .success(unsafePtr.pointee)
-            }
-            .get()
+        // As per Apple documentation, we cannot pass the pointee out directly.
+        // We need to copy the memory to ensure it persists, so a basic wrapper should suffice.
+        let packetBox: PacketBox = packetBuilder
+            .withUnsafePointer { PacketBox($0.pointee) }
         
-        self = packet
+        self = packetBox.packet
+    }
+    
+    @usableFromInline
+    package struct PacketBox {
+        @inline(__always) @usableFromInline
+        package let packet: CoreMIDI.MIDIEventPacket
+        
+        @inline(__always) @usableFromInline
+        package init(_ packet: CoreMIDI.MIDIEventPacket) {
+            self.packet = packet
+        }
     }
 }
 

@@ -7,112 +7,300 @@
 import Foundation
 import MIDIKitCore
 internal import MIDIKitInternals
+internal import SwiftDataParsing
+
+// MARK: - Parse Entry-point Methods
 
 extension MIDIFile {
-    mutating func decode(rawData data: Data) throws {
-        // basic checks
+    mutating func decode(
+        rawData: some DataProtocol & Sendable,
+        bundleParameterNumbers: Bool
+    ) throws(MIDIFile.DecodeError) {
+        let parser = try Parser(data: rawData)
+        let parsedChunks = try parser.chunks(bundleParameterNumbers: bundleParameterNumbers)
+        header = parser.fileDescriptor.header
+        chunks = parsedChunks
+    }
+    
+    /// Concurrent version of `decode(rawData:)` method.
+    @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
+    mutating func decode(
+        rawData: some DataProtocol & Sendable,
+        bundleParameterNumbers: Bool
+    ) async throws(MIDIFile.DecodeError) {
+        let parser = try Parser(data: rawData)
+        let parsedChunks = try await parser.chunks(bundleParameterNumbers: bundleParameterNumbers)
+        header = parser.fileDescriptor.header
+        chunks = parsedChunks
+    }
+}
 
-        guard !data.isEmpty else {
-            throw DecodeError.malformed(
-                "MIDI data is empty / contains no bytes."
+// MARK: - Intermediate Parsing Types
+
+extension MIDIFile {
+    struct Parser<DataType: DataProtocol>: Sendable where DataType: Sendable {
+        let data: DataType
+        
+        let fileDescriptor: FileDescriptor
+        
+        init(data: DataType) throws(MIDIFile.DecodeError) {
+            self.data = data
+            fileDescriptor = try Self.parseFileDescriptor(fileData: data)
+            
+            // print("Chunk descriptors:")
+            // print(
+            //     fileDescriptor.chunkDescriptors
+            //         .map { "\($0.typeString) @ \($0.startOffset) (\($0.bodyByteLength) body bytes)" }
+            //         .joined(separator: "\n")
+            // )
+        }
+        
+        func chunks(bundleParameterNumbers: Bool) throws(MIDIFile.DecodeError) -> [MIDIFile.Chunk] {
+            try Self.parseChunks(
+                chunkDescriptors: fileDescriptor.chunkDescriptors,
+                timebase: fileDescriptor.header.timeBase,
+                bundleParameterNumbers: bundleParameterNumbers,
+                in: data
             )
         }
-
-        // reset values to a known state
-
-        chunks = []
-        header = .init() // resets format and timeBase
-
-        // begin parse
         
-        try data.withDataReader { dataReader in
-            // ____ Header ____
+        /// Concurrent version of `chunks` method.
+        @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
+        func chunks(bundleParameterNumbers: Bool) async throws(MIDIFile.DecodeError) -> [MIDIFile.Chunk] {
+            try await Self.parseChunks(
+                chunkDescriptors: fileDescriptor.chunkDescriptors,
+                timebase: fileDescriptor.header.timeBase,
+                bundleParameterNumbers: bundleParameterNumbers,
+                in: data
+            )
+        }
+    }
+}
 
-            guard let readHeader = try? dataReader
-                .read(bytes: Chunk.Header.midi1SMFFixedRawBytesLength)
+extension MIDIFile.Parser {
+    struct FileDescriptor: Sendable {
+        var header: MIDIFile.Chunk.Header
+        var chunkDescriptors: [ChunkDescriptor]
+    }
+    
+    struct ChunkDescriptor: Sendable {
+        /// 4-Character Chunk type string.
+        var typeString: String
+        
+        /// Byte offset of the start of the chunk.
+        var startOffset: Int
+        
+        /// Byte offset of the body (data portion) of the chunk (after the chunk type and length bytes).
+        var bodyByteStartOffset: Int
+        
+        /// Byte length (count) of the body (data portion) of the chunk (after the chunk type and length bytes).
+        var bodyByteLength: Int
+    }
+}
+
+extension MIDIFile.Parser {
+    static func parseFileDescriptor(
+        fileData: some DataProtocol
+    ) throws(MIDIFile.DecodeError) -> FileDescriptor {
+        guard !fileData.isEmpty else {
+            throw .malformed("MIDI data is empty (contains no bytes).")
+        }
+        
+        return try fileData.withDataParser { parser throws(MIDIFile.DecodeError) in
+            // ____ Header ____
+            
+            guard let readHeader = try? parser
+                .read(bytes: MIDIFile.Chunk.Header.midi1SMFFixedRawBytesLength)
             else {
-                throw MIDIFile.DecodeError.malformed(
+                throw .malformed(
                     "Header is not correct. File may not be a MIDI file."
                 )
             }
-
-            header = try Chunk.Header(midi1SMFRawBytes: readHeader)
-
+            
+            let header = try MIDIFile.Chunk.Header(midi1SMFRawBytes: readHeader)
+            
             // chunks
-
-            var tracksEncountered = 0
+            
             var endOfFile = false
-
-            var newChunks: [Chunk] = []
-
+            var chunkDescriptors: [ChunkDescriptor] = []
+            
+            // gather chunk references before parsing their contents
+            
             while !endOfFile {
                 // chunk header
-
-                guard let chunkType = try? dataReader.read(bytes: 4) else {
-                    throw DecodeError.malformed(
-                        "There was a problem reading chunk header at byte offset \(dataReader.readOffset). Encountered end of file early."
+                let chunkStartByteOffset = parser.readOffset
+                guard let chunkType = try? parser.read(bytes: 4) else {
+                    let offsetString = parser.readOffset.hexString(prefix: true)
+                    throw .malformed(
+                        "There was a problem reading chunk header at byte offset \(offsetString). Encountered end of file early."
                     )
-                }
-
-                guard let chunkLength = (try? dataReader.read(bytes: 4))?
-                    .toUInt32(from: .bigEndian)
-                else {
-                    throw DecodeError.malformed(
-                        "There was a problem reading chunk length at byte offset \(dataReader.readOffset). Encountered end of file early."
-                    )
-                }
-
-                let chunkTypeString = chunkType.asciiDataToString() ?? "????"
-            
-                try autoreleasepool {
-                    let newChunk: Chunk
-                    
-                    // chunk length
-                    
-                    guard let chunkData = try? dataReader.read(bytes: Int(chunkLength)) else {
-                        throw DecodeError.malformed(
-                            "There was a problem reading track data blob at byte offset \(dataReader.readOffset) for track \(tracksEncountered). Encountered end of file early."
-                        )
-                    }
-                    
-                    do {
-                        switch chunkTypeString {
-                        case MIDIFile.Chunk.Track.staticIdentifier:
-                            tracksEncountered += 1
-                            
-                            let newTrack = try Chunk.Track(midi1SMFRawBytes: chunkData.toUInt8Bytes)
-                            newChunk = .track(newTrack)
-                            
-                        default:
-                            // as per Standard MIDI File 1.0 Spec:
-                            // unrecognized chunks should be skipped and not throw an error
-                            
-                            let newUnrecognizedChunk = Chunk.UnrecognizedChunk(id: chunkTypeString, rawData: chunkData)
-                            newChunk = .other(newUnrecognizedChunk)
-                        }
-                    } catch let error as DecodeError {
-                        // append some context for the error and rethrow it
-                        switch error {
-                        case let .malformed(verboseError):
-                            throw DecodeError.malformed(
-                                "There was a problem reading track data at byte offset \(dataReader.readOffset) for track \(tracksEncountered). " +
-                                    verboseError
-                            )
-                            
-                        default:
-                            throw error
-                        }
-                    }
-                    
-                    newChunks.append(newChunk)
                 }
                 
-                if dataReader.readOffset >= data.count {
+                let chunkTypeString = chunkType.asciiDataToString() ?? "????"
+                
+                // chunk length
+                guard let chunkLength = (try? parser.read(bytes: 4))?
+                    .toUInt32(from: .bigEndian)
+                else {
+                    let offsetString = parser.readOffset.hexString(prefix: true)
+                    throw .malformed(
+                        "There was a problem reading chunk length at byte offset \(offsetString)"
+                    )
+                }
+                
+                // grab body data offset
+                let dataBodyOffset = parser.readOffset
+                
+                // advance parser
+                try parser.toMIDIFileDecodeError(
+                    malformedReason: "There was a problem reading chunk data at byte offset \(parser.readOffset.hexString(prefix: true)). Encountered end of file early.",
+                    try parser.seek(by: Int(chunkLength))
+                )
+                
+                // append chunk descriptor
+                let chunkDescriptor = ChunkDescriptor(
+                    typeString: chunkTypeString,
+                    startOffset: chunkStartByteOffset,
+                    bodyByteStartOffset: dataBodyOffset,
+                    bodyByteLength: Int(chunkLength)
+                )
+                chunkDescriptors.append(chunkDescriptor)
+                
+                // test for end of file
+                if parser.readOffset >= fileData.count {
                     endOfFile = true
                 }
             }
-
-            chunks = newChunks
+            
+            return FileDescriptor(header: header, chunkDescriptors: chunkDescriptors)
+        }
+    }
+    
+    /// Serial chunk parser. Parses one chunk at a time.
+    static func parseChunks(
+        chunkDescriptors: [ChunkDescriptor],
+        timebase: MIDIFile.TimeBase,
+        bundleParameterNumbers: Bool,
+        in fileData: some DataProtocol & Sendable,
+    ) throws(MIDIFile.DecodeError) -> [MIDIFile.Chunk] {
+        var newChunks: [MIDIFile.Chunk] = []
+        for (index, chunkDescriptor) in chunkDescriptors.enumerated() {
+            let newChunk = try fileData.withDataParser { parser throws(MIDIFile.DecodeError) in
+                try parser.toMIDIFileDecodeError(
+                    try parser.seek(to: chunkDescriptor.bodyByteStartOffset)
+                )
+                let chunkData = try parser.toMIDIFileDecodeError(
+                    try parser.read(bytes: chunkDescriptor.bodyByteLength)
+                )
+                return try parseChunk(
+                    chunkDescriptor: chunkDescriptor,
+                    chunkIndex: index,
+                    timebase: timebase,
+                    bundleParameterNumbers: bundleParameterNumbers,
+                    in: chunkData
+                )
+            }
+            
+            newChunks.append(newChunk)
+        }
+        return newChunks
+    }
+    
+    /// Concurrent version of `parseChunks` method. Parses multiple chunks concurrently.
+    @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
+    static func parseChunks(
+        chunkDescriptors: [ChunkDescriptor],
+        timebase: MIDIFile.TimeBase,
+        bundleParameterNumbers: Bool,
+        in fileData: some DataProtocol & Sendable,
+    ) async throws(MIDIFile.DecodeError) -> [MIDIFile.Chunk] {
+        let result: Result<[MIDIFile.Chunk], MIDIFile.DecodeError> = await withTaskGroup(
+            of: Result<(index: Int, chunk: MIDIFile.Chunk), MIDIFile.DecodeError>.self,
+            returning: Result<[MIDIFile.Chunk], MIDIFile.DecodeError>.self
+        ) { group in
+            var newChunks: [Int: MIDIFile.Chunk] = [:]
+            
+            for (index, chunkDescriptor) in chunkDescriptors.enumerated() {
+                group.addTask {
+                    do throws(MIDIFile.DecodeError) {
+                        let chunk = try fileData.withDataParser { parser throws(MIDIFile.DecodeError) in
+                            try parser.toMIDIFileDecodeError(
+                                try parser.seek(to: chunkDescriptor.bodyByteStartOffset)
+                            )
+                            let chunkData = try parser.toMIDIFileDecodeError(
+                                try parser.read(bytes: chunkDescriptor.bodyByteLength)
+                            )
+                            return try parseChunk(
+                                chunkDescriptor: chunkDescriptor,
+                                chunkIndex: index,
+                                timebase: timebase,
+                                bundleParameterNumbers: bundleParameterNumbers,
+                                in: chunkData
+                            )
+                        }
+                        
+                        return .success((index: index, chunk: chunk))
+                    } catch {
+                        return .failure(error)
+                    }
+                }
+            }
+            
+            for await result in group {
+                switch result {
+                case let .success((index, chunk)):
+                    newChunks[index] = chunk
+                case let .failure(error):
+                    return .failure(error)
+                }
+            }
+            
+            let chunks = newChunks.sorted(by: { $0.key < $1.key }).map(\.value)
+            return .success(chunks)
+        }
+        
+        return try result.get()
+    }
+    
+    static func parseChunk(
+        chunkDescriptor: ChunkDescriptor,
+        chunkIndex: Int,
+        timebase: MIDIFile.TimeBase,
+        bundleParameterNumbers: Bool,
+        in chunkData: some DataProtocol
+    ) throws(MIDIFile.DecodeError) -> MIDIFile.Chunk {
+        do throws(MIDIFile.DecodeError) {
+            switch chunkDescriptor.typeString {
+            case MIDIFile.Chunk.Track.staticIdentifier:
+                let newTrack = try MIDIFile.Chunk.Track(
+                    midi1SMFRawBytes: chunkData,
+                    timebase: timebase,
+                    bundleParameterNumbers: bundleParameterNumbers
+                )
+                return .track(newTrack)
+                
+            default:
+                // as per Standard MIDI File 1.0 Spec:
+                // unrecognized chunks should be skipped and not throw an error
+                
+                let newUnrecognizedChunk = MIDIFile.Chunk.UnrecognizedChunk(
+                    id: chunkDescriptor.typeString,
+                    rawData: chunkData.toData()
+                )
+                return .other(newUnrecognizedChunk)
+            }
+        } catch {
+            // append some context for the error and rethrow it
+            switch error {
+            case let .malformed(verboseError):
+                let offsetString = chunkDescriptor.startOffset.hexString(prefix: true)
+                throw .malformed(
+                    "There was a problem reading track data at byte offset \(offsetString) for chunk index \(chunkIndex). \(verboseError)"
+                )
+                
+            default:
+                throw error
+            }
         }
     }
 }

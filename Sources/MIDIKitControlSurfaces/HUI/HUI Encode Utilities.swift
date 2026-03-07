@@ -432,7 +432,7 @@ func encodeHUISmallDisplay(
 ///   - body: Data bytes, not including the manufacturer or sub ID 1/2.
 /// - Returns: MIDI event.
 @inlinable
-func huiSysExTemplate(body: [UInt8]) throws -> MIDIEvent {
+func huiSysExTemplate(body: [UInt8]) throws(MIDIEvent.ParseError) -> MIDIEvent {
     try .sysEx7(
         manufacturer: HUIConstants.kMIDI.kSysEx.kManufacturer,
         data: [

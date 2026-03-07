@@ -62,14 +62,14 @@ extension PThreadMutex: Sendable where T: Sendable { }
 
 extension PThreadMutex {
     @discardableResult
-    public func withReadLock<Result>(_ block: (T) throws -> Result) rethrows -> Result {
+    public func withReadLock<Result, E>(_ block: (T) throws(E) -> Result) rethrows -> Result {
         lock.readLock()
         defer { lock.unlock() }
         return try block(value)
     }
     
     @discardableResult @_disfavoredOverload
-    public func withWriteLock<Result>(_ block: (inout T) throws -> Result) rethrows -> Result {
+    public func withWriteLock<Result, E>(_ block: (inout T) throws(E) -> Result) rethrows -> Result {
         lock.writeLock()
         defer { lock.unlock() }
         return try block(&value)
@@ -103,13 +103,13 @@ final class PThreadRWLock: @unchecked Sendable {
         pthread_rwlock_unlock(&lock)
     }
     
-    func withReadLock<T>(block: () throws -> T) rethrows -> T {
+    func withReadLock<T, E>(block: () throws(E) -> T) rethrows -> T {
         readLock()
         defer { unlock() }
         return try block()
     }
     
-    func withWriteLock<T>(block: () throws -> T) rethrows -> T {
+    func withWriteLock<T, E>(block: () throws(E) -> T) rethrows -> T {
         writeLock()
         defer { unlock() }
         return try block()

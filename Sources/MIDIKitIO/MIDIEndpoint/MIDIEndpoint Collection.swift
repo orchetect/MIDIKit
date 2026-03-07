@@ -10,7 +10,7 @@ extension Collection where Element: MIDIEndpoint {
     // Note: sortedByName() is already implemented on MIDIEndpoint
     // and requires no special implementation here for endpoints.
     
-    /// Returns the array sorted alphabetically by MIDI object name.
+    /// Returns the array sorted alphabetically by MIDI object display name.
     public func sortedByDisplayName() -> [Element] {
         sorted(by: {
             $0.displayName

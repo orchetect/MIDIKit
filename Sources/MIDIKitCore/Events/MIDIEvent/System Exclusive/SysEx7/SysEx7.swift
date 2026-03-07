@@ -34,7 +34,7 @@ extension MIDIEvent {
             manufacturer: MIDIEvent.SysExManufacturer,
             data: [UInt8],
             group: UInt4 = 0x0
-        ) throws {
+        ) throws(ParseError) {
             self.manufacturer = manufacturer
             
             // data must all be 7-bit bytes,
@@ -93,7 +93,7 @@ extension MIDIEvent {
         manufacturer: SysExManufacturer,
         data: [UInt8],
         group: UInt4 = 0x0
-    ) throws -> Self {
+    ) throws(ParseError) -> Self {
         try .sysEx7(
             .init(
                 manufacturer: manufacturer,

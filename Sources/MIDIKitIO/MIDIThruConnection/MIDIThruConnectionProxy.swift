@@ -25,7 +25,7 @@ final class MIDIThruConnectionProxy {
         inputs: [MIDIInputEndpoint],
         midiManager: MIDIManager,
         api: CoreMIDIAPIVersion = .bestForPlatform()
-    ) throws {
+    ) throws(MIDIIOError) {
         outputConnection = MIDIOutputConnection(
             mode: .inputs(matching: Set(inputs.asIdentities())),
             filter: .default(),

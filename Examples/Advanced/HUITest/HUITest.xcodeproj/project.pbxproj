@@ -120,7 +120,7 @@
 			mainGroup = E284EBA926AE018F0016AA0F;
 			packageReferences = (
 				E261699228E9272400DEA000 /* XCRemoteSwiftPackageReference "Controls" */,
-				E20237EB2CC4537000661322 /* XCLocalSwiftPackageReference "../../../../MIDIKit" */,
+				E20237EB2CC4537000661322 /* XCLocalSwiftPackageReference "../../../" */,
 			);
 			productRefGroup = E284EBB326AE018F0016AA0F /* Products */;
 			projectDirPath = "";
@@ -358,9 +358,9 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		E20237EB2CC4537000661322 /* XCLocalSwiftPackageReference "../../../../MIDIKit" */ = {
+		E20237EB2CC4537000661322 /* XCLocalSwiftPackageReference "../../../" */ = {
 			isa = XCLocalSwiftPackageReference;
-			relativePath = ../../../../MIDIKit;
+			relativePath = ../../../;
 		};
 /* End XCLocalSwiftPackageReference section */
 
@@ -378,22 +378,22 @@
 /* Begin XCSwiftPackageProductDependency section */
 		E20237FE2CC459E500661322 /* MIDIKitControlSurfaces */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = E20237EB2CC4537000661322 /* XCLocalSwiftPackageReference "../../../../MIDIKit" */;
+			package = E20237EB2CC4537000661322 /* XCLocalSwiftPackageReference "../../../" */;
 			productName = MIDIKitControlSurfaces;
 		};
 		E20238002CC459E500661322 /* MIDIKitCore */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = E20237EB2CC4537000661322 /* XCLocalSwiftPackageReference "../../../../MIDIKit" */;
+			package = E20237EB2CC4537000661322 /* XCLocalSwiftPackageReference "../../../" */;
 			productName = MIDIKitCore;
 		};
 		E20238022CC459E500661322 /* MIDIKitIO */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = E20237EB2CC4537000661322 /* XCLocalSwiftPackageReference "../../../../MIDIKit" */;
+			package = E20237EB2CC4537000661322 /* XCLocalSwiftPackageReference "../../../" */;
 			productName = MIDIKitIO;
 		};
 		E20238042CC459E500661322 /* MIDIKitUI */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = E20237EB2CC4537000661322 /* XCLocalSwiftPackageReference "../../../../MIDIKit" */;
+			package = E20237EB2CC4537000661322 /* XCLocalSwiftPackageReference "../../../" */;
 			productName = MIDIKitUI;
 		};
 		E261699328E9272400DEA000 /* Controls */ = {

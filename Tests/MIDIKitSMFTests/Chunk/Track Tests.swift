@@ -14,23 +14,8 @@ import Testing
     // swiftformat:disable spaceInsideParens spaceInsideBrackets spacearoundoperators
     // swiftformat:options --maxwidth none
     
-    /// Ensure that event decode order contains all event types and that there are no duplicates.
     @Test
-    func eventDecodeOrder() {
-        // check count matches since an array can contain more than one of the same identical element
-        #expect(
-            Set(MIDIFile.Chunk.Track.eventDecodeOrder).count ==
-                MIDIFileEventType.allCases.count
-        )
-        
-        // ensure order contains all cases
-        for eventType in MIDIFileEventType.allCases {
-            #expect(MIDIFile.Chunk.Track.eventDecodeOrder.filter { $0 == eventType }.count == 1)
-        }
-    }
-    
-    @Test
-    func emptyEvents() throws {
+    func emptyEvents() async throws {
         let events: [MIDIFileEvent] = []
         
         let track = MIDIFile.Chunk.Track(events: events)
@@ -46,21 +31,30 @@ import Testing
         
         // generate raw bytes
         
-        let generatedData: Data = try track.midi1SMFRawBytes(
-            using: .musical(ticksPerQuarterNote: 960)
-        )
+        let timebase: MIDIFile.TimeBase = .musical(ticksPerQuarterNote: 960)
+        let generatedData: Data = try track.midi1SMFRawBytes(using: timebase)
         
-        #expect(generatedData.toUInt8Bytes == bytes)
+        #expect(generatedData.toUInt8Bytes() == bytes)
         
         // parse raw bytes
         
-        let parsedTrack = try MIDIFile.Chunk.Track(midi1SMFRawBytesStream: generatedData)
+        let parsedTrackA = try? MIDIFile.Chunk.Track(
+            midi1SMFRawBytesStream: generatedData,
+            timebase: timebase,
+            bundleParameterNumbers: true
+        )
+        #expect(parsedTrackA == track)
         
-        #expect(parsedTrack == parsedTrack)
+        let parsedTrackB = try? MIDIFile.Chunk.Track(
+            midi1SMFRawBytes: generatedData[8...], // exclude header and length
+            timebase: timebase,
+            bundleParameterNumbers: true
+        )
+        #expect(parsedTrackB == track)
     }
     
     @Test
-    func withEvents() throws {
+    func withEvents() async throws {
         let events: [MIDIFileEvent] = [
             .noteOn(delta: .none, note: 60, velocity: .midi1(64), channel: 0),
             .cc(delta: .ticks(240), controller: .expression, value: .midi1(20), channel: 1)
@@ -83,23 +77,30 @@ import Testing
         
         // generate raw bytes
         
-        let generatedData: Data = try track.midi1SMFRawBytes(
-            using: .musical(ticksPerQuarterNote: 960)
-        )
+        let timebase: MIDIFile.TimeBase = .musical(ticksPerQuarterNote: 960)
+        let generatedData: Data = try track.midi1SMFRawBytes(using: timebase)
         
-        #expect(generatedData.toUInt8Bytes == bytes)
+        #expect(generatedData.toUInt8Bytes() == bytes)
         
         // parse raw bytes
         
-        let parsedTrack = try MIDIFile.Chunk.Track(midi1SMFRawBytesStream: generatedData)
+        let parsedTrackA = try? MIDIFile.Chunk.Track(
+            midi1SMFRawBytesStream: generatedData,
+            timebase: timebase,
+            bundleParameterNumbers: true
+        )
+        #expect(parsedTrackA == track)
         
-        #expect(parsedTrack == parsedTrack)
+        let parsedTrackB = try? MIDIFile.Chunk.Track(
+            midi1SMFRawBytes: generatedData[8...], // exclude header and length
+            timebase: timebase,
+            bundleParameterNumbers: true
+        )
+        #expect(parsedTrackB == track)
     }
     
-    // MARK: - Events
-    
     @Test
-    func eventsAtBeatPositions() throws {
+    func eventsAtBeatPositions() async throws {
         let ppq: UInt16 = 480
         var midiFile = MIDIFile(timeBase: .musical(ticksPerQuarterNote: UInt16(ppq)))
         
@@ -155,5 +156,57 @@ import Testing
         #expect(eventsAtBeatPositions[8].beat == 5.0) // cc
         #expect(eventsAtBeatPositions[9].beat == 5.5) // cc
         #expect(eventsAtBeatPositions[10].beat == 5.625) // cc
+    }
+    
+    /// Regression test: Test authoring and parsing a Standard MIDI File with very large events.
+    @Test(
+        .bug(
+            "https://github.com/orchetect/MIDIKit/issues/268",
+            "Read-ahead buffer truncates large meta/sequencer-specific events"
+        )
+    )
+    func largeEvents() async throws {
+        // text event
+        let textCharCount = Int.random(in: 10000 ... 20000)
+        let textString: String = String(
+            (0 ..< textCharCount)
+                .map { _ in "ABCDEFabcdef1234567890-_ ".randomElement()! }
+        )
+        #expect(textString.count == textCharCount)
+        let textEventPayload: MIDIFileEvent.Text = .init(text: textString)
+        let textEvent: MIDIFileEvent = .text(delta: .none, event: textEventPayload)
+        
+        // sequencer-specific event
+        let seqSpecificByteCount = Int.random(in: 10000 ... 20000)
+        let seqSpecificData: [UInt8] = (0 ..< seqSpecificByteCount)
+            .map { _ in UInt8.random(in: UInt8.min ... UInt8.max) }
+        #expect(seqSpecificData.count == seqSpecificByteCount)
+        let seqSpecificEventPayload: MIDIFileEvent.SequencerSpecific = .init(data: seqSpecificData)
+        let seqSpecificEvent: MIDIFileEvent = .sequencerSpecific(delta: .none, event: seqSpecificEventPayload)
+        
+        // author MIDI file
+        let events: [MIDIFileEvent] = [textEvent, seqSpecificEvent]
+        let track = MIDIFile.Chunk.Track(events: events)
+        let midiFile = MIDIFile(format: .singleTrack, timeBase: .musical(ticksPerQuarterNote: 480), chunks: [.track(track)])
+        
+        // encode and decode
+        let midiFileData = try midiFile.rawData()
+        let decodedMIDIFile = try await MIDIFile(rawData: midiFileData)
+        
+        // compare events
+        let decodedTrack = try #require(decodedMIDIFile.tracks.first)
+        try #require(decodedTrack.events.count == 2)
+        
+        // extract events
+        let decodedTextEventPayload: MIDIFileEvent.Text = try #require(
+            decodedTrack.events[0].smfUnwrappedEvent.event as? MIDIFileEvent.Text
+        )
+        let decodedSeqSpecificEventPayload: MIDIFileEvent.SequencerSpecific = try #require(
+            decodedTrack.events[1].smfUnwrappedEvent.event as? MIDIFileEvent.SequencerSpecific
+        )
+        
+        // compare events
+        #expect(decodedTextEventPayload == textEventPayload)
+        #expect(decodedSeqSpecificEventPayload == seqSpecificEventPayload)
     }
 }

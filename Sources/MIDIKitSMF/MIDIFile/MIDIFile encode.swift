@@ -8,11 +8,11 @@ import Foundation
 import MIDIKitCore
 
 extension MIDIFile {
-    func encode() throws -> Data {
+    func encode() throws(EncodeError) -> Data {
         // basic validation checks
 
         guard chunks.count <= UInt16.max else {
-            throw EncodeError.internalInconsistency(
+            throw .internalInconsistency(
                 "Chunk count exceeds maximum."
             )
         }
