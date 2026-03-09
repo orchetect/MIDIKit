@@ -32,7 +32,7 @@ env:
 
 jobs:
   macOS-14:
-    name: macOS 14 Sonoma
+    name: Tests (macOS 14)
     runs-on: macos-14
     timeout-minutes: 20
     steps:
@@ -46,7 +46,7 @@ jobs:
       run: xcodebuild test -workspace "$WORKSPACEPATH" -scheme "$SCHEME" -destination "platform=macOS" | xcbeautify --renderer github-actions && exit ${PIPESTATUS[0]}
   
   macOS-15:
-    name: macOS 15 Sequoia
+    name: Tests (macOS 15)
     runs-on: macos-15
     timeout-minutes: 20
     steps:
@@ -60,7 +60,7 @@ jobs:
       run: xcodebuild test -workspace "$WORKSPACEPATH" -scheme "$SCHEME" -destination "platform=macOS" | xcbeautify --renderer github-actions && exit ${PIPESTATUS[0]}
     
   macOS-swift6-2:
-    name: macOS Sequoia (Swift 6.2)
+    name: Tests (macOS 15 - Swift 6.2)
     runs-on: macos-latest
     timeout-minutes: 20
     steps:
@@ -76,7 +76,7 @@ jobs:
       run: xcodebuild test -workspace "$WORKSPACEPATH" -scheme "$SCHEME" -destination "platform=macOS" | xcbeautify --renderer github-actions && exit ${PIPESTATUS[0]}
       
   macCatalyst:
-    name: macCatalyst
+    name: Tests (macCatalyst)
     runs-on: macos-latest
     timeout-minutes: 20
     steps:
