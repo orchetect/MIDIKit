@@ -22,6 +22,10 @@ extension MIDIFile.Chunk {
         public init(events: [MIDIFileEvent]) {
             self.events = events
         }
+        
+        public init(events: some Sequence<MIDIFileEvent>) {
+            self.events = Array(events)
+        }
     }
 }
 
@@ -90,6 +94,11 @@ extension MIDIFile.Chunk.Track {
 extension MIDIFile.Chunk {
     /// Track: `MTrk` chunk type.
     public static func track(_ events: [MIDIFileEvent]) -> Self {
+        .track(.init(events: events))
+    }
+    
+    /// Track: `MTrk` chunk type.
+    public static func track(_ events: some Sequence<MIDIFileEvent>) -> Self {
         .track(.init(events: events))
     }
 }
