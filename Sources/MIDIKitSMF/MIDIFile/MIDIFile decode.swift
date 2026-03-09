@@ -6,7 +6,6 @@
 
 import Foundation
 import MIDIKitCore
-internal import MIDIKitInternals
 
 // MARK: - Parse Entry-point Methods
 

@@ -7,7 +7,7 @@
 import Foundation
 
 extension MIDIFile {
-    struct Parser<DataType: DataProtocol>: MIDIFileParserProtocol, Sendable where DataType: Sendable {
+    struct Parser<DataType: DataProtocol> where DataType: Sendable {
         let data: DataType
         
         let fileDescriptor: MIDIFileParserFileDescriptor
@@ -45,3 +45,7 @@ extension MIDIFile {
         }
     }
 }
+
+extension MIDIFile.Parser: Sendable { }
+
+extension MIDIFile.Parser: MIDIFileParserProtocol { }
