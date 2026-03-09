@@ -158,6 +158,45 @@ import Testing
         #expect(eventsAtBeatPositions[10].beat == 5.625) // cc
     }
     
+    @Test
+    func maxEventCount() async throws {
+        let events: [MIDIFileEvent] = [
+            .noteOn(delta: .none, note: 60, velocity: .midi1(64), channel: 0),
+            .cc(delta: .ticks(240), controller: .expression, value: .midi1(20), channel: 0),
+            .cc(delta: .ticks(240), controller: .expression, value: .midi1(40), channel: 0),
+            .noteOff(delta: .none, note: 60, velocity: .midi1(0), channel: 0)
+        ]
+        
+        let track = MIDIFile.Chunk.Track(events: events)
+        
+        // generate raw bytes
+        
+        let timebase: MIDIFile.TimeBase = .musical(ticksPerQuarterNote: 960)
+        let generatedData: Data = try track.midi1SMFRawBytes(using: timebase)
+        
+        // create comparison track
+        
+        let limitedTrack = MIDIFile.Chunk.Track(events: events[0 ... 1])
+        
+        // parse raw bytes and check event count
+        
+        let parsedTrackA = try? MIDIFile.Chunk.Track(
+            midi1SMFRawBytesStream: generatedData,
+            timebase: timebase,
+            bundleParameterNumbers: true,
+            maxEventCount: 2
+        )
+        #expect(parsedTrackA == limitedTrack)
+        
+        let parsedTrackB = try? MIDIFile.Chunk.Track(
+            midi1SMFRawBytes: generatedData[8...], // exclude header and length
+            timebase: timebase,
+            bundleParameterNumbers: true,
+            maxEventCount: 2
+        )
+        #expect(parsedTrackB == limitedTrack)
+    }
+    
     /// Regression test: Test authoring and parsing a Standard MIDI File with very large events.
     @Test(
         .bug(
