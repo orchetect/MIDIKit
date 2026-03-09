@@ -81,7 +81,11 @@ extension MIDIFile {
         rawData: some DataProtocol & Sendable,
         options: DecodeOptions = DecodeOptions()
     ) throws(DecodeError) {
-        try decode(rawData: rawData, bundleParameterNumbers: options.contains(.bundleParameterNumbers))
+        try decode(
+            rawData: rawData,
+            bundleParameterNumbers: options.bundleParameterNumbers,
+            maxTrackEventCount: options.maxTrackEventCount
+        )
     }
     
     /// Initialize by loading the contents of a MIDI file's raw data.
@@ -90,7 +94,11 @@ extension MIDIFile {
         rawData: some DataProtocol & Sendable,
         options: DecodeOptions = DecodeOptions()
     ) async throws(DecodeError) {
-        try await decode(rawData: rawData, bundleParameterNumbers: options.contains(.bundleParameterNumbers))
+        try await decode(
+            rawData: rawData,
+            bundleParameterNumbers: options.bundleParameterNumbers,
+            maxTrackEventCount: options.maxTrackEventCount
+        )
     }
 }
 
@@ -140,7 +148,11 @@ extension MIDIFile {
         options: DecodeOptions = DecodeOptions()
     ) throws(DecodeError) {
         let data = try Self.data(forFileURL: url)
-        try decode(rawData: data, bundleParameterNumbers: options.contains(.bundleParameterNumbers))
+        try decode(
+            rawData: data,
+            bundleParameterNumbers: options.bundleParameterNumbers,
+            maxTrackEventCount: options.maxTrackEventCount
+        )
     }
     
     /// Initialize by loading the contents of a MIDI file from disk.
@@ -150,7 +162,11 @@ extension MIDIFile {
         options: DecodeOptions = DecodeOptions()
     ) async throws(DecodeError) {
         let data = try Self.data(forFileURL: url)
-        try await decode(rawData: data, bundleParameterNumbers: options.contains(.bundleParameterNumbers))
+        try await decode(
+            rawData: data,
+            bundleParameterNumbers: options.bundleParameterNumbers,
+            maxTrackEventCount: options.maxTrackEventCount
+        )
     }
     
     static func data(forFileURL url: URL) throws(DecodeError) -> Data {

@@ -94,6 +94,7 @@ extension MIDIFileParserProtocol {
         chunkDescriptors: [MIDIFileParserChunkDescriptor],
         timebase: MIDIFile.TimeBase,
         bundleParameterNumbers: Bool,
+        maxTrackEventCount: Int?,
         in fileData: some DataProtocol & Sendable
     ) throws(MIDIFile.DecodeError) -> [MIDIFile.Chunk] {
         var newChunks: [MIDIFile.Chunk] = []
@@ -110,6 +111,7 @@ extension MIDIFileParserProtocol {
                     chunkIndex: index,
                     timebase: timebase,
                     bundleParameterNumbers: bundleParameterNumbers,
+                    maxTrackEventCount: maxTrackEventCount,
                     in: chunkData
                 )
             }
@@ -125,6 +127,7 @@ extension MIDIFileParserProtocol {
         chunkDescriptors: [MIDIFileParserChunkDescriptor],
         timebase: MIDIFile.TimeBase,
         bundleParameterNumbers: Bool,
+        maxTrackEventCount: Int?,
         in fileData: some DataProtocol & Sendable
     ) async throws(MIDIFile.DecodeError) -> [MIDIFile.Chunk] {
         let result: Result<[MIDIFile.Chunk], MIDIFile.DecodeError> = await withTaskGroup(
@@ -148,6 +151,7 @@ extension MIDIFileParserProtocol {
                                 chunkIndex: index,
                                 timebase: timebase,
                                 bundleParameterNumbers: bundleParameterNumbers,
+                                maxTrackEventCount: maxTrackEventCount,
                                 in: chunkData
                             )
                         }
@@ -180,6 +184,7 @@ extension MIDIFileParserProtocol {
         chunkIndex: Int,
         timebase: MIDIFile.TimeBase,
         bundleParameterNumbers: Bool,
+        maxTrackEventCount: Int?,
         in chunkData: some DataProtocol
     ) throws(MIDIFile.DecodeError) -> MIDIFile.Chunk {
         do throws(MIDIFile.DecodeError) {
@@ -188,7 +193,8 @@ extension MIDIFileParserProtocol {
                 let newTrack = try MIDIFile.Chunk.Track(
                     midi1SMFRawBytes: chunkData,
                     timebase: timebase,
-                    bundleParameterNumbers: bundleParameterNumbers
+                    bundleParameterNumbers: bundleParameterNumbers,
+                    maxEventCount: maxTrackEventCount
                 )
                 return .track(newTrack)
                 
