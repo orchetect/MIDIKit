@@ -101,7 +101,8 @@ extension MIDIFile.Chunk.Track {
     public init<D: DataProtocol>(
         midi1SMFRawBytesStream stream: D,
         timebase: MIDIFile.TimeBase,
-        bundleParameterNumbers: Bool
+        bundleParameterNumbers: Bool,
+        maxEventCount: Int? = nil
     ) throws(MIDIFile.DecodeError) {
         guard stream.count >= 8 else {
             throw .malformed(
@@ -146,7 +147,12 @@ extension MIDIFile.Chunk.Track {
             
             // we can't pass pointer ranges outside of the data reader closure,
             // so we must use them within the closure
-            return try Self(midi1SMFRawBytes: readChunk, timebase: timebase, bundleParameterNumbers: bundleParameterNumbers)
+            return try Self(
+                midi1SMFRawBytes: readChunk,
+                timebase: timebase,
+                bundleParameterNumbers: bundleParameterNumbers,
+                maxEventCount: maxEventCount
+            )
         }
     }
     
@@ -154,8 +160,12 @@ extension MIDIFile.Chunk.Track {
     init<D: DataProtocol>(
         midi1SMFRawBytes rawData: D,
         timebase: MIDIFile.TimeBase,
-        bundleParameterNumbers: Bool
+        bundleParameterNumbers: Bool,
+        maxEventCount: Int? = nil
     ) throws(MIDIFile.DecodeError) {
+        // sanitize inputs
+        let maxEventCount = maxEventCount?.clamped(to: 0...)
+        
         // chunk data
         
         try rawData.withDataParser { parser throws(MIDIFile.DecodeError) in
@@ -166,9 +176,13 @@ extension MIDIFile.Chunk.Track {
             
             // running status
             
+            var parsedEventCount = 0
             var runningStatusByte: UInt8?
             
             while !endOfChunk {
+                // check for early return if event count is being limited
+                if let maxEventCount, parsedEventCount >= maxEventCount { break }
+                
                 // delta time
                 
                 let eventDeltaTimeRead = try parser.toMIDIFileDecodeError(
@@ -263,6 +277,9 @@ extension MIDIFile.Chunk.Track {
                 } else if (0xF0 ... 0xF7).contains(foundEvent.statusByte) {
                     runningStatusByte = nil
                 }
+                
+                // increment event counter
+                parsedEventCount += 1
             }
             
             // bundle RPN and NRPN events
