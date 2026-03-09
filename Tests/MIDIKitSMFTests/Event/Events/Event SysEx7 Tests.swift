@@ -14,14 +14,14 @@ import Testing
     // MARK: - MIDIEvent.sysEx7(midi1SMFRawBytes:)
     
     @Test
-    func midiEventSysEx7_midi1SMFRawBytes_Empty() {
+    func midiEventSysEx7_midi1SMFRawBytes_Empty() async {
         #expect(throws: (any Error).self) {
             try MIDIEvent.sysEx7(midi1SMFRawBytes: [])
         }
     }
     
     @Test
-    func midiEventSysEx7_midi1SMFRawBytes_EmptyOrShort() throws {
+    func midiEventSysEx7_midi1SMFRawBytes_EmptyOrShort() async throws {
         // 0xF7 termination byte is required in SMF for all syntactically complete sysex messages
         
         // not syntactically complete, but could be valid in multi-part sysex context
@@ -52,7 +52,7 @@ import Testing
     }
     
     @Test
-    func midiEventSysEx7_midi1SMFRawBytes_WrongLength() {
+    func midiEventSysEx7_midi1SMFRawBytes_WrongLength() async {
         // length must include data length and termination byte
         
         #expect(throws: (any Error).self) {
@@ -66,7 +66,7 @@ import Testing
     }
     
     @Test
-    func midiEventSysEx7_midi1SMFRawBytes_SysEx_EmptyData() throws {
+    func midiEventSysEx7_midi1SMFRawBytes_SysEx_EmptyData() async throws {
         let sysEx = try MIDIEvent.sysEx7(midi1SMFRawBytes: [
             0xF0,  // start byte
             0x02,  // length: 2 bytes to follow
@@ -83,7 +83,7 @@ import Testing
     }
     
     @Test
-    func midiEventSysEx7_midi1SMFRawBytes_SysEx_WithData() throws {
+    func midiEventSysEx7_midi1SMFRawBytes_SysEx_WithData() async throws {
         let sysEx = try MIDIEvent.sysEx7(midi1SMFRawBytes: [
             0xF0,  // start byte
             0x04,  // length: 4 bytes to follow
@@ -102,7 +102,7 @@ import Testing
     }
     
     @Test
-    func midiEventSysEx7_midi1SMFRawBytes_UniversalSysEx_EmptyData() throws {
+    func midiEventSysEx7_midi1SMFRawBytes_UniversalSysEx_EmptyData() async throws {
         let sysEx = try MIDIEvent.sysEx7(midi1SMFRawBytes: [
             0xF0,  // start byte
             0x05,  // length: 5 bytes to follow
@@ -125,7 +125,7 @@ import Testing
     }
     
     @Test
-    func midiEventSysEx7_midi1SMFRawBytes_UniversalSysEx_WithData() throws {
+    func midiEventSysEx7_midi1SMFRawBytes_UniversalSysEx_WithData() async throws {
         let sysEx = try MIDIEvent.sysEx7(midi1SMFRawBytes: [
             0xF0,  // start byte
             0x07,  // length: 7 bytes to follow
@@ -152,7 +152,7 @@ import Testing
     // MARK: - MIDIFileEvent.SysEx7
     
     @Test
-    func sysEx7_midi1SMFRawBytes_EmptyData() throws {
+    func sysEx7_midi1SMFRawBytes_EmptyData() async throws {
         let sysEx = try MIDIFileEvent.SysEx7(
             manufacturer: .oneByte(0x7D),
             data: []
@@ -169,7 +169,7 @@ import Testing
     }
     
     @Test
-    func sysEx7_midi1SMFRawBytes_WithData() throws {
+    func sysEx7_midi1SMFRawBytes_WithData() async throws {
         let sysEx = try MIDIFileEvent.SysEx7(
             manufacturer: .oneByte(0x7D),
             data: [0x12, 0x34]
@@ -188,7 +188,7 @@ import Testing
     }
     
     @Test
-    func sysEx7_midi1SMFRawBytes_128Bytes() throws {
+    func sysEx7_midi1SMFRawBytes_128Bytes() async throws {
         let data: [UInt8] = .init(repeating: 0x12, count: 128 - 2)
         
         let sysEx = try MIDIFileEvent.SysEx7(
@@ -213,7 +213,7 @@ import Testing
     // MARK: - MIDIFileEvent.UniversalSysEx7
     
     @Test
-    func universalSysEx7_midi1SMFRawBytes_EmptyData() throws {
+    func universalSysEx7_midi1SMFRawBytes_EmptyData() async throws {
         let sysEx = try MIDIFileEvent.UniversalSysEx7(
             universalType: .realTime,
             deviceID: 0x01,
@@ -236,7 +236,7 @@ import Testing
     }
     
     @Test
-    func universalSysEx7_midi1SMFRawBytes_WithData() throws {
+    func universalSysEx7_midi1SMFRawBytes_WithData() async throws {
         let sysEx = try MIDIFileEvent.UniversalSysEx7(
             universalType: .nonRealTime,
             deviceID: 0x7F,
@@ -261,7 +261,7 @@ import Testing
     }
     
     @Test
-    func universalSysEx7_midi1SMFRawBytes_128Bytes() throws {
+    func universalSysEx7_midi1SMFRawBytes_128Bytes() async throws {
         let data: [UInt8] = .init(repeating: 0x12, count: 128 - 5)
         
         let sysEx = try MIDIFileEvent.UniversalSysEx7(

@@ -15,7 +15,7 @@ import Testing
     // swiftformat:options --maxwidth none
     
     @Test
-    func init_Type0() throws {
+    func init_Type0() async throws {
         let header = MIDIFile.Chunk.Header(
             format: .singleTrack,
             timeBase: .musical(ticksPerQuarterNote: 720)
@@ -30,25 +30,25 @@ import Testing
                                 0x00, 0x01, // track count
                                 0x02, 0xD0] // timebase
         
-        #expect(try header.midi1SMFRawBytes(withChunkCount: 1).toUInt8Bytes == rawData)
+        #expect(try header.midi1SMFRawBytes(withChunkCount: 1).toUInt8Bytes() == rawData)
     }
     
     @Test
-    func init_Type0_rawData() throws {
+    func init_Type0_rawData() async throws {
         let rawData: [UInt8] = [0x4D, 0x54, 0x68, 0x64, // MThd header
                                 0x00, 0x00, 0x00, 0x06, // length
                                 0x00, 0x00, // format
                                 0x00, 0x01, // track count
                                 0x02, 0xD0] // timebase
         
-        let header = try MIDIFile.Chunk.Header(midi1SMFRawBytes: rawData.data)
+        let header = try MIDIFile.Chunk.Header(midi1SMFRawBytes: rawData)
         
         #expect(header.format == .singleTrack)
         #expect(header.timeBase == .musical(ticksPerQuarterNote: 720))
     }
     
     @Test
-    func init_Type1() throws {
+    func init_Type1() async throws {
         let header = MIDIFile.Chunk.Header(
             format: .multipleTracksSynchronous,
             timeBase: .musical(ticksPerQuarterNote: 720)
@@ -63,25 +63,25 @@ import Testing
                                 0x00, 0x02, // track count
                                 0x02, 0xD0] // timebase
         
-        #expect(try header.midi1SMFRawBytes(withChunkCount: 2).toUInt8Bytes == rawData)
+        #expect(try header.midi1SMFRawBytes(withChunkCount: 2).toUInt8Bytes() == rawData)
     }
     
     @Test
-    func init_Type1_rawData() throws {
+    func init_Type1_rawData() async throws {
         let rawData: [UInt8] = [0x4D, 0x54, 0x68, 0x64, // MThd header
                                 0x00, 0x00, 0x00, 0x06, // length
                                 0x00, 0x01, // format
                                 0x00, 0x02, // track count
                                 0x02, 0xD0] // timebase
         
-        let header = try MIDIFile.Chunk.Header(midi1SMFRawBytes: rawData.data)
+        let header = try MIDIFile.Chunk.Header(midi1SMFRawBytes: rawData)
         
         #expect(header.format == .multipleTracksSynchronous)
         #expect(header.timeBase == .musical(ticksPerQuarterNote: 720))
     }
     
     @Test
-    func init_Type2() throws {
+    func init_Type2() async throws {
         let header = MIDIFile.Chunk.Header(
             format: .multipleTracksAsynchronous,
             timeBase: .musical(ticksPerQuarterNote: 720)
@@ -96,18 +96,18 @@ import Testing
                                 0x00, 0x02, // track count
                                 0x02, 0xD0] // timebase
         
-        #expect(try header.midi1SMFRawBytes(withChunkCount: 2).toUInt8Bytes == rawData)
+        #expect(try header.midi1SMFRawBytes(withChunkCount: 2).toUInt8Bytes() == rawData)
     }
     
     @Test
-    func init_Type2_rawData() throws {
+    func init_Type2_rawData() async throws {
         let rawData: [UInt8] = [0x4D, 0x54, 0x68, 0x64, // MThd header
                                 0x00, 0x00, 0x00, 0x06, // length
                                 0x00, 0x02, // format
                                 0x00, 0x02, // track count
                                 0x02, 0xD0] // timebase
         
-        let header = try MIDIFile.Chunk.Header(midi1SMFRawBytes: rawData.data)
+        let header = try MIDIFile.Chunk.Header(midi1SMFRawBytes: rawData)
         
         #expect(header.format == .multipleTracksAsynchronous)
         #expect(header.timeBase == .musical(ticksPerQuarterNote: 720))
@@ -116,31 +116,31 @@ import Testing
     // MARK: - Edge Cases
     
     @Test
-    func init_LengthIntTooShort() {
+    func init_LengthIntTooShort() async {
         let rawData: [UInt8] = [0x4D, 0x54, 0x68, 0x64, // MThd header
                                 0x00, 0x00, 0x00, 0x05, // length (wrong)
                                 0x00, 0x00, // format
                                 0x00, 0x01, // track count
                                 0x02, 0xD0] // timebase
         #expect(throws: (any Error).self) {
-            try MIDIFile.Chunk.Header(midi1SMFRawBytes: rawData.data)
+            try MIDIFile.Chunk.Header(midi1SMFRawBytes: rawData)
         }
     }
     
     @Test
-    func init_LengthIntTooLong() {
+    func init_LengthIntTooLong() async {
         let rawData: [UInt8] = [0x4D, 0x54, 0x68, 0x64, // MThd header
                                 0x00, 0x00, 0x00, 0x07, // length (wrong)
                                 0x00, 0x00, // format
                                 0x00, 0x01, // track count
                                 0x02, 0xD0] // timebase
         #expect(throws: (any Error).self) {
-            try MIDIFile.Chunk.Header(midi1SMFRawBytes: rawData.data)
+            try MIDIFile.Chunk.Header(midi1SMFRawBytes: rawData)
         }
     }
     
     @Test
-    func init_LengthTooShort() {
+    func init_LengthTooShort() async {
         let rawData: [UInt8] = [0x4D, 0x54, 0x68, 0x64, // MThd header
                                 0x00, 0x00, 0x00, 0x06, // length
                                 0x00, 0x00, // format
@@ -148,12 +148,12 @@ import Testing
                                 0x02] // timebase, but too few bytes (wrong)
         
         #expect(throws: (any Error).self) {
-            try MIDIFile.Chunk.Header(midi1SMFRawBytes: rawData.data)
+            try MIDIFile.Chunk.Header(midi1SMFRawBytes: rawData)
         }
     }
     
     @Test
-    func init_MoreBytesThanExpected() {
+    func init_MoreBytesThanExpected() async {
         // valid header chunk, with an additional unexpected subsequent byte
         
         let rawData: [UInt8] = [0x4D, 0x54, 0x68, 0x64, // MThd header
@@ -166,7 +166,7 @@ import Testing
         // since the header is always a known total number of bytes,
         // init will succeed and ignore any additional subsequent bytes
         #expect(throws: Never.self) {
-            try MIDIFile.Chunk.Header(midi1SMFRawBytes: rawData.data)
+            try MIDIFile.Chunk.Header(midi1SMFRawBytes: rawData)
         }
     }
 }

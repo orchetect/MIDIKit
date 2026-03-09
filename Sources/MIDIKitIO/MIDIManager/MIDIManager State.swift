@@ -16,27 +16,35 @@ extension MIDIManager {
     /// Subsequent calls will not have any effect.
     ///
     /// - Throws: `MIDIIOError.osStatus`
-    public func start() throws {
+    public func start() throws(MIDIIOError) {
         // if start() was already called, return
         guard coreMIDIClientRef == MIDIClientRef() else { return }
         
-        func block() throws -> MIDIClientRef {
+        func block() -> Result<MIDIClientRef, MIDIIOError> {
             var newCoreMIDIClientRef = MIDIClientRef()
-            try MIDIClientCreateWithBlock(clientName as CFString, &newCoreMIDIClientRef) { [weak self] notificationPtr in
-                guard let self else { return }
-                let internalNotif = MIDIIOInternalNotification(notificationPtr)
-                internalNotificationHandler(internalNotif)
+            
+            do throws(MIDIIOError) {
+                try MIDIClientCreateWithBlock(clientName as CFString, &newCoreMIDIClientRef) { [weak self] notificationPtr in
+                    guard let self else { return }
+                    let internalNotif = MIDIIOInternalNotification(notificationPtr)
+                    internalNotificationHandler(internalNotif)
+                }
+                .throwIfOSStatusErr()
+                
+                return .success(newCoreMIDIClientRef)
+            } catch {
+                return .failure(error)
             }
-            .throwIfOSStatusErr()
-            return newCoreMIDIClientRef
         }
+        
         // `MIDIClientCreateWithBlock` must be called on the main thread,
         // otherwise the notification block will never happen.
         let newCoreMIDIClientRef: MIDIClientRef
         if Thread.current.isMainThread {
-            newCoreMIDIClientRef = try block()
+            newCoreMIDIClientRef = try block().get()
         } else {
-            newCoreMIDIClientRef = try DispatchQueue.main.sync { try block() }
+            let result = DispatchQueue.main.sync { block() }
+            newCoreMIDIClientRef = try result.get()
         }
         assert(newCoreMIDIClientRef != MIDIClientRef())
         self.coreMIDIClientRef = newCoreMIDIClientRef

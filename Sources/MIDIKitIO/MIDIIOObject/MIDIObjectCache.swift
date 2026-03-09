@@ -32,9 +32,17 @@ extension MIDIObjectCache {
         }
         
         // add or replace exiting objects that share the same Core MIDI ref.
-        manager.devices.devices.forEach { devices.update(with: $0) }
-        manager.endpoints.inputs.forEach { inputEndpoints.update(with: $0) }
-        manager.endpoints.outputs.forEach { outputEndpoints.update(with: $0) }
+        manager.devices.devices
+            .filter { $0.uniqueID != .invalidMIDIIdentifier }
+            .forEach { devices.update(with: $0) }
+        
+        manager.endpoints.inputs
+            .filter { $0.uniqueID != .invalidMIDIIdentifier }
+            .forEach { inputEndpoints.update(with: $0) }
+        
+        manager.endpoints.outputs
+            .filter { $0.uniqueID != .invalidMIDIIdentifier }
+            .forEach { outputEndpoints.update(with: $0) }
     }
 }
 

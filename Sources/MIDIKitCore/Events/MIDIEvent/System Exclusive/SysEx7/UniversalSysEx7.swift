@@ -41,7 +41,7 @@ extension MIDIEvent {
             subID2: UInt7,
             data: [UInt8],
             group: UInt4 = 0x0
-        ) throws {
+        ) throws(ParseError) {
             self.universalType = universalType
             self.deviceID = deviceID
             self.subID1 = subID1
@@ -50,7 +50,7 @@ extension MIDIEvent {
             // data must all be 7-bit bytes,
             // but we make the array [UInt8] instead of [UInt7] to reduce friction
             guard data.allSatisfy({ $0 < 0x80 }) else {
-                throw ParseError.malformed
+                throw .malformed
             }
             
             self.data = data
@@ -107,7 +107,7 @@ extension MIDIEvent {
         subID2: UInt7,
         data: [UInt8],
         group: UInt4 = 0x0
-    ) throws -> Self {
+    ) throws(ParseError) -> Self {
         try .universalSysEx7(
             .init(
                 universalType: universalType,

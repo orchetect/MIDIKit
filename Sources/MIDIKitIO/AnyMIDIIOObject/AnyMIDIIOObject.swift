@@ -63,6 +63,19 @@ extension AnyMIDIIOObject: MIDIIOObject {
         }
     }
     
+    public var displayName: String {
+        switch self {
+        case let .device(device):
+            device.displayName
+        case let .entity(entity):
+            entity.displayName
+        case let .inputEndpoint(endpoint):
+            endpoint.displayName
+        case let .outputEndpoint(endpoint):
+            endpoint.displayName
+        }
+    }
+    
     public var uniqueID: MIDIIdentifier {
         switch self {
         case let .device(device):

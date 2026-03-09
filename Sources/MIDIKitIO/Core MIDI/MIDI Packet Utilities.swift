@@ -31,8 +31,9 @@ func unpackMIDIRefCon(
     let srcRef = UInt32(truncating: srcRefNS)
     
     // filter out invalid ref data
-    let uID = getUniqueID(of: srcRef)
-    guard uID != .invalidMIDIIdentifier else { return nil }
+    guard let uniqueID = try? getUniqueID(of: srcRef),
+          uniqueID != .invalidMIDIIdentifier
+    else { return nil }
 
     return MIDIOutputEndpoint(from: srcRef)
 }

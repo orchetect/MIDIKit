@@ -13,21 +13,35 @@ public protocol MIDIFileEventPayload where Self: Sendable {
     static var smfEventType: MIDIFileEventType { get }
     
     /// Initialize from raw event bytes.
-    /// Returns nil if data is malformed or cannot otherwise be used to construct the event.
-    init<D: DataProtocol>(midi1SMFRawBytes rawBytes: D) throws
+    /// Throws an error if data is malformed or cannot otherwise be used to construct the event.
+    ///
+    /// - Parameters:
+    ///   - rawBytes: Raw event bytes.
+    ///   - runningStatus: Running status, if present while parsing a Standard MIDI file track.
+    ///     If `rawBytes` contains all bytes that comprise the message, pass `nil` for running status.
+    init<D: DataProtocol>(
+        midi1SMFRawBytes rawBytes: D,
+        runningStatus: UInt8?
+    ) throws(MIDIFile.DecodeError)
+    
+    /// If it is possible to initialize a new instance of this event from the head of the data
+    /// stream, a new instance will be returned along with the byte length traversed from the
+    /// stream.
+    ///
+    /// - Parameters:
+    ///   - stream: Raw event byte stream.
+    ///   - runningStatus: Running status, if present while parsing a Standard MIDI file track.
+    ///     If `rawBytes` contains all bytes that comprise the message, pass `nil` for running status.
+    static func initFrom(
+        midi1SMFRawBytesStream stream: some DataProtocol,
+        runningStatus: UInt8?
+    ) throws(MIDIFile.DecodeError) -> StreamDecodeResult
     
     /// Raw data for the event.
     func midi1SMFRawBytes<D: MutableDataProtocol>() -> D
    
     /// Returns the new event and MIDI file buffer length (number of bytes).
     typealias StreamDecodeResult = (newEvent: Self, bufferLength: Int)
-    
-    /// If it is possible to initialize a new instance of this event from the head of the data
-    /// stream, a new instance will be returned along with the byte length traversed from the
-    /// stream.
-    static func initFrom(
-        midi1SMFRawBytesStream stream: some DataProtocol
-    ) throws -> StreamDecodeResult
     
     /// Description for the event in a MIDI file context.
     var smfDescription: String { get }
@@ -44,4 +58,25 @@ extension MIDIFileEventPayload /* : CustomStringConvertible */ {
 extension MIDIFileEventPayload /* : CustomDebugStringConvertible */ {
     @_disfavoredOverload
     public var debugDescription: String { smfDebugDescription }
+}
+
+// MARK: - Defaulted Methods
+
+extension MIDIFileEventPayload {
+    /// Initialize from raw event bytes.
+    /// Throws an error if data is malformed or cannot otherwise be used to construct the event.
+    public init<D: DataProtocol>(
+        midi1SMFRawBytes rawBytes: D
+    ) throws(MIDIFile.DecodeError) {
+        try self.init(midi1SMFRawBytes: rawBytes, runningStatus: nil)
+    }
+    
+    /// If it is possible to initialize a new instance of this event from the head of the data
+    /// stream, a new instance will be returned along with the byte length traversed from the
+    /// stream.
+    public static func initFrom(
+        midi1SMFRawBytesStream stream: some DataProtocol
+    ) throws(MIDIFile.DecodeError) -> StreamDecodeResult {
+        try initFrom(midi1SMFRawBytesStream: stream, runningStatus: nil)
+    }
 }

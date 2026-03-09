@@ -61,8 +61,9 @@ public struct MIDIOutputEndpoint: _MIDIEndpoint {
             self.displayName = displayName
         }
     
-        let uniqueID = MIDIKitIO.getUniqueID(of: coreMIDIObjectRef)
-        if uniqueID != .invalidMIDIIdentifier {
+        if let uniqueID = try? MIDIKitIO.getUniqueID(of: coreMIDIObjectRef),
+           uniqueID != .invalidMIDIIdentifier
+        {
             self.uniqueID = uniqueID
         }
     }

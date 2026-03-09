@@ -167,7 +167,7 @@ extension MIDIOutputConnection {
     /// - Parameter manager: ``MIDIManager`` instance by reference
     ///
     /// - Throws: ``MIDIIOError``
-    func setupOutput(in manager: MIDIManager) throws {
+    func setupOutput(in manager: MIDIManager) throws(MIDIIOError) {
         guard coreMIDIOutputPortRef == nil else {
             // if we already set the output port up, it's not really an error condition
             // so just return; don't throw an error
@@ -188,7 +188,7 @@ extension MIDIOutputConnection {
     }
     
     /// Disposes of the output port if it exists.
-    func closeOutput() throws {
+    func closeOutput() throws(MIDIIOError) {
         guard let coreMIDIOutputPortRef else { return }
     
         defer { self.coreMIDIOutputPortRef = nil }
@@ -202,7 +202,7 @@ extension MIDIOutputConnection {
     /// - Parameter manager: ``MIDIManager`` instance by reference
     ///
     /// - Throws: ``MIDIIOError``
-    func resolveEndpoints(in manager: MIDIManager) throws {
+    func resolveEndpoints(in manager: MIDIManager) throws(MIDIIOError) {
         // resolve criteria to endpoints in the system
         let getInputEndpointRefs = inputsCriteria
             .compactMap {
@@ -216,7 +216,7 @@ extension MIDIOutputConnection {
     /// Refresh the connection.
     /// This is typically called after receiving a Core MIDI notification that system port
     /// configuration has changed or endpoints were added/removed.
-    func refreshConnection(in manager: MIDIManager) throws {
+    func refreshConnection(in manager: MIDIManager) throws(MIDIIOError) {
         // re-resolve endpoints only if at least one matching endpoint exists in the system
     
         let getSystemInputs = manager.endpoints.inputs
@@ -235,7 +235,7 @@ extension MIDIOutputConnection {
     /// Only call when removing the connection from the MIDI manager.
     ///
     /// Errors thrown can be safely ignored and are typically only useful for debugging purposes.
-    func dispose() throws {
+    func dispose() throws(MIDIIOError) {
         try closeOutput()
     }
 }
@@ -351,9 +351,9 @@ extension MIDIOutputConnection: MIDIManagedSendsMessages {
 }
 
 extension MIDIOutputConnection: _MIDIManagedSendsMessages {
-    func send(packetList: UnsafeMutablePointer<MIDIPacketList>) throws {
+    func send(packetList: UnsafeMutablePointer<MIDIPacketList>) throws(MIDIIOError) {
         guard let coreMIDIOutputPortRef else {
-            throw MIDIIOError.internalInconsistency(
+            throw .internalInconsistency(
                 "Output port reference is nil."
             )
         }
@@ -374,9 +374,9 @@ extension MIDIOutputConnection: _MIDIManagedSendsMessages {
     }
     
     @available(macOS 11, iOS 14, macCatalyst 14, *)
-    func send(eventList: UnsafeMutablePointer<MIDIEventList>) throws {
+    func send(eventList: UnsafeMutablePointer<MIDIEventList>) throws(MIDIIOError) {
         guard let coreMIDIOutputPortRef else {
-            throw MIDIIOError.internalInconsistency(
+            throw .internalInconsistency(
                 "Output port reference is nil."
             )
         }

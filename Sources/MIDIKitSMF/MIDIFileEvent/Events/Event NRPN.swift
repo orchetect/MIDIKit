@@ -46,34 +46,27 @@ extension MIDIFileEvent {
 extension MIDIEvent.NRPN: MIDIFileEventPayload {
     public static let smfEventType: MIDIFileEventType = .nrpn
     
-    public init(midi1SMFRawBytes rawBytes: some DataProtocol) throws {
-        let newEvent = try Self.initFrom(midi1SMFRawBytesStream: rawBytes)
+    public init(
+        midi1SMFRawBytes rawBytes: some DataProtocol,
+        runningStatus: UInt8?
+    ) throws(MIDIFile.DecodeError) {
+        let newEvent = try Self.initFrom(midi1SMFRawBytesStream: rawBytes, runningStatus: runningStatus)
         self = newEvent.newEvent
     }
     
-    public func midi1SMFRawBytes<D>() -> D where D: MutableDataProtocol {
-        D(midi1RawBytes())
+    public static func initFrom(
+        midi1SMFRawBytesStream stream: some DataProtocol,
+        runningStatus: UInt8?
+    ) throws(MIDIFile.DecodeError) -> StreamDecodeResult {
+        // stream parsing is not supported since it involves multiple MIDI file events with delta times
+        throw .notImplemented
     }
     
-    public static func initFrom(
-        midi1SMFRawBytesStream stream: some DataProtocol
-    ) throws -> StreamDecodeResult {
-        let result = try MIDIParameterNumberUtils.initFrom(
-            midi1SMFRawBytesStream: stream,
-            expectedType: .assignable
-        )
-        
-        let newEvent = MIDIEvent.NRPN(
-            .raw(
-                parameter: result.param,
-                dataEntryMSB: result.dataMSB,
-                dataEntryLSB: result.dataLSB
-            ),
-            change: .absolute,
-            channel: result.channel
-        )
-        
-        return (newEvent: newEvent, bufferLength: result.byteLength)
+    public func midi1SMFRawBytes<D: MutableDataProtocol>() -> D {
+        let events = parameter.midi1Events(channel: channel, group: group)
+            .map { $0.midi1RawBytes() }
+        let packed = events.joined(separator: [0x00]) // add delta time for all events after the first event
+        return D(packed)
     }
     
     public var smfDescription: String {

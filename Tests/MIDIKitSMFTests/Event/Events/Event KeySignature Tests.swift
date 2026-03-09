@@ -12,7 +12,7 @@ import Testing
     // swiftformat:disable spaceInsideParens spaceInsideBrackets spacearoundoperators
     
     @Test
-    func init_midi1SMFRawBytes_A() throws {
+    func init_midi1SMFRawBytes_A() async throws {
         let bytes: [UInt8] = [0xFF, 0x59, 0x02, 4, 0x00]
         
         let event = try MIDIFileEvent.KeySignature(midi1SMFRawBytes: bytes)
@@ -22,7 +22,7 @@ import Testing
     }
     
     @Test
-    func midi1SMFRawBytes_A() {
+    func midi1SMFRawBytes_A() async {
         let event = MIDIFileEvent.KeySignature(flatsOrSharps: 4, majorKey: true)
         
         let bytes: [UInt8] = event.midi1SMFRawBytes()
@@ -31,7 +31,7 @@ import Testing
     }
     
     @Test
-    func init_midi1SMFRawBytes_B() throws {
+    func init_midi1SMFRawBytes_B() async throws {
         let bytes: [UInt8] = [0xFF, 0x59, 0x02, 0xFD, 0x01]
         
         let event = try MIDIFileEvent.KeySignature(midi1SMFRawBytes: bytes)
@@ -41,7 +41,7 @@ import Testing
     }
     
     @Test
-    func midi1SMFRawBytes_B() {
+    func midi1SMFRawBytes_B() async {
         let event = MIDIFileEvent.KeySignature(flatsOrSharps: -3, majorKey: false)
         
         let bytes: [UInt8] = event.midi1SMFRawBytes()

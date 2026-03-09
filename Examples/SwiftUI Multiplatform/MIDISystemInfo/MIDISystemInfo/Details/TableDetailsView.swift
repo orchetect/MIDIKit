@@ -18,14 +18,14 @@ struct TableDetailsView: View, DetailsContent {
     #endif
     
     public var object: AnyMIDIIOObject
-    @Binding public var isRelevantPropertiesOnlyShown: Bool
+    @Binding public var isOnlySetPropertiesShown: Bool
     
     @State var properties: [Property] = []
     @State var selection: Set<Property.ID> = []
     
     init(object: AnyMIDIIOObject, isRelevantPropertiesOnlyShown: Binding<Bool>) {
         self.object = object
-        _isRelevantPropertiesOnlyShown = isRelevantPropertiesOnlyShown
+        _isOnlySetPropertiesShown = isRelevantPropertiesOnlyShown
     }
     
     var body: some View {
@@ -43,7 +43,7 @@ struct TableDetailsView: View, DetailsContent {
         .onAppear {
             refreshProperties()
         }
-        .onChange(of: isRelevantPropertiesOnlyShown) { _ in
+        .onChange(of: isOnlySetPropertiesShown) { _ in
             withAnimation { refreshProperties() }
         }
     }
@@ -55,17 +55,37 @@ struct TableDetailsView: View, DetailsContent {
                 TableColumn("Property") { property in
                     HStack {
                         Text(property.key)
+                        
                         Spacer()
+                        
+                        if let status = property.status {
+                            status.view
+                        }
+                        
                         Text(property.value)
-                            .foregroundColor(.secondary)
+                            .foregroundColor(property.color)
                     }
                 }
             }
         } else {
             Table(properties, selection: $selection) {
                 TableColumn("Property", value: \.key)
+                #if os(macOS)
+                    .width(min: 180, ideal: 200, max: 280)
+                #elseif os(iOS)
                     .width(min: 50, ideal: 120, max: 250)
-                TableColumn("Value", value: \.value)
+                #endif
+                
+                TableColumn("Value") { property in
+                    HStack {
+                        if let status = property.status {
+                            status.view
+                        }
+                        
+                        Text(property.value)
+                            .foregroundColor(property.color)
+                    }
+                }
             }
         }
     }

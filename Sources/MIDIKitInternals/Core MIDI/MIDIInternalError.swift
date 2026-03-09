@@ -8,7 +8,7 @@ import Foundation
 
 public enum MIDIInternalError: LocalizedError {
     case packetTooLarge(bufferByteCount: Int)
-    case packetBuildError
+    case packetBuildError(underlyingError: Error?)
     case umpEmpty
     case umpTooLarge
     
@@ -16,8 +16,9 @@ public enum MIDIInternalError: LocalizedError {
         switch self {
         case let .packetTooLarge(bufferByteCount):
             "Legacy MIDI Packet is too large (\(bufferByteCount) byte buffer). Maximum size is 65536 bytes."
-        case .packetBuildError:
-            "Error building MIDI Packet."
+        case let .packetBuildError(underlyingError):
+            "Error building MIDI Packet. \(underlyingError?.localizedDescription ?? "")"
+                .trimmingCharacters(in: .whitespacesAndNewlines)
         case .umpEmpty:
             "Universal MIDI Packet cannot be empty."
         case .umpTooLarge:

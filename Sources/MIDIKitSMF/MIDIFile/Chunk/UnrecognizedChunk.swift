@@ -6,6 +6,7 @@
 
 import Foundation
 import MIDIKitCore
+internal import SwiftDataParsing
 
 extension MIDIFile.Chunk {
     /// Unrecognized MIDI File Chunk.
@@ -110,22 +111,25 @@ extension MIDIFile.Chunk {
 
 extension MIDIFile.Chunk.UnrecognizedChunk {
     /// Init from MIDI file buffer.
-    public init<D: DataProtocol>(midi1SMFRawBytesStream stream: D) throws {
+    public init<D: DataProtocol>(midi1SMFRawBytesStream stream: D) throws(MIDIFile.DecodeError) {
         guard stream.count >= 8 else {
-            throw MIDIFile.DecodeError.malformed(
+            throw .malformed(
                 "There was a problem reading chunk header. Encountered end of file early."
             )
         }
         
         // track header
         
-        let (id, dataBody) = try stream.withDataReader { dataReader -> (String, D.SubSequence) in
-            let readChunkType = try dataReader.read(bytes: 4)
+        let (id, dataBody) = try stream.withDataParser { parser throws(MIDIFile.DecodeError) -> (String, Data) in
+            let readChunkType = try parser.toMIDIFileDecodeError(
+                malformedReason: "Missing chunk type identifier.",
+                try parser.read(bytes: 4)
+            )
             
-            guard let chunkLengthInt32 = (try? dataReader.read(bytes: 4))?
-                .data.toUInt32(from: .bigEndian)
+            guard let chunkLengthInt32 = (try? parser.read(bytes: 4))?
+                .toUInt32(from: .bigEndian)
             else {
-                throw MIDIFile.DecodeError.malformed(
+                throw .malformed(
                     "There was a problem reading chunk length."
                 )
             }
@@ -134,27 +138,29 @@ extension MIDIFile.Chunk.UnrecognizedChunk {
             let chunkTypeString = readChunkType.asciiDataToString() ?? "????"
             
             guard !Self.disallowedIdentifiers.contains(chunkTypeString) else {
-                throw MIDIFile.DecodeError.malformed(
+                throw .malformed(
                     "Chunk type matches known identifier \(chunkTypeString.quoted). Forming an unrecognized chunk using this identifier is not allowed."
                 )
             }
             
-            guard let dataBody = try? dataReader.read(bytes: chunkLength) else {
-                throw MIDIFile.DecodeError.malformed(
+            guard let dataBody = try? parser.read(bytes: chunkLength) else {
+                throw .malformed(
                     "There was a problem reading chunk data blob. Encountered end of data early."
                 )
             }
             
-            return (id: chunkTypeString, dataBody)
+            // we can't pass pointer ranges outside of the data reader closure,
+            // so we must use them within the closure
+            return (id: chunkTypeString, dataBody.toData())
         }
         
         self.init(
             id: id,
-            rawData: dataBody.data
+            rawData: dataBody
         )
     }
     
-    func midi1SMFRawBytes(using timeBase: MIDIFile.TimeBase) throws -> Data {
+    func midi1SMFRawBytes(using timeBase: MIDIFile.TimeBase) throws(MIDIFile.EncodeError) -> Data {
         // assemble track body without header or length
         
         let bodyData = rawData
@@ -172,7 +178,7 @@ extension MIDIFile.Chunk.UnrecognizedChunk {
         } else {
             // track length overflows max length integer size
             // maximum track data size is 4.294967296 GB (UInt32.max bytes)
-            throw MIDIFile.EncodeError.internalInconsistency(
+            throw .internalInconsistency(
                 "Chunk length overflowed maximum size."
             )
         }

@@ -7,13 +7,6 @@
 import Foundation
 import MIDIKitCore
 
-extension FileManager {
-    // `FileManager` is thread-safe but doesn't yet conform to Sendable,
-    // so we can coerce it to be treated as Sendable.
-    fileprivate static func fileManager() -> @Sendable () -> FileManager { { Self.default } }
-    fileprivate static var sendableDefault: FileManager { fileManager()() }
-}
-
 /// Standard MIDI Files (SMF) object. Read or write MIDI file contents.
 public struct MIDIFile {
     // MARK: - Properties
@@ -48,57 +41,129 @@ public struct MIDIFile {
         }
     }
     
-    // Identifiable protocol conformance fulfilment
+    // Identifiable protocol conformance implementation
     public let id: UUID = .init()
     
     // MARK: - Init
     
-    /// Initialize with default values.
-    public init() { }
-    
     /// Initialize from header parameters and track chunks.
     public init(
         format: Format = .multipleTracksSynchronous,
-        timeBase: TimeBase,
+        timeBase: TimeBase = .default(),
         chunks: [Chunk] = []
     ) {
-        self.init()
-        
         self.format = format
         self.timeBase = timeBase
         self.chunks = chunks
-    }
-    
-    /// Initialize by loading the contents of a MIDI file's raw data.
-    public init(rawData: Data) throws {
-        try decode(rawData: rawData)
-    }
-    
-    /// Initialize by loading the contents of a MIDI file from disk.
-    public init(midiFile path: String) throws {
-        guard FileManager.sendableDefault.fileExists(atPath: path) else {
-            throw DecodeError.fileNotFound
-        }
-        
-        guard let url = URL(string: path) else {
-            throw DecodeError.malformedURL
-        }
-        
-        try self.init(midiFile: url)
-    }
-    
-    /// Initialize by loading the contents of a MIDI file from disk.
-    public init(midiFile url: URL) throws {
-        let data = try Data(contentsOf: url)
-        
-        try decode(rawData: data)
-    }
-    
-    /// Returns raw MIDI file data. Throws an error if a problem occurs.
-    public func rawData() throws -> Data {
-        try encode()
     }
 }
 
 // Sendable must be applied in the same file as the struct for it to be compiler-checked.
 extension MIDIFile: Sendable { }
+
+// MARK: - Init: Raw Data
+
+extension MIDIFile {
+    /// Initialize by loading the contents of a MIDI file's raw data.
+    @available(*, deprecated, message: "This method is less performant than its async variant. Considering calling with await.")
+    public init(
+        rawData: some DataProtocol & Sendable,
+        options: DecodeOptions = .default()
+    ) throws(DecodeError) {
+        try decode(rawData: rawData, bundleParameterNumbers: options.contains(.bundleParameterNumbers))
+    }
+    
+    /// Initialize by loading the contents of a MIDI file's raw data.
+    @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
+    public init(
+        rawData: some DataProtocol & Sendable,
+        options: DecodeOptions = .default()
+    ) async throws(DecodeError) {
+        try await decode(rawData: rawData, bundleParameterNumbers: options.contains(.bundleParameterNumbers))
+    }
+}
+
+// MARK: - Init: File Path
+
+extension MIDIFile {
+    /// Initialize by loading the contents of a MIDI file from disk.
+    @available(*, deprecated, message: "This method is less performant than its async variant. Considering calling with await.")
+    public init(
+        midiFile path: String,
+        options: DecodeOptions = .default()
+    ) throws(DecodeError) {
+        let url = try Self.url(forFilePath: path)
+        try self.init(midiFile: url, options: options)
+    }
+    
+    /// Initialize by loading the contents of a MIDI file from disk.
+    @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
+    public init(
+        midiFile path: String,
+        options: DecodeOptions = .default()
+    ) async throws(DecodeError) {
+        let url = try Self.url(forFilePath: path)
+        try await self.init(midiFile: url, options: options)
+    }
+    
+    static func url(forFilePath path: String) throws(DecodeError) -> URL {
+        guard FileManager.sendableDefault.fileExists(atPath: path) else {
+            throw .fileNotFound
+        }
+        
+        guard let url = URL(string: path) else {
+            throw .malformedURL
+        }
+        
+        return url
+    }
+}
+
+// MARK: - Init: File URL
+
+extension MIDIFile {
+    /// Initialize by loading the contents of a MIDI file from disk.
+    @available(*, deprecated, message: "This method is less performant than its async variant. Considering calling with await.")
+    public init(
+        midiFile url: URL,
+        options: DecodeOptions = .default()
+    ) throws(DecodeError) {
+        let data = try Self.data(forFileURL: url)
+        try decode(rawData: data, bundleParameterNumbers: options.contains(.bundleParameterNumbers))
+    }
+    
+    /// Initialize by loading the contents of a MIDI file from disk.
+    @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
+    public init(
+        midiFile url: URL,
+        options: DecodeOptions = .default()
+    ) async throws(DecodeError) {
+        let data = try Self.data(forFileURL: url)
+        try await decode(rawData: data, bundleParameterNumbers: options.contains(.bundleParameterNumbers))
+    }
+    
+    static func data(forFileURL url: URL) throws(DecodeError) -> Data {
+        do { return try Data(contentsOf: url) }
+        catch { throw .fileReadError }
+    }
+}
+
+// MARK: - Properties
+
+extension MIDIFile {
+    /// Returns raw MIDI file data. Throws an error if a problem occurs.
+    public func rawData() throws(EncodeError) -> Data {
+        try encode()
+    }
+    
+    // TODO: add async version of rawData() that can build file contents concurrently (encode tracks in parallel using withTaskGroup)
+}
+
+// MARK: - Utilities
+
+extension FileManager {
+    // `FileManager` is thread-safe but doesn't yet conform to Sendable,
+    // so we can coerce it to be treated as Sendable.
+    fileprivate static func fileManager() -> @Sendable () -> FileManager { { Self.default } }
+    fileprivate static var sendableDefault: FileManager { fileManager()() }
+}

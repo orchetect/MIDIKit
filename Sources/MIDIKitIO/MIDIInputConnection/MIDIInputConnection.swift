@@ -190,7 +190,7 @@ extension MIDIInputConnection {
     /// - Parameter manager: `MIDIManager` instance by reference
     ///
     /// - Throws: ``MIDIIOError``
-    func listen(in manager: MIDIManager) throws {
+    func listen(in manager: MIDIManager) throws(MIDIIOError) {
         guard coreMIDIInputPortRef == nil else {
             // if we're already listening, it's not really an error condition
             // so just return; don't throw an error
@@ -224,7 +224,7 @@ extension MIDIInputConnection {
             
         case .newCoreMIDI:
             guard #available(macOS 11, iOS 14, macCatalyst 14, *) else {
-                throw MIDIIOError.internalInconsistency(
+                throw .internalInconsistency(
                     "New Core MIDI API is not accessible on this platform."
                 )
             }
@@ -257,7 +257,7 @@ extension MIDIInputConnection {
     }
     
     /// Disposes of the listening port if it exists.
-    func stopListening() throws {
+    func stopListening() throws(MIDIIOError) {
         guard let coreMIDIInputPortRef else { return }
     
         defer { self.coreMIDIInputPortRef = nil }
@@ -275,14 +275,14 @@ extension MIDIInputConnection {
     /// - Throws: ``MIDIIOError``
     func connect(
         in manager: MIDIManager
-    ) throws {
+    ) throws(MIDIIOError) {
         // if not already listening, start listening
         if coreMIDIInputPortRef == nil {
             try listen(in: manager)
         }
         
         guard let coreMIDIInputPortRef else {
-            throw MIDIIOError.connectionError(
+            throw .connectionError(
                 "Not in a listening state; can't connect to endpoints."
             )
         }
@@ -321,9 +321,9 @@ extension MIDIInputConnection {
     /// Errors thrown can be safely ignored and are typically only useful for debugging purposes.
     func disconnect(
         endpointRefs: Set<MIDIEndpointRef>? = nil
-    ) throws {
+    ) throws(MIDIIOError) {
         guard let coreMIDIInputPortRef else {
-            throw MIDIIOError.connectionError(
+            throw .connectionError(
                 "Attempted to disconnect outputs but was not in a listening state; nothing to disconnect."
             )
         }
@@ -331,7 +331,7 @@ extension MIDIInputConnection {
         let refs = endpointRefs ?? coreMIDIOutputEndpointRefs
         
         for outputEndpointRef in refs {
-            do {
+            do throws(MIDIIOError) {
                 try MIDIPortDisconnectSource(
                     coreMIDIInputPortRef,
                     outputEndpointRef
@@ -346,7 +346,7 @@ extension MIDIInputConnection {
     /// Refresh the connection.
     /// This is typically called after receiving a Core MIDI notification that system port
     /// configuration has changed or endpoints were added/removed.
-    func refreshConnection(in manager: MIDIManager) throws {
+    func refreshConnection(in manager: MIDIManager) throws(MIDIIOError) {
         // call (re-)connect only if at least one matching endpoint exists in the system
         
         let getSystemOutputs = manager.endpoints.outputs
@@ -365,7 +365,7 @@ extension MIDIInputConnection {
     /// Only call when removing the connection from the MIDI manager.
     ///
     /// Errors thrown can be safely ignored and are typically only useful for debugging purposes.
-    func dispose() throws {
+    func dispose() throws(MIDIIOError) {
         try disconnect()
         try stopListening()
     }

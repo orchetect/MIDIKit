@@ -136,7 +136,7 @@
 			);
 			mainGroup = E2F1FE6729B2DF5800054467;
 			packageReferences = (
-				E20238392CC45F0E00661322 /* XCLocalSwiftPackageReference "../../../../MIDIKit" */,
+				E20238392CC45F0E00661322 /* XCLocalSwiftPackageReference "../../../" */,
 			);
 			productRefGroup = E2F1FE7129B2DF5800054467 /* Products */;
 			projectDirPath = "";
@@ -402,9 +402,9 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		E20238392CC45F0E00661322 /* XCLocalSwiftPackageReference "../../../../MIDIKit" */ = {
+		E20238392CC45F0E00661322 /* XCLocalSwiftPackageReference "../../../" */ = {
 			isa = XCLocalSwiftPackageReference;
-			relativePath = ../../../../MIDIKit;
+			relativePath = ../../../;
 		};
 /* End XCLocalSwiftPackageReference section */
 

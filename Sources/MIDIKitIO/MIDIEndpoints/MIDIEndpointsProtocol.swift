@@ -54,7 +54,7 @@ extension MIDIEndpointsProtocol /* : Hashable */ {
 }
 
 extension MIDIEndpointsProtocol {
-    func _fetchProperties(manager: MIDIManager?) -> (
+    func _fetchSystemEndpoints(for manager: MIDIManager?) -> (
         inputs: [MIDIInputEndpoint],
         inputsUnowned: [MIDIInputEndpoint],
         outputs: [MIDIOutputEndpoint],

@@ -17,7 +17,7 @@ extension CoreMIDI.MIDIEventList {
         protocol midiProtocol: CoreMIDI.MIDIProtocolID,
         packetWords: [UInt32],
         timeStamp: UInt64 = mach_absolute_time()
-    ) throws {
+    ) throws(MIDIInternalError) {
         let packet = try CoreMIDI.MIDIEventPacket(
             words: packetWords,
             timeStamp: timeStamp

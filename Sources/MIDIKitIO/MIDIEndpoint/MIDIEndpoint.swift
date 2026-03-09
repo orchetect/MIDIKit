@@ -36,13 +36,13 @@ protocol _MIDIEndpoint: MIDIEndpoint { }
 extension _MIDIEndpoint {
     /// Returns the entity that owns the endpoint, if present.
     public var entity: MIDIEntity? {
-        try? getSystemEntity(for: coreMIDIObjectRef)
+        try? getSystemEntity(forEndpoint: coreMIDIObjectRef)
     }
     
     /// Returns the device that owns the endpoint, if present.
     public var device: MIDIDevice? {
         guard let entity else { return nil }
-        return try? getSystemDevice(for: entity.coreMIDIObjectRef)
+        return try? getSystemDevice(forEntity: entity.coreMIDIObjectRef)
     }
 }
 
@@ -51,7 +51,7 @@ extension _MIDIEndpoint {
 extension MIDIEndpoint {
     /// Returns `true` if the object exists in the system by querying Core MIDI.
     public var exists: Bool {
-        getSystemDestinationEndpoint(matching: uniqueID) != nil
+        getSystemDestinationEndpointRef(matching: uniqueID) != nil
     }
     
     /// Returns endpoint identity criterium describing the endpoint.
@@ -60,12 +60,12 @@ extension MIDIEndpoint {
     }
     
     /// Makes a virtual endpoint in the system invisible to the user.
-    func hide() throws {
+    func hide() throws(MIDIIOError) {
         try MIDIKitIO.hide(endpoint: coreMIDIObjectRef)
     }
     
     /// Makes a virtual endpoint in the system visible to the user.
-    func show() throws {
+    func show() throws(MIDIIOError) {
         try MIDIKitIO.show(endpoint: coreMIDIObjectRef)
     }
 }

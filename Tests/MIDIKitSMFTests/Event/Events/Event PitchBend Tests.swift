@@ -12,7 +12,7 @@ import Testing
     // swiftformat:disable spaceInsideParens spaceInsideBrackets spacearoundoperators
     
     @Test
-    func init_midi1SMFRawBytes_A() throws {
+    func init_midi1SMFRawBytes_A() async throws {
         let bytes: [UInt8] = [0xE0, 0x00, 0x40]
         
         let event = try MIDIFileEvent.PitchBend(midi1SMFRawBytes: bytes)
@@ -22,7 +22,7 @@ import Testing
     }
     
     @Test
-    func midi1SMFRawBytes_A() {
+    func midi1SMFRawBytes_A() async {
         let event = MIDIFileEvent.PitchBend(
             value: .midi1(.midpoint),
             channel: 0
@@ -34,7 +34,7 @@ import Testing
     }
     
     @Test
-    func init_midi1SMFRawBytes_B() throws {
+    func init_midi1SMFRawBytes_B() async throws {
         let bytes: [UInt8] = [0xE1, 0x7F, 0x7F]
         
         let event = try MIDIFileEvent.PitchBend(midi1SMFRawBytes: bytes)
@@ -44,7 +44,7 @@ import Testing
     }
     
     @Test
-    func midi1SMFRawBytes_B() {
+    func midi1SMFRawBytes_B() async {
         let event = MIDIFileEvent.PitchBend(
             value: .midi1(.max),
             channel: 1

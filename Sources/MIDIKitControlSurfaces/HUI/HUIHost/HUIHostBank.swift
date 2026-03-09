@@ -19,8 +19,7 @@ internal import MIDIKitInternals
 @Observable public final class HUIHostBank: Sendable {
     // MARK: - Decoder
     
-    @ObservationIgnored
-    nonisolated(unsafe)
+    @ObservationIgnored nonisolated(unsafe)
     var decoder: HUISurfaceEventDecoder!
     
     // MARK: - Handlers
@@ -39,9 +38,8 @@ internal import MIDIKitInternals
     @ObservationIgnored
     public let remotePresenceChangedHandler: PresenceChangedHandler?
     
-    @ObservationIgnored
-    public nonisolated(unsafe)
-    var midiOutHandler: MIDIOutHandler?
+    @ObservationIgnored nonisolated(unsafe)
+    public var midiOutHandler: MIDIOutHandler?
     
     // MARK: - Presence
     
@@ -59,8 +57,8 @@ internal import MIDIKitInternals
         set { _remotePresenceTimer.value = newValue }
     }
 
-    @ObservationIgnored
-    private nonisolated(unsafe) var _remotePresenceTimer = PThreadMutexValue<Task<Void, any Error>?>(nil)
+    @ObservationIgnored nonisolated(unsafe)
+    private var _remotePresenceTimer = PThreadMutexValue<Task<Void, any Error>?>(nil)
     
     func restartRemotePresenceTimer() {
         remotePresenceTimer?.cancel()
@@ -70,7 +68,7 @@ internal import MIDIKitInternals
             guard let self else { return }
             try await Task.sleep(for: .seconds(remotePresenceTimeout))
             try Task.checkCancellation()
-            isRemotePresent = false
+            setIsRemotePresent(false)
             remotePresenceTimer?.cancel()
             remotePresenceTimer = nil
             remotePresenceChangedHandler?(false)
@@ -84,20 +82,21 @@ internal import MIDIKitInternals
     /// Ping timeout can be set to a custom value by setting the ``remotePresenceTimeout`` property.
     ///
     /// This property is observable with Combine/SwiftUI and can trigger UI updates upon changes.
-    public internal(set) var isRemotePresent: Bool {
-        get { _isRemotePresent.value }
-        _modify { yield &_isRemotePresent.value }
-        set { _isRemotePresent.value = newValue }
+    @MainActor
+    public internal(set) var isRemotePresent: Bool = false
+    
+    func setIsRemotePresent(_ newValue: Bool) {
+        Task { @MainActor in isRemotePresent = newValue }
     }
-
-    private nonisolated(unsafe) var _isRemotePresent = PThreadMutexValue(false)
     
     private func receivedPing() {
-        let oldValue = isRemotePresent
-        restartRemotePresenceTimer()
-        isRemotePresent = true
-        if !oldValue {
-            remotePresenceChangedHandler?(true)
+        Task {
+            let oldValue = await isRemotePresent
+            restartRemotePresenceTimer()
+            setIsRemotePresent(true)
+            if !oldValue {
+                remotePresenceChangedHandler?(true)
+            }
         }
     }
     

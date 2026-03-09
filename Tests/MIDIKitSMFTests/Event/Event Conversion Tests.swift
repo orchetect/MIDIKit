@@ -9,7 +9,7 @@ import Testing
 
 @Suite struct Event_Conversion_EventToSMFEvent_Tests {
     @Test
-    func midi_Event_NoteOn_smfEvent() throws {
+    func midi_Event_NoteOn_smfEvent() async throws {
         let event: MIDIEvent = .noteOn(
             60,
             velocity: .midi1(64),
@@ -40,7 +40,7 @@ import Testing
     }
     
     @Test
-    func midi_Event_NoteOff_smfEvent() throws {
+    func midi_Event_NoteOff_smfEvent() async throws {
         let event: MIDIEvent = .noteOff(
             60,
             velocity: .midi1(0),
@@ -70,7 +70,7 @@ import Testing
     }
     
     @Test
-    func midi_Event_NoteCC_smfEvent() throws {
+    func midi_Event_NoteCC_smfEvent() async throws {
         let event: MIDIEvent = .noteCC(
             note: 60,
             controller: .registered(.modWheel),
@@ -88,7 +88,7 @@ import Testing
     }
     
     @Test
-    func midi_Event_NotePitchBend_smfEvent() throws {
+    func midi_Event_NotePitchBend_smfEvent() async throws {
         let event: MIDIEvent = .notePitchBend(
             note: 60,
             value: .midi2(.zero),
@@ -105,7 +105,7 @@ import Testing
     }
     
     @Test
-    func midi_Event_NotePressure_smfEvent() throws {
+    func midi_Event_NotePressure_smfEvent() async throws {
         let event: MIDIEvent = .notePressure(
             note: 60,
             amount: .midi2(.zero),
@@ -134,7 +134,7 @@ import Testing
     }
     
     @Test
-    func midi_Event_NoteManagement_smfEvent() throws {
+    func midi_Event_NoteManagement_smfEvent() async throws {
         let event: MIDIEvent = .noteManagement(
             note: 60,
             flags: [.detachPerNoteControllers],
@@ -151,7 +151,7 @@ import Testing
     }
     
     @Test
-    func midi_Event_CC_smfEvent() throws {
+    func midi_Event_CC_smfEvent() async throws {
         let event: MIDIEvent = .cc(
             .modWheel,
             value: .midi1(64),
@@ -180,7 +180,7 @@ import Testing
     }
     
     @Test
-    func midi_Event_ProgramChange_smfEvent() throws {
+    func midi_Event_ProgramChange_smfEvent() async throws {
         let event: MIDIEvent = .programChange(
             program: 20,
             bank: .bankSelect(4),
@@ -209,7 +209,7 @@ import Testing
     }
     
     @Test
-    func midi_Event_RPN_smfEvent() throws {
+    func midi_Event_RPN_smfEvent() async throws {
         let event: MIDIEvent = .rpn(
             .channelFineTuning(123),
             channel: 0
@@ -236,7 +236,7 @@ import Testing
     }
     
     @Test
-    func midi_Event_NRPN_smfEvent() throws {
+    func midi_Event_NRPN_smfEvent() async throws {
         let event: MIDIEvent = .nrpn(
             .raw(parameter: .init(msb: 2, lsb: 1), dataEntryMSB: 0x05, dataEntryLSB: 0x20),
             channel: 0
@@ -263,7 +263,7 @@ import Testing
     }
     
     @Test
-    func midi_Event_PitchBend_smfEvent() throws {
+    func midi_Event_PitchBend_smfEvent() async throws {
         let event: MIDIEvent = .pitchBend(
             value: .midi1(.midpoint),
             channel: 1,
@@ -291,7 +291,7 @@ import Testing
     }
     
     @Test
-    func midi_Event_Pressure_smfEvent() throws {
+    func midi_Event_Pressure_smfEvent() async throws {
         let event: MIDIEvent = .pressure(
             amount: .midi1(5),
             channel: 1,
@@ -319,7 +319,7 @@ import Testing
     }
     
     @Test
-    func midi_Event_SysEx_smfEvent() throws {
+    func midi_Event_SysEx_smfEvent() async throws {
         let event: MIDIEvent = try .sysEx7(
             manufacturer: .educational(),
             data: [0x12, 0x34],
@@ -347,7 +347,7 @@ import Testing
     }
     
     @Test
-    func midi_Event_UniversalSysEx_smfEvent() throws {
+    func midi_Event_UniversalSysEx_smfEvent() async throws {
         let event: MIDIEvent = try .universalSysEx7(
             universalType: .nonRealTime,
             deviceID: 0x7F,
@@ -378,7 +378,7 @@ import Testing
     }
     
     @Test
-    func midi_Event_TimecodeQuarterFrame_smfEvent() {
+    func midi_Event_TimecodeQuarterFrame_smfEvent() async {
         let event: MIDIEvent = .timecodeQuarterFrame(
             dataByte: 0x00,
             group: 2
@@ -392,7 +392,7 @@ import Testing
     }
     
     @Test
-    func midi_Event_SongPositionPointer_smfEvent() {
+    func midi_Event_SongPositionPointer_smfEvent() async {
         let event: MIDIEvent = .songPositionPointer(
             midiBeat: 8,
             group: 2
@@ -406,7 +406,7 @@ import Testing
     }
     
     @Test
-    func midi_Event_SongSelect_smfEvent() {
+    func midi_Event_SongSelect_smfEvent() async {
         let event: MIDIEvent = .songSelect(
             number: 4,
             group: 2
@@ -420,7 +420,7 @@ import Testing
     }
     
     @Test
-    func midi_Event_TuneRequest_smfEvent() {
+    func midi_Event_TuneRequest_smfEvent() async {
         let event: MIDIEvent = .tuneRequest(group: 2)
         
         // convert MIDIEvent case to MIDIFileEvent case, preserving payloads
@@ -431,7 +431,7 @@ import Testing
     }
     
     @Test
-    func midi_Event_TimingClock_smfEvent() {
+    func midi_Event_TimingClock_smfEvent() async {
         let event: MIDIEvent = .timingClock(group: 2)
         
         // convert MIDIEvent case to MIDIFileEvent case, preserving payloads
@@ -442,7 +442,7 @@ import Testing
     }
     
     @Test
-    func midi_Event_Start_smfEvent() {
+    func midi_Event_Start_smfEvent() async {
         let event: MIDIEvent = .start(group: 2)
         
         // convert MIDIEvent case to MIDIFileEvent case, preserving payloads
@@ -453,7 +453,7 @@ import Testing
     }
     
     @Test
-    func midi_Event_Continue_smfEvent() {
+    func midi_Event_Continue_smfEvent() async {
         let event: MIDIEvent = .continue(group: 2)
         
         // convert MIDIEvent case to MIDIFileEvent case, preserving payloads
@@ -464,7 +464,7 @@ import Testing
     }
     
     @Test
-    func midi_Event_Stop_smfEvent() {
+    func midi_Event_Stop_smfEvent() async {
         let event: MIDIEvent = .stop(group: 2)
         
         // convert MIDIEvent case to MIDIFileEvent case, preserving payloads
@@ -475,7 +475,7 @@ import Testing
     }
     
     @Test
-    func midi_Event_ActiveSensing_smfEvent() {
+    func midi_Event_ActiveSensing_smfEvent() async {
         let event: MIDIEvent = .activeSensing(group: 2)
         
         // convert MIDIEvent case to MIDIFileEvent case, preserving payloads
@@ -486,7 +486,7 @@ import Testing
     }
     
     @Test
-    func midi_Event_SystemReset_smfEvent() {
+    func midi_Event_SystemReset_smfEvent() async {
         let event: MIDIEvent = .systemReset(group: 2)
         
         // convert MIDIEvent case to MIDIFileEvent case, preserving payloads
@@ -501,7 +501,7 @@ import Testing
 
 @Suite struct Event_Conversion_SMFEventToEvent_Tests {
     @Test
-    func midi_File_Event_CC_event() throws {
+    func midi_File_Event_CC_event() async throws {
         let smfEvent = MIDIFileEvent.cc(
             delta: .none,
             controller: .modWheel,
@@ -530,7 +530,7 @@ import Testing
     }
     
     @Test
-    func midi_File_Event_NoteOff_event() throws {
+    func midi_File_Event_NoteOff_event() async throws {
         let smfEvent = MIDIFileEvent.noteOff(
             delta: .none,
             note: 60,
@@ -559,7 +559,7 @@ import Testing
     }
     
     @Test
-    func midi_File_Event_NoteOn_event() throws {
+    func midi_File_Event_NoteOn_event() async throws {
         let smfEvent = MIDIFileEvent.noteOn(
             delta: .none,
             note: 60,
@@ -588,7 +588,7 @@ import Testing
     }
     
     @Test
-    func midi_File_Event_NotePressure_event() throws {
+    func midi_File_Event_NotePressure_event() async throws {
         let smfEvent = MIDIFileEvent.notePressure(
             delta: .none,
             note: 60,
@@ -617,7 +617,7 @@ import Testing
     }
     
     @Test
-    func midi_File_Event_PitchBend_event() throws {
+    func midi_File_Event_PitchBend_event() async throws {
         let smfEvent = MIDIFileEvent.pitchBend(
             delta: .none,
             value: .midi1(.midpoint),
@@ -645,7 +645,7 @@ import Testing
     }
     
     @Test
-    func midi_File_Event_Pressure_event() throws {
+    func midi_File_Event_Pressure_event() async throws {
         let smfEvent = MIDIFileEvent.pressure(
             delta: .none,
             amount: .midi1(.midpoint),
@@ -673,7 +673,7 @@ import Testing
     }
     
     @Test
-    func midi_File_Event_ProgramChange_event() throws {
+    func midi_File_Event_ProgramChange_event() async throws {
         let smfEvent = MIDIFileEvent.programChange(
             delta: .none,
             program: 20,
@@ -701,7 +701,7 @@ import Testing
     }
     
     @Test
-    func midi_File_Event_RPN_event() throws {
+    func midi_File_Event_RPN_event() async throws {
         let smfEvent = MIDIFileEvent.rpn(
             delta: .none,
             parameter: .channelFineTuning(123),
@@ -730,7 +730,7 @@ import Testing
     }
     
     @Test
-    func midi_File_Event_NRPN_event() throws {
+    func midi_File_Event_NRPN_event() async throws {
         let smfEvent = MIDIFileEvent.nrpn(
             delta: .none,
             parameter: .raw(
@@ -763,7 +763,7 @@ import Testing
     }
     
     @Test
-    func midi_File_Event_SysEx7_event() throws {
+    func midi_File_Event_SysEx7_event() async throws {
         let smfEvent = try MIDIFileEvent.sysEx7(
             delta: .none,
             manufacturer: .educational(),
@@ -791,7 +791,7 @@ import Testing
     }
     
     @Test
-    func midi_File_Event_UniversalSysEx7_event() throws {
+    func midi_File_Event_UniversalSysEx7_event() async throws {
         let smfEvent = try MIDIFileEvent.universalSysEx7(
             delta: .none,
             universalType: .nonRealTime,
@@ -822,7 +822,7 @@ import Testing
     }
     
     @Test
-    func midi_File_Event_ChannelPrefix_event() throws {
+    func midi_File_Event_ChannelPrefix_event() async throws {
         let smfEvent = MIDIFileEvent.channelPrefix(
             delta: .none,
             channel: 4
@@ -836,7 +836,7 @@ import Testing
     }
     
     @Test
-    func midi_File_Event_KeySignature_event() throws {
+    func midi_File_Event_KeySignature_event() async throws {
         let smfEvent = MIDIFileEvent.keySignature(
             delta: .none,
             flatsOrSharps: -2,
@@ -851,7 +851,7 @@ import Testing
     }
     
     @Test
-    func midi_File_Event_PortPrefix_event() throws {
+    func midi_File_Event_PortPrefix_event() async throws {
         let smfEvent = MIDIFileEvent.portPrefix(
             delta: .none,
             port: 4
@@ -865,7 +865,7 @@ import Testing
     }
     
     @Test
-    func midi_File_Event_SequenceNumber_event() throws {
+    func midi_File_Event_SequenceNumber_event() async throws {
         let smfEvent = MIDIFileEvent.sequenceNumber(
             delta: .none,
             sequence: 4
@@ -879,7 +879,7 @@ import Testing
     }
     
     @Test
-    func midi_File_Event_SequencerSpecific_event() throws {
+    func midi_File_Event_SequencerSpecific_event() async throws {
         let smfEvent = MIDIFileEvent.sequencerSpecific(
             delta: .none,
             data: [0x12, 0x34]
@@ -893,7 +893,7 @@ import Testing
     }
     
     @Test
-    func midi_File_Event_SMPTEOffset_event() throws {
+    func midi_File_Event_SMPTEOffset_event() async throws {
         let smfEvent = MIDIFileEvent.smpteOffset(
             delta: .none,
             hr: 1,
@@ -912,7 +912,7 @@ import Testing
     }
     
     @Test
-    func midi_File_Event_Tempo_event() throws {
+    func midi_File_Event_Tempo_event() async throws {
         let smfEvent = MIDIFileEvent.tempo(
             delta: .none,
             bpm: 140.0
@@ -926,7 +926,7 @@ import Testing
     }
     
     @Test
-    func midi_File_Event_Text_event() throws {
+    func midi_File_Event_Text_event() async throws {
         let smfEvent = MIDIFileEvent.text(
             delta: .none,
             type: .trackOrSequenceName,
@@ -941,7 +941,7 @@ import Testing
     }
     
     @Test
-    func midi_File_Event_TimeSignature_event() throws {
+    func midi_File_Event_TimeSignature_event() async throws {
         let smfEvent = MIDIFileEvent.timeSignature(
             delta: .none,
             numerator: 2,
@@ -956,7 +956,7 @@ import Testing
     }
     
     @Test
-    func midi_File_Event_UnrecognizedMeta_event() throws {
+    func midi_File_Event_UnrecognizedMeta_event() async throws {
         let smfEvent = MIDIFileEvent.unrecognizedMeta(
             delta: .none,
             metaType: 0x30,
@@ -971,7 +971,7 @@ import Testing
     }
     
     @Test
-    func midi_File_Event_XMFPatchTypePrefix_event() throws {
+    func midi_File_Event_XMFPatchTypePrefix_event() async throws {
         let smfEvent = MIDIFileEvent.xmfPatchTypePrefix(
             delta: .none,
             patchSet: .DLS

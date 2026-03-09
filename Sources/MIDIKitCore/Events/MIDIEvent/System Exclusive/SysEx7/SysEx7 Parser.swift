@@ -15,18 +15,18 @@ extension MIDIEvent {
     public static func sysEx7(
         rawBytes: [UInt8],
         group: UInt4 = 0
-    ) throws -> Self {
+    ) throws(ParseError) -> Self {
         var readPos = rawBytes.startIndex
     
-        func readPosAdvance(by: Int) throws {
+        func readPosAdvance(by: Int) throws(ParseError) {
             let newPos = readPos + by
             guard readPos + by < rawBytes.endIndex else {
-                throw ParseError.malformed
+                throw .malformed
             }
             readPos = newPos
         }
     
-        func readData() throws -> [UInt8] {
+        func readData() throws(ParseError) -> [UInt8] {
             let actualEndIndex = rawBytes.endIndex.advanced(by: -1)
     
             var dataBytes: [UInt8] = []
@@ -41,7 +41,7 @@ extension MIDIEvent {
                     dataBytes.append(byte)
                 } else {
                     // invalid byte
-                    throw ParseError.malformed
+                    throw .malformed
                 }
             }
     
@@ -165,7 +165,7 @@ extension MIDIEvent {
     public static func sysEx7(
         rawHexString: some StringProtocol,
         group: UInt4 = 0
-    ) throws -> Self {
+    ) throws(ParseError) -> Self {
         // basic string sanitation and split into character pairs
         let hexStrings = rawHexString
             .removing(.whitespacesAndNewlines)
@@ -175,7 +175,7 @@ extension MIDIEvent {
         guard !hexStrings.isEmpty,
               hexStrings.last?.count == 2
         else {
-            throw ParseError.malformed
+            throw .malformed
         }
     
         // map to integers
@@ -185,7 +185,7 @@ extension MIDIEvent {
         // ensure values successfully converted (all valid hex strings)
         guard conditionalBytes.allSatisfy({ $0 != nil })
         else {
-            throw ParseError.malformed
+            throw .malformed
         }
     
         let bytes = conditionalBytes

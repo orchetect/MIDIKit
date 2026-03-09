@@ -58,7 +58,7 @@ jobs:
       run: xcodebuild build -workspace "$WORKSPACEPATH" -scheme "$SCHEME" -destination "generic/platform=macOS" | xcbeautify --renderer github-actions && exit ${PIPESTATUS[0]}
     - name: Unit Tests
       run: xcodebuild test -workspace "$WORKSPACEPATH" -scheme "$SCHEME" -destination "platform=macOS" | xcbeautify --renderer github-actions && exit ${PIPESTATUS[0]}
-    
+  
   macOS-swift6-2:
     name: Tests (macOS 15 - Swift 6.2)
     runs-on: macos-latest

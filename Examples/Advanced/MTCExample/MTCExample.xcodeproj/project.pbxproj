@@ -148,7 +148,7 @@
 			mainGroup = E2FAC4D1257884DF00A6DD31;
 			packageReferences = (
 				E29EF037267BF71B00282F94 /* XCRemoteSwiftPackageReference "DunneAudioKit" */,
-				E287C0632D44F74000F8A47C /* XCLocalSwiftPackageReference "../../../../MIDIKit" */,
+				E287C0632D44F74000F8A47C /* XCLocalSwiftPackageReference "../../../" */,
 				E28B23312ED6860A0089C0E7 /* XCRemoteSwiftPackageReference "swift-radix" */,
 				E2094BBC2ED9551100B9DAB1 /* XCRemoteSwiftPackageReference "swift-timecode" */,
 			);
@@ -406,9 +406,9 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		E287C0632D44F74000F8A47C /* XCLocalSwiftPackageReference "../../../../MIDIKit" */ = {
+		E287C0632D44F74000F8A47C /* XCLocalSwiftPackageReference "../../../" */ = {
 			isa = XCLocalSwiftPackageReference;
-			relativePath = ../../../../MIDIKit;
+			relativePath = ../../../;
 		};
 /* End XCLocalSwiftPackageReference section */
 
@@ -447,7 +447,7 @@
 		};
 		E287C0772D44F76D00F8A47C /* MIDIKit */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = E287C0632D44F74000F8A47C /* XCLocalSwiftPackageReference "../../../../MIDIKit" */;
+			package = E287C0632D44F74000F8A47C /* XCLocalSwiftPackageReference "../../../" */;
 			productName = MIDIKit;
 		};
 		E28B23322ED6860A0089C0E7 /* SwiftRadix */ = {

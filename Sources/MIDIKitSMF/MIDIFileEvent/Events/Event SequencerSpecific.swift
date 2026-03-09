@@ -6,7 +6,7 @@
 
 import Foundation
 import MIDIKitCore
-internal import MIDIKitInternals
+internal import SwiftDataParsing
 
 // MARK: - SequencerSpecific
 
@@ -61,43 +61,65 @@ extension MIDIFileEvent {
 extension MIDIFileEvent.SequencerSpecific: MIDIFileEventPayload {
     public static let smfEventType: MIDIFileEventType = .sequencerSpecific
     
-    public init(midi1SMFRawBytes rawBytes: some DataProtocol) throws {
+    public init(
+        midi1SMFRawBytes rawBytes: some DataProtocol,
+        runningStatus: UInt8?
+    ) throws(MIDIFile.DecodeError) {
+        if let runningStatus {
+            let rsString = runningStatus.hexString(prefix: true)
+            throw .malformed("Running status byte \(rsString) was passed to event parser that does not use running status.")
+        }
+        
         guard rawBytes.count >= 3 else {
-            throw MIDIFile.DecodeError.malformed(
+            throw .malformed(
                 "Too few bytes."
             )
         }
         
-        try rawBytes.withDataReader { dataReader in
+        try rawBytes.withDataParser { parser throws(MIDIFile.DecodeError) in
             // 2-byte preamble
-            guard try dataReader.read(bytes: 2).elementsEqual(
-                MIDIFile.kEventHeaders[Self.smfEventType]!
-            ) else {
-                throw MIDIFile.DecodeError.malformed(
-                    "Event does not start with expected bytes."
-                )
-            }
-            
-            let readAheadCount = dataReader.remainingByteCount.clamped(to: 1 ... 4)
-            guard let length = try MIDIFile
-                .decodeVariableLengthValue(from: dataReader.nonAdvancingRead(bytes: readAheadCount))
+            let header = MIDIFile.kEventHeaders[Self.smfEventType]!
+            guard let headerBytes = try? parser.read(bytes: header.count),
+                  headerBytes.elementsEqual(header)
             else {
-                throw MIDIFile.DecodeError.malformed(
-                    "Could not extract variable length."
-                )
-            }
-            dataReader.advanceBy(length.byteLength)
-            
-            guard dataReader.remainingByteCount >= length.value else {
-                throw MIDIFile.DecodeError.malformed(
-                    "Fewer bytes are available (\(dataReader.remainingByteCount) than are expected (\(length.value))."
-                )
+                throw .malformed("Event does not start with expected bytes.")
             }
             
-            let readData = try dataReader.read(bytes: length.value)
+            let length = try parser.decodeVariableLengthValue()
             
-            data = readData.data.toUInt8Bytes
+            guard parser.remainingByteCount >= length else {
+                throw .malformed(
+                    "Fewer bytes are available (\(parser.remainingByteCount) than are expected (\(length))."
+                )
+            }
+            
+            let readData = try parser.toMIDIFileDecodeError(
+                malformedReason: "Not enough bytes in data block.",
+                try parser.read(bytes: length)
+            )
+            
+            data = readData.toUInt8Bytes()
         }
+    }
+    
+    public static func initFrom(
+        midi1SMFRawBytesStream stream: some DataProtocol,
+        runningStatus: UInt8?
+    ) throws(MIDIFile.DecodeError) -> StreamDecodeResult {
+        guard stream.count >= 3 else {
+            throw .malformed("Byte length too short.")
+        }
+        
+        let newInstance = try Self(midi1SMFRawBytes: stream, runningStatus: runningStatus)
+        
+        // TODO: this is brittle but it may work
+        
+        let length = (newInstance.midi1SMFRawBytes() as Data).count
+        
+        return (
+            newEvent: newInstance,
+            bufferLength: length
+        )
     }
     
     public func midi1SMFRawBytes<D: MutableDataProtocol>() -> D {
@@ -108,27 +130,6 @@ extension MIDIFileEvent.SequencerSpecific: MIDIFileEventPayload {
             MIDIFile.encodeVariableLengthValue(data.count) +
             // data
             data
-    }
-    
-    public static func initFrom(
-        midi1SMFRawBytesStream stream: some DataProtocol
-    ) throws -> StreamDecodeResult {
-        guard stream.count >= 3 else {
-            throw MIDIFile.DecodeError.malformed(
-                "Byte length too short."
-            )
-        }
-        
-        let newInstance = try Self(midi1SMFRawBytes: stream)
-        
-        // TODO: this is brittle but it may work
-        
-        let length = (newInstance.midi1SMFRawBytes() as Data).count
-        
-        return (
-            newEvent: newInstance,
-            bufferLength: length
-        )
     }
     
     public var smfDescription: String {

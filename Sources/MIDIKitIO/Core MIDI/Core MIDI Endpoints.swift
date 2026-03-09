@@ -19,9 +19,10 @@ func getSystemSourceEndpoints() -> [MIDIOutputEndpoint] {
     endpoints.reserveCapacity(srcCount)
     
     for i in 0 ..< srcCount {
-        let endpoint = MIDIGetSource(i)
-    
-        endpoints.append(MIDIOutputEndpoint(from: endpoint))
+        let endpointRef = MIDIGetSource(i)
+        let endpoint = MIDIOutputEndpoint(from: endpointRef)
+        guard endpoint.uniqueID != .invalidMIDIIdentifier else { continue }
+        endpoints.append(endpoint)
     }
     
     return endpoints
@@ -38,9 +39,10 @@ func getSystemDestinationEndpoints() -> [MIDIInputEndpoint] {
     endpoints.reserveCapacity(destCount)
     
     for i in 0 ..< destCount {
-        let endpoint = MIDIGetDestination(i)
-    
-        endpoints.append(MIDIInputEndpoint(from: endpoint))
+        let endpointRef = MIDIGetDestination(i)
+        let endpoint = MIDIInputEndpoint(from: endpointRef)
+        guard endpoint.uniqueID != .invalidMIDIIdentifier else { continue }
+        endpoints.append(endpoint)
     }
     
     return endpoints
@@ -49,15 +51,17 @@ func getSystemDestinationEndpoints() -> [MIDIInputEndpoint] {
 /// Internal:
 /// Returns all source `MIDIEndpointRef`s in the system that have a name matching `name`.
 ///
-/// - Parameter name: MIDI port name to search for.
-func getSystemSourceEndpoints(
+/// - Parameters:
+///   - name: MIDI port name to search for.
+func getSystemSourceEndpointRefs(
     matching name: String
 ) -> [CoreMIDI.MIDIEndpointRef] {
     var refs: [MIDIEndpointRef] = []
     
     for i in 0 ..< MIDIGetNumberOfSources() {
-        let endpoint = MIDIGetSource(i)
-        if (try? getName(of: endpoint)) == name { refs.append(endpoint) }
+        let endpointRef = MIDIGetSource(i)
+        guard endpointRef != 0 else { continue }
+        if (try? getName(of: endpointRef)) == name { refs.append(endpointRef) }
     }
     
     return refs
@@ -67,13 +71,17 @@ func getSystemSourceEndpoints(
 /// Returns the first source `MIDIEndpointRef` in the system with a unique ID matching `uniqueID`.
 /// If not found, returns `nil`.
 ///
-/// - Parameter uniqueID: MIDI port unique ID to search for.
-func getSystemSourceEndpoint(
+/// - Parameters:
+///   - uniqueID: MIDI port unique ID to search for.
+func getSystemSourceEndpointRef(
     matching uniqueID: CoreMIDI.MIDIUniqueID
 ) -> CoreMIDI.MIDIEndpointRef? {
+    guard uniqueID != .invalidMIDIIdentifier else { return nil }
+    
     for i in 0 ..< MIDIGetNumberOfSources() {
-        let endpoint = MIDIGetSource(i)
-        if getUniqueID(of: endpoint) == uniqueID { return endpoint }
+        let endpointRef = MIDIGetSource(i)
+        guard endpointRef != 0 else { continue }
+        if (try? getUniqueID(of: endpointRef)) == uniqueID { return endpointRef }
     }
     
     return nil
@@ -82,15 +90,17 @@ func getSystemSourceEndpoint(
 /// Internal:
 /// Returns all destination `MIDIEndpointRef`s in the system that have a name matching `name`.
 ///
-/// - Parameter name: MIDI port name to search for.
-func getSystemDestinationEndpoints(
+/// - Parameters:
+///   - name: MIDI port name to search for.
+func getSystemDestinationEndpointRefs(
     matching name: String
 ) -> [CoreMIDI.MIDIEndpointRef] {
     var refs: [MIDIEndpointRef] = []
     
     for i in 0 ..< MIDIGetNumberOfDestinations() {
-        let endpoint = MIDIGetDestination(i)
-        if (try? getName(of: endpoint)) == name { refs.append(endpoint) }
+        let endpointRef = MIDIGetDestination(i)
+        guard endpointRef != 0 else { continue }
+        if (try? getName(of: endpointRef)) == name { refs.append(endpointRef) }
     }
     
     return refs
@@ -100,13 +110,17 @@ func getSystemDestinationEndpoints(
 /// Returns the first destination `MIDIEndpointRef` in the system with a unique ID matching
 /// `uniqueID`. If not found, returns `nil`.
 ///
-/// - Parameter uniqueID: MIDI port unique ID to search for.
-func getSystemDestinationEndpoint(
+/// - Parameters:
+///   - uniqueID: MIDI port unique ID to search for.
+func getSystemDestinationEndpointRef(
     matching uniqueID: CoreMIDI.MIDIUniqueID
 ) -> CoreMIDI.MIDIEndpointRef? {
+    guard uniqueID != .invalidMIDIIdentifier else { return nil }
+    
     for i in 0 ..< MIDIGetNumberOfDestinations() {
-        let endpoint = MIDIGetDestination(i)
-        if getUniqueID(of: endpoint) == uniqueID { return endpoint }
+        let endpointRef = MIDIGetDestination(i)
+        guard endpointRef != 0 else { continue }
+        if (try? getUniqueID(of: endpointRef)) == uniqueID { return endpointRef }
     }
     
     return nil
@@ -115,33 +129,30 @@ func getSystemDestinationEndpoint(
 /// Internal:
 /// Returns a ``MIDIEntity`` instance of the endpoint's owning entity.
 func getSystemEntity(
-    for endpoint: MIDIEndpointRef
-) throws -> MIDIEntity {
-    var ent = MIDIEntityRef()
+    forEndpoint endpointRef: MIDIEndpointRef
+) throws(MIDIIOError) -> MIDIEntity? {
+    let refPtr: UnsafeMutablePointer<MIDIEntityRef>? = nil
     
-    try MIDIEndpointGetEntity(endpoint, &ent)
+    try MIDIEndpointGetEntity(endpointRef, refPtr)
         .throwIfOSStatusErr()
     
-    guard ent != MIDIEntityRef() else {
-        throw MIDIIOError.internalInconsistency(
-            "Error getting entity ID for endpoint ref \(endpoint)"
-        )
-    }
+    guard let refPtr else { return nil }
+    guard refPtr.pointee != MIDIEntityRef() else { return nil }
     
-    return MIDIEntity(from: ent)
+    return MIDIEntity(from: refPtr.pointee)
 }
 
 /// Internal:
 /// Makes a virtual endpoint in the system invisible to the user.
-func hide(endpoint: MIDIEndpointRef) throws {
-    try MIDIObjectSetIntegerProperty(endpoint, kMIDIPropertyPrivate, 1)
+func hide(endpoint endpointRef: MIDIEndpointRef) throws(MIDIIOError) {
+    try MIDIObjectSetIntegerProperty(endpointRef, kMIDIPropertyPrivate, 1)
         .throwIfOSStatusErr()
 }
 
 /// Internal:
 /// Makes a virtual endpoint in the system visible to the user.
-func show(endpoint: MIDIEndpointRef) throws {
-    try MIDIObjectSetIntegerProperty(endpoint, kMIDIPropertyPrivate, 0)
+func show(endpoint endpointRef: MIDIEndpointRef) throws(MIDIIOError) {
+    try MIDIObjectSetIntegerProperty(endpointRef, kMIDIPropertyPrivate, 0)
         .throwIfOSStatusErr()
 }
 

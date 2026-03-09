@@ -15,7 +15,7 @@ import Testing
     // swiftformat:options --maxwidth none
     
     @Test
-    func emptyData() throws {
+    func emptyData() async throws {
         let id = "ABCD"
         
         let track = MIDIFile.Chunk.UnrecognizedChunk(id: id)
@@ -31,7 +31,7 @@ import Testing
         
         let generatedBytes = try track.midi1SMFRawBytes(
             using: .musical(ticksPerQuarterNote: 960)
-        ).toUInt8Bytes
+        ).toUInt8Bytes()
         
         #expect(generatedBytes == bytes)
         
@@ -44,14 +44,14 @@ import Testing
     }
     
     @Test
-    func withData() throws {
+    func withData() async throws {
         let data: [UInt8] = [0x12, 0x34, 0x56, 0x78]
         
         let id = "ABCD"
         
         let track = MIDIFile.Chunk.UnrecognizedChunk(
             id: id,
-            rawData: data.data
+            rawData: data.toData()
         )
         
         #expect(track.identifier == id)
@@ -65,7 +65,7 @@ import Testing
         
         let generatedBytes = try track.midi1SMFRawBytes(
             using: .musical(ticksPerQuarterNote: 960)
-        ).toUInt8Bytes
+        ).toUInt8Bytes()
         
         #expect(generatedBytes == bytes)
         

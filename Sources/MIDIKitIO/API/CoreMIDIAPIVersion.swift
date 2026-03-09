@@ -23,18 +23,19 @@ extension CoreMIDIAPIVersion: Hashable { }
 
 extension CoreMIDIAPIVersion: Sendable { }
 
-extension CoreMIDIAPIVersion {
-    /// MIDI protocol version.
-    public var midiProtocol: MIDIProtocolVersion {
+extension CoreMIDIAPIVersion: CustomStringConvertible {
+    public var description: String {
         switch self {
         case .legacyCoreMIDI:
-            return .midi1_0
-    
-        case let .newCoreMIDI(protocolVersion):
-            return protocolVersion
+            return "Legacy Core MIDI API"
+            
+        case .newCoreMIDI:
+            return "New Core MIDI API (\(midiProtocol))"
         }
     }
 }
+
+// MARK: - Static Constructors
 
 extension CoreMIDIAPIVersion {
     /// Returns the recommended API version for the current platform (operating system).
@@ -48,7 +49,20 @@ extension CoreMIDIAPIVersion {
     }
 }
 
+// MARK: - Properties
+
 extension CoreMIDIAPIVersion {
+    /// MIDI protocol version.
+    public var midiProtocol: MIDIProtocolVersion {
+        switch self {
+        case .legacyCoreMIDI:
+            return .midi1_0
+            
+        case let .newCoreMIDI(protocolVersion):
+            return protocolVersion
+        }
+    }
+    
     // swiftformat:options --ifdef indent
     
     /// Returns true if API version can be used on the current platform (operating system).
@@ -80,18 +94,6 @@ extension CoreMIDIAPIVersion {
             }
     
             return false
-        }
-    }
-}
-
-extension CoreMIDIAPIVersion: CustomStringConvertible {
-    public var description: String {
-        switch self {
-        case .legacyCoreMIDI:
-            return "Legacy Core MIDI API"
-    
-        case .newCoreMIDI:
-            return "New Core MIDI API (\(midiProtocol))"
         }
     }
 }

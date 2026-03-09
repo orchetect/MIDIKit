@@ -10,34 +10,36 @@ import Foundation
 internal import CoreMIDI
 
 /// Internal:
-/// List of MIDI entities in the system (computed property)
+/// Return the owning device of the entity.
 func getSystemDevice(
-    for entity: CoreMIDI.MIDIEntityRef
-) throws -> MIDIDevice? {
-    var dev = MIDIDeviceRef()
+    forEntity entityRef: CoreMIDI.MIDIEntityRef
+) throws(MIDIIOError) -> MIDIDevice? {
+    let refPtr: UnsafeMutablePointer<MIDIDeviceRef>? = nil
     
-    try MIDIEntityGetDevice(entity, &dev)
+    try MIDIEntityGetDevice(entityRef, refPtr)
         .throwIfOSStatusErr()
     
-    guard dev != MIDIDeviceRef() else { return nil }
+    guard let refPtr else { return nil }
+    guard refPtr.pointee != MIDIDeviceRef() else { return nil }
     
-    return MIDIDevice(from: dev)
+    return MIDIDevice(from: refPtr.pointee)
 }
     
 /// Internal:
 /// List of source endpoints for the entity (computed property)
-func getSystemSources(
-    for entity: CoreMIDI.MIDIEntityRef
+func getSystemSourceEndpoints(
+    forEntity entityRef: CoreMIDI.MIDIEntityRef
 ) -> [MIDIOutputEndpoint] {
-    let srcCount = MIDIEntityGetNumberOfSources(entity)
+    let srcCount = MIDIEntityGetNumberOfSources(entityRef)
     
     var endpoints: [MIDIOutputEndpoint] = []
     endpoints.reserveCapacity(srcCount)
     
     for i in 0 ..< srcCount {
-        let endpoint = MIDIEntityGetSource(entity, i)
-    
-        endpoints.append(MIDIOutputEndpoint(from: endpoint))
+        let endpointRef = MIDIEntityGetSource(entityRef, i)
+        let endpoint = MIDIOutputEndpoint(from: endpointRef)
+        guard endpoint.uniqueID != .invalidMIDIIdentifier else { continue }
+        endpoints.append(endpoint)
     }
     
     return endpoints
@@ -45,18 +47,19 @@ func getSystemSources(
     
 /// Internal:
 /// List of destination endpoints for the entity (computed property)
-func getSystemDestinations(
-    for entity: CoreMIDI.MIDIEntityRef
+func getSystemDestinationEndpoints(
+    forEntity entityRef: CoreMIDI.MIDIEntityRef
 ) -> [MIDIInputEndpoint] {
-    let srcCount = MIDIEntityGetNumberOfDestinations(entity)
+    let srcCount = MIDIEntityGetNumberOfDestinations(entityRef)
     
     var endpoints: [MIDIInputEndpoint] = []
     endpoints.reserveCapacity(srcCount)
     
     for i in 0 ..< srcCount {
-        let endpoint = MIDIEntityGetDestination(entity, i)
-    
-        endpoints.append(MIDIInputEndpoint(from: endpoint))
+        let endpointRef = MIDIEntityGetDestination(entityRef, i)
+        let endpoint = MIDIInputEndpoint(from: endpointRef)
+        guard endpoint.uniqueID != .invalidMIDIIdentifier else { continue }
+        endpoints.append(endpoint)
     }
     
     return endpoints

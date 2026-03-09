@@ -23,7 +23,7 @@ extension CoreMIDI.MIDIPacketList {
     /// Assembles an array of `UInt8` packet arrays into Core MIDI `MIDIPacket`s and wraps them in a
     /// `MIDIPacketList`.
     @_disfavoredOverload @inlinable
-    public init(data: [[UInt8]]) throws {
+    public init(data: [[UInt8]]) throws(MIDIInternalError) {
         let packetList = try UnsafeMutablePointer<CoreMIDI.MIDIPacketList>(data: data)
         self = packetList.pointee
         packetList.deallocate()
@@ -77,7 +77,7 @@ extension UnsafeMutablePointer where Pointee == CoreMIDI.MIDIPacketList {
     /// - Note: System Exclusive messages must each be packed in a dedicated `MIDIPacketList` with no
     ///   other events, otherwise MIDI packet list creation may fail.
     @_disfavoredOverload @inlinable
-    public init(data: [[UInt8]]) throws {
+    public init(data: [[UInt8]]) throws(MIDIInternalError) {
         // Create a buffer that is big enough to hold the data to be sent and
         // all the necessary headers.
         let bufferSize = data
@@ -87,7 +87,7 @@ extension UnsafeMutablePointer where Pointee == CoreMIDI.MIDIPacketList {
         // MIDIPacketListAdd's discussion section states that "The maximum size of a packet list is
         // 65536 bytes."
         guard bufferSize <= 65536 else {
-            throw MIDIInternalError.packetTooLarge(bufferByteCount: bufferSize)
+            throw .packetTooLarge(bufferByteCount: bufferSize)
         }
     
         // As per Apple docs, timeTag must not be 0 when a packet is sent with `MIDIReceived()`. It
@@ -112,7 +112,7 @@ extension UnsafeMutablePointer where Pointee == CoreMIDI.MIDIPacketList {
             )
     
             guard currentPacket != nil else {
-                throw MIDIInternalError.packetBuildError
+                throw .packetBuildError(underlyingError: nil)
             }
         }
     

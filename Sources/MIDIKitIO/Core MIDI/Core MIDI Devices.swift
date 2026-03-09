@@ -17,9 +17,10 @@ func getSystemDevices() -> [MIDIDevice] {
     devices.reserveCapacity(devCount)
     
     for i in 0 ..< devCount {
-        let device = MIDIGetDevice(i)
-    
-        devices.append(MIDIDevice(from: device))
+        let deviceRef = MIDIGetDevice(i)
+        let device = MIDIDevice(from: deviceRef)
+        guard device.uniqueID != .invalidMIDIIdentifier else { continue }
+        devices.append(device)
     }
     
     return devices
@@ -34,9 +35,10 @@ func getSystemEntities(for device: CoreMIDI.MIDIDeviceRef) -> [MIDIEntity] {
     entities.reserveCapacity(entityCount)
     
     for i in 0 ..< entityCount {
-        let entity = MIDIDeviceGetEntity(device, i)
-    
-        entities.append(MIDIEntity(from: entity))
+        let entityRef = MIDIDeviceGetEntity(device, i)
+        let entity = MIDIEntity(from: entityRef)
+        guard entity.uniqueID != .invalidMIDIIdentifier else { continue }
+        entities.append(entity)
     }
     
     return entities
