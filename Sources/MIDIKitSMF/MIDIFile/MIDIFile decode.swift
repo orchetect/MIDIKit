@@ -181,7 +181,7 @@ extension MIDIFile.Parser {
         chunkDescriptors: [ChunkDescriptor],
         timebase: MIDIFile.TimeBase,
         bundleParameterNumbers: Bool,
-        in fileData: some DataProtocol & Sendable,
+        in fileData: some DataProtocol & Sendable
     ) throws(MIDIFile.DecodeError) -> [MIDIFile.Chunk] {
         var newChunks: [MIDIFile.Chunk] = []
         for (index, chunkDescriptor) in chunkDescriptors.enumerated() {
@@ -212,7 +212,7 @@ extension MIDIFile.Parser {
         chunkDescriptors: [ChunkDescriptor],
         timebase: MIDIFile.TimeBase,
         bundleParameterNumbers: Bool,
-        in fileData: some DataProtocol & Sendable,
+        in fileData: some DataProtocol & Sendable
     ) async throws(MIDIFile.DecodeError) -> [MIDIFile.Chunk] {
         let result: Result<[MIDIFile.Chunk], MIDIFile.DecodeError> = await withTaskGroup(
             of: Result<(index: Int, chunk: MIDIFile.Chunk), MIDIFile.DecodeError>.self,
