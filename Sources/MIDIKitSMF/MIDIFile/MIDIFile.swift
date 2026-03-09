@@ -56,6 +56,17 @@ public struct MIDIFile {
         self.timeBase = timeBase
         self.chunks = chunks
     }
+    
+    /// Initialize from header parameters and track chunks.
+    public init(
+        format: Format = .multipleTracksSynchronous,
+        timeBase: TimeBase = .default(),
+        chunks: some Sequence<Chunk> = []
+    ) {
+        self.format = format
+        self.timeBase = timeBase
+        self.chunks = Array(chunks)
+    }
 }
 
 // Sendable must be applied in the same file as the struct for it to be compiler-checked.
