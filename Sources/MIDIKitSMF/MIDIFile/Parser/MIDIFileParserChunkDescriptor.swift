@@ -5,8 +5,8 @@
 //
 
 struct MIDIFileParserChunkDescriptor {
-    /// 4-Character Chunk type string.
-    var typeString: String
+    /// Chunk type (4-character identifier).
+    var chunkType: MIDIFile.ChunkType
     
     /// Byte offset of the start of the chunk.
     var startOffset: Int

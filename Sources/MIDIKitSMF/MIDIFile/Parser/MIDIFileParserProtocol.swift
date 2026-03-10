@@ -42,14 +42,15 @@ extension MIDIFileParserProtocol {
             while !endOfFile {
                 // chunk header
                 let chunkStartByteOffset = parser.readOffset
-                guard let chunkType = try? parser.read(bytes: 4) else {
+                guard let chunkTypeBytes = try? parser.read(bytes: 4),
+                      let chunkTypeString = chunkTypeBytes.asciiDataToString(),
+                      let chunkType = MIDIFile.ChunkType(rawValue: chunkTypeString)
+                else {
                     let offsetString = parser.readOffset.hexString(prefix: true)
                     throw .malformed(
-                        "There was a problem reading chunk header at byte offset \(offsetString). Encountered end of file early."
+                        "There was a problem reading chunk header at byte offset \(offsetString). Encountered end of file early or chunk identifier may be malformed."
                     )
                 }
-                
-                let chunkTypeString = chunkType.asciiDataToString() ?? "????"
                 
                 // chunk length
                 guard let chunkLength = (try? parser.read(bytes: 4))?
@@ -72,7 +73,7 @@ extension MIDIFileParserProtocol {
                 
                 // append chunk descriptor
                 let chunkDescriptor = MIDIFileParserChunkDescriptor(
-                    typeString: chunkTypeString,
+                    chunkType: chunkType,
                     startOffset: chunkStartByteOffset,
                     bodyByteStartOffset: dataBodyOffset,
                     bodyByteLength: Int(chunkLength)
@@ -188,8 +189,8 @@ extension MIDIFileParserProtocol {
         in chunkData: some DataProtocol
     ) throws(MIDIFile.DecodeError) -> MIDIFile.Chunk {
         do throws(MIDIFile.DecodeError) {
-            switch chunkDescriptor.typeString {
-            case MIDIFile.Chunk.Track.staticIdentifier:
+            switch chunkDescriptor.chunkType {
+            case .track:
                 let newTrack = try MIDIFile.Chunk.Track(
                     midi1SMFRawBytes: chunkData,
                     timebase: timebase,
@@ -198,12 +199,12 @@ extension MIDIFileParserProtocol {
                 )
                 return .track(newTrack)
                 
-            default:
+            case let .other(identifier: fourCharString):
                 // as per Standard MIDI File 1.0 Spec:
                 // unrecognized chunks should be skipped and not throw an error
                 
                 let newUnrecognizedChunk = MIDIFile.Chunk.UnrecognizedChunk(
-                    id: chunkDescriptor.typeString,
+                    id: fourCharString,
                     rawData: chunkData.toData()
                 )
                 return .other(newUnrecognizedChunk)
