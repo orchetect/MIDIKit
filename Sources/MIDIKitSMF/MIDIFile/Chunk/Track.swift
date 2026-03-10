@@ -37,38 +37,76 @@ extension MIDIFile.Chunk.Track: Sendable { }
 
 extension MIDIFile.Chunk.Track: CustomStringConvertible {
     public var description: String {
-        var outputString = ""
-        
-        outputString += "Track(".newLined
-        outputString += "  events (\(events.count)): ".newLined
-        
-        for event in events {
-            let deltaString = event.smfUnwrappedEvent.delta.description
-                .padding(toLength: 15, withPad: " ", startingAt: 0)
-            
-            outputString += "    \(deltaString) \(event.smfUnwrappedEvent.event.smfDescription)"
-                .newLined
-        }
-        
-        outputString += ")"
-        
-        return outputString
+        description(maxEventCount: 10) // by default, limit number of events
+    }
+    
+    /// Generate a description of the track, optionally limiting the number of events in the output.
+    public func description(maxEventCount: Int?) -> String {
+        descriptionBuilder(
+            maxEventCount: maxEventCount,
+            deltaPadLength: 15,
+            deltaDesc: { $0.description },
+            eventDesc: { $0.smfDescription }
+        )
     }
 }
 
 extension MIDIFile.Chunk.Track: CustomDebugStringConvertible {
     public var debugDescription: String {
-        var outputString = ""
+        debugDescription(maxEventCount: 10) // by default, limit number of events
+    }
+    
+    /// Generate a debug description of the track, optionally limiting the number of events in the output.
+    public func debugDescription(maxEventCount: Int?) -> String {
+        descriptionBuilder(
+            maxEventCount: maxEventCount,
+            deltaPadLength: 15 + 11,
+            deltaDesc: { $0.debugDescription },
+            eventDesc: { $0.smfDebugDescription }
+        )
+    }
+}
+
+extension MIDIFile.Chunk.Track {
+    func descriptionBuilder(
+        maxEventCount: Int?,
+        deltaPadLength: Int,
+        deltaDesc: (MIDIFileEvent.DeltaTime) -> String,
+        eventDesc: (any MIDIFileEventPayload) -> String
+    ) -> String {
+        // sanitize inputs
+        let maxEventCount = maxEventCount?.clamped(to: 0...)
         
+        var outputString = ""
         outputString += "Track(".newLined
         outputString += "  events (\(events.count)): ".newLined
         
-        for event in events {
-            let deltaString = event.smfUnwrappedEvent.delta.debugDescription
-                .padding(toLength: 15 + 11, withPad: " ", startingAt: 0)
+        if events.isEmpty {
+            outputString += "    No events.".newLined
+        } else {
+            let outputEvents = if let maxEventCount, maxEventCount < events.count {
+                events.prefix(maxEventCount)
+            } else {
+                events[...]
+            }
             
-            outputString += "    \(deltaString) \(event.smfUnwrappedEvent.event.smfDebugDescription)"
-                .newLined
+            for event in outputEvents {
+                let deltaString = deltaDesc(event.smfUnwrappedEvent.delta)
+                    .padding(toLength: deltaPadLength, withPad: " ", startingAt: 0)
+                
+                outputString += "    \(deltaString) \(eventDesc(event.smfUnwrappedEvent.event))"
+                    .newLined
+            }
+            
+            let excludedEventCount = events.count - outputEvents.count
+            if excludedEventCount > 0 {
+                let eventsLimitedString = if maxEventCount == 0 {
+                    "..."
+                } else {
+                    "+ \(excludedEventCount) more events" // + " (\(events.count) total events)"
+                }
+                outputString += "    \(eventsLimitedString.newLined)"
+            }
         }
         
         outputString += ")"
