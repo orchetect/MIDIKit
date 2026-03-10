@@ -10,7 +10,7 @@ internal import SwiftDataParsing
 
 extension MIDIFile.Chunk {
     /// Unrecognized MIDI File Chunk.
-    public struct UnrecognizedChunk: MIDIFileChunk {
+    public struct UnrecognizedChunk {
         public let identifier: String
 
         /// Contains the raw bytes of the chunk's data portion
@@ -87,6 +87,12 @@ extension MIDIFile.Chunk.UnrecognizedChunk: CustomDebugStringConvertible {
         
         return outputString
     }
+}
+
+extension MIDIFile.Chunk.UnrecognizedChunk: MIDIFileChunk {
+    // `identifier` is a stored instance property
+    
+    public var chunkType: MIDIFile.ChunkType { .other(identifier: identifier) }
 }
 
 // MARK: - Static

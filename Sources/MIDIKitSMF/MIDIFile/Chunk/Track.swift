@@ -117,12 +117,15 @@ extension MIDIFile.Chunk.Track {
 
 extension MIDIFile.Chunk.Track: MIDIFileChunk {
     public var identifier: String { Self.staticIdentifier }
+    
+    public var chunkType: MIDIFile.ChunkType { Self.staticChunkType }
 }
 
 // MARK: - Static
 
 extension MIDIFile.Chunk.Track {
     public static let staticIdentifier: String = "MTrk"
+    public static let staticChunkType: MIDIFile.ChunkType = .track
     
     static let chunkEnd: [UInt8] = [0xFF, 0x2F, 0x00]
 }

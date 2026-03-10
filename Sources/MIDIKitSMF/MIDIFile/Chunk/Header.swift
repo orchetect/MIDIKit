@@ -104,12 +104,15 @@ extension MIDIFile.Chunk.Header: Sendable { }
 
 extension MIDIFile.Chunk.Header: MIDIFileChunk {
     public var identifier: String { Self.staticIdentifier }
+    
+    public var chunkType: MIDIFile.ChunkType { Self.staticChunkType }
 }
 
 // MARK: - Static
 
 extension MIDIFile.Chunk.Header {
     public static let staticIdentifier: String = "MThd"
+    public static let staticChunkType: MIDIFile.ChunkType = .other(identifier: staticIdentifier)
 }
 
 // MARK: - Encoding
