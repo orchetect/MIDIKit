@@ -55,7 +55,7 @@ extension MIDIFile.TimeBase: CustomStringConvertible {
 
 extension MIDIFile.TimeBase: CustomDebugStringConvertible {
     public var debugDescription: String {
-        "timeBase(" + description + ")"
+        "TimeBase(" + description + ")"
     }
 }
 

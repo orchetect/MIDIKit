@@ -31,28 +31,16 @@ extension MIDIFile: CustomStringConvertible {
     
     /// Generate a description of the track, optionally limiting the number of events from each track in the output.
     public func description(trackMaxEventCount: Int?) -> String {
-        var outputString = ""
-        
-        outputString += "MIDIFile(".newLined
-        outputString += "  format: \(format)".newLined
-        outputString += "  timebase: \(timeBase)".newLined
-        outputString += "  chunks (\(chunks.count)): ".newLined
-        
-        for chunk in chunks.enumerated() {
-            let chunkDesc = switch chunk.element {
-            case let .track(track): track.description(maxEventCount: trackMaxEventCount)
-            case let .other(unrecognizedChunk): unrecognizedChunk.description
+        descriptionBuilder(
+            formatDesc: { $0.description },
+            timeBaseDesc: { $0.description },
+            chunkDesc: {
+                switch $0 {
+                case let .track(track): track.description(maxEventCount: trackMaxEventCount)
+                case let .other(unrecognizedChunk): unrecognizedChunk.description
+                }
             }
-            
-            // indent each line with additional spaces
-            outputString += "Chunk #\(chunk.offset + 1): \(chunkDesc)"
-                .split(separator: "\n")
-                .reduce("") { $0 + "    \($1)".newLined }
-        }
-        
-        outputString += ")"
-        
-        return outputString
+        )
     }
 }
 
@@ -63,18 +51,34 @@ extension MIDIFile: CustomDebugStringConvertible {
     
     /// Generate a debug description of the track, optionally limiting the number of events from each track in the output.
     public func debugDescription(trackMaxEventCount: Int?) -> String {
+        descriptionBuilder(
+            formatDesc: { $0.description },
+            timeBaseDesc: { $0.description },
+            chunkDesc: {
+                switch $0 {
+                case let .track(track): track.debugDescription(maxEventCount: trackMaxEventCount)
+                case let .other(unrecognizedChunk): unrecognizedChunk.debugDescription
+                }
+            }
+        )
+    }
+}
+
+extension MIDIFile {
+    func descriptionBuilder(
+        formatDesc: (Format) -> String,
+        timeBaseDesc: (TimeBase) -> String,
+        chunkDesc: (_ chunk: Chunk) -> String
+    ) -> String {
         var outputString = ""
         
         outputString += "MIDIFile(".newLined
-        outputString += "  format: \(format.debugDescription)".newLined
-        outputString += "  timebase: \(timeBase.debugDescription)".newLined
+        outputString += "  format: \(formatDesc(format))".newLined
+        outputString += "  timebase: \(timeBaseDesc(timeBase))".newLined
         outputString += "  chunks (\(chunks.count)): ".newLined
         
         for chunk in chunks.enumerated() {
-            let chunkDebugDesc = switch chunk.element {
-            case let .track(track): track.debugDescription(maxEventCount: trackMaxEventCount)
-            case let .other(unrecognizedChunk): unrecognizedChunk.description
-            }
+            let chunkDebugDesc = chunkDesc(chunk.element)
             
             // indent each line with additional spaces
             outputString += "#\(chunk.offset + 1): \(chunkDebugDesc)"
