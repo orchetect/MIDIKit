@@ -110,7 +110,7 @@ extension MIDIFile.Chunk.Track {
     public init<D: DataProtocol>(
         midi1SMFRawBytesStream stream: D,
         timebase: MIDIFile.TimeBase,
-        bundleParameterNumbers: Bool,
+        bundleRPNAndNRPNEvents: Bool,
         maxEventCount: Int? = nil
     ) throws(MIDIFile.DecodeError) {
         guard stream.count >= 8 else {
@@ -159,7 +159,7 @@ extension MIDIFile.Chunk.Track {
             return try Self(
                 midi1SMFRawBytes: readChunk,
                 timebase: timebase,
-                bundleParameterNumbers: bundleParameterNumbers,
+                bundleRPNAndNRPNEvents: bundleRPNAndNRPNEvents,
                 maxEventCount: maxEventCount
             )
         }
@@ -169,7 +169,7 @@ extension MIDIFile.Chunk.Track {
     init<D: DataProtocol>(
         midi1SMFRawBytes rawData: D,
         timebase: MIDIFile.TimeBase,
-        bundleParameterNumbers: Bool,
+        bundleRPNAndNRPNEvents: Bool,
         maxEventCount: Int? = nil
     ) throws(MIDIFile.DecodeError) {
         // sanitize inputs
@@ -293,7 +293,7 @@ extension MIDIFile.Chunk.Track {
             
             // bundle RPN and NRPN events
             
-            if bundleParameterNumbers {
+            if bundleRPNAndNRPNEvents {
                 func bundleRPNAndNRPN(index: [MIDIFileEvent].Index) {
                     if newEvents[eventsIndex].eventType == .cc,
                        case let .cc(_, msbEvent) = newEvents[eventsIndex],

@@ -13,12 +13,12 @@ extension MIDIFile {
     /// Decode sequentially, without concurrency.
     mutating func decode(
         rawData: some DataProtocol & Sendable,
-        bundleParameterNumbers: Bool,
+        bundleRPNAndNRPNEvents: Bool,
         maxTrackEventCount: Int?
     ) throws(MIDIFile.DecodeError) {
         let parser = try Parser(data: rawData)
         let parsedChunks = try parser.chunks(
-            bundleParameterNumbers: bundleParameterNumbers,
+            bundleRPNAndNRPNEvents: bundleRPNAndNRPNEvents,
             maxTrackEventCount: maxTrackEventCount
         )
         header = parser.fileDescriptor.header
@@ -29,12 +29,12 @@ extension MIDIFile {
     @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
     mutating func decode(
         rawData: some DataProtocol & Sendable,
-        bundleParameterNumbers: Bool,
+        bundleRPNAndNRPNEvents: Bool,
         maxTrackEventCount: Int?
     ) async throws(MIDIFile.DecodeError) {
         let parser = try Parser(data: rawData)
         let parsedChunks = try await parser.chunks(
-            bundleParameterNumbers: bundleParameterNumbers,
+            bundleRPNAndNRPNEvents: bundleRPNAndNRPNEvents,
             maxTrackEventCount: maxTrackEventCount
         )
         header = parser.fileDescriptor.header

@@ -25,13 +25,13 @@ extension MIDIFile {
         }
         
         func chunks(
-            bundleParameterNumbers: Bool,
+            bundleRPNAndNRPNEvents: Bool,
             maxTrackEventCount: Int?
         ) throws(MIDIFile.DecodeError) -> [MIDIFile.Chunk] {
             try Self.parseChunks(
                 chunkDescriptors: fileDescriptor.chunkDescriptors,
                 timebase: fileDescriptor.header.timeBase,
-                bundleParameterNumbers: bundleParameterNumbers,
+                bundleRPNAndNRPNEvents: bundleRPNAndNRPNEvents,
                 maxTrackEventCount: maxTrackEventCount,
                 in: data
             )
@@ -40,13 +40,13 @@ extension MIDIFile {
         /// Concurrent version of `chunks` method.
         @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
         func chunks(
-            bundleParameterNumbers: Bool,
+            bundleRPNAndNRPNEvents: Bool,
             maxTrackEventCount: Int?
         ) async throws(MIDIFile.DecodeError) -> [MIDIFile.Chunk] {
             try await Self.parseChunks(
                 chunkDescriptors: fileDescriptor.chunkDescriptors,
                 timebase: fileDescriptor.header.timeBase,
-                bundleParameterNumbers: bundleParameterNumbers,
+                bundleRPNAndNRPNEvents: bundleRPNAndNRPNEvents,
                 maxTrackEventCount: maxTrackEventCount,
                 in: data
             )

@@ -7,14 +7,14 @@
 extension MIDIFile {
     /// MIDI file decoding options.
     public struct DecodeOptions {
-        public var bundleParameterNumbers: Bool
+        public var bundleRPNAndNRPNEvents: Bool
         public var maxTrackEventCount: Int?
         
         public init(
-            bundleParameterNumbers: Bool = true,
+            bundleRPNAndNRPNEvents: Bool = true,
             maxTrackEventCount: Int? = nil
         ) {
-            self.bundleParameterNumbers = bundleParameterNumbers
+            self.bundleRPNAndNRPNEvents = bundleRPNAndNRPNEvents
             self.maxTrackEventCount = maxTrackEventCount
         }
     }

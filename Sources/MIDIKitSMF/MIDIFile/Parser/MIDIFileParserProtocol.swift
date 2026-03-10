@@ -93,7 +93,7 @@ extension MIDIFileParserProtocol {
     static func parseChunks(
         chunkDescriptors: [MIDIFileParserChunkDescriptor],
         timebase: MIDIFile.TimeBase,
-        bundleParameterNumbers: Bool,
+        bundleRPNAndNRPNEvents: Bool,
         maxTrackEventCount: Int?,
         in fileData: some DataProtocol & Sendable
     ) throws(MIDIFile.DecodeError) -> [MIDIFile.Chunk] {
@@ -110,7 +110,7 @@ extension MIDIFileParserProtocol {
                     chunkDescriptor: chunkDescriptor,
                     chunkIndex: index,
                     timebase: timebase,
-                    bundleParameterNumbers: bundleParameterNumbers,
+                    bundleRPNAndNRPNEvents: bundleRPNAndNRPNEvents,
                     maxTrackEventCount: maxTrackEventCount,
                     in: chunkData
                 )
@@ -126,7 +126,7 @@ extension MIDIFileParserProtocol {
     static func parseChunks(
         chunkDescriptors: [MIDIFileParserChunkDescriptor],
         timebase: MIDIFile.TimeBase,
-        bundleParameterNumbers: Bool,
+        bundleRPNAndNRPNEvents: Bool,
         maxTrackEventCount: Int?,
         in fileData: some DataProtocol & Sendable
     ) async throws(MIDIFile.DecodeError) -> [MIDIFile.Chunk] {
@@ -150,7 +150,7 @@ extension MIDIFileParserProtocol {
                                 chunkDescriptor: chunkDescriptor,
                                 chunkIndex: index,
                                 timebase: timebase,
-                                bundleParameterNumbers: bundleParameterNumbers,
+                                bundleRPNAndNRPNEvents: bundleRPNAndNRPNEvents,
                                 maxTrackEventCount: maxTrackEventCount,
                                 in: chunkData
                             )
@@ -183,7 +183,7 @@ extension MIDIFileParserProtocol {
         chunkDescriptor: MIDIFileParserChunkDescriptor,
         chunkIndex: Int,
         timebase: MIDIFile.TimeBase,
-        bundleParameterNumbers: Bool,
+        bundleRPNAndNRPNEvents: Bool,
         maxTrackEventCount: Int?,
         in chunkData: some DataProtocol
     ) throws(MIDIFile.DecodeError) -> MIDIFile.Chunk {
@@ -193,7 +193,7 @@ extension MIDIFileParserProtocol {
                 let newTrack = try MIDIFile.Chunk.Track(
                     midi1SMFRawBytes: chunkData,
                     timebase: timebase,
-                    bundleParameterNumbers: bundleParameterNumbers,
+                    bundleRPNAndNRPNEvents: bundleRPNAndNRPNEvents,
                     maxEventCount: maxTrackEventCount
                 )
                 return .track(newTrack)

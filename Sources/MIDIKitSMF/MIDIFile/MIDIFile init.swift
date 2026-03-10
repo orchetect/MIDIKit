@@ -19,7 +19,7 @@ extension MIDIFile {
     ) throws(DecodeError) {
         try decode(
             rawData: rawData,
-            bundleParameterNumbers: options.bundleParameterNumbers,
+            bundleRPNAndNRPNEvents: options.bundleRPNAndNRPNEvents,
             maxTrackEventCount: options.maxTrackEventCount
         )
     }
@@ -32,7 +32,7 @@ extension MIDIFile {
     ) async throws(DecodeError) {
         try await decode(
             rawData: rawData,
-            bundleParameterNumbers: options.bundleParameterNumbers,
+            bundleRPNAndNRPNEvents: options.bundleRPNAndNRPNEvents,
             maxTrackEventCount: options.maxTrackEventCount
         )
     }
@@ -86,7 +86,7 @@ extension MIDIFile {
         let data = try Self.data(forFileURL: url)
         try decode(
             rawData: data,
-            bundleParameterNumbers: options.bundleParameterNumbers,
+            bundleRPNAndNRPNEvents: options.bundleRPNAndNRPNEvents,
             maxTrackEventCount: options.maxTrackEventCount
         )
     }
@@ -100,7 +100,7 @@ extension MIDIFile {
         let data = try Self.data(forFileURL: url)
         try await decode(
             rawData: data,
-            bundleParameterNumbers: options.bundleParameterNumbers,
+            bundleRPNAndNRPNEvents: options.bundleRPNAndNRPNEvents,
             maxTrackEventCount: options.maxTrackEventCount
         )
     }
