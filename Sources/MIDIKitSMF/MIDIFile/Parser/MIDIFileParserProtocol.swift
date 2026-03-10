@@ -9,7 +9,9 @@ import MIDIKitCore
 internal import MIDIKitInternals
 internal import SwiftDataParsing
 
-protocol MIDIFileParserProtocol { }
+protocol MIDIFileParserProtocol {
+    associatedtype DataType: DataProtocol
+}
 
 extension MIDIFileParserProtocol {
     static func parseFileDescriptor(
