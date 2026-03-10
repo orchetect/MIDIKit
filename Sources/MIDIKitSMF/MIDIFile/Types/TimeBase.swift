@@ -101,7 +101,8 @@ extension MIDIFile.TimeBase {
 // MARK: - Properties
 
 extension MIDIFile.TimeBase {
-    var rawData: Data {
+    /// Returns the timebase encoded as raw data.
+    public var rawData: Data {
         switch self {
         case let .musical(ticksPerQuarterNote):
             (ticksPerQuarterNote & 0b01111111_11111111)
