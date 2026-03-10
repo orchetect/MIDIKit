@@ -7,7 +7,7 @@
 import Foundation
 import MIDIKitCore
 
-// MARK: - Parse Entry-point Methods
+// MARK: - Internal Parsing Entry-point Methods
 
 extension MIDIFile {
     /// Decode sequentially, without concurrency.

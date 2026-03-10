@@ -7,6 +7,19 @@
 import Foundation
 import MIDIKitCore
 
+// MARK: - Public Methods
+
+extension MIDIFile {
+    /// Returns raw MIDI file data. Throws an error if a problem occurs.
+    public func rawData() throws(EncodeError) -> Data {
+        try encode()
+    }
+    
+    // TODO: add async version of rawData() that can build file contents concurrently (encode tracks in parallel using withTaskGroup)
+}
+
+// MARK: - Internal Methods
+
 extension MIDIFile {
     func encode() throws(EncodeError) -> Data {
         // basic validation checks
