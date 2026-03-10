@@ -14,12 +14,14 @@ extension MIDIFile {
     mutating func decode(
         rawData: some DataProtocol & Sendable,
         bundleRPNAndNRPNEvents: Bool,
-        maxTrackEventCount: Int?
+        maxTrackEventCount: Int?,
+        predicate: DecodePredicate?
     ) throws(MIDIFile.DecodeError) {
         let parser = try Parser(data: rawData)
         let parsedChunks = try parser.chunks(
             bundleRPNAndNRPNEvents: bundleRPNAndNRPNEvents,
-            maxTrackEventCount: maxTrackEventCount
+            maxTrackEventCount: maxTrackEventCount,
+            predicate: predicate
         )
         header = parser.fileDescriptor.header
         chunks = parsedChunks
@@ -30,12 +32,14 @@ extension MIDIFile {
     mutating func decode(
         rawData: some DataProtocol & Sendable,
         bundleRPNAndNRPNEvents: Bool,
-        maxTrackEventCount: Int?
+        maxTrackEventCount: Int?,
+        predicate: DecodePredicate?
     ) async throws(MIDIFile.DecodeError) {
         let parser = try Parser(data: rawData)
         let parsedChunks = try await parser.chunks(
             bundleRPNAndNRPNEvents: bundleRPNAndNRPNEvents,
-            maxTrackEventCount: maxTrackEventCount
+            maxTrackEventCount: maxTrackEventCount,
+            predicate: predicate
         )
         header = parser.fileDescriptor.header
         chunks = parsedChunks

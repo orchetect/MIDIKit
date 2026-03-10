@@ -98,10 +98,13 @@ extension MIDIFileParserProtocol {
         timebase: MIDIFile.TimeBase,
         bundleRPNAndNRPNEvents: Bool,
         maxTrackEventCount: Int?,
+        predicate: MIDIFile.DecodePredicate?,
         in fileData: some DataProtocol & Sendable
     ) throws(MIDIFile.DecodeError) -> [MIDIFile.Chunk] {
         var newChunks: [MIDIFile.Chunk] = []
         for (index, chunkDescriptor) in chunkDescriptors.enumerated() {
+            if let predicate { guard predicate(chunkDescriptor.chunkType, index) else { continue } }
+            
             let newChunk = try fileData.withDataParser { parser throws(MIDIFile.DecodeError) in
                 try parser.toMIDIFileDecodeError(
                     try parser.seek(to: chunkDescriptor.bodyByteStartOffset)
@@ -131,6 +134,7 @@ extension MIDIFileParserProtocol {
         timebase: MIDIFile.TimeBase,
         bundleRPNAndNRPNEvents: Bool,
         maxTrackEventCount: Int?,
+        predicate: MIDIFile.DecodePredicate?,
         in fileData: some DataProtocol & Sendable
     ) async throws(MIDIFile.DecodeError) -> [MIDIFile.Chunk] {
         let result: Result<[MIDIFile.Chunk], MIDIFile.DecodeError> = await withTaskGroup(
@@ -140,6 +144,8 @@ extension MIDIFileParserProtocol {
             var newChunks: [Int: MIDIFile.Chunk] = [:]
             
             for (index, chunkDescriptor) in chunkDescriptors.enumerated() {
+                if let predicate { guard predicate(chunkDescriptor.chunkType, index) else { continue } }
+                
                 group.addTask {
                     do throws(MIDIFile.DecodeError) {
                         let chunk = try fileData.withDataParser { parser throws(MIDIFile.DecodeError) in
