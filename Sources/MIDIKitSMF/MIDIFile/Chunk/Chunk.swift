@@ -63,20 +63,12 @@ extension MIDIFile.Chunk {
             chunk
         }
     }
-}
-
-extension MIDIFileChunk {
-    /// Wraps the concrete struct in its corresponding ``MIDIFile/Chunk`` enum case wrapper.
-    public var wrappedChunk: MIDIFile.Chunk {
+    
+    /// MIDI file chunk type.
+    public var chunkType: MIDIFile.ChunkType {
         switch self {
-        case let chunk as MIDIFile.Chunk.Track:
-            .track(chunk)
-            
-        case let chunk as MIDIFile.Chunk.UnrecognizedChunk:
-            .other(chunk)
-            
-        default:
-            fatalError()
+        case let .track(chunk): chunk.chunkType
+        case let .other(chunk): chunk.chunkType
         }
     }
 }
