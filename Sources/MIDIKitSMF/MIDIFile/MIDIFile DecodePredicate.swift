@@ -6,5 +6,5 @@
 
 extension MIDIFile {
     /// MIDI file decoding predicate.
-    public typealias DecodePredicate = (_ chunkType: ChunkType, _ chunkIndex: Int) -> Bool
+    public typealias DecodePredicate = @Sendable (_ chunkType: ChunkType, _ chunkIndex: Int) -> Bool
 }
