@@ -71,22 +71,13 @@ extension MIDIFile.TimeBase {
 
 extension MIDIFile.TimeBase {
     /// Initialize from raw data.
-    public init?(rawData: Data) {
-        guard rawData.count == 2 else {
+    public init?(rawData data: some DataProtocol) {
+        guard data.count == 2 else {
             return nil
         }
         
-        self.init(rawBytes: Array(rawData.prefix(2)))
-    }
-    
-    /// Initialize from raw data.
-    public init?(rawBytes bytes: [UInt8]) {
-        guard bytes.count == 2 else {
-            return nil
-        }
-        
-        let byte1 = bytes[0]
-        let byte2 = bytes[1]
+        let byte1 = data[atOffset: 0]
+        let byte2 = data[atOffset: 1]
         
         switch (byte1 & 0b10000000) >> 7 {
         case 0b0: // musical
