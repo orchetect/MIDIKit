@@ -19,16 +19,14 @@ import Testing
         #expect(timeBase.rawData.toUInt8Bytes() == rawData)
         
         do {
-            guard case let .musical(tpq) = MIDIFile
-                .TimeBase(rawBytes: rawData)
+            guard case let .musical(tpq) = MIDIFile.TimeBase(rawData: rawData)
             else { Issue.record(); return }
             
             #expect(tpq == 480)
         }
         
         do {
-            guard case let .musical(tpq) = MIDIFile
-                .TimeBase(rawData: rawData.toData())
+            guard case let .musical(tpq) = MIDIFile.TimeBase(rawData: rawData.toData())
             else { Issue.record(); return }
             
             #expect(tpq == 480)
@@ -47,7 +45,7 @@ import Testing
             guard case let .timecode(
                 smpteFormat,
                 ticksPerFrame
-            ) = MIDIFile.TimeBase(rawBytes: rawData)
+            ) = MIDIFile.TimeBase(rawData: rawData)
             else { Issue.record(); return }
             
             #expect(smpteFormat == .fps25)

@@ -118,7 +118,7 @@ import Testing
         
         // test if midiFile structs are equal by way of Equatable
         
-        let dp8MarkersRawData = try await MIDIFile(rawData: kMIDIFile.dp8Markers.toData())
+        let dp8MarkersRawData = try await MIDIFile(rawData: kMIDIFile.dp8Markers)
         #expect(midiFile == dp8MarkersRawData)
         
         // test if raw data is equal

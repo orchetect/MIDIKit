@@ -19,7 +19,7 @@ import Testing
     @Test
     func midiFileParse_NonAsync() throws { // DO NOT MARK THIS METHOD ASYNC!!!
         // Note: It's ok if this throws a deprecation warning. We need to test this specific method.
-        let midiFile = try /* NOT AWAIT! */ MIDIFile(rawData: kMIDIFile.dp8Markers.toData())
+        let midiFile = try /* NOT AWAIT! */ MIDIFile(rawData: kMIDIFile.dp8Markers)
         
         try #require(midiFile.chunks.count == 3)
         
@@ -31,7 +31,7 @@ import Testing
     /// Just ensure file parses successfully. Not testing contents in-depth.
     @Test
     func midiFileParse_Async() async throws { // MUST BE MARKED ASYNC!!!
-        let midiFile = try await MIDIFile(rawData: kMIDIFile.dp8Markers.toData())
+        let midiFile = try await MIDIFile(rawData: kMIDIFile.dp8Markers)
         
         try #require(midiFile.chunks.count == 3)
         
@@ -42,7 +42,7 @@ import Testing
     /// Test parsing a MIDI file that contains an unrecognized chunk.
     @Test
     func customChunk() async throws {
-        let midiFile = try await MIDIFile(rawData: kMIDIFile.customChunk.toData())
+        let midiFile = try await MIDIFile(rawData: kMIDIFile.customChunk)
         
         try #require(midiFile.chunks.count == 2)
         
@@ -73,5 +73,15 @@ import Testing
                  0x25, 0x00, 0x00, 0x20, 0x42, 0x30, 0x02, 0x38,
                  0x16, 0x40, 0x5A]
         )
+    }
+    
+    @Test
+    func predicate() async throws {
+        let midiFile = try await MIDIFile(rawData: kMIDIFile.dp8Markers)
+        
+        try #require(midiFile.chunks.count == 3)
+        
+        let encodedData = try midiFile.rawData()
+        #expect(encodedData.toUInt8Bytes() == kMIDIFile.dp8Markers)
     }
 }
