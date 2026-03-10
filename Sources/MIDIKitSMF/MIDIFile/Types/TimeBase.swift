@@ -8,8 +8,6 @@ import Foundation
 import MIDIKitCore
 internal import MIDIKitInternals
 
-// MARK: - timeBase
-
 extension MIDIFile {
     /// MIDI file timebase as described in the MIDI file header.
     public enum TimeBase {

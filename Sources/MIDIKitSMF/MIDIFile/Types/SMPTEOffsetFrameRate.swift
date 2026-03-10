@@ -6,8 +6,6 @@
 
 import MIDIKitCore
 
-// MARK: - SMPTEOffsetFrameRate
-
 extension MIDIFile {
     /// For use in SMPTE Offset track events
     public enum SMPTEOffsetFrameRate: UInt8 {
