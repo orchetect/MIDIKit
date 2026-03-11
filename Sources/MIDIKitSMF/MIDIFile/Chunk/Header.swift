@@ -79,10 +79,24 @@ internal import SwiftDataParsing
 
 extension MIDIFile.Chunk {
     /// Header: `MThd` chunk type.
+    ///
+    /// > Note:
+    /// >
+    /// > The header model omits the chunk (track) count property. It is automatically synthesized
+    /// > based on the chunk count in the `MIDIFile.chunks` array when calling `MIDIFile.rawData()`.
     public struct Header {
+        /// MIDI file format.
         public var format: MIDIFile.Format = .multipleTracksSynchronous
         
+        /// MIDI file timebase (for duration calculations).
         public var timebase: MIDIFile.Timebase = .default()
+        
+        /// (Internal) The number of chunks that follow the header chunk.
+        ///
+        /// This will be non-`nil` when returning a Header instance from a `MIDIFile` decoder.
+        /// This value is ignored when encoding raw MIDI File data, as the chunk count is synthesized
+        /// from the number of chunks present in the `MIDIFile`'s `chunks` array.
+        var parsedChunkCount: Int? = nil
         
         public init() { }
         
@@ -92,6 +106,17 @@ extension MIDIFile.Chunk {
         ) {
             self.format = format
             self.timebase = timebase
+            parsedChunkCount = nil
+        }
+        
+        init(
+            format: MIDIFile.Format,
+            timebase: MIDIFile.Timebase,
+            parsedChunkCount: Int?
+        ) {
+            self.format = format
+            self.timebase = timebase
+            self.parsedChunkCount = parsedChunkCount
         }
     }
 }
@@ -181,6 +206,8 @@ extension MIDIFile.Chunk.Header {
                 )
             }
             
+            parsedChunkCount = Int(numberOfChunks) // UInt16 is guaranteed to fit into `Int`
+            
             guard let timeDivision = try? parser.read(bytes: 2) else {
                 throw .malformed(
                     "Could not read division info from file header; end of file encountered."
@@ -195,8 +222,8 @@ extension MIDIFile.Chunk.Header {
             
             self.timebase = timebase
             
-            // technically Format 0 can only have one track (chunk),
-            // so header must always state a track count of 1 in that event
+            // technically Format 0 can only have one track (chunk), and in that case the
+            // header should always state a track count of 1 (but sometimes it disobeys this)
             if midiFileFormat == .singleTrack,
                numberOfChunks != 1
             {
