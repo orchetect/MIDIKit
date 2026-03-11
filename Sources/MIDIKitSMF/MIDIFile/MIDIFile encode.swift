@@ -55,7 +55,8 @@ extension MIDIFile {
 
         // ____ Header ____
 
-        data += try header.midi1SMFRawBytes(withTrackCount: chunks.count)
+        // header encodes track chunk count only, not including non-track chunks
+        data += try header.midi1SMFRawBytes(withTrackCount: tracks.count)
 
         // ____ Chunks ____
 
@@ -88,7 +89,8 @@ extension MIDIFile {
         
         // ____ Header ____
         
-        data += try header.midi1SMFRawBytes(withTrackCount: chunks.count)
+        // header encodes track chunk count only, not including non-track chunks
+        data += try header.midi1SMFRawBytes(withTrackCount: tracks.count)
         
         // ____ Chunks ____
         
