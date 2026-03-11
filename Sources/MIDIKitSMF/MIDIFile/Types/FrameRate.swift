@@ -11,7 +11,7 @@ import MIDIKitCore
 extension MIDIFile {
     /// Timecode Frame Rate
     /// (For use in the MIDI file header when
-    /// ``TimeBase-swift.enum/timecode(smpteFormat:ticksPerFrame:)`` timebase is selected.)
+    /// ``Timebase-swift.enum/timecode(smpteFormat:ticksPerFrame:)`` timebase is selected.)
     ///
     /// MIDI file header time division 2-byte value:
     /// Bits 8 - 15 (i.e. the first byte) specifies the number of frames per second (fps), and will

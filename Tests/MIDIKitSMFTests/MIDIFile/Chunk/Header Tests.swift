@@ -18,11 +18,11 @@ import Testing
     func init_Type0() async throws {
         let header = MIDIFile.Chunk.Header(
             format: .singleTrack,
-            timeBase: .musical(ticksPerQuarterNote: 720)
+            timebase: .musical(ticksPerQuarterNote: 720)
         )
         
         #expect(header.format == .singleTrack)
-        #expect(header.timeBase == .musical(ticksPerQuarterNote: 720))
+        #expect(header.timebase == .musical(ticksPerQuarterNote: 720))
         
         let rawData: [UInt8] = [0x4D, 0x54, 0x68, 0x64, // MThd header
                                 0x00, 0x00, 0x00, 0x06, // length
@@ -44,18 +44,18 @@ import Testing
         let header = try MIDIFile.Chunk.Header(midi1SMFRawBytes: rawData)
         
         #expect(header.format == .singleTrack)
-        #expect(header.timeBase == .musical(ticksPerQuarterNote: 720))
+        #expect(header.timebase == .musical(ticksPerQuarterNote: 720))
     }
     
     @Test
     func init_Type1() async throws {
         let header = MIDIFile.Chunk.Header(
             format: .multipleTracksSynchronous,
-            timeBase: .musical(ticksPerQuarterNote: 720)
+            timebase: .musical(ticksPerQuarterNote: 720)
         )
         
         #expect(header.format == .multipleTracksSynchronous)
-        #expect(header.timeBase == .musical(ticksPerQuarterNote: 720))
+        #expect(header.timebase == .musical(ticksPerQuarterNote: 720))
         
         let rawData: [UInt8] = [0x4D, 0x54, 0x68, 0x64, // MThd header
                                 0x00, 0x00, 0x00, 0x06, // length
@@ -77,18 +77,18 @@ import Testing
         let header = try MIDIFile.Chunk.Header(midi1SMFRawBytes: rawData)
         
         #expect(header.format == .multipleTracksSynchronous)
-        #expect(header.timeBase == .musical(ticksPerQuarterNote: 720))
+        #expect(header.timebase == .musical(ticksPerQuarterNote: 720))
     }
     
     @Test
     func init_Type2() async throws {
         let header = MIDIFile.Chunk.Header(
             format: .multipleTracksAsynchronous,
-            timeBase: .musical(ticksPerQuarterNote: 720)
+            timebase: .musical(ticksPerQuarterNote: 720)
         )
         
         #expect(header.format == .multipleTracksAsynchronous)
-        #expect(header.timeBase == .musical(ticksPerQuarterNote: 720))
+        #expect(header.timebase == .musical(ticksPerQuarterNote: 720))
         
         let rawData: [UInt8] = [0x4D, 0x54, 0x68, 0x64, // MThd header
                                 0x00, 0x00, 0x00, 0x06, // length
@@ -110,7 +110,7 @@ import Testing
         let header = try MIDIFile.Chunk.Header(midi1SMFRawBytes: rawData)
         
         #expect(header.format == .multipleTracksAsynchronous)
-        #expect(header.timeBase == .musical(ticksPerQuarterNote: 720))
+        #expect(header.timebase == .musical(ticksPerQuarterNote: 720))
     }
     
     // MARK: - Edge Cases

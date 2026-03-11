@@ -34,9 +34,8 @@ extension MIDIFileEvent {
 
 extension MIDIFileEvent.DeltaTime: Equatable {
     public static func == (lhs: Self, rhs: Self) -> Bool {
-        let timeBase = MIDIFile.TimeBase.musical(ticksPerQuarterNote: 960)
-
-        return lhs.ticksValue(using: timeBase) == rhs.ticksValue(using: timeBase)
+        let timebase = MIDIFile.Timebase.musical(ticksPerQuarterNote: 960)
+        return lhs.ticksValue(using: timebase) == rhs.ticksValue(using: timebase)
     }
 }
 
@@ -77,7 +76,7 @@ extension MIDIFileEvent.DeltaTime: CustomDebugStringConvertible {
 extension MIDIFileEvent.DeltaTime {
     public init?(
         ticks: UInt32,
-        using timeBase: MIDIFile.TimeBase
+        using timebase: MIDIFile.Timebase
     ) {
         // TODO: add init here that sets self = a certain enum case based on provided ticks and provided timebase
         
@@ -88,10 +87,10 @@ extension MIDIFileEvent.DeltaTime {
 // MARK: - ticksValue
 
 extension MIDIFileEvent.DeltaTime {
-    public func ticksValue(using timeBase: MIDIFile.TimeBase) -> UInt32 {
+    public func ticksValue(using timebase: MIDIFile.Timebase) -> UInt32 {
         let midiFileTicksPerQuarter: UInt32
 
-        switch timeBase {
+        switch timebase {
         case let .musical(ticksPerQuarterNote):
             midiFileTicksPerQuarter = UInt32(ticksPerQuarterNote)
 

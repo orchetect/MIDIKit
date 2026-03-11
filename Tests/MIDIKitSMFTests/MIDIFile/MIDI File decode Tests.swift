@@ -52,7 +52,7 @@ import Testing
         let midiFile = try await MIDIFile(rawData: kMIDIFile.dp8Markers) { fileHeader, chunkCount, chunkIndex, result in
             // check header info
             #expect(fileHeader.format == .multipleTracksSynchronous)
-            #expect(fileHeader.timeBase == .musical(ticksPerQuarterNote: 480))
+            #expect(fileHeader.timebase == .musical(ticksPerQuarterNote: 480))
             
             // check chunk count
             #expect(chunkCount == 3)

@@ -12,21 +12,21 @@ import Testing
 @Suite struct Timebase_Tests {
     @Test
     func initMusical() async {
-        let timeBase = MIDIFile.TimeBase.musical(ticksPerQuarterNote: 480)
+        let timebase = MIDIFile.Timebase.musical(ticksPerQuarterNote: 480)
         
         let rawData: [UInt8] = [0x01, 0xE0]
         
-        #expect(timeBase.rawData.toUInt8Bytes() == rawData)
+        #expect(timebase.rawData.toUInt8Bytes() == rawData)
         
         do {
-            guard case let .musical(tpq) = MIDIFile.TimeBase(rawData: rawData)
+            guard case let .musical(tpq) = MIDIFile.Timebase(rawData: rawData)
             else { Issue.record(); return }
             
             #expect(tpq == 480)
         }
         
         do {
-            guard case let .musical(tpq) = MIDIFile.TimeBase(rawData: rawData.toData())
+            guard case let .musical(tpq) = MIDIFile.Timebase(rawData: rawData.toData())
             else { Issue.record(); return }
             
             #expect(tpq == 480)
@@ -35,17 +35,17 @@ import Testing
     
     @Test
     func initTimecode() async {
-        let timeBase = MIDIFile.TimeBase.timecode(smpteFormat: .fps25, ticksPerFrame: 80)
+        let timebase = MIDIFile.Timebase.timecode(smpteFormat: .fps25, ticksPerFrame: 80)
         
         let rawData: [UInt8] = [0b11100111, 0x50]
         
-        #expect(timeBase.rawData.toUInt8Bytes() == rawData)
+        #expect(timebase.rawData.toUInt8Bytes() == rawData)
         
         do {
             guard case let .timecode(
                 smpteFormat,
                 ticksPerFrame
-            ) = MIDIFile.TimeBase(rawData: rawData)
+            ) = MIDIFile.Timebase(rawData: rawData)
             else { Issue.record(); return }
             
             #expect(smpteFormat == .fps25)
@@ -56,7 +56,7 @@ import Testing
             guard case let .timecode(
                 smpteFormat,
                 ticksPerFrame
-            ) = MIDIFile.TimeBase(rawData: rawData.toData())
+            ) = MIDIFile.Timebase(rawData: rawData.toData())
             else { Issue.record(); return }
             
             #expect(smpteFormat == .fps25)

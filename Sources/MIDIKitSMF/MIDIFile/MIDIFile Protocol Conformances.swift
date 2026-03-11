@@ -33,7 +33,7 @@ extension MIDIFile: CustomStringConvertible {
     public func description(trackMaxEventCount: Int?) -> String {
         descriptionBuilder(
             formatDesc: { $0.description },
-            timeBaseDesc: { $0.description },
+            timebaseDesc: { $0.description },
             chunkDesc: {
                 switch $0 {
                 case let .track(track): track.description(maxEventCount: trackMaxEventCount)
@@ -53,7 +53,7 @@ extension MIDIFile: CustomDebugStringConvertible {
     public func debugDescription(trackMaxEventCount: Int?) -> String {
         descriptionBuilder(
             formatDesc: { $0.description },
-            timeBaseDesc: { $0.description },
+            timebaseDesc: { $0.description },
             chunkDesc: {
                 switch $0 {
                 case let .track(track): track.debugDescription(maxEventCount: trackMaxEventCount)
@@ -67,14 +67,14 @@ extension MIDIFile: CustomDebugStringConvertible {
 extension MIDIFile {
     func descriptionBuilder(
         formatDesc: (Format) -> String,
-        timeBaseDesc: (TimeBase) -> String,
+        timebaseDesc: (Timebase) -> String,
         chunkDesc: (_ chunk: Chunk) -> String
     ) -> String {
         var outputString = ""
         
         outputString += "MIDIFile(".newLined
         outputString += "  format: \(formatDesc(format))".newLined
-        outputString += "  timebase: \(timeBaseDesc(timeBase))".newLined
+        outputString += "  timebase: \(timebaseDesc(timebase))".newLined
         outputString += "  chunks (\(chunks.count)): ".newLined
         
         for chunk in chunks.enumerated() {

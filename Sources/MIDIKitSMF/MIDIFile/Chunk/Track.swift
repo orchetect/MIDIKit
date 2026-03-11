@@ -150,7 +150,7 @@ extension MIDIFile.Chunk.Track {
     /// Init from MIDI file data stream.
     public init<D: DataProtocol>(
         midi1SMFRawBytesStream stream: D,
-        timebase: MIDIFile.TimeBase,
+        timebase: MIDIFile.Timebase,
         bundleRPNAndNRPNEvents: Bool,
         maxEventCount: Int? = nil
     ) throws(MIDIFile.DecodeError) {
@@ -209,7 +209,7 @@ extension MIDIFile.Chunk.Track {
     /// Init from raw data stream, excluding the header identifier and length.
     init<D: DataProtocol>(
         midi1SMFRawBytes rawData: D,
-        timebase: MIDIFile.TimeBase,
+        timebase: MIDIFile.Timebase,
         bundleRPNAndNRPNEvents: Bool,
         maxEventCount: Int? = nil
     ) throws(MIDIFile.DecodeError) {
@@ -425,7 +425,7 @@ extension MIDIFile.Chunk.Track {
 
 extension MIDIFile.Chunk.Track {
     func midi1SMFRawBytes<D: MutableDataProtocol>(
-        using timeBase: MIDIFile.TimeBase
+        using timebase: MIDIFile.Timebase
     ) throws(MIDIFile.EncodeError) -> D {
         // assemble chunk body without header or length
         
@@ -433,7 +433,7 @@ extension MIDIFile.Chunk.Track {
         
         for event in events {
             let unwrapped = event.smfUnwrappedEvent
-            bodyData.append(deltaTime: unwrapped.delta.ticksValue(using: timeBase))
+            bodyData.append(deltaTime: unwrapped.delta.ticksValue(using: timebase))
             bodyData.append(contentsOf: unwrapped.event.midi1SMFRawBytes() as D)
         }
         

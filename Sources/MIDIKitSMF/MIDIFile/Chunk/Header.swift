@@ -82,16 +82,16 @@ extension MIDIFile.Chunk {
     public struct Header {
         public var format: MIDIFile.Format = .multipleTracksSynchronous
         
-        public var timeBase: MIDIFile.TimeBase = .default()
+        public var timebase: MIDIFile.Timebase = .default()
         
         public init() { }
         
         public init(
             format: MIDIFile.Format,
-            timeBase: MIDIFile.TimeBase
+            timebase: MIDIFile.Timebase
         ) {
             self.format = format
-            self.timeBase = timeBase
+            self.timebase = timebase
         }
     }
 }
@@ -187,13 +187,13 @@ extension MIDIFile.Chunk.Header {
                 )
             }
         
-            guard let timeBase = MIDIFile.TimeBase(rawData: timeDivision) else {
+            guard let timebase = MIDIFile.Timebase(rawData: timeDivision) else {
                 throw .malformed(
                     "Could not decode timebase."
                 )
             }
         
-            self.timeBase = timeBase
+            self.timebase = timebase
         
             // technically Format 0 can only have one track,
             // so header must always state a track count of 1 in that event
@@ -248,12 +248,12 @@ extension MIDIFile.Chunk.Header {
         
         // Time division: ticks per quarter note
         // Specifies the timing interval to be used, and whether timecode (Hrs.Mins.Secs.Frames) or
-        // metrical (Bar.Beat) timeBase is to be used.
+        // metrical (Bar.Beat) timebase is to be used.
         // 15-bit variable-length encoded value: big endian, with top bit reserved for timecode flag
-        // Bit 15 = 0 : metrical timeBase
+        // Bit 15 = 0 : metrical timebase
         // Bit 15 = 1 : timecode
         
-        data += timeBase.rawData
+        data += timebase.rawData
         
         return data
     }

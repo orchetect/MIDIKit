@@ -51,16 +51,16 @@ let data = try midiFile.rawData()
 try data.write(to: url)
 ```
 
-## Accessing Meta Data, Tracks, and Events on Tracks
+## Accessing Metadata, Tracks, and Events on Tracks
 
 MIDI file contents can be read and written by accessing these properties.
 
 ```swift
-// metadata
+// header chunk metadata
 midiFile.format // type 0, 1, or 2 MIDI file
-midiFile.timeBase // musical or timecode-based
+midiFile.timebase // musical or timecode-based
 
-// chunks, which includes tracks:
+// all chunks, which includes tracks:
 midiFile.chunks // [Chunk]
 
 // track 1 events

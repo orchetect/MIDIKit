@@ -13,7 +13,7 @@ import Testing
         var midiFile = MIDIFile()
         
         midiFile.format = .singleTrack // Type 1
-        midiFile.timeBase = .musical(ticksPerQuarterNote: 480)
+        midiFile.timebase = .musical(ticksPerQuarterNote: 480)
         
         midiFile.chunks = [
             .track([
@@ -30,7 +30,7 @@ import Testing
     func encodeDP8Markers() async throws {
         var midiFile = MIDIFile()
         
-        midiFile.timeBase = .musical(ticksPerQuarterNote: 480)
+        midiFile.timebase = .musical(ticksPerQuarterNote: 480)
         
         // 3 tracks
         

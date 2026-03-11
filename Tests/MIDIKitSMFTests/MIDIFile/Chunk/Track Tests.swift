@@ -31,7 +31,7 @@ import Testing
         
         // generate raw bytes
         
-        let timebase: MIDIFile.TimeBase = .musical(ticksPerQuarterNote: 960)
+        let timebase: MIDIFile.Timebase = .musical(ticksPerQuarterNote: 960)
         let generatedData: Data = try track.midi1SMFRawBytes(using: timebase)
         
         #expect(generatedData.toUInt8Bytes() == bytes)
@@ -77,7 +77,7 @@ import Testing
         
         // generate raw bytes
         
-        let timebase: MIDIFile.TimeBase = .musical(ticksPerQuarterNote: 960)
+        let timebase: MIDIFile.Timebase = .musical(ticksPerQuarterNote: 960)
         let generatedData: Data = try track.midi1SMFRawBytes(using: timebase)
         
         #expect(generatedData.toUInt8Bytes() == bytes)
@@ -102,7 +102,7 @@ import Testing
     @Test
     func eventsAtBeatPositions() async throws {
         let ppq: UInt16 = 480
-        var midiFile = MIDIFile(timeBase: .musical(ticksPerQuarterNote: UInt16(ppq)))
+        var midiFile = MIDIFile(timebase: .musical(ticksPerQuarterNote: UInt16(ppq)))
         
         midiFile.chunks = [
             .track([
@@ -171,7 +171,7 @@ import Testing
         
         // generate raw bytes
         
-        let timebase: MIDIFile.TimeBase = .musical(ticksPerQuarterNote: 960)
+        let timebase: MIDIFile.Timebase = .musical(ticksPerQuarterNote: 960)
         let generatedData: Data = try track.midi1SMFRawBytes(using: timebase)
         
         // create comparison track
@@ -226,7 +226,7 @@ import Testing
         // author MIDI file
         let events: [MIDIFileEvent] = [textEvent, seqSpecificEvent]
         let track = MIDIFile.Chunk.Track(events: events)
-        let midiFile = MIDIFile(format: .singleTrack, timeBase: .musical(ticksPerQuarterNote: 480), chunks: [.track(track)])
+        let midiFile = MIDIFile(format: .singleTrack, timebase: .musical(ticksPerQuarterNote: 480), chunks: [.track(track)])
         
         // encode and decode
         let midiFileData = try midiFile.rawData()

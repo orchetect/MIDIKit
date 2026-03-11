@@ -51,7 +51,7 @@ extension MIDIFile.Parser {
                 return try Self.parseChunk(
                     chunkDescriptor: chunkDescriptor,
                     chunkIndex: index,
-                    timebase: fileDescriptor.header.timeBase,
+                    timebase: fileDescriptor.header.timebase,
                     bundleRPNAndNRPNEvents: bundleRPNAndNRPNEvents,
                     maxTrackEventCount: maxTrackEventCount,
                     in: chunkData
@@ -91,7 +91,7 @@ extension MIDIFile.Parser {
                             return try Self.parseChunk(
                                 chunkDescriptor: chunkDescriptor,
                                 chunkIndex: index,
-                                timebase: fileDescriptor.header.timeBase,
+                                timebase: fileDescriptor.header.timebase,
                                 bundleRPNAndNRPNEvents: bundleRPNAndNRPNEvents,
                                 maxTrackEventCount: maxTrackEventCount,
                                 in: chunkData
@@ -149,7 +149,7 @@ extension MIDIFile.Parser {
                                     return try Self.parseChunk(
                                         chunkDescriptor: chunkDescriptor,
                                         chunkIndex: index,
-                                        timebase: fileDescriptor.header.timeBase,
+                                        timebase: fileDescriptor.header.timebase,
                                         bundleRPNAndNRPNEvents: bundleRPNAndNRPNEvents,
                                         maxTrackEventCount: maxTrackEventCount,
                                         in: chunkData
@@ -264,7 +264,7 @@ extension MIDIFile.Parser {
     static func parseChunk(
         chunkDescriptor: ChunkDescriptor,
         chunkIndex: Int,
-        timebase: MIDIFile.TimeBase,
+        timebase: MIDIFile.Timebase,
         bundleRPNAndNRPNEvents: Bool,
         maxTrackEventCount: Int?,
         in chunkData: some DataProtocol

@@ -1,5 +1,5 @@
 //
-//  TimeBase.swift
+//  Timebase.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
@@ -10,7 +10,7 @@ internal import MIDIKitInternals
 
 extension MIDIFile {
     /// MIDI file timebase as described in the MIDI file header.
-    public enum TimeBase {
+    public enum Timebase {
         /// Musical: Delta-time ticks per quarter note (PPQN / PPQ / PPQBase / TPQN).
         ///
         /// Common values: 96, 120, 480, 960. Cubase exports at 480 by default.
@@ -29,17 +29,17 @@ extension MIDIFile {
     }
 }
 
-extension MIDIFile.TimeBase: Equatable { }
+extension MIDIFile.Timebase: Equatable { }
 
-extension MIDIFile.TimeBase: Hashable { }
+extension MIDIFile.Timebase: Hashable { }
 
-extension MIDIFile.TimeBase: Identifiable {
+extension MIDIFile.Timebase: Identifiable {
     public var id: Self { self }
 }
 
-extension MIDIFile.TimeBase: Sendable { }
+extension MIDIFile.Timebase: Sendable { }
 
-extension MIDIFile.TimeBase: CustomStringConvertible {
+extension MIDIFile.Timebase: CustomStringConvertible {
     public var description: String {
         switch self {
         case let .musical(ticksPerQuarterNote):
@@ -51,15 +51,15 @@ extension MIDIFile.TimeBase: CustomStringConvertible {
     }
 }
 
-extension MIDIFile.TimeBase: CustomDebugStringConvertible {
+extension MIDIFile.Timebase: CustomDebugStringConvertible {
     public var debugDescription: String {
-        "TimeBase(" + description + ")"
+        "Timebase(" + description + ")"
     }
 }
 
 // MARK: - Static Constructors
 
-extension MIDIFile.TimeBase {
+extension MIDIFile.Timebase {
     public static func `default`() -> Self {
         .musical(ticksPerQuarterNote: 960)
     }
@@ -67,7 +67,7 @@ extension MIDIFile.TimeBase {
 
 // MARK: - Init
 
-extension MIDIFile.TimeBase {
+extension MIDIFile.Timebase {
     /// Initialize from raw data.
     public init?(rawData data: some DataProtocol) {
         guard data.count == 2 else {
@@ -98,7 +98,7 @@ extension MIDIFile.TimeBase {
 
 // MARK: - Properties
 
-extension MIDIFile.TimeBase {
+extension MIDIFile.Timebase {
     /// Returns the timebase encoded as raw data.
     public var rawData: Data {
         switch self {

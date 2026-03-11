@@ -35,7 +35,7 @@ import Testing
         // (not implemented, so we need to test parsing using a track instead)
         // let event = try MIDIFileEvent.NRPN(midi1SMFRawBytes: bytes)
         
-        let timebase: MIDIFile.TimeBase = .musical(ticksPerQuarterNote: 960)
+        let timebase: MIDIFile.Timebase = .musical(ticksPerQuarterNote: 960)
         
         let parsedTrackA = try MIDIFile.Chunk.Track(
             midi1SMFRawBytesStream: bytes,
@@ -75,7 +75,7 @@ import Testing
         // (not implemented, so we need to test parsing using a track instead)
         // let event = try MIDIFileEvent.NRPN(midi1SMFRawBytes: bytes)
         
-        let timebase: MIDIFile.TimeBase = .musical(ticksPerQuarterNote: 960)
+        let timebase: MIDIFile.Timebase = .musical(ticksPerQuarterNote: 960)
         
         let parsedTrackA = try MIDIFile.Chunk.Track(
             midi1SMFRawBytesStream: bytes,
@@ -137,7 +137,7 @@ import Testing
         // (not implemented, so we need to test parsing using a track instead)
         // let event = try MIDIFileEvent.NRPN(midi1SMFRawBytes: bytes)
         
-        let timebase: MIDIFile.TimeBase = .musical(ticksPerQuarterNote: 960)
+        let timebase: MIDIFile.Timebase = .musical(ticksPerQuarterNote: 960)
         
         let parsedTrackA = try MIDIFile.Chunk.Track(
             midi1SMFRawBytesStream: bytes,
@@ -175,7 +175,7 @@ import Testing
         // (not implemented, so we need to test parsing using a track instead)
         // let event = try MIDIFileEvent.NRPN(midi1SMFRawBytes: bytes)
         
-        let timebase: MIDIFile.TimeBase = .musical(ticksPerQuarterNote: 960)
+        let timebase: MIDIFile.Timebase = .musical(ticksPerQuarterNote: 960)
         
         let parsedTrackA = try MIDIFile.Chunk.Track(
             midi1SMFRawBytesStream: bytes,
@@ -244,7 +244,7 @@ import Testing
         
         // parse raw bytes
         
-        let timebase: MIDIFile.TimeBase = .musical(ticksPerQuarterNote: 960)
+        let timebase: MIDIFile.Timebase = .musical(ticksPerQuarterNote: 960)
         let rpnTotalTicks: UInt32 = 0x01 + 0x02 + 0x03 + 0x04
         
         let parsedTrackA = try MIDIFile.Chunk.Track(
