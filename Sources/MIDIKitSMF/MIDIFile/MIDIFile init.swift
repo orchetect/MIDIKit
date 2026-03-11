@@ -12,7 +12,6 @@ internal import MIDIKitInternals
 
 extension MIDIFile {
     /// Initialize by loading the contents of a MIDI file's raw data.
-    @available(*, deprecated, message: "This method is less performant than its async variant. Considering calling with await.")
     public init(
         rawData: some DataProtocol & Sendable,
         options: DecodeOptions = DecodeOptions(),
@@ -67,7 +66,6 @@ extension MIDIFile {
 
 extension MIDIFile {
     /// Initialize by loading the contents of a MIDI file from disk.
-    @available(*, deprecated, message: "This method is less performant than its async variant. Considering calling with await.")
     public init(
         midiFile path: String,
         options: DecodeOptions = DecodeOptions(),
@@ -121,7 +119,6 @@ extension MIDIFile {
 
 extension MIDIFile {
     /// Initialize by loading the contents of a MIDI file from disk.
-    @available(*, deprecated, message: "This method is less performant than its async variant. Considering calling with await.")
     public init(
         midiFile url: URL,
         options: DecodeOptions = DecodeOptions(),
