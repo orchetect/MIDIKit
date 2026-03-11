@@ -83,20 +83,13 @@ extension MIDIFile.Chunk {
     /// > Note:
     /// >
     /// > The header model omits the chunk (track) count property. It is automatically synthesized
-    /// > based on the chunk count in the `MIDIFile.chunks` array when calling `MIDIFile.rawData()`.
+    /// > based on the track count in the `MIDIFile.chunks` array when calling `MIDIFile.rawData()`.
     public struct Header {
         /// MIDI file format.
         public var format: MIDIFile.Format = .multipleTracksSynchronous
         
         /// MIDI file timebase (for duration calculations).
         public var timebase: MIDIFile.Timebase = .default()
-        
-        /// (Internal) The number of chunks that follow the header chunk.
-        ///
-        /// This will be non-`nil` when returning a Header instance from a `MIDIFile` decoder.
-        /// This value is ignored when encoding raw MIDI File data, as the chunk count is synthesized
-        /// from the number of chunks present in the `MIDIFile`'s `chunks` array.
-        var parsedChunkCount: Int? = nil
         
         public init() { }
         
@@ -106,17 +99,6 @@ extension MIDIFile.Chunk {
         ) {
             self.format = format
             self.timebase = timebase
-            parsedChunkCount = nil
-        }
-        
-        init(
-            format: MIDIFile.Format,
-            timebase: MIDIFile.Timebase,
-            parsedChunkCount: Int?
-        ) {
-            self.format = format
-            self.timebase = timebase
-            self.parsedChunkCount = parsedChunkCount
         }
     }
 }
@@ -145,14 +127,16 @@ extension MIDIFile.Chunk.Header {
 extension MIDIFile.Chunk.Header {
     static let midi1SMFFixedRawBytesLength = 14
     
-    init<D: DataProtocol>(midi1SMFRawBytes: D) throws(MIDIFile.DecodeError) {
+    static func initFrom<D: DataProtocol>(
+        midi1SMFRawBytes: D
+    ) throws(MIDIFile.DecodeError) -> (header: Self, trackCount: Int) {
         guard midi1SMFRawBytes.count >= Self.midi1SMFFixedRawBytesLength else {
             throw .malformed(
                 "File header length is not correct. File may not be a MIDI file."
             )
         }
         
-        try midi1SMFRawBytes.withDataParser { parser throws(MIDIFile.DecodeError) in
+        return try midi1SMFRawBytes.withDataParser { parser throws(MIDIFile.DecodeError) in
             // Header descriptor
             
             guard (try? parser.read(bytes: 4).toUInt8Bytes()) == Self.staticIdentifier.toASCIIBytes()
@@ -162,14 +146,14 @@ extension MIDIFile.Chunk.Header {
                 )
             }
             
-            guard let headerLengthUInt32Bytes = try? parser.read(bytes: 4)
+            guard let rawHeaderLengthBytes = try? parser.read(bytes: 4)
             else {
                 throw .malformed(
                     "Not enough bytes found when attempting to read MIDI file header length."
                 )
             }
             
-            guard let headerLengthUInt32 = headerLengthUInt32Bytes.toInt32(from: .bigEndian)
+            guard let headerLengthUInt32 = rawHeaderLengthBytes.toInt32(from: .bigEndian)
             else {
                 throw .malformed(
                     "Could not read MIDI file header length."
@@ -185,28 +169,28 @@ extension MIDIFile.Chunk.Header {
             
             // MIDI Format Type specification - 0, 1, or 2 (2 bytes: big endian)
             
-            guard let midiFileFormatRawValue = (try? parser.read(bytes: 2))?
+            guard let rawFileFormat = (try? parser.read(bytes: 2))?
                 .toUInt16(from: .bigEndian),
-                (0 ... 2).contains(midiFileFormatRawValue),
-                let uInt8Value = UInt8(exactly: midiFileFormatRawValue),
-                let midiFileFormat = MIDIFile.Format(rawValue: uInt8Value)
+                (0 ... 2).contains(rawFileFormat),
+                let fileFormatUInt8 = UInt8(exactly: rawFileFormat),
+                let format = MIDIFile.Format(rawValue: fileFormatUInt8)
             else {
                 throw .malformed(
                     "Could not read MIDI file format from file header."
                 )
             }
-
-            format = midiFileFormat
             
-            guard let numberOfChunks = (try? parser.read(bytes: 2))?
+            // note track count is NOT total chunk count after the header;
+            // non-track chunks are not included in the number
+            guard let rawTrackCount = (try? parser.read(bytes: 2))?
                 .toUInt16(from: .bigEndian)
             else {
                 throw .malformed(
-                    "Could not read number of chunks from file header; end of file encountered."
+                    "Could not read number of tracks from file header; end of file encountered."
                 )
             }
             
-            parsedChunkCount = Int(numberOfChunks) // UInt16 is guaranteed to fit into `Int`
+            let trackCount = Int(rawTrackCount) // UInt16 is guaranteed to fit into `Int`
             
             guard let timeDivision = try? parser.read(bytes: 2) else {
                 throw .malformed(
@@ -220,27 +204,28 @@ extension MIDIFile.Chunk.Header {
                 )
             }
             
-            self.timebase = timebase
-            
-            // technically Format 0 can only have one track (chunk), and in that case the
+            // technically Format 0 can only have one track, and in that case the
             // header should always state a track count of 1 (but sometimes it disobeys this)
-            if midiFileFormat == .singleTrack,
-               numberOfChunks != 1
+            if format == .singleTrack,
+               trackCount != 1
             {
                 throw .malformed(
-                    "MIDI file is Format 0 which can only contain a single track, but header reports a track count of \(numberOfChunks)."
+                    "MIDI file is Format 0 which should only contain a single track, but header reports a track count of \(trackCount)."
                 )
             }
+            
+            let header = Self(format: format, timebase: timebase)
+            return (header: header, trackCount: trackCount)
         }
     }
 }
 
 extension MIDIFile.Chunk.Header {
-    func midi1SMFRawBytes(withChunkCount chunkCount: Int) throws(MIDIFile.EncodeError) -> Data {
-        try midi1SMFRawBytes(as: Data.self, withChunkCount: chunkCount)
+    func midi1SMFRawBytes(withTrackCount trackCount: Int) throws(MIDIFile.EncodeError) -> Data {
+        try midi1SMFRawBytes(as: Data.self, withTrackCount: trackCount)
     }
     
-    func midi1SMFRawBytes<D: MutableDataProtocol>(as dataType: D.Type, withChunkCount: Int) throws(MIDIFile.EncodeError) -> D {
+    func midi1SMFRawBytes<D: MutableDataProtocol>(as dataType: D.Type, withTrackCount trackCount: Int) throws(MIDIFile.EncodeError) -> D {
         // The header chunk appears at the beginning of the file:
         //   4D 54 68 64    ASCII "MThd".
         //   00 00 00 06    4-byte size of the header; this will always be 6
@@ -262,9 +247,9 @@ extension MIDIFile.Chunk.Header {
         
         // Track count as 16-bit number (2 bytes: big endian)
         if format == .singleTrack {
-            guard withChunkCount == 1 else {
+            guard trackCount == 1 else {
                 throw .internalInconsistency(
-                    "MIDI file is Format 0 which can only contain a single track, but header reports a track count of \(withChunkCount)."
+                    "MIDI file is Format 0 which should only contain a single track, but header encoding encountered a track count of \(trackCount)."
                 )
             }
             
@@ -274,7 +259,7 @@ extension MIDIFile.Chunk.Header {
             // For format 1 or 2 files, track count can be any value. There is no limitation as far
             // as the file format is concerned, though sequencer software will generally impose a
             // practical limit.
-            data += UInt16(withChunkCount).toData(.bigEndian)
+            data += UInt16(trackCount).toData(.bigEndian)
         }
         
         // Time division: ticks per quarter note

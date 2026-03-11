@@ -205,7 +205,7 @@ extension MIDIFile.Parser {
                 )
             }
             
-            let header = try MIDIFile.Chunk.Header(midi1SMFRawBytes: readHeader)
+            let (header, expectedChunkCount) = try MIDIFile.Chunk.Header.initFrom(midi1SMFRawBytes: readHeader)
             
             // chunks
             
@@ -262,15 +262,11 @@ extension MIDIFile.Parser {
                     // if there's more bytes remaining but we've already parsed all of the expected chunks,
                     // then ignore any spurious bytes that follow as long as `ignoreBytesPastEOF` is true.
                     // if `ignoreBytesPastEOF` is false, then continue the chunk parsing loop.
-                    if let parsedChunkCount = header.parsedChunkCount {
-                        if chunkDescriptors.count == parsedChunkCount,
-                           !endOfFile,
-                           ignoreBytesPastEOF
-                        {
-                            endOfFile = true
-                        }
-                    } else {
-                        assertionFailure("Parsed chunk count in header model is `nil`. This should never happen.")
+                    if chunkDescriptors.count == expectedChunkCount,
+                       !endOfFile,
+                       ignoreBytesPastEOF
+                    {
+                        endOfFile = true
                     }
                 }
             }
