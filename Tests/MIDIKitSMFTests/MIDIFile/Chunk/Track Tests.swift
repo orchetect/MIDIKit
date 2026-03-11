@@ -229,7 +229,7 @@ import Testing
         let midiFile = MIDIFile(format: .singleTrack, timebase: .musical(ticksPerQuarterNote: 480), chunks: [.track(track)])
         
         // encode and decode
-        let midiFileData = try midiFile.rawData()
+        let midiFileData = try await midiFile.rawData()
         let decodedMIDIFile = try await MIDIFile(rawData: midiFileData)
         
         // compare events

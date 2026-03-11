@@ -23,7 +23,7 @@ import Testing
         
         try #require(midiFile.chunks.count == 3)
         
-        let encodedData = try midiFile.rawData()
+        let encodedData = try /* NOT AWAIT! */ midiFile.rawData()
         #expect(encodedData.toUInt8Bytes() == kMIDIFile.dp8Markers)
     }
     
@@ -35,7 +35,7 @@ import Testing
         
         try #require(midiFile.chunks.count == 3)
         
-        let encodedData = try midiFile.rawData()
+        let encodedData = try await midiFile.rawData()
         #expect(encodedData.toUInt8Bytes() == kMIDIFile.dp8Markers)
     }
     
@@ -73,7 +73,7 @@ import Testing
         try #require(midiFile.chunks.count == 3)
         
         // this also ensures tracks stored within the `MIDIFile` are in the correct order
-        let encodedData = try midiFile.rawData()
+        let encodedData = try await midiFile.rawData()
         #expect(encodedData.toUInt8Bytes() == kMIDIFile.dp8Markers)
     }
     
@@ -173,7 +173,7 @@ import Testing
         let track = MIDIFile.Chunk.Track(events: events)
         let midiFile = MIDIFile(chunks: [.track(track)])
         
-        let rawData = try midiFile.rawData()
+        let rawData = try await midiFile.rawData()
         
         // decode without bundleRPNAndNRPNEvents
         do {

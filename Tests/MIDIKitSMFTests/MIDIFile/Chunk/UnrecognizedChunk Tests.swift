@@ -18,9 +18,9 @@ import Testing
     func emptyData() async throws {
         let id = "ABCD"
         
-        let track = MIDIFile.Chunk.UnrecognizedChunk(id: id)
+        let chunk = MIDIFile.Chunk.UnrecognizedChunk(id: id)
         
-        #expect(track.identifier == id)
+        #expect(chunk.identifier == id)
         
         let bytes: [UInt8] = [
             0x41, 0x42, 0x43, 0x44, // ABCD
@@ -29,18 +29,16 @@ import Testing
         
         // generate raw bytes
         
-        let generatedBytes = try track.midi1SMFRawBytes(
-            using: .musical(ticksPerQuarterNote: 960)
-        ).toUInt8Bytes()
+        let generatedBytes = try chunk.midi1SMFRawBytes(as: [UInt8].self)
         
         #expect(generatedBytes == bytes)
         
         // parse raw bytes
         
-        let parsedTrack = try MIDIFile.Chunk
+        let parsedChunk = try MIDIFile.Chunk
             .UnrecognizedChunk(midi1SMFRawBytesStream: generatedBytes)
 
-        #expect(parsedTrack == parsedTrack)
+        #expect(parsedChunk == parsedChunk)
     }
     
     @Test
@@ -49,12 +47,12 @@ import Testing
         
         let id = "ABCD"
         
-        let track = MIDIFile.Chunk.UnrecognizedChunk(
+        let chunk = MIDIFile.Chunk.UnrecognizedChunk(
             id: id,
             rawData: data.toData()
         )
         
-        #expect(track.identifier == id)
+        #expect(chunk.identifier == id)
         
         let bytes: [UInt8] = [
             0x41, 0x42, 0x43, 0x44, // ABCD
@@ -63,17 +61,15 @@ import Testing
         
         // generate raw bytes
         
-        let generatedBytes = try track.midi1SMFRawBytes(
-            using: .musical(ticksPerQuarterNote: 960)
-        ).toUInt8Bytes()
+        let generatedBytes = try chunk.midi1SMFRawBytes(as: [UInt8].self)
         
         #expect(generatedBytes == bytes)
         
         // parse raw bytes
         
-        let parsedTrack = try MIDIFile.Chunk
+        let parsedChunk = try MIDIFile.Chunk
             .UnrecognizedChunk(midi1SMFRawBytesStream: generatedBytes)
 
-        #expect(parsedTrack == parsedTrack)
+        #expect(parsedChunk == parsedChunk)
     }
 }

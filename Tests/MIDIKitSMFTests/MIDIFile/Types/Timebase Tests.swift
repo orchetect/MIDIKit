@@ -16,7 +16,7 @@ import Testing
         
         let rawData: [UInt8] = [0x01, 0xE0]
         
-        #expect(timebase.rawData.toUInt8Bytes() == rawData)
+        #expect(timebase.rawData(as: [UInt8].self) == rawData)
         
         do {
             guard case let .musical(tpq) = MIDIFile.Timebase(rawData: rawData)
@@ -39,7 +39,7 @@ import Testing
         
         let rawData: [UInt8] = [0b11100111, 0x50]
         
-        #expect(timebase.rawData.toUInt8Bytes() == rawData)
+        #expect(timebase.rawData(as: [UInt8].self) == rawData)
         
         do {
             guard case let .timecode(

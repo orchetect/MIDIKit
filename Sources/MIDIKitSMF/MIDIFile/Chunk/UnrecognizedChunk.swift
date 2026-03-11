@@ -166,14 +166,18 @@ extension MIDIFile.Chunk.UnrecognizedChunk {
         )
     }
     
-    func midi1SMFRawBytes(using timebase: MIDIFile.Timebase) throws(MIDIFile.EncodeError) -> Data {
+    func midi1SMFRawBytes() throws(MIDIFile.EncodeError) -> Data {
+        try midi1SMFRawBytes(as: Data.self)
+    }
+    
+    func midi1SMFRawBytes<D: MutableDataProtocol>(as dataType: D.Type) throws(MIDIFile.EncodeError) -> D {
         // assemble track body without header or length
         
         let bodyData = rawData
         
         // assemble full chunk data with header and length
         
-        var data = Data()
+        var data = D()
         
         // 4-byte chunk identifier
         data += identifier.toASCIIData()

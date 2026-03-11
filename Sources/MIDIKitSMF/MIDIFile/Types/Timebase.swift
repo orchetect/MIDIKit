@@ -100,8 +100,13 @@ extension MIDIFile.Timebase {
 
 extension MIDIFile.Timebase {
     /// Returns the timebase encoded as raw data.
-    public var rawData: Data {
-        switch self {
+    public func rawData() -> Data {
+        rawData(as: Data.self)
+    }
+    
+    /// Returns the timebase encoded as raw data.
+    public func rawData<D: MutableDataProtocol>(as dataType: D.Type) -> D {
+        let data = switch self {
         case let .musical(ticksPerQuarterNote):
             (ticksPerQuarterNote & 0b01111111_11111111)
                 .toData(.bigEndian)
@@ -113,5 +118,7 @@ extension MIDIFile.Timebase {
             ]
                 .toData()
         }
+        
+        return D(data)
     }
 }
