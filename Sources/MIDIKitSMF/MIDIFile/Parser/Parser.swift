@@ -205,69 +205,76 @@ extension MIDIFile.Parser {
                 )
             }
             
-            let (header, expectedChunkCount) = try MIDIFile.Chunk.Header.initFrom(midi1SMFRawBytes: readHeader)
+            let (header, expectedTrackCount) = try MIDIFile.Chunk.Header.initFrom(midi1SMFRawBytes: readHeader)
             
             // chunks
             
-            var endOfFile = false
+            var isParsing = true
             var chunkDescriptors: [ChunkDescriptor] = []
             
             // gather chunk references before parsing their contents
             
-            while !endOfFile {
-                // chunk header
-                let chunkStartByteOffset = parser.readOffset
-                guard let chunkTypeBytes = try? parser.read(bytes: 4),
-                      let chunkTypeString = chunkTypeBytes.asciiDataToString(),
-                      let chunkType = MIDIFile.ChunkType(rawValue: chunkTypeString)
-                else {
-                    let offsetString = parser.readOffset.hexString(prefix: true)
-                    throw .malformed(
-                        "There was a problem reading chunk header at byte offset \(offsetString). Encountered end of file early or chunk identifier may be malformed."
+            while isParsing {
+                do throws(MIDIFile.DecodeError) {
+                    // chunk header
+                    let chunkStartByteOffset = parser.readOffset
+                    guard let chunkTypeBytes = try? parser.read(bytes: 4),
+                          let chunkTypeString = chunkTypeBytes.asciiDataToString(),
+                          let chunkType = MIDIFile.ChunkType(rawValue: chunkTypeString)
+                    else {
+                        let offsetString = parser.readOffset.hexString(prefix: true)
+                        throw .malformed(
+                            "There was a problem reading chunk header at byte offset \(offsetString). Encountered end of file early or chunk identifier may be malformed."
+                        )
+                    }
+                    
+                    // chunk length
+                    guard let chunkLength = (try? parser.read(bytes: 4))?
+                        .toUInt32(from: .bigEndian)
+                    else {
+                        let offsetString = parser.readOffset.hexString(prefix: true)
+                        throw .malformed(
+                            "There was a problem reading chunk length at byte offset \(offsetString)"
+                        )
+                    }
+                    
+                    // grab body data offset
+                    let dataBodyOffset = parser.readOffset
+                    
+                    // advance parser
+                    try parser.toMIDIFileDecodeError(
+                        malformedReason: "There was a problem reading chunk data at byte offset \(parser.readOffset.hexString(prefix: true)). Encountered end of file early.",
+                        try parser.seek(by: Int(chunkLength))
                     )
-                }
-                
-                // chunk length
-                guard let chunkLength = (try? parser.read(bytes: 4))?
-                    .toUInt32(from: .bigEndian)
-                else {
-                    let offsetString = parser.readOffset.hexString(prefix: true)
-                    throw .malformed(
-                        "There was a problem reading chunk length at byte offset \(offsetString)"
+                    
+                    // append chunk descriptor
+                    let chunkDescriptor = ChunkDescriptor(
+                        chunkType: chunkType,
+                        startOffset: chunkStartByteOffset,
+                        bodyByteStartOffset: dataBodyOffset,
+                        bodyByteLength: Int(chunkLength)
                     )
+                    chunkDescriptors.append(chunkDescriptor)
+                } catch {
+                    // a parsing error here could be a legitimately malformed file. however, if there's
+                    // more bytes remaining but we've already parsed all of the expected tracks,
+                    // then as long as `ignoreBytesPastEOF` is true we will ignore any spurious bytes
+                    // that follow that are not properly encoded chunks.
+                    // if `ignoreBytesPastEOF` is false, then consider the file malformed and throw the error.
+                    if chunkDescriptors.filter({ $0.chunkType == .track }).count == expectedTrackCount,
+                       isParsing,
+                       ignoreBytesPastEOF
+                    {
+                        isParsing = false
+                    } else {
+                        // rethrow the error
+                        throw error
+                    }
                 }
-                
-                // grab body data offset
-                let dataBodyOffset = parser.readOffset
-                
-                // advance parser
-                try parser.toMIDIFileDecodeError(
-                    malformedReason: "There was a problem reading chunk data at byte offset \(parser.readOffset.hexString(prefix: true)). Encountered end of file early.",
-                    try parser.seek(by: Int(chunkLength))
-                )
-                
-                // append chunk descriptor
-                let chunkDescriptor = ChunkDescriptor(
-                    chunkType: chunkType,
-                    startOffset: chunkStartByteOffset,
-                    bodyByteStartOffset: dataBodyOffset,
-                    bodyByteLength: Int(chunkLength)
-                )
-                chunkDescriptors.append(chunkDescriptor)
                 
                 // test for end of file
                 if parser.readOffset >= fileData.count {
-                    endOfFile = true
-                } else {
-                    // if there's more bytes remaining but we've already parsed all of the expected chunks,
-                    // then ignore any spurious bytes that follow as long as `ignoreBytesPastEOF` is true.
-                    // if `ignoreBytesPastEOF` is false, then continue the chunk parsing loop.
-                    if chunkDescriptors.count == expectedChunkCount,
-                       !endOfFile,
-                       ignoreBytesPastEOF
-                    {
-                        endOfFile = true
-                    }
+                    isParsing = false
                 }
             }
             
