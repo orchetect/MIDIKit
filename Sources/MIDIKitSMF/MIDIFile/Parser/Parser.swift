@@ -12,9 +12,12 @@ extension MIDIFile {
         
         let fileDescriptor: FileDescriptor
         
-        init(data: DataType) throws(MIDIFile.DecodeError) {
+        init(data: DataType, ignoreBytesPastEOF: Bool) throws(MIDIFile.DecodeError) {
             self.data = data
-            fileDescriptor = try Self.parseFileDescriptor(fileData: data)
+            fileDescriptor = try Self.parseFileDescriptor(
+                fileData: data,
+                ignoreBytesPastEOF: ignoreBytesPastEOF
+            )
             
             // print("Chunk descriptors:")
             // print(
@@ -184,7 +187,8 @@ extension MIDIFile.Parser {
 
 extension MIDIFile.Parser {
     static func parseFileDescriptor(
-        fileData: some DataProtocol
+        fileData: some DataProtocol,
+        ignoreBytesPastEOF: Bool
     ) throws(MIDIFile.DecodeError) -> FileDescriptor {
         guard !fileData.isEmpty else {
             throw .malformed("MIDI data is empty (contains no bytes).")
@@ -254,6 +258,20 @@ extension MIDIFile.Parser {
                 // test for end of file
                 if parser.readOffset >= fileData.count {
                     endOfFile = true
+                } else {
+                    // if there's more bytes remaining but we've already parsed all of the expected chunks,
+                    // then ignore any spurious bytes that follow as long as `ignoreBytesPastEOF` is true.
+                    // if `ignoreBytesPastEOF` is false, then continue the chunk parsing loop.
+                    if let parsedChunkCount = header.parsedChunkCount {
+                        if chunkDescriptors.count == parsedChunkCount,
+                           !endOfFile,
+                           ignoreBytesPastEOF
+                        {
+                            endOfFile = true
+                        }
+                    } else {
+                        assertionFailure("Parsed chunk count in header model is `nil`. This should never happen.")
+                    }
                 }
             }
             

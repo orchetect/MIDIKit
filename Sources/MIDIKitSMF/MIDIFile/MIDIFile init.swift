@@ -23,6 +23,7 @@ extension MIDIFile {
             rawData: rawData,
             bundleRPNAndNRPNEvents: options.bundleRPNAndNRPNEvents,
             maxTrackEventCount: options.maxTrackEventCount,
+            ignoreBytesPastEOF: options.ignoreBytesPastEOF,
             predicate: predicate
         )
     }
@@ -38,6 +39,7 @@ extension MIDIFile {
             rawData: rawData,
             bundleRPNAndNRPNEvents: options.bundleRPNAndNRPNEvents,
             maxTrackEventCount: options.maxTrackEventCount,
+            ignoreBytesPastEOF: options.ignoreBytesPastEOF,
             predicate: predicate
         )
     }
@@ -58,6 +60,7 @@ extension MIDIFile {
             rawData: rawData,
             bundleRPNAndNRPNEvents: options.bundleRPNAndNRPNEvents,
             maxTrackEventCount: options.maxTrackEventCount,
+            ignoreBytesPastEOF: options.ignoreBytesPastEOF,
             predicate: predicate,
             parsedChunk: parsedChunk
         )
@@ -135,6 +138,7 @@ extension MIDIFile {
             rawData: data,
             bundleRPNAndNRPNEvents: options.bundleRPNAndNRPNEvents,
             maxTrackEventCount: options.maxTrackEventCount,
+            ignoreBytesPastEOF: options.ignoreBytesPastEOF,
             predicate: predicate
         )
     }
@@ -151,6 +155,7 @@ extension MIDIFile {
             rawData: data,
             bundleRPNAndNRPNEvents: options.bundleRPNAndNRPNEvents,
             maxTrackEventCount: options.maxTrackEventCount,
+            ignoreBytesPastEOF: options.ignoreBytesPastEOF,
             predicate: predicate
         )
     }
@@ -172,6 +177,7 @@ extension MIDIFile {
             rawData: data,
             bundleRPNAndNRPNEvents: options.bundleRPNAndNRPNEvents,
             maxTrackEventCount: options.maxTrackEventCount,
+            ignoreBytesPastEOF: options.ignoreBytesPastEOF,
             predicate: predicate,
             parsedChunk: parsedChunk
         )

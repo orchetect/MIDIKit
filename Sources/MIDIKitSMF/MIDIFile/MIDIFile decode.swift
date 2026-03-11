@@ -15,9 +15,10 @@ extension MIDIFile {
         rawData: some DataProtocol & Sendable,
         bundleRPNAndNRPNEvents: Bool,
         maxTrackEventCount: Int?,
+        ignoreBytesPastEOF: Bool,
         predicate: DecodePredicate?
     ) throws(MIDIFile.DecodeError) {
-        let parser = try Parser(data: rawData)
+        let parser = try Parser(data: rawData, ignoreBytesPastEOF: ignoreBytesPastEOF)
         
         header = parser.fileDescriptor.header
         
@@ -35,9 +36,10 @@ extension MIDIFile {
         rawData: some DataProtocol & Sendable,
         bundleRPNAndNRPNEvents: Bool,
         maxTrackEventCount: Int?,
+        ignoreBytesPastEOF: Bool,
         predicate: DecodePredicate?
     ) async throws(MIDIFile.DecodeError) {
-        let parser = try Parser(data: rawData)
+        let parser = try Parser(data: rawData, ignoreBytesPastEOF: ignoreBytesPastEOF)
         
         header = parser.fileDescriptor.header
         
@@ -58,10 +60,11 @@ extension MIDIFile {
         rawData: some DataProtocol & Sendable,
         bundleRPNAndNRPNEvents: Bool,
         maxTrackEventCount: Int?,
+        ignoreBytesPastEOF: Bool,
         predicate: DecodePredicate?,
         parsedChunk: @escaping ChunkDecodeBlock
     ) async throws(MIDIFile.DecodeError) {
-        let parser = try Parser(data: rawData)
+        let parser = try Parser(data: rawData, ignoreBytesPastEOF: ignoreBytesPastEOF)
         
         header = parser.fileDescriptor.header
         
