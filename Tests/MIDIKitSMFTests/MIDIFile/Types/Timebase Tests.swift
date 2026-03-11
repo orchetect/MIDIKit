@@ -1,5 +1,5 @@
 //
-//  Timing Tests.swift
+//  Timebase Tests.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
@@ -9,7 +9,7 @@ import MIDIKitInternals
 @testable import MIDIKitSMF
 import Testing
 
-@Suite struct TimeBase_Tests {
+@Suite struct Timebase_Tests {
     @Test
     func initMusical() async {
         let timeBase = MIDIFile.TimeBase.musical(ticksPerQuarterNote: 480)
