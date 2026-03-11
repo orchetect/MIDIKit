@@ -11,21 +11,21 @@ import Testing
 @Suite struct MIDIFileUtilities_Tests {
     @Test
     func encodeVariableLengthValue() async {
-        #expect(MIDIFile.encodeVariableLengthValue(0) == [0x00])
-        #expect(MIDIFile.encodeVariableLengthValue(1) == [0x01])
-        #expect(MIDIFile.encodeVariableLengthValue(64) == [0x40])
+        #expect(MIDIFile.encodeVariableLengthValue(0, as: [UInt8].self) == [0x00])
+        #expect(MIDIFile.encodeVariableLengthValue(1, as: [UInt8].self) == [0x01])
+        #expect(MIDIFile.encodeVariableLengthValue(64, as: [UInt8].self) == [0x40])
         
-        #expect(MIDIFile.encodeVariableLengthValue(127) == [0x7F])
-        #expect(MIDIFile.encodeVariableLengthValue(128) == [0x81, 0x00])
-        #expect(MIDIFile.encodeVariableLengthValue(129) == [0x81, 0x01])
+        #expect(MIDIFile.encodeVariableLengthValue(127, as: [UInt8].self) == [0x7F])
+        #expect(MIDIFile.encodeVariableLengthValue(128, as: [UInt8].self) == [0x81, 0x00])
+        #expect(MIDIFile.encodeVariableLengthValue(129, as: [UInt8].self) == [0x81, 0x01])
         
-        #expect(MIDIFile.encodeVariableLengthValue(255) == [0x81, 0x7F])
-        #expect(MIDIFile.encodeVariableLengthValue(256) == [0x82, 0x00])
-        #expect(MIDIFile.encodeVariableLengthValue(257) == [0x82, 0x01])
+        #expect(MIDIFile.encodeVariableLengthValue(255, as: [UInt8].self) == [0x81, 0x7F])
+        #expect(MIDIFile.encodeVariableLengthValue(256, as: [UInt8].self) == [0x82, 0x00])
+        #expect(MIDIFile.encodeVariableLengthValue(257, as: [UInt8].self) == [0x82, 0x01])
         
-        #expect(MIDIFile.encodeVariableLengthValue(16383) == [0xFF, 0x7F])
-        #expect(MIDIFile.encodeVariableLengthValue(16384) == [0x81, 0x80, 0x00])
-        #expect(MIDIFile.encodeVariableLengthValue(16385) == [0x81, 0x80, 0x01])
+        #expect(MIDIFile.encodeVariableLengthValue(16383, as: [UInt8].self) == [0xFF, 0x7F])
+        #expect(MIDIFile.encodeVariableLengthValue(16384, as: [UInt8].self) == [0x81, 0x80, 0x00])
+        #expect(MIDIFile.encodeVariableLengthValue(16385, as: [UInt8].self) == [0x81, 0x80, 0x01])
     }
     
     @Test

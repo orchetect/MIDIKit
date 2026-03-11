@@ -118,7 +118,7 @@ extension MIDIEvent.SysEx7: MIDIFileEventPayload {
         let msg = midi1RawBytes(leadingF0: false, trailingF7: false)
         
         return [0xF0]
-            + MIDIFile.encodeVariableLengthValue(msg.count + 1)
+            + MIDIFile.encodeVariableLengthValue(msg.count + 1, as: D.self)
             + D(msg)
             + [0xF7]
     }
@@ -273,7 +273,7 @@ extension MIDIEvent.UniversalSysEx7: MIDIFileEventPayload {
         
         let msg = midi1RawBytes(leadingF0: false, trailingF7: false)
         
-        return [0xF0] + MIDIFile.encodeVariableLengthValue(msg.count + 1) + msg + [0xF7]
+        return [0xF0] + MIDIFile.encodeVariableLengthValue(msg.count + 1, as: D.self) + msg + [0xF7]
     }
     
     public var smfDescription: String {

@@ -12,7 +12,7 @@ extension MIDIFile {
     /// Returns variable length value encoded byte array.
     static func encodeVariableLengthValue<
         D: MutableDataProtocol
-    >(_ number: some BinaryInteger) -> D {
+    >(_ number: some BinaryInteger, as dataType: D.Type) -> D {
         var result = D()
         var count = 0
 
@@ -115,6 +115,6 @@ extension MutableDataProtocol {
         // According to the Standard MIDI File 1.0 Spec, the entire delta-time should be at most 4
         // bytes long.
         
-        append(contentsOf: MIDIFile.encodeVariableLengthValue(ticks) as Self)
+        append(contentsOf: MIDIFile.encodeVariableLengthValue(ticks, as: Self.self))
     }
 }

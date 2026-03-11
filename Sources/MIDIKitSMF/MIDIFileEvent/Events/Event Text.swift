@@ -218,7 +218,7 @@ extension MIDIFileEvent.Text: MIDIFileEventPayload {
         
         return MIDIFile.kTextEventHeaders[textType]! +
             // length
-            MIDIFile.encodeVariableLengthValue(stringData.count) +
+            MIDIFile.encodeVariableLengthValue(stringData.count, as: D.self) +
             // text
             stringData
     }

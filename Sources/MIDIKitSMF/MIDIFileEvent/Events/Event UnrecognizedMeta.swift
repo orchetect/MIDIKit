@@ -182,7 +182,7 @@ extension MIDIFileEvent.UnrecognizedMeta: MIDIFileEventPayload {
         
         [0xFF, metaType] +
             // length of data
-            MIDIFile.encodeVariableLengthValue(data.count) +
+            MIDIFile.encodeVariableLengthValue(data.count, as: D.self) +
             // data
             data
     }
