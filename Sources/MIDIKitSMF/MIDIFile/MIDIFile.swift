@@ -46,7 +46,7 @@ public struct MIDIFile {
     
     // MARK: - Init
     
-    /// Initialize from header parameters and track chunks.
+    /// Initialize from header parameters and chunks.
     public init(
         format: Format = .multipleTracksSynchronous,
         timebase: Timebase = .default(),
@@ -57,7 +57,7 @@ public struct MIDIFile {
         self.chunks = chunks
     }
     
-    /// Initialize from header parameters and track chunks.
+    /// Initialize from header parameters and chunks.
     @_disfavoredOverload
     public init(
         format: Format = .multipleTracksSynchronous,
@@ -67,6 +67,29 @@ public struct MIDIFile {
         self.format = format
         self.timebase = timebase
         self.chunks = Array(chunks)
+    }
+    
+    /// Initialize from header parameters and track chunks.
+    public init(
+        format: Format = .multipleTracksSynchronous,
+        timebase: Timebase = .default(),
+        tracks: [Chunk.Track]
+    ) {
+        self.format = format
+        self.timebase = timebase
+        self.chunks = tracks.map { .track($0) }
+    }
+    
+    /// Initialize from header parameters and track chunks.
+    @_disfavoredOverload
+    public init(
+        format: Format = .multipleTracksSynchronous,
+        timebase: Timebase = .default(),
+        tracks: some Sequence<Chunk.Track>
+    ) {
+        self.format = format
+        self.timebase = timebase
+        self.chunks = Array(tracks.map { .track($0) })
     }
 }
 
