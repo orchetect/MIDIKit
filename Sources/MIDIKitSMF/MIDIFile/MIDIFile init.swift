@@ -12,6 +12,8 @@ internal import MIDIKitInternals
 
 extension MIDIFile {
     /// Initialize by loading the contents of a MIDI file's raw data.
+    ///
+    /// - Tip: Consider using the `async` overload of this initializer, as it is much more performant.
     public init(
         rawData: some DataProtocol & Sendable,
         options: DecodeOptions = DecodeOptions(),
@@ -66,6 +68,8 @@ extension MIDIFile {
 
 extension MIDIFile {
     /// Initialize by loading the contents of a MIDI file from disk.
+    ///
+    /// - Tip: Consider using the `async` overload of this initializer, as it is much more performant.
     public init(
         midiFile path: String,
         options: DecodeOptions = DecodeOptions(),
@@ -119,6 +123,8 @@ extension MIDIFile {
 
 extension MIDIFile {
     /// Initialize by loading the contents of a MIDI file from disk.
+    ///
+    /// - Tip: Consider using the `async` overload of this initializer, as it is much more performant.
     public init(
         midiFile url: URL,
         options: DecodeOptions = DecodeOptions(),
