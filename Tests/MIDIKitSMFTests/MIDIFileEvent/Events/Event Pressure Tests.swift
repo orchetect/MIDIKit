@@ -28,7 +28,7 @@ import Testing
             channel: 0
         )
         
-        let bytes: [UInt8] = event.midi1SMFRawBytes()
+        let bytes = event.midi1SMFRawBytes(as: [UInt8].self)
         
         #expect(bytes == [0xD0, 0x40])
     }
@@ -50,7 +50,7 @@ import Testing
             channel: 1
         )
         
-        let bytes: [UInt8] = event.midi1SMFRawBytes()
+        let bytes = event.midi1SMFRawBytes(as: [UInt8].self)
         
         #expect(bytes == [0xD1, 0x7F])
     }

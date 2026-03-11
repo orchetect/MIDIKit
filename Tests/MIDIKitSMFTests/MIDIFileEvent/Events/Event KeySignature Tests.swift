@@ -25,7 +25,7 @@ import Testing
     func midi1SMFRawBytes_A() async {
         let event = MIDIFileEvent.KeySignature(flatsOrSharps: 4, majorKey: true)
         
-        let bytes: [UInt8] = event.midi1SMFRawBytes()
+        let bytes = event.midi1SMFRawBytes(as: [UInt8].self)
         
         #expect(bytes == [0xFF, 0x59, 0x02, 4, 0x00])
     }
@@ -44,7 +44,7 @@ import Testing
     func midi1SMFRawBytes_B() async {
         let event = MIDIFileEvent.KeySignature(flatsOrSharps: -3, majorKey: false)
         
-        let bytes: [UInt8] = event.midi1SMFRawBytes()
+        let bytes = event.midi1SMFRawBytes(as: [UInt8].self)
         
         #expect(bytes == [0xFF, 0x59, 0x02, 0xFD, 0x01])
     }

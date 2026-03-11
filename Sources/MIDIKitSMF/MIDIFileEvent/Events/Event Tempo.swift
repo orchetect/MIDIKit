@@ -145,7 +145,7 @@ extension MIDIFileEvent.Tempo: MIDIFileEventPayload {
         )
     }
     
-    public func midi1SMFRawBytes<D: MutableDataProtocol>() -> D {
+    public func midi1SMFRawBytes<D: MutableDataProtocol>(as dataType: D.Type) -> D {
         // FF 51 03 xx xx xx
         // xx xx xx = 3-byte (24-bit) microseconds per MIDI quarter-note
         

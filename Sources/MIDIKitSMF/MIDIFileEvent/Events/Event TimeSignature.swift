@@ -151,7 +151,7 @@ extension MIDIFileEvent.TimeSignature: MIDIFileEventPayload {
         )
     }
     
-    public func midi1SMFRawBytes<D: MutableDataProtocol>() -> D {
+    public func midi1SMFRawBytes<D: MutableDataProtocol>(as dataType: D.Type) -> D {
         // FF 58 04 nn dd cc bb
         
         var data = D()

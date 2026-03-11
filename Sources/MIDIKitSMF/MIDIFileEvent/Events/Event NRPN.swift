@@ -62,7 +62,7 @@ extension MIDIEvent.NRPN: MIDIFileEventPayload {
         throw .notImplemented
     }
     
-    public func midi1SMFRawBytes<D: MutableDataProtocol>() -> D {
+    public func midi1SMFRawBytes<D: MutableDataProtocol>(as dataType: D.Type) -> D {
         let events = parameter.midi1Events(channel: channel, group: group)
             .map { $0.midi1RawBytes() }
         let packed = events.joined(separator: [0x00]) // add delta time for all events after the first event

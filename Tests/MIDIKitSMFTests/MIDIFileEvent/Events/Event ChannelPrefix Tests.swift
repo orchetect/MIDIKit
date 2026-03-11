@@ -24,7 +24,7 @@ import Testing
     func midi1SMFRawBytes() async {
         let event = MIDIFileEvent.ChannelPrefix(channel: 2)
         
-        let bytes: [UInt8] = event.midi1SMFRawBytes()
+        let bytes = event.midi1SMFRawBytes(as: [UInt8].self)
         
         #expect(bytes == [0xFF, 0x20, 0x01, 0x02])
     }

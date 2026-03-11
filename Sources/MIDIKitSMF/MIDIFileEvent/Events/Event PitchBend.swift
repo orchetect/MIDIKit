@@ -144,7 +144,7 @@ extension MIDIEvent.PitchBend: MIDIFileEventPayload {
         )
     }
     
-    public func midi1SMFRawBytes<D: MutableDataProtocol>() -> D {
+    public func midi1SMFRawBytes<D: MutableDataProtocol>(as dataType: D.Type) -> D {
         // 3 bytes : En lsb msb
         
         D(midi1RawBytes())

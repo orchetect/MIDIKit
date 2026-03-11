@@ -135,7 +135,7 @@ extension MIDIEvent.Pressure: MIDIFileEventPayload {
         )
     }
     
-    public func midi1SMFRawBytes<D: MutableDataProtocol>() -> D {
+    public func midi1SMFRawBytes<D: MutableDataProtocol>(as dataType: D.Type) -> D {
         // Dn value
         D(midi1RawBytes())
     }

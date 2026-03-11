@@ -28,7 +28,7 @@ import Testing
     func midi1SMFRawBytes_EmptyString() async {
         let event = MIDIFileEvent.Text(type: .text, string: "")
         
-        let bytes: [UInt8] = event.midi1SMFRawBytes()
+        let bytes = event.midi1SMFRawBytes(as: [UInt8].self)
         
         #expect(bytes == [
             0xFF, 0x01, // header
@@ -54,7 +54,7 @@ import Testing
     func midi1SMFRawBytes_WithString() async {
         let event = MIDIFileEvent.Text(type: .text, string: "abcd")
         
-        let bytes: [UInt8] = event.midi1SMFRawBytes()
+        let bytes = event.midi1SMFRawBytes(as: [UInt8].self)
         
         #expect(bytes == [
             0xFF, 0x01, // header
@@ -87,7 +87,7 @@ import Testing
             ]
             
             let event1 = MIDIFileEvent.Text(type: eventType, string: "a")
-            #expect(event1.midi1SMFRawBytes() == bytes)
+            #expect(event1.midi1SMFRawBytes(as: [UInt8].self) == bytes)
             
             let event2 = try MIDIFileEvent.Text(midi1SMFRawBytes: bytes)
             #expect(event1 == event2)

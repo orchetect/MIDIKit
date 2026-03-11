@@ -97,7 +97,7 @@ import Testing
         )
         
         // (first delta time is omitted as always, it synthesizes zero delta times for subsequent events)
-        let bytes: [UInt8] = event.midi1SMFRawBytes()
+        let bytes = event.midi1SMFRawBytes(as: [UInt8].self)
         
         #expect(bytes == [
             0xB1, 0x65, 0x00, // cc 101, chan 1
@@ -197,7 +197,7 @@ import Testing
         )
         
         // (first delta time is omitted as always, it synthesizes zero delta times for subsequent events)
-        let bytes: [UInt8] = event.midi1SMFRawBytes()
+        let bytes = event.midi1SMFRawBytes(as: [UInt8].self)
         
         #expect(bytes == [
             0xB2, 0x65, 0x05, // cc 101, chan 2

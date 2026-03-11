@@ -156,7 +156,7 @@ extension MIDIFileEvent.KeySignature: MIDIFileEventPayload {
         )
     }
     
-    public func midi1SMFRawBytes<D: MutableDataProtocol>() -> D {
+    public func midi1SMFRawBytes<D: MutableDataProtocol>(as dataType: D.Type) -> D {
         // FF 59 02(length) sf mi
         // sf is a byte specifying the number of flats (-ve) or sharps (+ve) that identifies the
         // key signature (-7 = 7 flats, -1 = 1 flat, 0 = key of C, 1 = 1 sharp, etc).

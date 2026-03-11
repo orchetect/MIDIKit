@@ -122,7 +122,7 @@ extension MIDIFileEvent.SequencerSpecific: MIDIFileEventPayload {
         )
     }
     
-    public func midi1SMFRawBytes<D: MutableDataProtocol>() -> D {
+    public func midi1SMFRawBytes<D: MutableDataProtocol>(as dataType: D.Type) -> D {
         // FF 7F length data
         
         MIDIFile.kEventHeaders[.sequencerSpecific]! +

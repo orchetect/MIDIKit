@@ -158,7 +158,7 @@ import Testing
             data: []
         )
         
-        let bytes: [UInt8] = sysEx.midi1SMFRawBytes()
+        let bytes: [UInt8] = sysEx.midi1SMFRawBytes(as: [UInt8].self)
         
         #expect(bytes == [
             0xF0,  // start byte
@@ -175,7 +175,7 @@ import Testing
             data: [0x12, 0x34]
         )
         
-        let bytes: [UInt8] = sysEx.midi1SMFRawBytes()
+        let bytes: [UInt8] = sysEx.midi1SMFRawBytes(as: [UInt8].self)
         
         #expect(bytes == [
             0xF0,  // start byte
@@ -196,7 +196,7 @@ import Testing
             data: data
         )
         
-        let bytes: [UInt8] = sysEx.midi1SMFRawBytes()
+        let bytes: [UInt8] = sysEx.midi1SMFRawBytes(as: [UInt8].self)
         
         #expect(
             bytes ==
@@ -222,7 +222,7 @@ import Testing
             data: []
         )
         
-        let bytes: [UInt8] = sysEx.midi1SMFRawBytes()
+        let bytes: [UInt8] = sysEx.midi1SMFRawBytes(as: [UInt8].self)
         
         #expect(bytes == [
             0xF0,  // start byte
@@ -245,7 +245,7 @@ import Testing
             data: [0x12, 0x34]
         )
         
-        let bytes: [UInt8] = sysEx.midi1SMFRawBytes()
+        let bytes: [UInt8] = sysEx.midi1SMFRawBytes(as: [UInt8].self)
         
         #expect(bytes == [
             0xF0,  // start byte
@@ -272,7 +272,7 @@ import Testing
             data: data
         )
         
-        let bytes: [UInt8] = sysEx.midi1SMFRawBytes()
+        let bytes: [UInt8] = sysEx.midi1SMFRawBytes(as: [UInt8].self)
         
         #expect(
             bytes ==

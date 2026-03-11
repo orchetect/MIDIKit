@@ -108,7 +108,7 @@ extension MIDIEvent.SysEx7: MIDIFileEventPayload {
         )
     }
     
-    public func midi1SMFRawBytes<D: MutableDataProtocol>() -> D {
+    public func midi1SMFRawBytes<D: MutableDataProtocol>(as dataType: D.Type) -> D {
         // F0 variable_length(of message including trailing F7) message
         // The system exclusive message:
         //   F0 7E 00 09 01 F7
@@ -128,7 +128,7 @@ extension MIDIEvent.SysEx7: MIDIFileEventPayload {
     }
 
     public var smfDebugDescription: String {
-        let bytes: [UInt8] = midi1SMFRawBytes()
+        let bytes = midi1SMFRawBytes(as: [UInt8].self)
         
         let byteDump = bytes
             .hexString(padEachTo: 2, prefixes: true, separator: ", ")
@@ -264,7 +264,7 @@ extension MIDIEvent.UniversalSysEx7: MIDIFileEventPayload {
         )
     }
     
-    public func midi1SMFRawBytes<D: MutableDataProtocol>() -> D {
+    public func midi1SMFRawBytes<D: MutableDataProtocol>(as dataType: D.Type) -> D {
         // F0 variable_length(of message including trailing F7) message
         // The system exclusive message:
         //   F0 7E 00 09 01 F7
@@ -281,7 +281,7 @@ extension MIDIEvent.UniversalSysEx7: MIDIFileEventPayload {
     }
     
     public var smfDebugDescription: String {
-        let bytes: [UInt8] = midi1SMFRawBytes()
+        let bytes = midi1SMFRawBytes(as: [UInt8].self)
         
         let byteDump = bytes
             .hexString(padEachTo: 2, prefixes: true, separator: ", ")

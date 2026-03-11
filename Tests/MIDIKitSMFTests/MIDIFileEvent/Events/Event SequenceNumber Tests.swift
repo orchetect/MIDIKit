@@ -24,7 +24,7 @@ import Testing
     func midi1SMFRawBytes_A() async {
         let event = MIDIFileEvent.SequenceNumber(sequence: 0x00)
         
-        let bytes: [UInt8] = event.midi1SMFRawBytes()
+        let bytes = event.midi1SMFRawBytes(as: [UInt8].self)
         
         #expect(bytes == [0xFF, 0x00, 0x02, 0x00, 0x00])
     }
@@ -42,7 +42,7 @@ import Testing
     func midi1SMFRawBytes_B() async {
         let event = MIDIFileEvent.SequenceNumber(sequence: 0x7FFF)
         
-        let bytes: [UInt8] = event.midi1SMFRawBytes()
+        let bytes = event.midi1SMFRawBytes(as: [UInt8].self)
         
         #expect(bytes == [0xFF, 0x00, 0x02, 0x7F, 0xFF])
     }

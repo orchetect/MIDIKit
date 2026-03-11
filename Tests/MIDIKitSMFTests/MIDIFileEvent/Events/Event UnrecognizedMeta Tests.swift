@@ -31,7 +31,7 @@ import Testing
             data: []
         )
         
-        let bytes: [UInt8] = event.midi1SMFRawBytes()
+        let bytes = event.midi1SMFRawBytes(as: [UInt8].self)
         
         #expect(bytes == [
             0xFF, 0x30, // unknown/undefined meta type 0x30
@@ -60,7 +60,7 @@ import Testing
             data: [0x12]
         )
         
-        let bytes: [UInt8] = event.midi1SMFRawBytes()
+        let bytes = event.midi1SMFRawBytes(as: [UInt8].self)
         
         #expect(bytes == [
             0xFF, 0x30, // unknown/undefined meta type 0x30
@@ -93,7 +93,7 @@ import Testing
             data: data
         )
         
-        let bytes: [UInt8] = event.midi1SMFRawBytes()
+        let bytes = event.midi1SMFRawBytes(as: [UInt8].self)
         
         #expect(
             bytes ==
@@ -127,7 +127,7 @@ import Testing
             data: data
         )
         
-        let bytes: [UInt8] = event.midi1SMFRawBytes()
+        let bytes = event.midi1SMFRawBytes(as: [UInt8].self)
         
         #expect(
             bytes ==

@@ -36,7 +36,7 @@ import Testing
             denominator: 1
         )
         
-        let bytes: [UInt8] = event.midi1SMFRawBytes()
+        let bytes = event.midi1SMFRawBytes(as: [UInt8].self)
         
         #expect(bytes == [
             0xFF, 0x58, 0x04, // header

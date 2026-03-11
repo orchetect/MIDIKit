@@ -122,7 +122,7 @@ extension MIDIFileEvent.PortPrefix: MIDIFileEventPayload {
         )
     }
     
-    public func midi1SMFRawBytes<D: MutableDataProtocol>() -> D {
+    public func midi1SMFRawBytes<D: MutableDataProtocol>(as dataType: D.Type) -> D {
         // FF 21 01 pp
         // pp is port number (0...127 assumably)
         

@@ -38,7 +38,7 @@ import SwiftTimecodeCore
             frRate: .fps25
         )
         
-        let bytes: [UInt8] = event.midi1SMFRawBytes()
+        let bytes = event.midi1SMFRawBytes(as: [UInt8].self)
         
         #expect(bytes == [0xFF, 0x54, 0x05,
                           0b00100001, 2, 3, 4, 5])

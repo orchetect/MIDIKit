@@ -27,7 +27,7 @@ import Testing
     func midi1SMFRawBytes_A() async {
         let event = MIDIFileEvent.Tempo(bpm: 120.0)
         
-        let bytes: [UInt8] = event.midi1SMFRawBytes()
+        let bytes = event.midi1SMFRawBytes(as: [UInt8].self)
         
         #expect(bytes == [
             0xFF, 0x51, 0x03, // header
@@ -51,7 +51,7 @@ import Testing
     func midi1SMFRawBytes_B() async {
         let event = MIDIFileEvent.Tempo(bpm: 60.0)
         
-        let bytes: [UInt8] = event.midi1SMFRawBytes()
+        let bytes = event.midi1SMFRawBytes(as: [UInt8].self)
         
         #expect(bytes == [
             0xFF, 0x51, 0x03, // header

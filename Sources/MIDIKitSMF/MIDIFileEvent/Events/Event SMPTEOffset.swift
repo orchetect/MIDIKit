@@ -323,7 +323,7 @@ extension MIDIFileEvent.SMPTEOffset: MIDIFileEventPayload {
         subframes = readSubframes
     }
     
-    public func midi1SMFRawBytes<D: MutableDataProtocol>() -> D {
+    public func midi1SMFRawBytes<D: MutableDataProtocol>(as dataType: D.Type) -> D {
         // FF 54 05 hr mn se fr ff
         //
         // 05 is length

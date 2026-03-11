@@ -10,6 +10,8 @@ import MIDIKitCore
 // MARK: - DeltaTime
 
 extension MIDIFileEvent {
+    // TODO: This needs refactoring into two separate types - one for each of the two MIDIFile timebases (musical, and timecode) since musical note durations have no relevance in timecode timebase
+    
     /// Delta time advancement.
     public enum DeltaTime {
         case none
@@ -100,6 +102,7 @@ extension MIDIFileEvent.DeltaTime {
             fatalError("Timecode timebase not implemented yet.")
         }
 
+        // TODO: this has no relevance to MIDIFile timecode timebase mode, only musical timebase
         switch self {
         case .none:
             return 0

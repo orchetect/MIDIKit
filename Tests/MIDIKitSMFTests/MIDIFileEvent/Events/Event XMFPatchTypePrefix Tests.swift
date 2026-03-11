@@ -28,7 +28,7 @@ import Testing
     func midi1SMFRawBytes_A() async {
         let event = MIDIFileEvent.XMFPatchTypePrefix(patchSet: .generalMIDI1)
         
-        let bytes: [UInt8] = event.midi1SMFRawBytes()
+        let bytes = event.midi1SMFRawBytes(as: [UInt8].self)
         
         #expect(bytes == [
             0xFF, 0x60, // header
@@ -54,7 +54,7 @@ import Testing
     func midi1SMFRawBytes_B() async {
         let event = MIDIFileEvent.XMFPatchTypePrefix(patchSet: .generalMIDI2)
         
-        let bytes: [UInt8] = event.midi1SMFRawBytes()
+        let bytes = event.midi1SMFRawBytes(as: [UInt8].self)
         
         #expect(bytes == [
             0xFF, 0x60, // header
