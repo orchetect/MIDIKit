@@ -58,6 +58,7 @@ public struct MIDIFile {
     }
     
     /// Initialize from header parameters and track chunks.
+    @_disfavoredOverload
     public init(
         format: Format = .multipleTracksSynchronous,
         timebase: Timebase = .default(),

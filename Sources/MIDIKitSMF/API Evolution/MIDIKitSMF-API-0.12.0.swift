@@ -15,6 +15,7 @@ extension MIDIFile {
     
     @_documentation(visibility: internal)
     @available(*, deprecated, renamed: "init(format:timebase:chunks:)")
+    @_disfavoredOverload
     public init(
         format: Format = .multipleTracksSynchronous,
         timeBase: Timebase = .default(),

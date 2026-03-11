@@ -19,10 +19,13 @@ extension MIDIFile.Chunk {
         /// Instance a new empty MIDI file track.
         public init() { }
         
+        /// Instance a new MIDI file track with events.
         public init(events: [MIDIFileEvent]) {
             self.events = events
         }
         
+        /// Instance a new MIDI file track with events.
+        @_disfavoredOverload
         public init(events: some Sequence<MIDIFileEvent>) {
             self.events = Array(events)
         }
@@ -139,6 +142,7 @@ extension MIDIFile.Chunk {
     }
     
     /// Track: `MTrk` chunk type.
+    @_disfavoredOverload
     public static func track(_ events: some Sequence<MIDIFileEvent>) -> Self {
         .track(.init(events: events))
     }
