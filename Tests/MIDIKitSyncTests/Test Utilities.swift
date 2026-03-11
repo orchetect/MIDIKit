@@ -12,7 +12,7 @@ import Testing
 
 // ⚠️ NOTE:
 //
-// This file is duplicated in the MIDIKitIOTests target.
+// This file is duplicated in: MIDIKitIOTests, MIDIKitSyncTests, and MIDIKitSMF targets.
 // Ensure changes here are also reflected there.
 //
 

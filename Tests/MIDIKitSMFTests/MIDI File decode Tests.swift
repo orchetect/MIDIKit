@@ -30,11 +30,49 @@ import Testing
     /// Test parsing using ASYNC method.
     /// Just ensure file parses successfully. Not testing contents in-depth.
     @Test
-    func midiFileParse_Async() async throws { // MUST BE MARKED ASYNC!!!
+    func midiFileParse_Async() async throws {
         let midiFile = try await MIDIFile(rawData: kMIDIFile.dp8Markers)
         
         try #require(midiFile.chunks.count == 3)
         
+        let encodedData = try midiFile.rawData()
+        #expect(encodedData.toUInt8Bytes() == kMIDIFile.dp8Markers)
+    }
+    
+    /// Test parsing using AsyncSequence method.
+    /// Just ensure file parses successfully. Not testing contents in-depth.
+    @Test
+    func midiFileParse_AsyncSequence() async throws {
+        actor Receiver {
+            var chunks: [Int: MIDIFile.Chunk] = [:]
+            func addChunk(index: Int, chunk: MIDIFile.Chunk) { chunks[index] = chunk }
+            init() { }
+        }
+        let receiver = Receiver()
+        let midiFile = try await MIDIFile(rawData: kMIDIFile.dp8Markers) { fileHeader, chunkCount, chunkIndex, result in
+            // check header info
+            #expect(fileHeader.format == .multipleTracksSynchronous)
+            #expect(fileHeader.timeBase == .musical(ticksPerQuarterNote: 480))
+            
+            // check chunk count
+            #expect(chunkCount == 3)
+            
+            // collect parsed track
+            do {
+                let chunk = try result.get()
+                Task { await receiver.addChunk(index: chunkIndex, chunk: chunk) }
+            } catch {
+                Issue.record("\(error.localizedDescription)")
+            }
+        }
+        
+        // wait for all tracks to be received asynchronously
+        await wait(expect: { await receiver.chunks.count == 3 }, timeout: 10.0)
+        
+        // ensure tracks are also stored in the `MIDIFile` as usual
+        try #require(midiFile.chunks.count == 3)
+        
+        // this also ensures tracks stored within the `MIDIFile` are in the correct order
         let encodedData = try midiFile.rawData()
         #expect(encodedData.toUInt8Bytes() == kMIDIFile.dp8Markers)
     }
