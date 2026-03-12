@@ -221,11 +221,11 @@ extension MIDIFile.Chunk.Header {
 }
 
 extension MIDIFile.Chunk.Header {
-    func midi1SMFRawBytes(withTrackCount trackCount: Int) throws(MIDIFile.EncodeError) -> Data {
+    public func midi1SMFRawBytes(withTrackCount trackCount: Int) throws(MIDIFile.EncodeError) -> Data {
         try midi1SMFRawBytes(as: Data.self, withTrackCount: trackCount)
     }
     
-    func midi1SMFRawBytes<D: MutableDataProtocol>(as dataType: D.Type, withTrackCount trackCount: Int) throws(MIDIFile.EncodeError) -> D {
+    public func midi1SMFRawBytes<D: MutableDataProtocol>(as dataType: D.Type, withTrackCount trackCount: Int) throws(MIDIFile.EncodeError) -> D {
         // The header chunk appears at the beginning of the file:
         //   4D 54 68 64    ASCII "MThd".
         //   00 00 00 06    4-byte size of the header; this will always be 6

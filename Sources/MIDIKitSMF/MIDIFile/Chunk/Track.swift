@@ -428,13 +428,13 @@ extension MIDIFile.Chunk.Track {
 }
 
 extension MIDIFile.Chunk.Track {
-    func midi1SMFRawBytes(
+    public func midi1SMFRawBytes(
         using timebase: MIDIFile.Timebase
     ) throws(MIDIFile.EncodeError) -> Data {
         try midi1SMFRawBytes(as: Data.self, using: timebase)
     }
     
-    func midi1SMFRawBytes<D: MutableDataProtocol>(
+    public func midi1SMFRawBytes<D: MutableDataProtocol>(
         as dataType: D.Type,
         using timebase: MIDIFile.Timebase
     ) throws(MIDIFile.EncodeError) -> D {

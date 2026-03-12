@@ -166,11 +166,11 @@ extension MIDIFile.Chunk.UnrecognizedChunk {
         )
     }
     
-    func midi1SMFRawBytes() throws(MIDIFile.EncodeError) -> Data {
+    public func midi1SMFRawBytes() throws(MIDIFile.EncodeError) -> Data {
         try midi1SMFRawBytes(as: Data.self)
     }
     
-    func midi1SMFRawBytes<D: MutableDataProtocol>(as dataType: D.Type) throws(MIDIFile.EncodeError) -> D {
+    public func midi1SMFRawBytes<D: MutableDataProtocol>(as dataType: D.Type) throws(MIDIFile.EncodeError) -> D {
         // assemble track body without header or length
         
         let bodyData = rawData
