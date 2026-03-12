@@ -153,7 +153,7 @@ extension MIDIEvent.CC: MIDIFileEventPayload {
         )
     }
 
-    public func midi1SMFRawBytes<D: MutableDataProtocol>() -> D {
+    public func midi1SMFRawBytes<D: MutableDataProtocol>(as dataType: D.Type) -> D {
         // Bn controller value
         
         D(midi1RawBytes())

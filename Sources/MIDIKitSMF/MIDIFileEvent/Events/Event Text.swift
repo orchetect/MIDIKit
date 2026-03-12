@@ -211,14 +211,14 @@ extension MIDIFileEvent.Text: MIDIFileEventPayload {
         }
     }
     
-    public func midi1SMFRawBytes<D: MutableDataProtocol>() -> D {
+    public func midi1SMFRawBytes<D: MutableDataProtocol>(as dataType: D.Type) -> D {
         // FF 01 length text
         
         let stringData = text.data(using: .nonLossyASCII) ?? Data()
         
         return MIDIFile.kTextEventHeaders[textType]! +
             // length
-            MIDIFile.encodeVariableLengthValue(stringData.count) +
+            MIDIFile.encodeVariableLengthValue(stringData.count, as: D.self) +
             // text
             stringData
     }

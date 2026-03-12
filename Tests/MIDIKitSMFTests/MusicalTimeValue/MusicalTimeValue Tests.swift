@@ -110,7 +110,7 @@ import Testing
     @Test
     func elapsedTicks() async throws {
         let ppq = 480
-        var midiFile = MIDIFile(timeBase: .musical(ticksPerQuarterNote: UInt16(ppq)))
+        var midiFile = MIDIFile(timebase: .musical(ticksPerQuarterNote: UInt16(ppq)))
         
         midiFile.chunks = [
             .track([

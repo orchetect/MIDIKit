@@ -10,7 +10,7 @@ internal import SwiftDataParsing
 
 extension MIDIFile.Chunk {
     /// Unrecognized MIDI File Chunk.
-    public struct UnrecognizedChunk: MIDIFileChunk {
+    public struct UnrecognizedChunk {
         public let identifier: String
 
         /// Contains the raw bytes of the chunk's data portion
@@ -89,6 +89,12 @@ extension MIDIFile.Chunk.UnrecognizedChunk: CustomDebugStringConvertible {
     }
 }
 
+extension MIDIFile.Chunk.UnrecognizedChunk: MIDIFileChunk {
+    // `identifier` is a stored instance property
+    
+    public var chunkType: MIDIFile.ChunkType { .other(identifier: identifier) }
+}
+
 // MARK: - Static
 
 extension MIDIFile.Chunk.UnrecognizedChunk {
@@ -160,14 +166,18 @@ extension MIDIFile.Chunk.UnrecognizedChunk {
         )
     }
     
-    func midi1SMFRawBytes(using timeBase: MIDIFile.TimeBase) throws(MIDIFile.EncodeError) -> Data {
+    public func midi1SMFRawBytes() throws(MIDIFile.EncodeError) -> Data {
+        try midi1SMFRawBytes(as: Data.self)
+    }
+    
+    public func midi1SMFRawBytes<D: MutableDataProtocol>(as dataType: D.Type) throws(MIDIFile.EncodeError) -> D {
         // assemble track body without header or length
         
         let bodyData = rawData
         
         // assemble full chunk data with header and length
         
-        var data = Data()
+        var data = D()
         
         // 4-byte chunk identifier
         data += identifier.toASCIIData()

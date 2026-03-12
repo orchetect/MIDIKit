@@ -1,0 +1,304 @@
+//
+//  MIDI File decode Tests.swift
+//  MIDIKit • https://github.com/orchetect/MIDIKit
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
+//
+
+import Foundation
+import MIDIKitInternals
+import MIDIKitSMF
+import Testing
+
+@Suite struct MIDIFileDecodeTests {
+    // swiftformat:options --wrapcollections preserve
+    // swiftformat:disable spaceInsideParens spaceInsideBrackets spacearoundoperators
+    // swiftformat:options --maxwidth none
+    
+    /// Test parsing using NON-ASYNC method.
+    /// Just ensure file parses successfully. Not testing contents in-depth.
+    @Test
+    func midiFileParse_NonAsync() /* NOT ASYNC! */ throws {
+        // Note: It's ok if this throws a deprecation warning. We need to test this specific method.
+        let midiFile = try /* NOT AWAIT! */ MIDIFile(rawData: kMIDIFile.dp8Markers)
+        
+        try #require(midiFile.chunks.count == 3)
+        
+        let encodedData = try /* NOT AWAIT! */ midiFile.rawData()
+        #expect(encodedData.toUInt8Bytes() == kMIDIFile.dp8Markers)
+    }
+    
+    /// Test parsing using ASYNC method.
+    /// Just ensure file parses successfully. Not testing contents in-depth.
+    @Test
+    func midiFileParse_Async() async throws {
+        let midiFile = try await MIDIFile(rawData: kMIDIFile.dp8Markers)
+        
+        try #require(midiFile.chunks.count == 3)
+        
+        let encodedData = try await midiFile.rawData()
+        #expect(encodedData.toUInt8Bytes() == kMIDIFile.dp8Markers)
+    }
+    
+    /// Test parsing using AsyncSequence method.
+    /// Just ensure file parses successfully. Not testing contents in-depth.
+    @Test
+    func midiFileParse_AsyncSequence() async throws {
+        actor Receiver {
+            var chunks: [Int: MIDIFile.Chunk] = [:]
+            func addChunk(index: Int, chunk: MIDIFile.Chunk) { chunks[index] = chunk }
+            init() { }
+        }
+        let receiver = Receiver()
+        let midiFile = try await MIDIFile(rawData: kMIDIFile.dp8Markers) { fileHeader, chunkCount, chunkIndex, result in
+            // check header info
+            #expect(fileHeader.format == .multipleTracksSynchronous)
+            #expect(fileHeader.timebase == .musical(ticksPerQuarterNote: 480))
+            
+            // check chunk count
+            #expect(chunkCount == 3)
+            
+            // collect parsed track
+            do {
+                let chunk = try result.get()
+                Task { await receiver.addChunk(index: chunkIndex, chunk: chunk) }
+            } catch {
+                Issue.record("\(error.localizedDescription)")
+            }
+        }
+        
+        // wait for all tracks to be received asynchronously
+        await wait(expect: { await receiver.chunks.count == 3 }, timeout: 10.0)
+        
+        // ensure tracks are also stored in the `MIDIFile` as usual
+        try #require(midiFile.chunks.count == 3)
+        
+        // this also ensures tracks stored within the `MIDIFile` are in the correct order
+        let encodedData = try await midiFile.rawData()
+        #expect(encodedData.toUInt8Bytes() == kMIDIFile.dp8Markers)
+    }
+    
+    /// Test parsing a MIDI file that contains an unrecognized chunk.
+    @Test
+    func customChunk() async throws {
+        let midiFile = try await MIDIFile(rawData: kMIDIFile.customChunk)
+        
+        try #require(midiFile.chunks.count == 2)
+        
+        // chunk 1 - track
+        
+        guard case let .track(track1) = midiFile.chunks[0] else {
+            Issue.record()
+            return
+        }
+        
+        #expect(track1.events.count == 6)
+        
+        // chunk 2 - unknown chunk
+        
+        guard case let .other(unknownChunk) = midiFile.chunks[1] else {
+            Issue.record()
+            return
+        }
+        
+        #expect(unknownChunk.identifier == "Kdoc")
+        
+        #expect(unknownChunk.rawData.count == 35)
+        #expect(
+            unknownChunk.rawData.toUInt8Bytes() ==
+                [0x0D, 0x00, 0x00, 0x80, 0x3F, 0x10, 0x01, 0x22,
+                 0x14, 0x0D, 0x00, 0x00, 0xF0, 0x41, 0x15, 0x00,
+                 0x00, 0x48, 0x42, 0x1D, 0x00, 0x00, 0xA0, 0x41,
+                 0x25, 0x00, 0x00, 0x20, 0x42, 0x30, 0x02, 0x38,
+                 0x16, 0x40, 0x5A]
+        )
+    }
+    
+    // MARK: - DecodeOptions & Predicate
+    
+    @Test
+    func decodeOptions_maxTrackEventCount() /* NOT ASYNC! */ throws {
+        let options = MIDIFile.DecodeOptions(maxTrackEventCount: 1)
+        // Note: It's ok if this throws a deprecation warning. We need to test this specific method.
+        let midiFile = try /* NOT AWAIT! */ MIDIFile(rawData: kMIDIFile.dp8Markers, options: options)
+        try #require(midiFile.chunks.count == 3)
+        try #require(midiFile.tracks.count == 3)
+        for track in midiFile.tracks {
+            #expect(track.events.count == 1)
+        }
+    }
+    
+    @Test
+    func decodeOptions_maxTrackEventCount_async() async throws {
+        let options = MIDIFile.DecodeOptions(
+            maxTrackEventCount: 1
+        )
+        let midiFile = try await MIDIFile(rawData: kMIDIFile.dp8Markers, options: options)
+        try #require(midiFile.chunks.count == 3)
+        try #require(midiFile.tracks.count == 3)
+        for track in midiFile.tracks {
+            #expect(track.events.count == 1)
+        }
+    }
+    
+    @Test
+    func predicate() /* NOT ASYNC! */ throws {
+        // Note: It's ok if this throws a deprecation warning. We need to test this specific method.
+        let midiFile = try /* NOT AWAIT! */ MIDIFile(rawData: kMIDIFile.dp8Markers) { chunkType, chunkIndex in
+            chunkType == .track && chunkIndex == 1
+        }
+        try #require(midiFile.chunks.count == 1)
+        let track = midiFile.tracks[0]
+        #expect(track.events.count == 3) // check if the correct track was included
+    }
+    
+    @Test
+    func predicate_async() async throws {
+        let midiFile = try await MIDIFile(rawData: kMIDIFile.dp8Markers) { chunkType, chunkIndex in
+            chunkType == .track && chunkIndex == 1
+        }
+        try #require(midiFile.chunks.count == 1)
+        let track = midiFile.tracks[0]
+        #expect(track.events.count == 3) // check if the correct track was included
+    }
+    
+    @Test
+    func decodeOptions_bundleRPNAndNRPNEvents() async throws {
+        let rpnEvent = MIDIEvent.RPN(
+            .raw(parameter: .init(msb: 0x05, lsb: 0x10), dataEntryMSB: 0x08, dataEntryLSB: 0x07),
+            channel: 2
+        )
+        let event: MIDIFileEvent = .rpn(delta: .none, event: rpnEvent)
+        let events: [MIDIFileEvent] = [event]
+        
+        let track = MIDIFile.Chunk.Track(events: events)
+        let midiFile = MIDIFile(chunks: [.track(track)])
+        
+        let rawData = try await midiFile.rawData()
+        
+        // decode without bundleRPNAndNRPNEvents
+        do {
+            let options = MIDIFile.DecodeOptions(bundleRPNAndNRPNEvents: false)
+            let decodedMIDIFile = try await MIDIFile(rawData: rawData, options: options)
+            #expect(decodedMIDIFile.tracks.count == 1)
+            let decodedTrack = decodedMIDIFile.tracks[0]
+            #expect(decodedTrack.events.count == 4)
+            #expect(decodedTrack.events == [
+                .cc(delta: .none, event: .init(controller: .rpnMSB, value: .midi1(0x05), channel: 2)),
+                .cc(delta: .none, event: .init(controller: .rpnLSB, value: .midi1(0x10), channel: 2)),
+                .cc(delta: .none, event: .init(controller: .dataEntry, value: .midi1(0x08), channel: 2)),
+                .cc(delta: .none, event: .init(controller: .lsb(for: .dataEntry), value: .midi1(0x07), channel: 2))
+            ])
+        }
+        
+        // decode with bundleRPNAndNRPNEvents
+        do {
+            let options = MIDIFile.DecodeOptions(bundleRPNAndNRPNEvents: true)
+            let decodedMIDIFile = try await MIDIFile(rawData: rawData, options: options)
+            #expect(decodedMIDIFile.tracks.count == 1)
+            let decodedTrack = decodedMIDIFile.tracks[0]
+            #expect(decodedTrack.events.count == 1)
+            #expect(decodedTrack.events == events)
+        }
+    }
+    
+    /// This test ensures the `ignoreBytesPastEOF` decoding option successfully ignores unexpected trailing bytes.
+    @Test
+    func decodeSpuriousBytesPastEOF() async throws {
+        let midiFile = try await MIDIFile(rawData: kMIDIFile.customChunk)
+        let baseRawData: [UInt8] = try await midiFile.rawData(as: [UInt8].self)
+        
+        // test with various trailing byte sequences - CR/LF, whitespace/newlines, etc.
+        
+        // ignoring spurious trailing bytes
+        do {
+            let options = MIDIFile.DecodeOptions(ignoreBytesPastEOF: true)
+            
+            let rawDataCR = baseRawData + [0x0D]
+            #expect(try await MIDIFile(rawData: rawDataCR, options: options) == midiFile)
+            
+            let rawDataLF = baseRawData + [0x0A]
+            #expect(try await MIDIFile(rawData: rawDataLF, options: options) == midiFile)
+            
+            let rawDataCRLF = baseRawData + [0x0D, 0x0A]
+            #expect(try await MIDIFile(rawData: rawDataCRLF, options: options) == midiFile)
+            
+            let rawDataCRLF_CRLF = baseRawData + [0x0D, 0x0A]
+            #expect(try await MIDIFile(rawData: rawDataCRLF_CRLF, options: options) == midiFile)
+            
+            let rawDataSpace = baseRawData + [0x20] // space char
+            #expect(try await MIDIFile(rawData: rawDataSpace, options: options) == midiFile)
+            
+            let rawData4Bytes = baseRawData + [0x43, 0x12, 0x01, 0x78]
+            #expect(try await MIDIFile(rawData: rawData4Bytes, options: options) == midiFile)
+            
+            let rawData8Bytes = baseRawData + [0x43, 0x12, 0x01, 0x78, 0x00, 0x09, 0x10, 0x58]
+            #expect(try await MIDIFile(rawData: rawData8Bytes, options: options) == midiFile)
+        }
+        
+        // NOT ignoring spurious trailing bytes
+        // (throwing error if spurious trailing bytes are encountered)
+        do {
+            let options = MIDIFile.DecodeOptions(ignoreBytesPastEOF: false)
+            
+            let rawDataCR = baseRawData + [0x0D]
+            await #expect(throws: (any Error).self) { try await MIDIFile(rawData: rawDataCR, options: options) }
+            
+            let rawDataLF = baseRawData + [0x0A]
+            await #expect(throws: (any Error).self) { try await MIDIFile(rawData: rawDataLF, options: options) }
+            
+            let rawDataCRLF = baseRawData + [0x0D, 0x0A]
+            await #expect(throws: (any Error).self) { try await MIDIFile(rawData: rawDataCRLF, options: options) }
+            
+            let rawDataCRLF_CRLF = baseRawData + [0x0D, 0x0A]
+            await #expect(throws: (any Error).self) { try await MIDIFile(rawData: rawDataCRLF_CRLF, options: options) }
+            
+            let rawDataSpace = baseRawData + [0x20] // space char
+            await #expect(throws: (any Error).self) { try await MIDIFile(rawData: rawDataSpace, options: options) }
+            
+            let rawData4Bytes = baseRawData + [0x43, 0x12, 0x01, 0x78]
+            await #expect(throws: (any Error).self) { try await MIDIFile(rawData: rawData4Bytes, options: options) }
+            
+            let rawData8Bytes = baseRawData + [0x43, 0x12, 0x01, 0x78, 0x00, 0x09, 0x10, 0x58]
+            await #expect(throws: (any Error).self) { try await MIDIFile(rawData: rawData8Bytes, options: options) }
+        }
+    }
+    
+    /// This test ensures the `ignoreBytesPastEOF` decoding option only takes effect if malformed bytes are found.
+    /// If unexpected, but valid, chunk(s) are present past the end of the expected file data, parse them.
+    @Test
+    func decodeMoreTracksThanSpecifiedInHeader() async throws {
+        let midiFile = try await MIDIFile(rawData: kMIDIFile.customChunk)
+        let baseRawData: [UInt8] = try await midiFile.rawData(as: [UInt8].self)
+        
+        let extraTrack = MIDIFile.Chunk.Track(events: [
+            .cc(delta: .none, event: .init(controller: .breath, value: .midi1(42), channel: 0))
+        ])
+        let extraTrackRawData = try extraTrack.midi1SMFRawBytes(as: [UInt8].self, using: midiFile.timebase)
+        let rawDataExtraTrack = baseRawData + extraTrackRawData
+        
+        // ignoring spurious trailing bytes
+        do {
+            let options = MIDIFile.DecodeOptions(ignoreBytesPastEOF: true)
+            let decodedMIDIFile = try await MIDIFile(rawData: rawDataExtraTrack, options: options)
+            
+            #expect(decodedMIDIFile.chunks.count == 3)
+            #expect(decodedMIDIFile.chunks == midiFile.chunks + [.track(extraTrack)])
+            
+            #expect(decodedMIDIFile.tracks.count == 2)
+            #expect(decodedMIDIFile.tracks == midiFile.tracks + [extraTrack])
+        }
+        
+        // NOT ignoring spurious trailing bytes
+        // (won't throw an error since the unexpected trailing data is a valid chunk)
+        do {
+            let options = MIDIFile.DecodeOptions(ignoreBytesPastEOF: false)
+            let decodedMIDIFile = try await MIDIFile(rawData: rawDataExtraTrack, options: options)
+            
+            #expect(decodedMIDIFile.chunks.count == 3)
+            #expect(decodedMIDIFile.chunks == midiFile.chunks + [.track(extraTrack)])
+            
+            #expect(decodedMIDIFile.tracks.count == 2)
+            #expect(decodedMIDIFile.tracks == midiFile.tracks + [extraTrack])
+        }
+    }
+}

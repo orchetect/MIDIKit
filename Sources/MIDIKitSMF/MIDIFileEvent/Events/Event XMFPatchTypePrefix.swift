@@ -160,7 +160,7 @@ extension MIDIFileEvent.XMFPatchTypePrefix: MIDIFileEventPayload {
         )
     }
     
-    public func midi1SMFRawBytes<D: MutableDataProtocol>() -> D {
+    public func midi1SMFRawBytes<D: MutableDataProtocol>(as dataType: D.Type) -> D {
         // FF 60 <len> <param>
         // len should always be 1, param is always one byte
         

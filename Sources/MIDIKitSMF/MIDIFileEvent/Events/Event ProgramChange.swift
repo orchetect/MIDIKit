@@ -136,7 +136,7 @@ extension MIDIEvent.ProgramChange: MIDIFileEventPayload {
         )
     }
     
-    public func midi1SMFRawBytes<D: MutableDataProtocol>() -> D {
+    public func midi1SMFRawBytes<D: MutableDataProtocol>(as dataType: D.Type) -> D {
         // Cn program
         
         D(midi1RawBytes())

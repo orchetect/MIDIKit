@@ -152,7 +152,7 @@ extension MIDIEvent.NoteOff: MIDIFileEventPayload {
         )
     }
     
-    public func midi1SMFRawBytes<D: MutableDataProtocol>() -> D {
+    public func midi1SMFRawBytes<D: MutableDataProtocol>(as dataType: D.Type) -> D {
         // 8n note velocity
         
         D(midi1RawBytes())

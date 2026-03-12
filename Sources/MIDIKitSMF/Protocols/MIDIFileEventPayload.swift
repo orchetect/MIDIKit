@@ -37,8 +37,11 @@ public protocol MIDIFileEventPayload where Self: Sendable {
         runningStatus: UInt8?
     ) throws(MIDIFile.DecodeError) -> StreamDecodeResult
     
-    /// Raw data for the event.
-    func midi1SMFRawBytes<D: MutableDataProtocol>() -> D
+    /// Returns the encoded raw data for the event.
+    func midi1SMFRawBytes() -> Data
+    
+    /// Returns the encoded raw data for the event.
+    func midi1SMFRawBytes<D: MutableDataProtocol>(as dataType: D.Type) -> D
    
     /// Returns the new event and MIDI file buffer length (number of bytes).
     typealias StreamDecodeResult = (newEvent: Self, bufferLength: Int)
@@ -60,7 +63,15 @@ extension MIDIFileEventPayload /* : CustomDebugStringConvertible */ {
     public var debugDescription: String { smfDebugDescription }
 }
 
-// MARK: - Defaulted Methods
+// MARK: - Default Implementation
+
+extension MIDIFileEventPayload {
+    public func midi1SMFRawBytes() -> Data {
+        midi1SMFRawBytes(as: Data.self)
+    }
+}
+
+// MARK: - Extension Methods
 
 extension MIDIFileEventPayload {
     /// Initialize from raw event bytes.

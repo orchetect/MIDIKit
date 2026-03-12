@@ -4,9 +4,17 @@
 //  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
-#if compiler(<6.2)
-
 import Foundation
+
+extension FileManager {
+    // `FileManager` is thread-safe but doesn't yet conform to Sendable,
+    // so we can coerce it to be treated as Sendable.
+    private static func getDefaultFileManager() -> @Sendable () -> FileManager { { Self.default } }
+    package static var sendableDefault: FileManager { getDefaultFileManager()() }
+}
+
+
+#if compiler(<6.2)
 
 // TODO: This was used in MIDIKitSMF prior to MIDIKit 0.12.0 to avoid large memory usage in the MIDIFile decode procedure, but after the decoding refactor this is not being used and may not be needed
 

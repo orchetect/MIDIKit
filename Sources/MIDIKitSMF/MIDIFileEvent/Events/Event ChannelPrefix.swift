@@ -131,7 +131,7 @@ extension MIDIFileEvent.ChannelPrefix: MIDIFileEventPayload {
         )
     }
     
-    public func midi1SMFRawBytes<D: MutableDataProtocol>() -> D {
+    public func midi1SMFRawBytes<D: MutableDataProtocol>(as dataType: D.Type) -> D {
         // FF 20 01 cc
         // cc is channel number (0...15)
         

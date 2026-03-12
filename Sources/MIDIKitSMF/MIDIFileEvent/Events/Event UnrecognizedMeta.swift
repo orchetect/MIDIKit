@@ -176,13 +176,13 @@ extension MIDIFileEvent.UnrecognizedMeta: MIDIFileEventPayload {
         )
     }
     
-    public func midi1SMFRawBytes<D: MutableDataProtocol>() -> D {
+    public func midi1SMFRawBytes<D: MutableDataProtocol>(as dataType: D.Type) -> D {
         // FF <type> <length> <bytes>
         // type == UInt8 meta type (unrecognized)
         
         [0xFF, metaType] +
             // length of data
-            MIDIFile.encodeVariableLengthValue(data.count) +
+            MIDIFile.encodeVariableLengthValue(data.count, as: D.self) +
             // data
             data
     }

@@ -134,7 +134,7 @@ extension MIDIFileEvent.SequenceNumber: MIDIFileEventPayload {
         )
     }
     
-    public func midi1SMFRawBytes<D: MutableDataProtocol>() -> D {
+    public func midi1SMFRawBytes<D: MutableDataProtocol>(as dataType: D.Type) -> D {
         // FF 00 02 ssss
         // ssss is UIn16 big-endian sequence number
         

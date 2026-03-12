@@ -19,8 +19,15 @@ extension MIDIFile.Chunk {
         /// Instance a new empty MIDI file track.
         public init() { }
         
+        /// Instance a new MIDI file track with events.
         public init(events: [MIDIFileEvent]) {
             self.events = events
+        }
+        
+        /// Instance a new MIDI file track with events.
+        @_disfavoredOverload
+        public init(events: some Sequence<MIDIFileEvent>) {
+            self.events = Array(events)
         }
     }
 }
@@ -33,38 +40,76 @@ extension MIDIFile.Chunk.Track: Sendable { }
 
 extension MIDIFile.Chunk.Track: CustomStringConvertible {
     public var description: String {
-        var outputString = ""
-        
-        outputString += "Track(".newLined
-        outputString += "  events (\(events.count)): ".newLined
-        
-        for event in events {
-            let deltaString = event.smfUnwrappedEvent.delta.description
-                .padding(toLength: 15, withPad: " ", startingAt: 0)
-            
-            outputString += "    \(deltaString) \(event.smfUnwrappedEvent.event.smfDescription)"
-                .newLined
-        }
-        
-        outputString += ")"
-        
-        return outputString
+        description(maxEventCount: 10) // by default, limit number of events
+    }
+    
+    /// Generate a description of the track, optionally limiting the number of events in the output.
+    public func description(maxEventCount: Int?) -> String {
+        descriptionBuilder(
+            maxEventCount: maxEventCount,
+            deltaPadLength: 15,
+            deltaDesc: { $0.description },
+            eventDesc: { $0.smfDescription }
+        )
     }
 }
 
 extension MIDIFile.Chunk.Track: CustomDebugStringConvertible {
     public var debugDescription: String {
-        var outputString = ""
+        debugDescription(maxEventCount: 10) // by default, limit number of events
+    }
+    
+    /// Generate a debug description of the track, optionally limiting the number of events in the output.
+    public func debugDescription(maxEventCount: Int?) -> String {
+        descriptionBuilder(
+            maxEventCount: maxEventCount,
+            deltaPadLength: 15 + 11,
+            deltaDesc: { $0.debugDescription },
+            eventDesc: { $0.smfDebugDescription }
+        )
+    }
+}
+
+extension MIDIFile.Chunk.Track {
+    func descriptionBuilder(
+        maxEventCount: Int?,
+        deltaPadLength: Int,
+        deltaDesc: (MIDIFileEvent.DeltaTime) -> String,
+        eventDesc: (any MIDIFileEventPayload) -> String
+    ) -> String {
+        // sanitize inputs
+        let maxEventCount = maxEventCount?.clamped(to: 0...)
         
+        var outputString = ""
         outputString += "Track(".newLined
         outputString += "  events (\(events.count)): ".newLined
         
-        for event in events {
-            let deltaString = event.smfUnwrappedEvent.delta.debugDescription
-                .padding(toLength: 15 + 11, withPad: " ", startingAt: 0)
+        if events.isEmpty {
+            outputString += "    No events.".newLined
+        } else {
+            let outputEvents = if let maxEventCount, maxEventCount < events.count {
+                events.prefix(maxEventCount)
+            } else {
+                events[...]
+            }
             
-            outputString += "    \(deltaString) \(event.smfUnwrappedEvent.event.smfDebugDescription)"
-                .newLined
+            for event in outputEvents {
+                let deltaString = deltaDesc(event.smfUnwrappedEvent.delta)
+                    .padding(toLength: deltaPadLength, withPad: " ", startingAt: 0)
+                
+                outputString += "    \(deltaString) \(eventDesc(event.smfUnwrappedEvent.event))"
+                    .newLined
+            }
+            
+            let excludedEventCount = events.count - outputEvents.count
+            if excludedEventCount > 0 {
+                let eventsLimitedString = if maxEventCount == 0 {
+                    "..."
+                } else {
+                    "+ \(excludedEventCount) more events" // + " (\(events.count) total events)"
+                }
+                outputString += "    \(eventsLimitedString.newLined)"
+            }
         }
         
         outputString += ")"
@@ -75,12 +120,15 @@ extension MIDIFile.Chunk.Track: CustomDebugStringConvertible {
 
 extension MIDIFile.Chunk.Track: MIDIFileChunk {
     public var identifier: String { Self.staticIdentifier }
+    
+    public var chunkType: MIDIFile.ChunkType { Self.staticChunkType }
 }
 
 // MARK: - Static
 
 extension MIDIFile.Chunk.Track {
     public static let staticIdentifier: String = "MTrk"
+    public static let staticChunkType: MIDIFile.ChunkType = .track
     
     static let chunkEnd: [UInt8] = [0xFF, 0x2F, 0x00]
 }
@@ -92,6 +140,12 @@ extension MIDIFile.Chunk {
     public static func track(_ events: [MIDIFileEvent]) -> Self {
         .track(.init(events: events))
     }
+    
+    /// Track: `MTrk` chunk type.
+    @_disfavoredOverload
+    public static func track(_ events: some Sequence<MIDIFileEvent>) -> Self {
+        .track(.init(events: events))
+    }
 }
 
 // MARK: - Encoding
@@ -100,8 +154,9 @@ extension MIDIFile.Chunk.Track {
     /// Init from MIDI file data stream.
     public init<D: DataProtocol>(
         midi1SMFRawBytesStream stream: D,
-        timebase: MIDIFile.TimeBase,
-        bundleParameterNumbers: Bool
+        timebase: MIDIFile.Timebase,
+        bundleRPNAndNRPNEvents: Bool,
+        maxEventCount: Int? = nil
     ) throws(MIDIFile.DecodeError) {
         guard stream.count >= 8 else {
             throw .malformed(
@@ -146,16 +201,25 @@ extension MIDIFile.Chunk.Track {
             
             // we can't pass pointer ranges outside of the data reader closure,
             // so we must use them within the closure
-            return try Self(midi1SMFRawBytes: readChunk, timebase: timebase, bundleParameterNumbers: bundleParameterNumbers)
+            return try Self(
+                midi1SMFRawBytes: readChunk,
+                timebase: timebase,
+                bundleRPNAndNRPNEvents: bundleRPNAndNRPNEvents,
+                maxEventCount: maxEventCount
+            )
         }
     }
     
     /// Init from raw data stream, excluding the header identifier and length.
     init<D: DataProtocol>(
         midi1SMFRawBytes rawData: D,
-        timebase: MIDIFile.TimeBase,
-        bundleParameterNumbers: Bool
+        timebase: MIDIFile.Timebase,
+        bundleRPNAndNRPNEvents: Bool,
+        maxEventCount: Int? = nil
     ) throws(MIDIFile.DecodeError) {
+        // sanitize inputs
+        let maxEventCount = maxEventCount?.clamped(to: 0...)
+        
         // chunk data
         
         try rawData.withDataParser { parser throws(MIDIFile.DecodeError) in
@@ -166,9 +230,13 @@ extension MIDIFile.Chunk.Track {
             
             // running status
             
+            var parsedEventCount = 0
             var runningStatusByte: UInt8?
             
             while !endOfChunk {
+                // check for early return if event count is being limited
+                if let maxEventCount, parsedEventCount >= maxEventCount { break }
+                
                 // delta time
                 
                 let eventDeltaTimeRead = try parser.toMIDIFileDecodeError(
@@ -263,11 +331,14 @@ extension MIDIFile.Chunk.Track {
                 } else if (0xF0 ... 0xF7).contains(foundEvent.statusByte) {
                     runningStatusByte = nil
                 }
+                
+                // increment event counter
+                parsedEventCount += 1
             }
             
             // bundle RPN and NRPN events
             
-            if bundleParameterNumbers {
+            if bundleRPNAndNRPNEvents {
                 func bundleRPNAndNRPN(index: [MIDIFileEvent].Index) {
                     if newEvents[eventsIndex].eventType == .cc,
                        case let .cc(_, msbEvent) = newEvents[eventsIndex],
@@ -357,8 +428,15 @@ extension MIDIFile.Chunk.Track {
 }
 
 extension MIDIFile.Chunk.Track {
-    func midi1SMFRawBytes<D: MutableDataProtocol>(
-        using timeBase: MIDIFile.TimeBase
+    public func midi1SMFRawBytes(
+        using timebase: MIDIFile.Timebase
+    ) throws(MIDIFile.EncodeError) -> Data {
+        try midi1SMFRawBytes(as: Data.self, using: timebase)
+    }
+    
+    public func midi1SMFRawBytes<D: MutableDataProtocol>(
+        as dataType: D.Type,
+        using timebase: MIDIFile.Timebase
     ) throws(MIDIFile.EncodeError) -> D {
         // assemble chunk body without header or length
         
@@ -366,8 +444,8 @@ extension MIDIFile.Chunk.Track {
         
         for event in events {
             let unwrapped = event.smfUnwrappedEvent
-            bodyData.append(deltaTime: unwrapped.delta.ticksValue(using: timeBase))
-            bodyData.append(contentsOf: unwrapped.event.midi1SMFRawBytes() as D)
+            bodyData.append(deltaTime: unwrapped.delta.ticksValue(using: timebase))
+            bodyData.append(contentsOf: unwrapped.event.midi1SMFRawBytes(as: D.self))
         }
         
         bodyData.append(deltaTime: 0)
