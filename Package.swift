@@ -44,7 +44,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/orchetect/swift-data-parsing", from: "0.1.0"),
-        .package(url: "https://github.com/orchetect/swift-timecode", from: "3.0.0")
+        .package(url: "https://github.com/orchetect/swift-timecode", from: "3.1.0")
     ] + doccPluginDependency(),
     targets: [
         .target(
