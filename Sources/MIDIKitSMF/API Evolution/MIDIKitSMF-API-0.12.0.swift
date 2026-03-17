@@ -76,6 +76,15 @@ extension MIDIFile.Chunk.Header {
     }
 }
 
+extension MIDIFile.Chunk.Track {
+    @_documentation(visibility: internal)
+    @available(*, deprecated, renamed: "eventsAtQuarterNotePositions(atPPQ:)")
+    @_disfavoredOverload
+    public func eventsAtBeatPositions(ppq: UInt16) -> [(beat: Double, event: MIDIFileEvent)] {
+        eventsAtQuarterNotePositions(atPPQ: ppq)
+    }
+}
+
 // MARK: - MIDIFile.Chunk.UnrecognizedChunk
 
 extension MIDIFile.Chunk.UnrecognizedChunk {

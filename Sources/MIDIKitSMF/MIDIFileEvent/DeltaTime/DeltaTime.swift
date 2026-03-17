@@ -113,9 +113,14 @@ extension MIDIFileEvent.DeltaTime: CustomDebugStringConvertible {
 // MARK: - Methods
 
 extension MIDIFileEvent.DeltaTime {
-    /// Returns the real time (wall clock) duration in seconds of the delta time using the specified timebase.
+    /// Returns the musical beat duration of the delta time using the specified timebase.
     /// Ensure the `ppq` (ticks per quarter note) supplied is the same as used in the MIDI file.
-    public func timeInterval(ppq: UInt16) -> TimeInterval {
+    ///
+    /// For example:
+    ///
+    /// - 480 ticks at 480 ppq == 1 beat == 0.25 beat duration
+    /// - 960 ticks at 480 ppq == 2 beats == 0.5 beat duration
+    public func quarterNoteBeats(atPPQ ppq: UInt16) -> Double {
         guard ppq > 0 else { return 0.0 }
         return Double(ticks) / Double(ppq)
     }

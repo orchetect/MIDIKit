@@ -100,7 +100,7 @@ import Testing
     }
     
     @Test
-    func eventsAtBeatPositions() async throws {
+    func eventsAtQuarterNotePositions() async throws {
         let ppq: UInt16 = 480
         var midiFile = MIDIFile(timebase: .musical(ticksPerQuarterNote: UInt16(ppq)))
         
@@ -141,7 +141,7 @@ import Testing
         
         let trackOne = try #require(midiFile.tracks.first)
         
-        let eventsAtBeatPositions = trackOne.eventsAtBeatPositions(ppq: ppq)
+        let eventsAtBeatPositions = trackOne.eventsAtQuarterNotePositions(atPPQ: ppq)
         
         #expect(eventsAtBeatPositions.count == 11)
         

@@ -151,13 +151,13 @@ extension MIDIFile.Chunk {
 // MARK: - Methods
 
 extension MIDIFile.Chunk.Track {
-    /// Returns ``events`` mapped to their beat position in the sequence.
+    /// Returns ``events`` mapped to their quarter-note beat position from the start of the track.
     /// This is computed, so avoid repeated calls to this method.
     /// Ensure the `ppq` (ticks per quarter note) supplied is the same as used in the MIDI file.
-    public func eventsAtBeatPositions(ppq: UInt16) -> [(beat: Double, event: MIDIFileEvent)] {
+    public func eventsAtQuarterNotePositions(atPPQ ppq: UInt16) -> [(beat: Double, event: MIDIFileEvent)] {
         var position = 0.0
         return events.map {
-            position += $0.delta.timeInterval(ppq: ppq)
+            position += $0.delta.quarterNoteBeats(atPPQ: ppq)
             return (beat: position, event: $0)
         }
     }
