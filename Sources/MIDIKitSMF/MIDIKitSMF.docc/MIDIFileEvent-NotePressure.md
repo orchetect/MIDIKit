@@ -21,8 +21,8 @@ Also known as:
 
 ### Constructors
 
-- ``MIDIFileEvent/notePressure(delta:note:amount:channel:)-71uo5``
-- ``MIDIFileEvent/notePressure(delta:note:amount:channel:)-2ioo1``
+- ``MIDIFileEvent/notePressure(delta:note:amount:channel:)-(_,MIDINote,_,_)``
+- ``MIDIFileEvent/notePressure(delta:note:amount:channel:)-(_,UInt7,_,_)``
 
 ### Switch Case Unwrapping
 
