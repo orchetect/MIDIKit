@@ -128,7 +128,8 @@ extension MIDIFile.Chunk.Header {
     static let midi1SMFFixedRawBytesLength = 14
     
     static func initFrom<D: DataProtocol>(
-        midi1SMFRawBytes: D
+        midi1SMFRawBytes: D,
+        allowMultiTrackFormat0: Bool
     ) throws(MIDIFile.DecodeError) -> (header: Self, trackCount: Int) {
         guard midi1SMFRawBytes.count >= Self.midi1SMFFixedRawBytesLength else {
             throw .malformed(
@@ -206,12 +207,12 @@ extension MIDIFile.Chunk.Header {
             
             // technically Format 0 can only have one track, and in that case the
             // header should always state a track count of 1 (but sometimes it disobeys this)
-            if format == .singleTrack,
-               trackCount != 1
-            {
-                throw .malformed(
-                    "MIDI file is Format 0 which should only contain a single track, but header reports a track count of \(trackCount)."
-                )
+            if format == .singleTrack {
+                if trackCount != 1, !allowMultiTrackFormat0 {
+                    throw .malformed(
+                        "MIDI file is Format 0 which should only contain a single track, but header reports a track count of \(trackCount)."
+                    )
+                }
             }
             
             let header = Self(format: format, timebase: timebase)

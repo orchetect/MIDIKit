@@ -7,6 +7,10 @@
 extension MIDIFile {
     /// MIDI file decoding options.
     public struct DecodeOptions {
+        /// Allows malformed MIDI files that declare they are format 0 (single track) but contain zero or multiple tracks.
+        /// If `false`, this is an error condition and the file is considered malformed.
+        public var allowMultiTrackFormat0: Bool
+        
         /// Bundle RPN/NRPN CC message sequences into `rpn`/`nrpn` event types.
         /// If `false`, the message sequences will be parsed as individual CC messages.
         public var bundleRPNAndNRPNEvents: Bool
@@ -30,10 +34,12 @@ extension MIDIFile {
         public var ignoreBytesPastEOF: Bool
         
         public init(
+            allowMultiTrackFormat0: Bool = true,
             bundleRPNAndNRPNEvents: Bool = true,
             maxTrackEventCount: Int? = nil,
             ignoreBytesPastEOF: Bool = true
         ) {
+            self.allowMultiTrackFormat0 = allowMultiTrackFormat0
             self.bundleRPNAndNRPNEvents = bundleRPNAndNRPNEvents
             self.maxTrackEventCount = maxTrackEventCount
             self.ignoreBytesPastEOF = ignoreBytesPastEOF

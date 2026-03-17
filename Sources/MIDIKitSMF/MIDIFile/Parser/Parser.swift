@@ -12,10 +12,11 @@ extension MIDIFile {
         
         let fileDescriptor: FileDescriptor
         
-        init(data: DataType, ignoreBytesPastEOF: Bool) throws(MIDIFile.DecodeError) {
+        init(data: DataType, allowMultiTrackFormat0: Bool, ignoreBytesPastEOF: Bool) throws(MIDIFile.DecodeError) {
             self.data = data
             fileDescriptor = try Self.parseFileDescriptor(
                 fileData: data,
+                allowMultiTrackFormat0: allowMultiTrackFormat0,
                 ignoreBytesPastEOF: ignoreBytesPastEOF
             )
             
@@ -188,6 +189,7 @@ extension MIDIFile.Parser {
 extension MIDIFile.Parser {
     static func parseFileDescriptor(
         fileData: some DataProtocol,
+        allowMultiTrackFormat0: Bool,
         ignoreBytesPastEOF: Bool
     ) throws(MIDIFile.DecodeError) -> FileDescriptor {
         guard !fileData.isEmpty else {
@@ -205,7 +207,10 @@ extension MIDIFile.Parser {
                 )
             }
             
-            let (header, expectedTrackCount) = try MIDIFile.Chunk.Header.initFrom(midi1SMFRawBytes: readHeader)
+            let (header, expectedTrackCount) = try MIDIFile.Chunk.Header.initFrom(
+                midi1SMFRawBytes: readHeader,
+                allowMultiTrackFormat0: allowMultiTrackFormat0
+            )
             
             // chunks
             

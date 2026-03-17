@@ -13,12 +13,13 @@ extension MIDIFile {
     /// Decode sequentially, without concurrency.
     mutating func decode(
         rawData: some DataProtocol & Sendable,
+        allowMultiTrackFormat0: Bool,
         bundleRPNAndNRPNEvents: Bool,
         maxTrackEventCount: Int?,
         ignoreBytesPastEOF: Bool,
         predicate: DecodePredicate?
     ) throws(MIDIFile.DecodeError) {
-        let parser = try Parser(data: rawData, ignoreBytesPastEOF: ignoreBytesPastEOF)
+        let parser = try Parser(data: rawData, allowMultiTrackFormat0: allowMultiTrackFormat0, ignoreBytesPastEOF: ignoreBytesPastEOF)
         
         header = parser.fileDescriptor.header
         
@@ -34,12 +35,13 @@ extension MIDIFile {
     @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
     mutating func decode(
         rawData: some DataProtocol & Sendable,
+        allowMultiTrackFormat0: Bool,
         bundleRPNAndNRPNEvents: Bool,
         maxTrackEventCount: Int?,
         ignoreBytesPastEOF: Bool,
         predicate: DecodePredicate?
     ) async throws(MIDIFile.DecodeError) {
-        let parser = try Parser(data: rawData, ignoreBytesPastEOF: ignoreBytesPastEOF)
+        let parser = try Parser(data: rawData, allowMultiTrackFormat0: allowMultiTrackFormat0, ignoreBytesPastEOF: ignoreBytesPastEOF)
         
         header = parser.fileDescriptor.header
         
@@ -58,13 +60,14 @@ extension MIDIFile {
     @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
     mutating func decode(
         rawData: some DataProtocol & Sendable,
+        allowMultiTrackFormat0: Bool,
         bundleRPNAndNRPNEvents: Bool,
         maxTrackEventCount: Int?,
         ignoreBytesPastEOF: Bool,
         predicate: DecodePredicate?,
         parsedChunk: @escaping ChunkDecodeBlock
     ) async throws(MIDIFile.DecodeError) {
-        let parser = try Parser(data: rawData, ignoreBytesPastEOF: ignoreBytesPastEOF)
+        let parser = try Parser(data: rawData, allowMultiTrackFormat0: allowMultiTrackFormat0, ignoreBytesPastEOF: ignoreBytesPastEOF)
         
         header = parser.fileDescriptor.header
         
