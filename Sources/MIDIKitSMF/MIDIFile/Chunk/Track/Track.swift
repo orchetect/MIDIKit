@@ -156,9 +156,7 @@ extension MIDIFile.Chunk.Track {
     public init?<D: DataProtocol>(
         midi1SMFRawBytesStream stream: D,
         timebase: MIDIFile.Timebase,
-        strategy: MIDIFile.DecodeOptions.TrackDecodeStrategy,
-        bundleRPNAndNRPNEvents: Bool,
-        maxEventCount: Int? = nil
+        options: DecodeOptions
     ) throws(MIDIFile.DecodeError) {
         guard stream.count >= 8 else {
             throw .malformed(
@@ -206,9 +204,7 @@ extension MIDIFile.Chunk.Track {
             return try Self(
                 midi1SMFRawBytes: readChunk,
                 timebase: timebase,
-                strategy: strategy,
-                bundleRPNAndNRPNEvents: bundleRPNAndNRPNEvents,
-                maxEventCount: maxEventCount
+                options: options
             )
         }
         
@@ -220,12 +216,10 @@ extension MIDIFile.Chunk.Track {
     init?<D: DataProtocol>(
         midi1SMFRawBytes rawData: D,
         timebase: MIDIFile.Timebase,
-        strategy: MIDIFile.DecodeOptions.TrackDecodeStrategy,
-        bundleRPNAndNRPNEvents: Bool,
-        maxEventCount: Int? = nil
+        options: DecodeOptions
     ) throws(MIDIFile.DecodeError) {
         // sanitize inputs
-        let maxEventCount = maxEventCount?.clamped(to: 0...)
+        let maxEventCount = options.maxEventCount?.clamped(to: 0...)
         
         // chunk data
         
@@ -344,7 +338,7 @@ extension MIDIFile.Chunk.Track {
                     parsedEventCount += 1
                 }
             } catch {
-                switch strategy {
+                switch options.errorStrategy {
                 case .throwOnError:
                     throw error
                 case .discardTracksWithErrors:
@@ -357,7 +351,7 @@ extension MIDIFile.Chunk.Track {
             
             // bundle RPN and NRPN events
             
-            if bundleRPNAndNRPNEvents {
+            if options.bundleRPNAndNRPNEvents {
                 func bundleRPNAndNRPN(index: [MIDIFileEvent].Index) {
                     if newEvents[eventsIndex].eventType == .cc,
                        case let .cc(_, msbEvent) = newEvents[eventsIndex],
