@@ -316,7 +316,7 @@ extension MIDIFile.Parser {
                 
                 let newUnrecognizedChunk = MIDIFile.Chunk.UnrecognizedChunk(
                     id: fourCharString,
-                    rawData: chunkData.toData()
+                    data: chunkData.toData()
                 )
                 return .other(newUnrecognizedChunk)
             }

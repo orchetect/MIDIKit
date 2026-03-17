@@ -58,6 +58,8 @@ extension MIDIFile {
     }
 }
 
+// MARK: - MIDIFile.Chunk.Header
+
 extension MIDIFile.Chunk.Header {
     @_documentation(visibility: internal)
     @available(*, deprecated, renamed: "timebase")
@@ -65,6 +67,7 @@ extension MIDIFile.Chunk.Header {
     
     @_documentation(visibility: internal)
     @available(*, deprecated, renamed: "init(format:timebase:)")
+    @_disfavoredOverload
     public init(
         format: MIDIFile.Format,
         timeBase: MIDIFile.Timebase
@@ -73,10 +76,31 @@ extension MIDIFile.Chunk.Header {
     }
 }
 
+// MARK: - MIDIFile.Chunk.UnrecognizedChunk
+
+extension MIDIFile.Chunk.UnrecognizedChunk {
+    @_documentation(visibility: internal)
+    @available(*, deprecated, renamed: "init(id:data:)")
+    @_disfavoredOverload
+    public init(id: String, rawData: Data? = nil) {
+        self.init(id: id, data: rawData)
+    }
+}
+
+extension MIDIFile.Chunk {
+    @_documentation(visibility: internal)
+    @available(*, deprecated, renamed: "other(id:data:)")
+    @_disfavoredOverload
+    public static func other(id: String, rawData: Data? = nil) -> Self {
+        .other(id: id, data: rawData)
+    }
+}
+
 // MARK: - MIDIFile.Timebase
 
 extension MIDIFile.Timebase {
     @_documentation(visibility: internal)
     @available(*, deprecated, renamed: "init(rawData:)")
+    @_disfavoredOverload
     public init?(rawBytes bytes: [UInt8]) { self.init(rawData: bytes) }
 }

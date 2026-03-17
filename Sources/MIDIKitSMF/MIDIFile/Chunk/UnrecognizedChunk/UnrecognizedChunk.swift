@@ -16,7 +16,7 @@ extension MIDIFile.Chunk {
         /// (NOT including the 4-character identifier or the length integer.)
         public var rawData: Data
 
-        public init(id: String, rawData: Data? = nil) {
+        public init(id: String, data: Data? = nil) {
             // identifier validation
 
             if Self.disallowedIdentifiers.contains(id) {
@@ -41,7 +41,7 @@ extension MIDIFile.Chunk {
 
             // store raw data
 
-            self.rawData = rawData ?? Data()
+            self.rawData = data ?? Data()
         }
     }
 }
@@ -107,7 +107,7 @@ extension MIDIFile.Chunk.UnrecognizedChunk {
 
 extension MIDIFile.Chunk {
     /// Unrecognized MIDI File Chunk.
-    public static func other(id: String, rawData: Data? = nil) -> Self {
-        .other(.init(id: id, rawData: rawData))
+    public static func other(id: String, data: Data? = nil) -> Self {
+        .other(.init(id: id, data: data))
     }
 }

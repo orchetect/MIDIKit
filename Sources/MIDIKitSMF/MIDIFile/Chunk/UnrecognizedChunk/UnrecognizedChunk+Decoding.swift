@@ -55,7 +55,7 @@ extension MIDIFile.Chunk.UnrecognizedChunk {
         
         self.init(
             id: id,
-            rawData: dataBody
+            data: dataBody
         )
     }
 }
