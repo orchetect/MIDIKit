@@ -41,16 +41,14 @@ import Testing
         let parsedTrackA = try? MIDIFile.Chunk.Track(
             midi1SMFRawBytesStream: generatedData,
             timebase: timebase,
-            strategy: .throwOnError,
-            bundleRPNAndNRPNEvents: true
+            options: .init(bundleRPNAndNRPNEvents: true)
         )
         #expect(parsedTrackA == track)
         
         let parsedTrackB = try? MIDIFile.Chunk.Track(
             midi1SMFRawBytes: generatedData[8...], // exclude header and length
             timebase: timebase,
-            strategy: .throwOnError,
-            bundleRPNAndNRPNEvents: true
+            options: .init(bundleRPNAndNRPNEvents: true)
         )
         #expect(parsedTrackB == track)
     }
@@ -89,16 +87,14 @@ import Testing
         let parsedTrackA = try? MIDIFile.Chunk.Track(
             midi1SMFRawBytesStream: generatedData,
             timebase: timebase,
-            strategy: .throwOnError,
-            bundleRPNAndNRPNEvents: true
+            options: .init(bundleRPNAndNRPNEvents: true)
         )
         #expect(parsedTrackA == track)
         
         let parsedTrackB = try? MIDIFile.Chunk.Track(
             midi1SMFRawBytes: generatedData[8...], // exclude header and length
             timebase: timebase,
-            strategy: .throwOnError,
-            bundleRPNAndNRPNEvents: true
+            options: .init(bundleRPNAndNRPNEvents: true)
         )
         #expect(parsedTrackB == track)
     }
@@ -187,18 +183,14 @@ import Testing
         let parsedTrackA = try? MIDIFile.Chunk.Track(
             midi1SMFRawBytesStream: generatedData,
             timebase: timebase,
-            strategy: .throwOnError,
-            bundleRPNAndNRPNEvents: true,
-            maxEventCount: 2
+            options: .init(bundleRPNAndNRPNEvents: true, maxEventCount: 2)
         )
         #expect(parsedTrackA == limitedTrack)
         
         let parsedTrackB = try? MIDIFile.Chunk.Track(
             midi1SMFRawBytes: generatedData[8...], // exclude header and length
             timebase: timebase,
-            strategy: .throwOnError,
-            bundleRPNAndNRPNEvents: true,
-            maxEventCount: 2
+            options: .init(bundleRPNAndNRPNEvents: true, maxEventCount: 2)
         )
         #expect(parsedTrackB == limitedTrack)
     }

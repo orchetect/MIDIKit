@@ -159,8 +159,89 @@ import Testing
     }
     
     @Test
+    func decodeOptions_trackDecodeOptions_errorStrategy() async throws {
+        let track1 = MIDIFile.Chunk.Track(events: [
+            .noteOn(delta: .none, note: 0x3C, velocity: .midi1(0x40), channel: 0),
+            .cc(delta: .ticks(240), controller: 0x0B, value: .midi1(0x14), channel: 1)
+        ])
+        
+        let partialTrack2 = MIDIFile.Chunk.Track(events: [
+            .noteOn(delta: .none, note: 0x3C, velocity: .midi1(0x40), channel: 0)
+        ])
+        
+        let track3 = MIDIFile.Chunk.Track(events: [
+            .noteOn(delta: .none, note: 0x3D, velocity: .midi1(0x41), channel: 2),
+        ])
+        
+        let rawData: [UInt8] = [0x4D, 0x54, 0x68, 0x64, // MThd header
+                                0x00, 0x00, 0x00, 0x06, // length
+                                0x00, 0x00, // format
+                                0x00, 0x03, // track count
+                                0x02, 0xD0, // timebase
+                                
+                                0x4D, 0x54, 0x72, 0x6B, // MTrk
+                                0x00, 0x00, 0x00, 0x0D, // length: 13 bytes to follow
+                                0x00,                   // delta time
+                                0x90, 0x3C, 0x40,       // note on event
+                                0x81, 0x70,             // delta time
+                                0xB1, 0x0B, 0x14,       // cc event
+                                0x00,                   // delta time prior to chunk end
+                                0xFF, 0x2F, 0x00,       // chunk end
+                                
+                                0x4D, 0x54, 0x72, 0x6B, // MTrk
+                                0x00, 0x00, 0x00, 0x0D, // length: 13 bytes to follow
+                                0x00,                   // delta time
+                                0x90, 0x3C, 0x40,       // note on event
+                                0x81, 0x70,             // delta time
+                                0xF0, 0x0B, 0x14,       // cc event -- ❌ but with an invalid status byte 0xF0
+                                0x00,                   // delta time prior to chunk end
+                                0xFF, 0x2F, 0x00,       // chunk end
+                                
+                                0x4D, 0x54, 0x72, 0x6B, // MTrk
+                                0x00, 0x00, 0x00, 0x08, // length: 8 bytes to follow
+                                0x00,                   // delta time
+                                0x92, 0x3D, 0x41,       // note on event
+                                0x00,                   // delta time prior to chunk end
+                                0xFF, 0x2F, 0x00        // chunk end
+        ]
+        
+        // throwOnError
+        await #expect(throws: MIDIFile.DecodeError.self) {
+            let options = MIDIFile.DecodeOptions(trackDecodeOptions: .init(errorStrategy: .throwOnError))
+            let _ = try await MIDIFile(rawData: rawData, options: options)
+        }
+        
+        // discardTracksWithErrors
+        do {
+            let options = MIDIFile.DecodeOptions(trackDecodeOptions: .init(errorStrategy: .discardTracksWithErrors))
+            let midiFile = try await MIDIFile(rawData: rawData, options: options)
+            
+            #expect(midiFile.format == .singleTrack)
+            #expect(midiFile.timebase == .musical(ticksPerQuarterNote: 720))
+            #expect(midiFile.chunks.count == 2)
+            #expect(midiFile.tracks.count == 2)
+            #expect(midiFile.tracks[0] == track1)
+            #expect(midiFile.tracks[1] == track3)
+        }
+        
+        // decodePartialTracksWithErrors
+        do {
+            let options = MIDIFile.DecodeOptions(trackDecodeOptions: .init(errorStrategy: .decodePartialTracksWithErrors))
+            let midiFile = try await MIDIFile(rawData: rawData, options: options)
+            
+            #expect(midiFile.format == .singleTrack)
+            #expect(midiFile.timebase == .musical(ticksPerQuarterNote: 720))
+            #expect(midiFile.chunks.count == 3)
+            #expect(midiFile.tracks.count == 3)
+            #expect(midiFile.tracks[0] == track1)
+            #expect(midiFile.tracks[1] == partialTrack2)
+            #expect(midiFile.tracks[2] == track3)
+        }
+    }
+    
+    @Test
     func decodeOptions_maxTrackEventCount() /* NOT ASYNC! */ throws {
-        let options = MIDIFile.DecodeOptions(maxTrackEventCount: 1)
+        let options = MIDIFile.DecodeOptions(trackDecodeOptions: .init(maxEventCount: 1))
         // Note: It's ok if this throws a deprecation warning. We need to test this specific method.
         let midiFile = try /* NOT AWAIT! */ MIDIFile(rawData: kMIDIFile.dp8Markers, options: options)
         try #require(midiFile.chunks.count == 3)
@@ -172,9 +253,7 @@ import Testing
     
     @Test
     func decodeOptions_maxTrackEventCount_async() async throws {
-        let options = MIDIFile.DecodeOptions(
-            maxTrackEventCount: 1
-        )
+        let options = MIDIFile.DecodeOptions(trackDecodeOptions: .init(maxEventCount: 1))
         let midiFile = try await MIDIFile(rawData: kMIDIFile.dp8Markers, options: options)
         try #require(midiFile.chunks.count == 3)
         try #require(midiFile.tracks.count == 3)
@@ -220,7 +299,7 @@ import Testing
         
         // decode without bundleRPNAndNRPNEvents
         do {
-            let options = MIDIFile.DecodeOptions(bundleRPNAndNRPNEvents: false)
+            let options = MIDIFile.DecodeOptions(trackDecodeOptions: .init(bundleRPNAndNRPNEvents: false))
             let decodedMIDIFile = try await MIDIFile(rawData: rawData, options: options)
             #expect(decodedMIDIFile.tracks.count == 1)
             let decodedTrack = decodedMIDIFile.tracks[0]
@@ -235,7 +314,7 @@ import Testing
         
         // decode with bundleRPNAndNRPNEvents
         do {
-            let options = MIDIFile.DecodeOptions(bundleRPNAndNRPNEvents: true)
+            let options = MIDIFile.DecodeOptions(trackDecodeOptions: .init(bundleRPNAndNRPNEvents: true))
             let decodedMIDIFile = try await MIDIFile(rawData: rawData, options: options)
             #expect(decodedMIDIFile.tracks.count == 1)
             let decodedTrack = decodedMIDIFile.tracks[0]

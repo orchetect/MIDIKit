@@ -41,8 +41,7 @@ import Testing
         let parsedTrackA = try #require(try MIDIFile.Chunk.Track(
             midi1SMFRawBytesStream: bytes,
             timebase: timebase,
-            strategy: .throwOnError,
-            bundleRPNAndNRPNEvents: true
+            options: .init(bundleRPNAndNRPNEvents: true)
         ))
         #expect(parsedTrackA.events.count == 1)
         guard case let .rpn(delta, event) = parsedTrackA.events[0] else { Issue.record(); return }
@@ -79,8 +78,7 @@ import Testing
         let parsedTrackA = try #require(try MIDIFile.Chunk.Track(
             midi1SMFRawBytesStream: bytes,
             timebase: timebase,
-            strategy: .throwOnError,
-            bundleRPNAndNRPNEvents: true
+            options: .init(bundleRPNAndNRPNEvents: true)
         ))
         #expect(parsedTrackA.events.count == 1)
         guard case let .rpn(delta, event) = parsedTrackA.events[0] else { Issue.record(); return }
@@ -139,8 +137,7 @@ import Testing
         let parsedTrackA = try #require(try MIDIFile.Chunk.Track(
             midi1SMFRawBytesStream: bytes,
             timebase: timebase,
-            strategy: .throwOnError,
-            bundleRPNAndNRPNEvents: true
+            options: .init(bundleRPNAndNRPNEvents: true)
         ))
         #expect(parsedTrackA.events.count == 1)
         guard case let .rpn(delta, event) = parsedTrackA.events[0] else { Issue.record(); return }
@@ -178,8 +175,7 @@ import Testing
         let parsedTrackA = try #require(try MIDIFile.Chunk.Track(
             midi1SMFRawBytesStream: bytes,
             timebase: timebase,
-            strategy: .throwOnError,
-            bundleRPNAndNRPNEvents: true
+            options: .init(bundleRPNAndNRPNEvents: true)
         ))
         #expect(parsedTrackA.events.count == 1)
         guard case let .rpn(delta, event) = parsedTrackA.events[0] else { Issue.record(); return }
@@ -249,8 +245,7 @@ import Testing
         let parsedTrackA = try #require(try MIDIFile.Chunk.Track(
             midi1SMFRawBytesStream: bytes,
             timebase: timebase,
-            strategy: .throwOnError,
-            bundleRPNAndNRPNEvents: true
+            options: .init(bundleRPNAndNRPNEvents: true)
         ))
         #expect(parsedTrackA.events.count == 2)
         #expect(parsedTrackA.events[0] == .cc(delta: .none, event: ccEvent))
@@ -260,8 +255,7 @@ import Testing
         let parsedTrackB = try #require(try MIDIFile.Chunk.Track(
             midi1SMFRawBytes: bytes[8...], // exclude header and length
             timebase: timebase,
-            strategy: .throwOnError,
-            bundleRPNAndNRPNEvents: true
+            options: .init(bundleRPNAndNRPNEvents: true)
         ))
         #expect(parsedTrackB.events.count == 2)
         #expect(parsedTrackB.events[0] == .cc(delta: .none, event: ccEvent))
