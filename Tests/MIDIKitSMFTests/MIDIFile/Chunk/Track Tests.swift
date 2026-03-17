@@ -41,6 +41,7 @@ import Testing
         let parsedTrackA = try? MIDIFile.Chunk.Track(
             midi1SMFRawBytesStream: generatedData,
             timebase: timebase,
+            strategy: .throwOnError,
             bundleRPNAndNRPNEvents: true
         )
         #expect(parsedTrackA == track)
@@ -48,6 +49,7 @@ import Testing
         let parsedTrackB = try? MIDIFile.Chunk.Track(
             midi1SMFRawBytes: generatedData[8...], // exclude header and length
             timebase: timebase,
+            strategy: .throwOnError,
             bundleRPNAndNRPNEvents: true
         )
         #expect(parsedTrackB == track)
@@ -87,6 +89,7 @@ import Testing
         let parsedTrackA = try? MIDIFile.Chunk.Track(
             midi1SMFRawBytesStream: generatedData,
             timebase: timebase,
+            strategy: .throwOnError,
             bundleRPNAndNRPNEvents: true
         )
         #expect(parsedTrackA == track)
@@ -94,6 +97,7 @@ import Testing
         let parsedTrackB = try? MIDIFile.Chunk.Track(
             midi1SMFRawBytes: generatedData[8...], // exclude header and length
             timebase: timebase,
+            strategy: .throwOnError,
             bundleRPNAndNRPNEvents: true
         )
         #expect(parsedTrackB == track)
@@ -183,6 +187,7 @@ import Testing
         let parsedTrackA = try? MIDIFile.Chunk.Track(
             midi1SMFRawBytesStream: generatedData,
             timebase: timebase,
+            strategy: .throwOnError,
             bundleRPNAndNRPNEvents: true,
             maxEventCount: 2
         )
@@ -191,6 +196,7 @@ import Testing
         let parsedTrackB = try? MIDIFile.Chunk.Track(
             midi1SMFRawBytes: generatedData[8...], // exclude header and length
             timebase: timebase,
+            strategy: .throwOnError,
             bundleRPNAndNRPNEvents: true,
             maxEventCount: 2
         )
