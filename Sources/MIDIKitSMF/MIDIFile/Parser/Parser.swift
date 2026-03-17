@@ -199,17 +199,17 @@ extension MIDIFile.Parser {
         return try fileData.withDataParser { parser throws(MIDIFile.DecodeError) in
             // ____ Header ____
             
-            guard let readHeader = try? parser
-                .read(bytes: MIDIFile.Chunk.Header.midi1SMFFixedRawBytesLength)
-            else {
-                throw .malformed(
-                    "Header is not correct. File may not be a MIDI file."
-                )
-            }
-            
-            let (header, expectedTrackCount) = try MIDIFile.Chunk.Header.initFrom(
-                midi1SMFRawBytes: readHeader,
+            let headerStream = try parser.toMIDIFileDecodeError(
+                malformedReason: "Error reading data for MIDI file header.",
+                try parser.read(advance: false)
+            )
+            let (header, expectedTrackCount, headerLength) = try MIDIFile.Chunk.Header.initFrom(
+                midi1SMFRawBytesStream: headerStream,
                 allowMultiTrackFormat0: allowMultiTrackFormat0
+            )
+            try parser.toMIDIFileDecodeError(
+                malformedReason: "Error reading data past MIDI file header.",
+                try parser.seek(by: headerLength)
             )
             
             // chunks

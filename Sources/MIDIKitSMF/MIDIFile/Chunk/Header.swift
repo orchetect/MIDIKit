@@ -91,6 +91,14 @@ extension MIDIFile.Chunk {
         /// MIDI file timebase (for duration calculations).
         public var timebase: MIDIFile.Timebase = .default()
         
+        /// Additional bytes found at the end of the header. Typically this should be left empty.
+        ///
+        /// The Standard MIDI File spec allows for additional bytes at the end of the file header.
+        /// Technically additional bytes should only be used if they are defined at some point in
+        /// a revision to the Standard MIDI File spec. However, until such event happens, file parsers
+        /// should preserve and ignore these bytes.
+        public var additionalBytes: Data? = nil
+        
         public init() { }
         
         public init(
@@ -99,6 +107,17 @@ extension MIDIFile.Chunk {
         ) {
             self.format = format
             self.timebase = timebase
+            self.additionalBytes = nil
+        }
+        
+        public init(
+            format: MIDIFile.Format,
+            timebase: MIDIFile.Timebase,
+            additionalBytes: some DataProtocol
+        ) {
+            self.format = format
+            self.timebase = timebase
+            self.additionalBytes = Data(additionalBytes)
         }
     }
 }
@@ -125,13 +144,77 @@ extension MIDIFile.Chunk.Header {
 // MARK: - Encoding
 
 extension MIDIFile.Chunk.Header {
-    static let midi1SMFFixedRawBytesLength = 14
+    /// The original Standard MIDI File spec defines the header as 14 bytes:
+    /// - MThd (4 bytes)
+    /// - header length (4 bytes)
+    /// - format (2 bytes)
+    /// - track count (2 bytes)
+    /// - time division (2 bytes)
+    ///
+    /// However, the spec says that parsers should allow for headers that are longer, but ignore any
+    /// header bytes past the first 14 bytes and continue parsing as normal. Additional bytes are possible
+    /// if/when there is an addition to the Standard MIDI File spec that formally defines them.
+    /// (At which point, we can update our parser to parse the additional bytes.)
+    static let midi1SMFMinimumRawBytesLength = 14
+    
+    /// Init from MIDI file data stream.
+    static func initFrom<D: DataProtocol>(
+        midi1SMFRawBytesStream stream: D,
+        allowMultiTrackFormat0: Bool
+    ) throws(MIDIFile.DecodeError) -> (header: Self, trackCount: Int, bufferLength: Int) {
+        // check for at least the minimum expected byte count
+        guard stream.count >= Self.midi1SMFMinimumRawBytesLength else {
+            throw .malformed(
+                "File header length is not correct. File may not be a MIDI file."
+            )
+        }
+        
+        return try stream.withDataParser { parser throws(MIDIFile.DecodeError) in
+            // Header descriptor
+            
+            guard (try? parser.read(bytes: 4).toUInt8Bytes()) == Self.staticIdentifier.toASCIIBytes()
+            else {
+                throw .malformed(
+                    "File header identifier is not correct. File may not be a MIDI file."
+                )
+            }
+            
+            guard let rawHeaderLengthBytes = try? parser.read(bytes: 4)
+            else {
+                throw .malformed(
+                    "Not enough bytes found when attempting to read MIDI file header length."
+                )
+            }
+            
+            guard let headerLengthUInt32 = rawHeaderLengthBytes.toInt32(from: .bigEndian)
+            else {
+                throw .malformed(
+                    "Could not read MIDI file header length."
+                )
+            }
+            let headerLength = Int(headerLengthUInt32)
+            
+            // we won't validate the header length here; that is done in the subsequent initFrom() function we pass the data to
+            
+            // now that we know the header length, grab the entire header and pass it to the parser
+            let entireHeaderLength = 4 + 4 + headerLength
+            parser.seekToStart()
+            let headerData = try parser.toMIDIFileDecodeError(
+                malformedReason: "Not enough bytes found when attempting to read MIDI file header.",
+                try parser.read(bytes: entireHeaderLength)
+            )
+            let (header, trackCount) = try initFrom(midi1SMFRawBytes: headerData, allowMultiTrackFormat0: allowMultiTrackFormat0)
+            
+            return (header: header, trackCount: trackCount, bufferLength: entireHeaderLength)
+        }
+    }
     
     static func initFrom<D: DataProtocol>(
         midi1SMFRawBytes: D,
         allowMultiTrackFormat0: Bool
     ) throws(MIDIFile.DecodeError) -> (header: Self, trackCount: Int) {
-        guard midi1SMFRawBytes.count >= Self.midi1SMFFixedRawBytesLength else {
+        // check for at least the minimum expected byte count
+        guard midi1SMFRawBytes.count >= Self.midi1SMFMinimumRawBytesLength else {
             throw .malformed(
                 "File header length is not correct. File may not be a MIDI file."
             )
@@ -162,9 +245,13 @@ extension MIDIFile.Chunk.Header {
             }
             let headerLength = Int(headerLengthUInt32)
             
-            guard headerLength == 6 else {
+            // the header may contain more than 6 bytes in the event the Standard MIDI File spec gains
+            // revisions - but until that happens, we just ignore any additional bytes after the first 6
+            // known (defined) bytes
+            let knownHeaderLength = 6
+            guard headerLength >= knownHeaderLength else {
                 throw .malformed(
-                    "Encountered unexpected file header length."
+                    "File header length is shorter than expected."
                 )
             }
             
@@ -205,6 +292,15 @@ extension MIDIFile.Chunk.Header {
                 )
             }
             
+            // gather any additional unhandled bytes that were included in the header length beyond the known (defined) bytes
+            var additionalBytes: Data? = nil
+            if headerLength > knownHeaderLength {
+                additionalBytes = try parser.toMIDIFileDecodeError(
+                    malformedReason: "Could not read trailing bytes of file header; end of file encountered.",
+                    try parser.read(bytes: headerLength - knownHeaderLength).toData()
+                )
+            }
+            
             // technically Format 0 can only have one track, and in that case the
             // header should always state a track count of 1 (but sometimes it disobeys this)
             if format == .singleTrack {
@@ -215,7 +311,11 @@ extension MIDIFile.Chunk.Header {
                 }
             }
             
-            let header = Self(format: format, timebase: timebase)
+            let header = if let additionalBytes {
+                Self(format: format, timebase: timebase, additionalBytes: additionalBytes)
+            } else {
+                Self(format: format, timebase: timebase)
+            }
             return (header: header, trackCount: trackCount)
         }
     }
@@ -239,9 +339,9 @@ extension MIDIFile.Chunk.Header {
         // Header descriptor
         data += identifier.toASCIIData()
         
-        // Header length (after this point - format, track count and delta-time values)
-        // 0x06 is assuming three 2-byte values are following
-        data += [0x00, 0x00, 0x00, 0x06]
+        // Header length (after this point - format, track count, delta-time values, and optionally additional bytes if present)
+        let headerLength = 6 + (additionalBytes?.count ?? 0)
+        data += UInt32(headerLength).toData(.bigEndian)
         
         // MIDI Format specification - 0, 1, or 2 (2 bytes: big endian)
         data += UInt16(format.rawValue).toData(.bigEndian)
@@ -271,6 +371,11 @@ extension MIDIFile.Chunk.Header {
         // Bit 15 = 1 : timecode
         
         data += timebase.rawData(as: D.self)
+        
+        // Additional bytes
+        if let additionalBytes {
+            data += additionalBytes
+        }
         
         return data
     }
