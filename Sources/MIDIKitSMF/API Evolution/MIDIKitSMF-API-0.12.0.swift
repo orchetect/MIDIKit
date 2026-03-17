@@ -100,7 +100,16 @@ extension MIDIFile.Chunk {
 
 extension MIDIFile.Timebase {
     @_documentation(visibility: internal)
-    @available(*, deprecated, renamed: "init(rawData:)")
+    @available(*, deprecated, renamed: "init(data:)")
     @_disfavoredOverload
-    public init?(rawBytes bytes: [UInt8]) { self.init(rawData: bytes) }
+    public init?(rawBytes bytes: [UInt8]) {
+        self.init(data: bytes)
+    }
+    
+    @_documentation(visibility: internal)
+    @available(*, deprecated, renamed: "init(data:)")
+    @_disfavoredOverload
+    public init?(rawData data: some DataProtocol) {
+        self.init(data: data)
+    }
 }
