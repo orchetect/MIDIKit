@@ -115,6 +115,49 @@ import Testing
     
     // MARK: - DecodeOptions & Predicate
     
+    /// Test that when the `allowMultiTrackFormat0` decode option is enabled, that all chunks are parsed
+    /// regardless of the reported track count in the header.
+    @Test
+    func decodeOptions_allowMultiTrackFormat0() async throws {
+        let rawData: [UInt8] = [0x4D, 0x54, 0x68, 0x64, // MThd header
+                                0x00, 0x00, 0x00, 0x06, // length
+                                0x00, 0x00, // format
+                                0x00, 0x02, // track count
+                                0x02, 0xD0, // timebase
+                                
+                                0x4D, 0x54, 0x72, 0x6B, // MTrk
+                                0x00, 0x00, 0x00, 0x04, // length: 4 bytes to follow
+                                0x00,                   // delta time prior to chunk end
+                                0xFF, 0x2F, 0x00,       // chunk end
+                                
+                                0x41, 0x42, 0x43, 0x44, // ABCD
+                                0x00, 0x00, 0x00, 0x02, // length: 2 bytes to follow
+                                0x01, 0x02,             // data bytes
+                                
+                                0x4D, 0x54, 0x72, 0x6B, // MTrk
+                                0x00, 0x00, 0x00, 0x04, // length: 4 bytes to follow
+                                0x00,                   // delta time prior to chunk end
+                                0xFF, 0x2F, 0x00        // chunk end
+        ]
+        
+        // flag disabled
+        await #expect(throws: MIDIFile.DecodeError.self) {
+            let options = MIDIFile.DecodeOptions(allowMultiTrackFormat0: false)
+            let _ = try await MIDIFile(rawData: rawData, options: options)
+        }
+        
+        // flag enabled
+        do {
+            let options = MIDIFile.DecodeOptions(allowMultiTrackFormat0: true)
+            let midiFile = try await MIDIFile(rawData: rawData, options: options)
+            
+            #expect(midiFile.format == .singleTrack)
+            #expect(midiFile.timebase == .musical(ticksPerQuarterNote: 720))
+            #expect(midiFile.chunks.count == 3)
+            #expect(midiFile.tracks.count == 2)
+        }
+    }
+    
     @Test
     func decodeOptions_maxTrackEventCount() /* NOT ASYNC! */ throws {
         let options = MIDIFile.DecodeOptions(maxTrackEventCount: 1)
