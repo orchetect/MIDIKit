@@ -245,8 +245,8 @@ extension MIDIFile.Chunk.Track {
                         )
                         let dataEntryMSB = extractedEvents[2].event.value.midi1Value
                         let totalDelta = extractedEvents.map(\.delta).reduce(into: 0) {
-                            $0 += $1.ticksValue(using: timebase)
-                        } + (dataEntryLSB?.delta.ticksValue(using: timebase) ?? 0)
+                            $0 += $1.ticks
+                        } + (dataEntryLSB?.delta.ticks ?? 0)
                         
                         var replacementEvent: MIDIFileEvent?
                         

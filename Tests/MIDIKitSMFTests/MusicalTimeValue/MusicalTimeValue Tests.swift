@@ -149,9 +149,7 @@ import Testing
         
         let trackOne = try #require(midiFile.tracks.first)
         
-        let deltaTimes = trackOne.events.map {
-            $0.delta.ticksValue(using: .musical(ticksPerQuarterNote: UInt16(ppq)))
-        }
+        let deltaTimes = trackOne.events.map(\.delta.ticks)
         
         let deltaSum = Int(deltaTimes.reduce(into: 0, +=))
         

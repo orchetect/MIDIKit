@@ -4,66 +4,93 @@
 //  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
-import Darwin
+import Foundation
 import MIDIKitCore
 
 // MARK: - DeltaTime
 
 extension MIDIFileEvent {
-    // TODO: This needs refactoring into two separate types - one for each of the two MIDIFile timebases (musical, and timecode) since musical note durations have no relevance in timecode timebase
-    
-    /// Delta time advancement.
-    public enum DeltaTime {
-        case none
-
-        case ticks(UInt32)
-
-        // TODO: Could add milliseconds calculation
-        // case seconds(TimeInterval)
-        // case milliseconds(Double)
-
-        case noteWhole
-        case noteHalf
-        case noteQuarter
-        case note8th
-        case note16th
-        case note32nd
-        case note64th
-        case note128th
-        case note256th
+    /// Delta time advancement within a MIDI file track.
+    public struct DeltaTime {
+        /// Raw delta time in ticks.
+        /// The actual duration is calculated using the MIDI file's timebase and division (musical or timecode).
+        public var ticks: UInt32
+        
+        public init(ticks: UInt32 = 0) {
+            self.ticks = ticks
+        }
     }
 }
 
-extension MIDIFileEvent.DeltaTime: Equatable {
-    public static func == (lhs: Self, rhs: Self) -> Bool {
-        let timebase = MIDIFile.Timebase.musical(ticksPerQuarterNote: 960)
-        return lhs.ticksValue(using: timebase) == rhs.ticksValue(using: timebase)
-    }
-}
+extension MIDIFileEvent.DeltaTime: Equatable { }
 
-extension MIDIFileEvent.DeltaTime: Hashable {
-    // synthesized
-}
+extension MIDIFileEvent.DeltaTime: Hashable { }
 
 extension MIDIFileEvent.DeltaTime: Sendable { }
+
+extension MIDIFileEvent.DeltaTime {
+    /// Construct zero delta time.
+    public static let none = Self(ticks: 0)
+    
+    /// Construct delta time by specifying a raw ticks value.
+    /// The actual duration is calculated using the MIDI file's timebase and division (musical or timecode) as defined in the MIDI file header.
+    public static func ticks(_ ticks: UInt32) -> Self { Self(ticks: ticks) }
+    
+    /// Construct delta time duration of a whole note.
+    /// (Applicable only for a MIDI file using musical timebase.
+    /// The `ppq` (ticks per quarter note) value must match the value in the MIDI file header.)
+    public static func noteWhole(ppq: UInt16) -> Self { Self(ticks: UInt32(ppq) * 4) }
+    
+    /// Construct delta time duration of a half note.
+    /// (Applicable only for a MIDI file using musical timebase.
+    /// The `ppq` (ticks per quarter note) value must match the value in the MIDI file header.)
+    public static func noteHalf(ppq: UInt16) -> Self { Self(ticks: UInt32(ppq) * 2) }
+    
+    /// Construct delta time duration of a quarter note.
+    /// (Applicable only for a MIDI file using musical timebase.
+    /// The `ppq` (ticks per quarter note) value must match the value in the MIDI file header.)
+    public static func noteQuarter(ppq: UInt16) -> Self { Self(ticks: UInt32(ppq)) }
+    
+    /// Construct delta time duration of a 8th note.
+    /// (Applicable only for a MIDI file using musical timebase.
+    /// The `ppq` (ticks per quarter note) value must match the value in the MIDI file header.)
+    public static func note8th(ppq: UInt16) -> Self { Self(ticks: UInt32(ppq) / 2) }
+    
+    /// Construct delta time duration of a 16th note.
+    /// (Applicable only for a MIDI file using musical timebase.
+    /// The `ppq` (ticks per quarter note) value must match the value in the MIDI file header.)
+    public static func note16th(ppq: UInt16) -> Self { Self(ticks: UInt32(ppq) / 4) }
+    
+    /// Construct delta time duration of a 32nd note.
+    /// (Applicable only for a MIDI file using musical timebase.
+    /// The `ppq` (ticks per quarter note) value must match the value in the MIDI file header.)
+    public static func note32nd(ppq: UInt16) -> Self { Self(ticks: UInt32(ppq) / 8) }
+    
+    /// Construct delta time duration of a 64th note.
+    /// (Applicable only for a MIDI file using musical timebase.
+    /// The `ppq` (ticks per quarter note) value must match the value in the MIDI file header.)
+    public static func note64th(ppq: UInt16) -> Self { Self(ticks: UInt32(ppq) / 16) }
+    
+    /// Construct delta time duration of a 128th note.
+    /// (Applicable only for a MIDI file using musical timebase.
+    /// The `ppq` (ticks per quarter note) value must match the value in the MIDI file header.)
+    public static func note128th(ppq: UInt16) -> Self { Self(ticks: UInt32(ppq) / 32) }
+    
+    /// Construct delta time duration of a 256th note.
+    /// (Applicable only for a MIDI file using musical timebase.
+    /// The `ppq` (ticks per quarter note) value must match the value in the MIDI file header.)
+    public static func note256th(ppq: UInt16) -> Self { Self(ticks: UInt32(ppq) / 64) }
+    
+    // TODO: Could add other convnience calculations
+    // public static func seconds(TimeInterval)
+    // public static func milliseconds(Double)
+}
 
 // MARK: - CustomStringConvertible
 
 extension MIDIFileEvent.DeltaTime: CustomStringConvertible {
     public var description: String {
-        switch self {
-        case .none:             "none"
-        case let .ticks(ticks): "ticks:\(ticks)"
-        case .noteWhole:        "whole note"
-        case .noteHalf:         "half note"
-        case .noteQuarter:      "quarter note"
-        case .note8th:          "8th note"
-        case .note16th:         "16th note"
-        case .note32nd:         "32nd note"
-        case .note64th:         "64th note"
-        case .note128th:        "128th note"
-        case .note256th:        "256th note"
-        }
+        "\(ticks) Ticks"
     }
 }
 
@@ -73,69 +100,13 @@ extension MIDIFileEvent.DeltaTime: CustomDebugStringConvertible {
     }
 }
 
-// MARK: - Init
+// MARK: - Methods
 
 extension MIDIFileEvent.DeltaTime {
-    public init?(
-        ticks: UInt32,
-        using timebase: MIDIFile.Timebase
-    ) {
-        // TODO: add init here that sets self = a certain enum case based on provided ticks and provided timebase
-        
-        self = .ticks(ticks)
-    }
-}
-
-// MARK: - ticksValue
-
-extension MIDIFileEvent.DeltaTime {
-    public func ticksValue(using timebase: MIDIFile.Timebase) -> UInt32 {
-        let midiFileTicksPerQuarter: UInt32
-
-        switch timebase {
-        case let .musical(ticksPerQuarterNote):
-            midiFileTicksPerQuarter = UInt32(ticksPerQuarterNote)
-
-        case let .timecode(smpteFormat, ticksPerFrame):
-            _ = smpteFormat
-            _ = ticksPerFrame
-            fatalError("Timecode timebase not implemented yet.")
-        }
-
-        // TODO: this has no relevance to MIDIFile timecode timebase mode, only musical timebase
-        switch self {
-        case .none:
-            return 0
-
-        case let .ticks(val):
-            return val
-
-        case .noteWhole:
-            return midiFileTicksPerQuarter * 4  // 2^5
-
-        case .noteHalf:
-            return midiFileTicksPerQuarter * 2  // 2^1
-
-        case .noteQuarter:
-            return midiFileTicksPerQuarter      // 2^0
-
-        case .note8th:
-            return midiFileTicksPerQuarter / 2  // 2^1
-
-        case .note16th:
-            return midiFileTicksPerQuarter / 4  // 2^2
-
-        case .note32nd:
-            return midiFileTicksPerQuarter / 8  // 2^3
-
-        case .note64th:
-            return midiFileTicksPerQuarter / 16 // 2^4
-
-        case .note128th:
-            return midiFileTicksPerQuarter / 32 // 2^5
-
-        case .note256th:
-            return midiFileTicksPerQuarter / 64 // 2^6
-        }
+    /// Returns the real time (wall clock) duration in seconds of the delta time using the specified timebase.
+    /// Ensure the `ppq` (ticks per quarter note) supplied is the same as used in the MIDI file.
+    public func timeInterval(ppq: UInt16) -> TimeInterval {
+        guard ppq > 0 else { return 0.0 }
+        return Double(ticks) / Double(ppq)
     }
 }

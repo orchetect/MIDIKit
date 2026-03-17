@@ -46,7 +46,7 @@ import Testing
         #expect(parsedTrackA.events.count == 1)
         guard case let .rpn(delta, event) = parsedTrackA.events[0] else { Issue.record(); return }
         
-        #expect(delta.ticksValue(using: timebase) == 0)
+        #expect(delta.ticks == 0)
         #expect(event.parameter == .channelFineTuning(1))
         #expect(event.channel == 1)
     }
@@ -83,7 +83,7 @@ import Testing
         #expect(parsedTrackA.events.count == 1)
         guard case let .rpn(delta, event) = parsedTrackA.events[0] else { Issue.record(); return }
         
-        #expect(delta.ticksValue(using: timebase) == 0)
+        #expect(delta.ticks == 0)
         #expect(event.parameter == .channelFineTuning(1))
         #expect(event.channel == 1)
     }
@@ -142,7 +142,7 @@ import Testing
         #expect(parsedTrackA.events.count == 1)
         guard case let .rpn(delta, event) = parsedTrackA.events[0] else { Issue.record(); return }
         
-        #expect(delta.ticksValue(using: timebase) == 0)
+        #expect(delta.ticks == 0)
         #expect(
             event.parameter ==
                 .raw(parameter: .init(msb: 0x05, lsb: 0x10), dataEntryMSB: 0x08, dataEntryLSB: nil)
@@ -180,7 +180,7 @@ import Testing
         #expect(parsedTrackA.events.count == 1)
         guard case let .rpn(delta, event) = parsedTrackA.events[0] else { Issue.record(); return }
         
-        #expect(delta.ticksValue(using: timebase) == 0)
+        #expect(delta.ticks == 0)
         #expect(
             event.parameter ==
                 .raw(parameter: .init(msb: 0x05, lsb: 0x10), dataEntryMSB: 0x08, dataEntryLSB: nil)

@@ -24,7 +24,7 @@ extension MIDIFile.Chunk.Track {
         
         for event in events {
             let unwrapped = event.smfUnwrappedEvent
-            bodyData.append(deltaTime: unwrapped.delta.ticksValue(using: timebase))
+            bodyData.append(deltaTime: unwrapped.delta.ticks)
             bodyData.append(contentsOf: unwrapped.event.midi1SMFRawBytes(as: D.self))
         }
         

@@ -113,3 +113,22 @@ extension MIDIFile.Timebase {
         self.init(data: data)
     }
 }
+
+extension MIDIFileEvent.DeltaTime {
+    @_documentation(visibility: internal)
+    @available(*, deprecated, renamed: "init(ticks:)")
+    @_disfavoredOverload
+    public init?(
+        ticks: UInt32,
+        using timebase: MIDIFile.Timebase
+    ) {
+        self.init(ticks: ticks)
+    }
+    
+    @_documentation(visibility: internal)
+    @available(*, deprecated, renamed: "ticks")
+    @_disfavoredOverload
+    public func ticksValue(using timebase: MIDIFile.Timebase) -> UInt32 {
+        ticks
+    }
+}
