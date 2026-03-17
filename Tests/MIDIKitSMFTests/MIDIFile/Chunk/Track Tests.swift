@@ -228,7 +228,7 @@ import Testing
         
         // encode and decode
         let midiFileData = try await midiFile.rawData()
-        let decodedMIDIFile = try await MIDIFile(rawData: midiFileData)
+        let decodedMIDIFile = try await MIDIFile(data: midiFileData)
         
         // compare events
         let decodedTrack = try #require(decodedMIDIFile.tracks.first)
