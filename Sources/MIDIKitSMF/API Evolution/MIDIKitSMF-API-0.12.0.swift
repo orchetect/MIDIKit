@@ -4,6 +4,10 @@
 //  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
+import Foundation
+
+// MARK: - MIDIFile
+
 extension MIDIFile {
     @_documentation(visibility: internal)
     @available(*, deprecated, renamed: "Timebase")
@@ -12,7 +16,9 @@ extension MIDIFile {
     @_documentation(visibility: internal)
     @available(*, deprecated, renamed: "timebase")
     public var timeBase: Timebase { timebase }
-    
+}
+
+extension MIDIFile {
     @_documentation(visibility: internal)
     @available(*, deprecated, renamed: "init(format:timebase:chunks:)")
     @_disfavoredOverload
@@ -22,6 +28,33 @@ extension MIDIFile {
         chunks: [Chunk] = []
     ) {
         self.init(format: format, timebase: timeBase, chunks: chunks)
+    }
+    
+    @_documentation(visibility: internal)
+    @available(*, deprecated, renamed: "init(data:)")
+    @_disfavoredOverload
+    public init(
+        rawData: Data
+    ) throws {
+        try self.init(data: rawData)
+    }
+    
+    @_documentation(visibility: internal)
+    @available(*, deprecated, renamed: "init(path:)")
+    @_disfavoredOverload
+    public init(
+        midiFile path: String
+    ) throws {
+        try self.init(path: path)
+    }
+    
+    @_documentation(visibility: internal)
+    @available(*, deprecated, renamed: "init(url:)")
+    @_disfavoredOverload
+    public init(
+        midiFile url: URL
+    ) throws {
+        try self.init(url: url)
     }
 }
 

@@ -12,11 +12,11 @@ import MIDIKitCore
 extension MIDIFile {
     /// Decode sequentially, without concurrency.
     mutating func decode(
-        rawData: some DataProtocol & Sendable,
+        data: some DataProtocol & Sendable,
         options: DecodeOptions,
         predicate: DecodePredicate?
     ) throws(MIDIFile.DecodeError) {
-        let parser = try Parser(data: rawData, options: options)
+        let parser = try Parser(data: data, options: options)
         
         header = parser.fileDescriptor.header
         
@@ -30,11 +30,11 @@ extension MIDIFile {
     /// Decode tracks concurrently for improved performance.
     @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
     mutating func decode(
-        rawData: some DataProtocol & Sendable,
+        data: some DataProtocol & Sendable,
         options: DecodeOptions,
         predicate: DecodePredicate?
     ) async throws(MIDIFile.DecodeError) {
-        let parser = try Parser(data: rawData, options: options)
+        let parser = try Parser(data: data, options: options)
         
         header = parser.fileDescriptor.header
         
@@ -51,12 +51,12 @@ extension MIDIFile {
     /// Errors encountered during individual chunk parsing are returned within the result closure and not thrown from this method.
     @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
     mutating func decode(
-        rawData: some DataProtocol & Sendable,
+        data: some DataProtocol & Sendable,
         options: DecodeOptions,
         predicate: DecodePredicate?,
         parsedChunk: @escaping ChunkDecodeBlock
     ) async throws(MIDIFile.DecodeError) {
-        let parser = try Parser(data: rawData, options: options)
+        let parser = try Parser(data: data, options: options)
         
         header = parser.fileDescriptor.header
         
