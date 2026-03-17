@@ -22,6 +22,7 @@ extension MIDIFile {
         try decode(
             rawData: rawData,
             allowMultiTrackFormat0: options.allowMultiTrackFormat0,
+            trackDecodeStrategy: options.trackDecodeStrategy,
             bundleRPNAndNRPNEvents: options.bundleRPNAndNRPNEvents,
             maxTrackEventCount: options.maxTrackEventCount,
             ignoreBytesPastEOF: options.ignoreBytesPastEOF,
@@ -39,6 +40,7 @@ extension MIDIFile {
         try await decode(
             rawData: rawData,
             allowMultiTrackFormat0: options.allowMultiTrackFormat0,
+            trackDecodeStrategy: options.trackDecodeStrategy,
             bundleRPNAndNRPNEvents: options.bundleRPNAndNRPNEvents,
             maxTrackEventCount: options.maxTrackEventCount,
             ignoreBytesPastEOF: options.ignoreBytesPastEOF,
@@ -61,6 +63,7 @@ extension MIDIFile {
         try await decode(
             rawData: rawData,
             allowMultiTrackFormat0: options.allowMultiTrackFormat0,
+            trackDecodeStrategy: options.trackDecodeStrategy,
             bundleRPNAndNRPNEvents: options.bundleRPNAndNRPNEvents,
             maxTrackEventCount: options.maxTrackEventCount,
             ignoreBytesPastEOF: options.ignoreBytesPastEOF,
@@ -140,6 +143,7 @@ extension MIDIFile {
         try decode(
             rawData: data,
             allowMultiTrackFormat0: options.allowMultiTrackFormat0,
+            trackDecodeStrategy: options.trackDecodeStrategy,
             bundleRPNAndNRPNEvents: options.bundleRPNAndNRPNEvents,
             maxTrackEventCount: options.maxTrackEventCount,
             ignoreBytesPastEOF: options.ignoreBytesPastEOF,
@@ -158,6 +162,7 @@ extension MIDIFile {
         try await decode(
             rawData: data,
             allowMultiTrackFormat0: options.allowMultiTrackFormat0,
+            trackDecodeStrategy: options.trackDecodeStrategy,
             bundleRPNAndNRPNEvents: options.bundleRPNAndNRPNEvents,
             maxTrackEventCount: options.maxTrackEventCount,
             ignoreBytesPastEOF: options.ignoreBytesPastEOF,
@@ -181,6 +186,7 @@ extension MIDIFile {
         try await decode(
             rawData: data,
             allowMultiTrackFormat0: options.allowMultiTrackFormat0,
+            trackDecodeStrategy: options.trackDecodeStrategy,
             bundleRPNAndNRPNEvents: options.bundleRPNAndNRPNEvents,
             maxTrackEventCount: options.maxTrackEventCount,
             ignoreBytesPastEOF: options.ignoreBytesPastEOF,

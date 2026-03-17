@@ -14,6 +14,7 @@ extension MIDIFile {
     mutating func decode(
         rawData: some DataProtocol & Sendable,
         allowMultiTrackFormat0: Bool,
+        trackDecodeStrategy: DecodeOptions.TrackDecodeStrategy,
         bundleRPNAndNRPNEvents: Bool,
         maxTrackEventCount: Int?,
         ignoreBytesPastEOF: Bool,
@@ -24,6 +25,7 @@ extension MIDIFile {
         header = parser.fileDescriptor.header
         
         let parsedChunks = try parser.chunks(
+            trackDecodeStrategy: trackDecodeStrategy,
             bundleRPNAndNRPNEvents: bundleRPNAndNRPNEvents,
             maxTrackEventCount: maxTrackEventCount,
             predicate: predicate
@@ -36,6 +38,7 @@ extension MIDIFile {
     mutating func decode(
         rawData: some DataProtocol & Sendable,
         allowMultiTrackFormat0: Bool,
+        trackDecodeStrategy: DecodeOptions.TrackDecodeStrategy,
         bundleRPNAndNRPNEvents: Bool,
         maxTrackEventCount: Int?,
         ignoreBytesPastEOF: Bool,
@@ -46,6 +49,7 @@ extension MIDIFile {
         header = parser.fileDescriptor.header
         
         let parsedChunks = try await parser.chunks(
+            trackDecodeStrategy: trackDecodeStrategy,
             bundleRPNAndNRPNEvents: bundleRPNAndNRPNEvents,
             maxTrackEventCount: maxTrackEventCount,
             predicate: predicate
@@ -61,6 +65,7 @@ extension MIDIFile {
     mutating func decode(
         rawData: some DataProtocol & Sendable,
         allowMultiTrackFormat0: Bool,
+        trackDecodeStrategy: DecodeOptions.TrackDecodeStrategy,
         bundleRPNAndNRPNEvents: Bool,
         maxTrackEventCount: Int?,
         ignoreBytesPastEOF: Bool,
@@ -73,6 +78,7 @@ extension MIDIFile {
         
         var parsedChunks: [Int: Chunk] = [:]
         for await (chunkIndex, result) in parser.chunksAsyncSequence(
+            trackDecodeStrategy: trackDecodeStrategy,
             bundleRPNAndNRPNEvents: bundleRPNAndNRPNEvents,
             maxTrackEventCount: maxTrackEventCount,
             predicate: predicate

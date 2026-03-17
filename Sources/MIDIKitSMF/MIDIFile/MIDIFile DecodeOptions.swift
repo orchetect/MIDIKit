@@ -19,6 +19,9 @@ extension MIDIFile {
         /// If `nil`, all events are parsed.
         public var maxTrackEventCount: Int?
         
+        /// The strategy to employ when errors are encountered while decoding tracks.
+        public var trackDecodeStrategy: TrackDecodeStrategy
+        
         /// Ignore any bytes that may be present past the "end of file".
         /// If `false`, if any extraneous bytes are present it is considered a malformed file and an error is thrown.
         ///
@@ -37,11 +40,13 @@ extension MIDIFile {
             allowMultiTrackFormat0: Bool = true,
             bundleRPNAndNRPNEvents: Bool = true,
             maxTrackEventCount: Int? = nil,
+            trackDecodeStrategy: TrackDecodeStrategy = .throwOnError,
             ignoreBytesPastEOF: Bool = true
         ) {
             self.allowMultiTrackFormat0 = allowMultiTrackFormat0
             self.bundleRPNAndNRPNEvents = bundleRPNAndNRPNEvents
             self.maxTrackEventCount = maxTrackEventCount
+            self.trackDecodeStrategy = trackDecodeStrategy
             self.ignoreBytesPastEOF = ignoreBytesPastEOF
         }
     }
@@ -52,3 +57,34 @@ extension MIDIFile.DecodeOptions: Equatable { }
 extension MIDIFile.DecodeOptions: Hashable { }
 
 extension MIDIFile.DecodeOptions: Sendable { }
+
+// MARK: - TrackDecodeStrategy
+
+extension MIDIFile.DecodeOptions {
+    public enum TrackDecodeStrategy {
+        /// An error is thrown upon the first decoding error encountered.
+        ///
+        /// This preserves the file's integrity, as the file only successfully decodes if no errors are encountered.
+        case throwOnError
+        
+        /// Tracks that encounter errors while decoding are silently discarded.
+        ///
+        /// This helps salvage tracks that are fully intact instead of failing to parse the file entirely.
+        /// As a result, this option results in data loss in the event there is data corruption in the source file.
+        case discardTracksWithErrors
+        
+        /// Tracks that encounter errors while decoding will contain all events successfully decoded until the error is encountered.
+        /// Any events that may occur in the track after the point in which the error occurs are discarded, as there is no way to repair
+        /// the remainder of the track's data.
+        ///
+        /// This helps salvage tracks that are only partially intact instead of failing to parse the file entirely.
+        /// As a result, this option results in data loss in the event there is data corruption in the source file.
+        case decodePartialTracksWithErrors
+    }
+}
+
+extension MIDIFile.DecodeOptions.TrackDecodeStrategy: Equatable { }
+
+extension MIDIFile.DecodeOptions.TrackDecodeStrategy: Hashable { }
+
+extension MIDIFile.DecodeOptions.TrackDecodeStrategy: Sendable { }
