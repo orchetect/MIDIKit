@@ -57,7 +57,7 @@ private func received(midiEvent: MIDIEvent) {
 
 For the `uniqueID:` parameter It is best to use ``MIDIIdentifierPersistence/userDefaultsManaged(key:suite:)`` which automatically manages the endpoint's Core MIDI identity and restores it each time the same virtual endpoint is created, which other applications rely on to uniquely identify your endpoint so that they can reconnect to it in future.
 
-For simple and powerful event filtering API, see [Event Filters](https://orchetect.github.io/MIDIKit/documentation/midikit/midikitcore-event-filters).
+For simple and powerful event filtering API, see <doc://MIDIKitIO/MIDIKitCore/MIDIKitCore-Event-Filters>.
 
 ## Virtual Outputs
 
