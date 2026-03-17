@@ -46,7 +46,7 @@ public protocol MIDIIOObject: Sendable {
     /// (`kMIDIPropertyName`)
     ///
     /// Devices, entities, and endpoints may all have names. Note that these names are
-    /// not required to be unique. Using ``MIDIIOObject/displayName-7u7g1`` may provide a better
+    /// not required to be unique. Using ``MIDIIOObject/displayName`` may provide a better
     /// description
     /// of the endpoint for user interface.
     ///
@@ -138,20 +138,20 @@ public protocol MIDIIOObject: Sendable {
     var imageFileURL: MIDIIOObjectProperty.Value<URL> { get }
     
     #if canImport(SwiftUI)
-    /// Calls ``MIDIIOObject/imageFileURL-6ltjy`` and attempts to initialize a new `Image`.
+    /// Calls ``MIDIIOObject/imageFileURL`` and attempts to initialize a new `Image`.
     /// (`kMIDIPropertyImage`)
     @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
     var image: MIDIIOObjectProperty.Value<Image> { get }
     #endif
     
     #if canImport(AppKit) && os(macOS)
-    /// Calls ``MIDIIOObject/imageFileURL-6ltjy`` and attempts to initialize a new `NSImage`.
+    /// Calls ``MIDIIOObject/imageFileURL`` and attempts to initialize a new `NSImage`.
     /// (`kMIDIPropertyImage`)
     var imageAsNSImage: MIDIIOObjectProperty.Value<NSImage> { get }
     #endif
     
     #if canImport(UIKit)
-    /// Calls ``MIDIIOObject/imageFileURL-6ltjy`` and attempts to initialize a new `UIImage`.
+    /// Calls ``MIDIIOObject/imageFileURL`` and attempts to initialize a new `UIImage`.
     /// (`kMIDIPropertyImage`)
     var imageAsUIImage: MIDIIOObjectProperty.Value<UIImage> { get }
     #endif
