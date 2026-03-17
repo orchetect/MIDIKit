@@ -23,6 +23,7 @@ import Testing
         
         #expect(header.format == .singleTrack)
         #expect(header.timebase == .musical(ticksPerQuarterNote: 720))
+        #expect(header.additionalBytes == nil)
         
         let rawData: [UInt8] = [0x4D, 0x54, 0x68, 0x64, // MThd header
                                 0x00, 0x00, 0x00, 0x06, // length
@@ -46,6 +47,7 @@ import Testing
         
         #expect(header.format == .singleTrack)
         #expect(header.timebase == .musical(ticksPerQuarterNote: 720))
+        #expect(header.additionalBytes == nil)
         #expect(trackCount == 1)
     }
     
@@ -58,6 +60,7 @@ import Testing
         
         #expect(header.format == .multipleTracksSynchronous)
         #expect(header.timebase == .musical(ticksPerQuarterNote: 720))
+        #expect(header.additionalBytes == nil)
         
         let rawData: [UInt8] = [0x4D, 0x54, 0x68, 0x64, // MThd header
                                 0x00, 0x00, 0x00, 0x06, // length
@@ -81,6 +84,7 @@ import Testing
         
         #expect(header.format == .multipleTracksSynchronous)
         #expect(header.timebase == .musical(ticksPerQuarterNote: 720))
+        #expect(header.additionalBytes == nil)
         #expect(trackCount == 2)
     }
     
@@ -93,6 +97,7 @@ import Testing
         
         #expect(header.format == .multipleTracksAsynchronous)
         #expect(header.timebase == .musical(ticksPerQuarterNote: 720))
+        #expect(header.additionalBytes == nil)
         
         let rawData: [UInt8] = [0x4D, 0x54, 0x68, 0x64, // MThd header
                                 0x00, 0x00, 0x00, 0x06, // length
@@ -104,7 +109,7 @@ import Testing
     }
     
     @Test
-    func init_Type2_rawData() async throws {
+    func initFrom_midi1SMFRawBytes_Type2_rawData() async throws {
         let rawData: [UInt8] = [0x4D, 0x54, 0x68, 0x64, // MThd header
                                 0x00, 0x00, 0x00, 0x06, // length
                                 0x00, 0x02, // format
@@ -116,7 +121,59 @@ import Testing
         
         #expect(header.format == .multipleTracksAsynchronous)
         #expect(header.timebase == .musical(ticksPerQuarterNote: 720))
+        #expect(header.additionalBytes == nil)
         #expect(trackCount == 2)
+    }
+    
+    @Test
+    func initFrom_midi1SMFRawBytesStream_Type2_rawData() async throws {
+        let rawData: [UInt8] = [0x4D, 0x54, 0x68, 0x64, // MThd header
+                                0x00, 0x00, 0x00, 0x06, // length
+                                0x00, 0x02, // format
+                                0x00, 0x02, // track count
+                                0x02, 0xD0] // timebase
+        
+        // note track count is NOT total chunk count; non-track chunks are not included in the number
+        let (header, trackCount, bufferLength) = try MIDIFile.Chunk.Header.initFrom(midi1SMFRawBytesStream: rawData, allowMultiTrackFormat0: false)
+        
+        #expect(header.format == .multipleTracksAsynchronous)
+        #expect(header.timebase == .musical(ticksPerQuarterNote: 720))
+        #expect(header.additionalBytes == nil)
+        #expect(trackCount == 2)
+        #expect(bufferLength == 14)
+    }
+    
+    @Test
+    func initFrom_midi1SMFRawBytesStream_Type2_rawData_nonStandardLength() async throws {
+        let rawData: [UInt8] = [0x4D, 0x54, 0x68, 0x64, // MThd header
+                                0x00, 0x00, 0x00, 0x08, // length
+                                0x00, 0x02, // format
+                                0x00, 0x02, // track count
+                                0x02, 0xD0, // timebase
+                                0x17, 0x18] // extra (non-standard) bytes
+        
+        // decode
+        do {
+            // note track count is NOT total chunk count; non-track chunks are not included in the number
+            let (header, trackCount, bufferLength) = try MIDIFile.Chunk.Header.initFrom(midi1SMFRawBytesStream: rawData, allowMultiTrackFormat0: false)
+            
+            #expect(header.format == .multipleTracksAsynchronous)
+            #expect(header.timebase == .musical(ticksPerQuarterNote: 720))
+            #expect(header.additionalBytes?.toUInt8Bytes() == [0x17, 0x18])
+            #expect(trackCount == 2)
+            #expect(bufferLength == 16)
+        }
+        
+        // encode
+        do {
+            let header = MIDIFile.Chunk.Header(
+                format: .multipleTracksAsynchronous,
+                timebase: .musical(ticksPerQuarterNote: 720),
+                additionalBytes: [0x17, 0x18]
+            )
+            let headerBytes = try header.midi1SMFRawBytes(as: [UInt8].self, withTrackCount: 2)
+            #expect(headerBytes == rawData)
+        }
     }
     
     // MARK: - Edge Cases
