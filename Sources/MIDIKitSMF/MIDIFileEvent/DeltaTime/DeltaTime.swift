@@ -86,6 +86,16 @@ extension MIDIFileEvent.DeltaTime {
     // public static func milliseconds(Double)
 }
 
+// MARK: - ExpressibleByIntegerLiteral
+
+extension MIDIFileEvent.DeltaTime: ExpressibleByIntegerLiteral {
+    public typealias IntegerLiteralType = UInt32
+    
+    public init(integerLiteral value: UInt32) {
+        self.init(ticks: value)
+    }
+}
+
 // MARK: - CustomStringConvertible
 
 extension MIDIFileEvent.DeltaTime: CustomStringConvertible {
