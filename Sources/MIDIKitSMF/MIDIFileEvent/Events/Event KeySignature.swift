@@ -29,7 +29,7 @@ extension MIDIFileEvent {
     public struct KeySignature {
         /// Number of flats that identifies the key signature
         /// (-7 = 7 flats, -1 = 1 flat, 0 = key of C, 1 = 1 sharp, etc).
-        public var flatsOrSharps: Int8 = 0 {
+        public var flatsOrSharps: Int8 = 0 { // TODO: Refactor as a new enum type
             didSet {
                 if oldValue != flatsOrSharps { flatsOrSharps_Validate() }
             }
@@ -40,7 +40,7 @@ extension MIDIFileEvent {
         }
 
         /// Major (true) or Minor (false) key.
-        public var majorKey: Bool = true
+        public var majorKey: Bool = true // TODO: Refactor as a new enum type
         
         // MARK: - Init
         
