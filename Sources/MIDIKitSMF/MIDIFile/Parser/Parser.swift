@@ -240,7 +240,7 @@ extension MIDIFile.Parser {
                     }
                     
                     // chunk length
-                    guard let chunkLength = (try? parser.read(bytes: 4))?
+                    guard var chunkLength = (try? parser.read(bytes: 4))?
                         .toUInt32(from: .bigEndian)
                     else {
                         let offsetString = parser.readOffset.hexString(prefix: true)
@@ -253,19 +253,37 @@ extension MIDIFile.Parser {
                     let dataBodyOffset = parser.readOffset
                     
                     // advance parser
-                    try parser.toMIDIFileDecodeError(
-                        malformedReason: "There was a problem reading chunk data at byte offset \(parser.readOffset.hexString(prefix: true)). Encountered end of file early.",
-                        try parser.seek(by: Int(chunkLength))
-                    )
+                    var discard = false
+                    do throws(MIDIFile.DecodeError) {
+                        try parser.toMIDIFileDecodeError(
+                            malformedReason: "There was a problem reading data while parsing the chunk that starts at byte offset \(chunkStartByteOffset.hexString(prefix: true)). Attempted to read byte offset \((parser.readOffset + Int(chunkLength)).hexString(prefix: true)) but encountered end of file early.",
+                            try parser.seek(by: Int(chunkLength))
+                        )
+                    } catch {
+                        // not enough bytes - EOF reached
+                        switch options.trackDecodeOptions.errorStrategy {
+                        case .decodePartialTracksWithErrors:
+                            // fix chunk length to end at the last byte available
+                            chunkLength = UInt32(exactly: parser.remainingByteCount.clamped(to: 0...)) ?? 0
+                            isParsing = false
+                        case .discardTracksWithErrors:
+                            discard = true
+                            isParsing = false
+                        case .throwOnError:
+                            throw error
+                        }
+                    }
                     
                     // append chunk descriptor
-                    let chunkDescriptor = ChunkDescriptor(
-                        chunkType: chunkType,
-                        startOffset: chunkStartByteOffset,
-                        bodyByteStartOffset: dataBodyOffset,
-                        bodyByteLength: Int(chunkLength)
-                    )
-                    chunkDescriptors.append(chunkDescriptor)
+                    if !discard {
+                        let chunkDescriptor = ChunkDescriptor(
+                            chunkType: chunkType,
+                            startOffset: chunkStartByteOffset,
+                            bodyByteStartOffset: dataBodyOffset,
+                            bodyByteLength: Int(chunkLength)
+                        )
+                        chunkDescriptors.append(chunkDescriptor)
+                    }
                 } catch {
                     // a parsing error here could be a legitimately malformed file. however, if there's
                     // more bytes remaining but we've already parsed all of the expected tracks,
