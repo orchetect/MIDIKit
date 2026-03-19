@@ -51,6 +51,8 @@ extension MIDIFile.Chunk: CustomDebugStringConvertible {
     }
 }
 
+// MARK: - Properties
+
 extension MIDIFile.Chunk {
     /// Unwraps the enum case and returns the ``MIDIFile/Chunk`` contained within, typed as
     /// ``MIDIFileChunk`` protocol.

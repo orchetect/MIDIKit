@@ -4,6 +4,10 @@
 //  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
+import Foundation
+
+// MARK: - MIDIFile
+
 extension MIDIFile {
     @_documentation(visibility: internal)
     @available(*, deprecated, renamed: "Timebase")
@@ -12,7 +16,9 @@ extension MIDIFile {
     @_documentation(visibility: internal)
     @available(*, deprecated, renamed: "timebase")
     public var timeBase: Timebase { timebase }
-    
+}
+
+extension MIDIFile {
     @_documentation(visibility: internal)
     @available(*, deprecated, renamed: "init(format:timebase:chunks:)")
     @_disfavoredOverload
@@ -23,7 +29,36 @@ extension MIDIFile {
     ) {
         self.init(format: format, timebase: timeBase, chunks: chunks)
     }
+    
+    @_documentation(visibility: internal)
+    @available(*, deprecated, renamed: "init(data:)")
+    @_disfavoredOverload
+    public init(
+        rawData: Data
+    ) throws {
+        try self.init(data: rawData)
+    }
+    
+    @_documentation(visibility: internal)
+    @available(*, deprecated, renamed: "init(path:)")
+    @_disfavoredOverload
+    public init(
+        midiFile path: String
+    ) throws {
+        try self.init(path: path)
+    }
+    
+    @_documentation(visibility: internal)
+    @available(*, deprecated, renamed: "init(url:)")
+    @_disfavoredOverload
+    public init(
+        midiFile url: URL
+    ) throws {
+        try self.init(url: url)
+    }
 }
+
+// MARK: - MIDIFile.Chunk.Header
 
 extension MIDIFile.Chunk.Header {
     @_documentation(visibility: internal)
@@ -32,6 +67,7 @@ extension MIDIFile.Chunk.Header {
     
     @_documentation(visibility: internal)
     @available(*, deprecated, renamed: "init(format:timebase:)")
+    @_disfavoredOverload
     public init(
         format: MIDIFile.Format,
         timeBase: MIDIFile.Timebase
@@ -40,10 +76,68 @@ extension MIDIFile.Chunk.Header {
     }
 }
 
+extension MIDIFile.Chunk.Track {
+    @_documentation(visibility: internal)
+    @available(*, deprecated, renamed: "eventsAtQuarterNotePositions(atPPQ:)")
+    @_disfavoredOverload
+    public func eventsAtBeatPositions(ppq: UInt16) -> [(beat: Double, event: MIDIFileEvent)] {
+        eventsAtQuarterNotePositions(atPPQ: ppq)
+    }
+}
+
+// MARK: - MIDIFile.Chunk.UnrecognizedChunk
+
+extension MIDIFile.Chunk.UnrecognizedChunk {
+    @_documentation(visibility: internal)
+    @available(*, deprecated, renamed: "init(id:data:)")
+    @_disfavoredOverload
+    public init(id: String, rawData: Data? = nil) {
+        self.init(id: id, data: rawData)
+    }
+}
+
+extension MIDIFile.Chunk {
+    @_documentation(visibility: internal)
+    @available(*, deprecated, renamed: "other(id:data:)")
+    @_disfavoredOverload
+    public static func other(id: String, rawData: Data? = nil) -> Self {
+        .other(id: id, data: rawData)
+    }
+}
+
 // MARK: - MIDIFile.Timebase
 
 extension MIDIFile.Timebase {
     @_documentation(visibility: internal)
-    @available(*, deprecated, renamed: "init(rawData:)")
-    public init?(rawBytes bytes: [UInt8]) { self.init(rawData: bytes) }
+    @available(*, deprecated, renamed: "init(data:)")
+    @_disfavoredOverload
+    public init?(rawBytes bytes: [UInt8]) {
+        self.init(data: bytes)
+    }
+    
+    @_documentation(visibility: internal)
+    @available(*, deprecated, renamed: "init(data:)")
+    @_disfavoredOverload
+    public init?(rawData data: some DataProtocol) {
+        self.init(data: data)
+    }
+}
+
+extension MIDIFileEvent.DeltaTime {
+    @_documentation(visibility: internal)
+    @available(*, deprecated, renamed: "init(ticks:)")
+    @_disfavoredOverload
+    public init?(
+        ticks: UInt32,
+        using timebase: MIDIFile.Timebase
+    ) {
+        self.init(ticks: ticks)
+    }
+    
+    @_documentation(visibility: internal)
+    @available(*, deprecated, renamed: "ticks")
+    @_disfavoredOverload
+    public func ticksValue(using timebase: MIDIFile.Timebase) -> UInt32 {
+        ticks
+    }
 }

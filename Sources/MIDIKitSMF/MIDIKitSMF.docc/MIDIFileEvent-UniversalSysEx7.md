@@ -20,8 +20,8 @@ Some standard Universal System Exclusive 7 messages have been defined by the MID
 
 ### Constructors
 
-- ``MIDIFileEvent/universalSysEx7(delta:universalType:deviceID:subID1:subID2:data:)-728aw``
-- ``MIDIFileEvent/universalSysEx7(delta:universalType:deviceID:subID1:subID2:data:)-4kjpc``
+- ``MIDIFileEvent/universalSysEx7(delta:universalType:deviceID:subID1:subID2:data:)-(_,_,_,_,_,[UInt7])``
+- ``MIDIFileEvent/universalSysEx7(delta:universalType:deviceID:subID1:subID2:data:)-(_,_,_,_,_,[UInt8])``
 
 ### Switch Case Unwrapping
 

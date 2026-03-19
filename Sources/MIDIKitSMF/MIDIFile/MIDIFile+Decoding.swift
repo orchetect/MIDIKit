@@ -1,5 +1,5 @@
 //
-//  MIDIFile decode.swift
+//  MIDIFile+Decoding.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
@@ -12,19 +12,16 @@ import MIDIKitCore
 extension MIDIFile {
     /// Decode sequentially, without concurrency.
     mutating func decode(
-        rawData: some DataProtocol & Sendable,
-        bundleRPNAndNRPNEvents: Bool,
-        maxTrackEventCount: Int?,
-        ignoreBytesPastEOF: Bool,
+        data: some DataProtocol & Sendable,
+        options: DecodeOptions,
         predicate: DecodePredicate?
     ) throws(MIDIFile.DecodeError) {
-        let parser = try Parser(data: rawData, ignoreBytesPastEOF: ignoreBytesPastEOF)
+        let parser = try Parser(data: data, options: options)
         
         header = parser.fileDescriptor.header
         
         let parsedChunks = try parser.chunks(
-            bundleRPNAndNRPNEvents: bundleRPNAndNRPNEvents,
-            maxTrackEventCount: maxTrackEventCount,
+            options: options,
             predicate: predicate
         )
         chunks = parsedChunks
@@ -33,19 +30,16 @@ extension MIDIFile {
     /// Decode tracks concurrently for improved performance.
     @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
     mutating func decode(
-        rawData: some DataProtocol & Sendable,
-        bundleRPNAndNRPNEvents: Bool,
-        maxTrackEventCount: Int?,
-        ignoreBytesPastEOF: Bool,
+        data: some DataProtocol & Sendable,
+        options: DecodeOptions,
         predicate: DecodePredicate?
     ) async throws(MIDIFile.DecodeError) {
-        let parser = try Parser(data: rawData, ignoreBytesPastEOF: ignoreBytesPastEOF)
+        let parser = try Parser(data: data, options: options)
         
         header = parser.fileDescriptor.header
         
         let parsedChunks = try await parser.chunks(
-            bundleRPNAndNRPNEvents: bundleRPNAndNRPNEvents,
-            maxTrackEventCount: maxTrackEventCount,
+            options: options,
             predicate: predicate
         )
         chunks = parsedChunks
@@ -57,21 +51,18 @@ extension MIDIFile {
     /// Errors encountered during individual chunk parsing are returned within the result closure and not thrown from this method.
     @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
     mutating func decode(
-        rawData: some DataProtocol & Sendable,
-        bundleRPNAndNRPNEvents: Bool,
-        maxTrackEventCount: Int?,
-        ignoreBytesPastEOF: Bool,
+        data: some DataProtocol & Sendable,
+        options: DecodeOptions,
         predicate: DecodePredicate?,
         parsedChunk: @escaping ChunkDecodeBlock
     ) async throws(MIDIFile.DecodeError) {
-        let parser = try Parser(data: rawData, ignoreBytesPastEOF: ignoreBytesPastEOF)
+        let parser = try Parser(data: data, options: options)
         
         header = parser.fileDescriptor.header
         
         var parsedChunks: [Int: Chunk] = [:]
         for await (chunkIndex, result) in parser.chunksAsyncSequence(
-            bundleRPNAndNRPNEvents: bundleRPNAndNRPNEvents,
-            maxTrackEventCount: maxTrackEventCount,
+            options: options,
             predicate: predicate
         ) {
             // call closure asynchronously

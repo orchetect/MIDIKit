@@ -37,15 +37,15 @@ import Testing
         
         let timebase: MIDIFile.Timebase = .musical(ticksPerQuarterNote: 960)
         
-        let parsedTrackA = try MIDIFile.Chunk.Track(
+        let parsedTrackA = try #require(try MIDIFile.Chunk.Track(
             midi1SMFRawBytesStream: bytes,
             timebase: timebase,
-            bundleRPNAndNRPNEvents: true
-        )
+            options: .init(bundleRPNAndNRPNEvents: true)
+        ))
         #expect(parsedTrackA.events.count == 1)
         guard case let .nrpn(delta, event) = parsedTrackA.events[0] else { Issue.record(); return }
         
-        #expect(delta.ticksValue(using: timebase) == 0)
+        #expect(delta.ticks == 0)
         #expect(
             event.parameter ==
                 .raw(parameter: .init(msb: 0x00, lsb: 0x01), dataEntryMSB: 0x02, dataEntryLSB: 0x03)
@@ -77,15 +77,15 @@ import Testing
         
         let timebase: MIDIFile.Timebase = .musical(ticksPerQuarterNote: 960)
         
-        let parsedTrackA = try MIDIFile.Chunk.Track(
+        let parsedTrackA = try #require(try MIDIFile.Chunk.Track(
             midi1SMFRawBytesStream: bytes,
             timebase: timebase,
-            bundleRPNAndNRPNEvents: true
-        )
+            options: .init(bundleRPNAndNRPNEvents: true)
+        ))
         #expect(parsedTrackA.events.count == 1)
         guard case let .nrpn(delta, event) = parsedTrackA.events[0] else { Issue.record(); return }
         
-        #expect(delta.ticksValue(using: timebase) == 0)
+        #expect(delta.ticks == 0)
         #expect(
             event.parameter ==
                 .raw(parameter: .init(msb: 0x00, lsb: 0x01), dataEntryMSB: 0x02, dataEntryLSB: 0x03)
@@ -139,15 +139,15 @@ import Testing
         
         let timebase: MIDIFile.Timebase = .musical(ticksPerQuarterNote: 960)
         
-        let parsedTrackA = try MIDIFile.Chunk.Track(
+        let parsedTrackA = try #require(try MIDIFile.Chunk.Track(
             midi1SMFRawBytesStream: bytes,
             timebase: timebase,
-            bundleRPNAndNRPNEvents: true
-        )
+            options: .init(bundleRPNAndNRPNEvents: true)
+        ))
         #expect(parsedTrackA.events.count == 1)
         guard case let .nrpn(delta, event) = parsedTrackA.events[0] else { Issue.record(); return }
         
-        #expect(delta.ticksValue(using: timebase) == 0)
+        #expect(delta.ticks == 0)
         #expect(
             event.parameter ==
                 .raw(parameter: .init(msb: 0x05, lsb: 0x10), dataEntryMSB: 0x08, dataEntryLSB: nil)
@@ -177,15 +177,15 @@ import Testing
         
         let timebase: MIDIFile.Timebase = .musical(ticksPerQuarterNote: 960)
         
-        let parsedTrackA = try MIDIFile.Chunk.Track(
+        let parsedTrackA = try #require(try MIDIFile.Chunk.Track(
             midi1SMFRawBytesStream: bytes,
             timebase: timebase,
-            bundleRPNAndNRPNEvents: true
-        )
+            options: .init(bundleRPNAndNRPNEvents: true)
+        ))
         #expect(parsedTrackA.events.count == 1)
         guard case let .nrpn(delta, event) = parsedTrackA.events[0] else { Issue.record(); return }
         
-        #expect(delta.ticksValue(using: timebase) == 0)
+        #expect(delta.ticks == 0)
         #expect(
             event.parameter ==
                 .raw(parameter: .init(msb: 0x05, lsb: 0x10), dataEntryMSB: 0x08, dataEntryLSB: nil)
@@ -247,21 +247,21 @@ import Testing
         let timebase: MIDIFile.Timebase = .musical(ticksPerQuarterNote: 960)
         let rpnTotalTicks: UInt32 = 0x01 + 0x02 + 0x03 + 0x04
         
-        let parsedTrackA = try MIDIFile.Chunk.Track(
+        let parsedTrackA = try #require(try MIDIFile.Chunk.Track(
             midi1SMFRawBytesStream: bytes,
             timebase: timebase,
-            bundleRPNAndNRPNEvents: true
-        )
+            options: .init(bundleRPNAndNRPNEvents: true)
+        ))
         #expect(parsedTrackA.events.count == 2)
         #expect(parsedTrackA.events[0] == .cc(delta: .none, event: ccEvent))
         #expect(parsedTrackA.events[1].delta == .ticks(rpnTotalTicks))
         #expect(parsedTrackA.events[1].event() == .nrpn(nrpnEvent))
         
-        let parsedTrackB = try MIDIFile.Chunk.Track(
+        let parsedTrackB = try #require(try MIDIFile.Chunk.Track(
             midi1SMFRawBytes: bytes[8...], // exclude header and length
             timebase: timebase,
-            bundleRPNAndNRPNEvents: true
-        )
+            options: .init(bundleRPNAndNRPNEvents: true)
+        ))
         #expect(parsedTrackB.events.count == 2)
         #expect(parsedTrackB.events[0] == .cc(delta: .none, event: ccEvent))
         #expect(parsedTrackB.events[1].delta == .ticks(rpnTotalTicks))

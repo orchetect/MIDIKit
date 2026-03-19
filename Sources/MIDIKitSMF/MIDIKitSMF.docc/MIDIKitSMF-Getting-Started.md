@@ -25,12 +25,12 @@ Tracks and events can be accessed once the file is successfully read.
 ```swift
 // using a file URL
 let url = URL() // replace with url to a MIDI file on disk
-let midiFile = try MIDIFile(midiFile: url)
+let midiFile = try MIDIFile(url: url)
 print(midiFile.description) // prints human-readable debug output of the file
 
 // using a file path
 let path = "/Users/user/Desktop/midifile.mid"
-let midiFile = try MIDIFile(midiFile: path)
+let midiFile = try MIDIFile(path: path)
 print(midiFile.description) // prints human-readable debug output of the file
 ```
 
@@ -38,7 +38,7 @@ print(midiFile.description) // prints human-readable debug output of the file
 
 ```swift
 let data = Data( ... ) // raw MIDI file contents
-let midiFile = try MIDIFile(rawData: data)
+let midiFile = try MIDIFile(data: data)
 ```
 
 ## Write a MIDI File to Disk
@@ -59,11 +59,31 @@ MIDI file contents can be read and written by accessing these properties.
 // header chunk metadata
 midiFile.format // type 0, 1, or 2 MIDI file
 midiFile.timebase // musical or timecode-based
+```
 
+Accessing chunks, including tracks:
+
+```swift
 // all chunks, which includes tracks:
-midiFile.chunks // [Chunk]
+midiFile.chunks // [MIDIFile.Chunk]
 
 // track 1 events
-guard case .track(let track1) = midiFile.chunks.first else { return }
-let events = track1.events // [MIDIFileEvent]
+for chunk in midiFile.chunks {
+    switch chunk {
+    case let .track(track): // `track` is MIDIFile.Chunk.Track
+        // chunk is a track
+    case let .other(chunk): // `chunk` is MIDIFile.Chunk.UnrecognizedChunk
+        // chunk is a non-track chunk
+    }
+}
+```
+
+For convenience, a read-only `tracks` property can be accessed to return only the tracks as a typed array:
+
+```swift
+midiFile.tracks // [MIDIFile.Chunk.Track]
+
+for track in midiFile.tracks {
+    // ...
+}
 ```

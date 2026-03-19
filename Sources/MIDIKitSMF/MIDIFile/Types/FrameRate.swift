@@ -45,17 +45,10 @@ extension MIDIFile.FrameRate: Sendable { }
 extension MIDIFile.FrameRate: CustomStringConvertible {
     public var description: String {
         switch self {
-        case .fps24:
-            "24fps"
-            
-        case .fps25:
-            "25fps"
-            
-        case .fps29_97d:
-            "29.97dfps"
-            
-        case .fps30:
-            "30fps"
+        case .fps24: "24fps"
+        case .fps25: "25fps"
+        case .fps29_97d: "29.97dfps"
+        case .fps30: "30fps"
         }
     }
 }

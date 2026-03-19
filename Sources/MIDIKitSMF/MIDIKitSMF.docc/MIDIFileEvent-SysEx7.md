@@ -16,8 +16,8 @@ System Exclusive: Manufacturer-specific (7-bit)
 
 ### Constructors
 
-- ``MIDIFileEvent/sysEx7(delta:manufacturer:data:)-6xiv7``
-- ``MIDIFileEvent/sysEx7(delta:manufacturer:data:)-oc22``
+- ``MIDIFileEvent/sysEx7(delta:manufacturer:data:)-(_,_,[UInt7]``
+- ``MIDIFileEvent/sysEx7(delta:manufacturer:data:)-(_,_,[UInt8]``
 
 ### Switch Case Unwrapping
 

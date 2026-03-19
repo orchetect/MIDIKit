@@ -36,7 +36,7 @@ Given the example raw MIDI 1.0 SysEx bytes `F0 43 01 02 03 04 F7`, the following
    )
    ```
 
-3. The ``MIDIEvent/sysEx7(manufacturer:data:group:)-2xian`` constructor separates the header parts into more descriptive types, as defined by the MIDI spec. (You only supply the payload bytes, so the F0/F7 trailing SysEx bytes and header info is taken care of for you.)
+3. The ``MIDIEvent/sysEx7(manufacturer:data:group:)-(_,[UInt8],_)`` constructor separates the header parts into more descriptive types, as defined by the MIDI spec. (You only supply the payload bytes, so the F0/F7 trailing SysEx bytes and header info is taken care of for you.)
 
    ```swift
    let event: MIDIEvent = try .sysEx7(
@@ -72,7 +72,7 @@ Given the example raw MIDI 1.0 SysEx bytes `F0 7F 01 02 01 07 0A F7`, the follow
    )
    ```
 
-3. The ``MIDIEvent/universalSysEx7(universalType:deviceID:subID1:subID2:data:group:)-1p0x1`` constructor separates the header parts into more descriptive types, as defined by the MIDI spec. (You only supply the payload bytes, so the F0/F7 trailing SysEx bytes and header info is taken care of for you.)
+3. The ``MIDIEvent/universalSysEx7(universalType:deviceID:subID1:subID2:data:group:)-(_,_,_,_,[UInt8],_)`` constructor separates the header parts into more descriptive types, as defined by the MIDI spec. (You only supply the payload bytes, so the F0/F7 trailing SysEx bytes and header info is taken care of for you.)
    
    ```swift
    let event: MIDIEvent = try .universalSysEx7(
@@ -110,12 +110,12 @@ For an overview of how event value types work (such as note velocity, CC value, 
 
 ### Constructors
 
-- ``MIDIEvent/sysEx7(manufacturer:data:group:)-2xian``
-- ``MIDIEvent/sysEx7(manufacturer:data:group:)-8tnhw``
+- ``MIDIEvent/sysEx7(manufacturer:data:group:)-(_,[UInt7],_)``
+- ``MIDIEvent/sysEx7(manufacturer:data:group:)-(_,[UInt8],_)``
 - ``MIDIEvent/sysEx7(rawHexString:group:)``
 - ``MIDIEvent/sysEx7(rawBytes:group:)``
-- ``MIDIEvent/universalSysEx7(universalType:deviceID:subID1:subID2:data:group:)-1p0x1``
-- ``MIDIEvent/universalSysEx7(universalType:deviceID:subID1:subID2:data:group:)-150x7``
+- ``MIDIEvent/universalSysEx7(universalType:deviceID:subID1:subID2:data:group:)-(_,_,_,_,[UInt7],_)``
+- ``MIDIEvent/universalSysEx7(universalType:deviceID:subID1:subID2:data:group:)-(_,_,_,_,[UInt8],_)``
 
 - ``MIDIEvent/sysEx8(manufacturer:data:group:)``
 - ``MIDIEvent/sysEx8(rawBytes:group:)``

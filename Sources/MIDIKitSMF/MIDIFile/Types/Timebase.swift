@@ -65,11 +65,11 @@ extension MIDIFile.Timebase {
     }
 }
 
-// MARK: - Init
+// MARK: - Decoding
 
 extension MIDIFile.Timebase {
     /// Initialize from raw data.
-    public init?(rawData data: some DataProtocol) {
+    public init?(data: some DataProtocol) {
         guard data.count == 2 else {
             return nil
         }
@@ -96,7 +96,7 @@ extension MIDIFile.Timebase {
     }
 }
 
-// MARK: - Properties
+// MARK: - Encoding
 
 extension MIDIFile.Timebase {
     /// Returns the timebase encoded as raw data.

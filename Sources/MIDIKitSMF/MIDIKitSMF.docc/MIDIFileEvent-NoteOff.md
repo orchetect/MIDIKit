@@ -16,8 +16,8 @@ Channel Voice Message: Note Off
 
 ### Constructors
 
-- ``MIDIFileEvent/noteOff(delta:note:velocity:channel:)-6eth4``
-- ``MIDIFileEvent/noteOff(delta:note:velocity:channel:)-3m9r7``
+- ``MIDIFileEvent/noteOff(delta:note:velocity:channel:)-(_,MIDINote,_,_)``
+- ``MIDIFileEvent/noteOff(delta:note:velocity:channel:)-(_,UInt7,_,_)``
 
 ### Switch Case Unwrapping
 

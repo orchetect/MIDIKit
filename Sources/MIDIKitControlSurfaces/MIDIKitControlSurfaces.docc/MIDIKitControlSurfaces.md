@@ -30,7 +30,6 @@ MIDI control surface protocol abstractions (HUI, etc.) for MIDIKit.
 ### HUI Common
 
 - ``HUISwitch``
-
 - ``HUIVPot``
 - ``HUIVPotDisplay``
 

@@ -12,11 +12,11 @@ extension MIDIFile {
         
         let fileDescriptor: FileDescriptor
         
-        init(data: DataType, ignoreBytesPastEOF: Bool) throws(MIDIFile.DecodeError) {
+        init(data: DataType, options: MIDIFile.DecodeOptions) throws(MIDIFile.DecodeError) {
             self.data = data
             fileDescriptor = try Self.parseFileDescriptor(
                 fileData: data,
-                ignoreBytesPastEOF: ignoreBytesPastEOF
+                options: options
             )
             
             // print("Chunk descriptors:")
@@ -36,15 +36,16 @@ extension MIDIFile.Parser: Sendable { }
 extension MIDIFile.Parser {
     /// Parses one chunk at a time and returns all chunks in order once all tracks have been parsed.
     func chunks(
-        bundleRPNAndNRPNEvents: Bool,
-        maxTrackEventCount: Int?,
+        options: MIDIFile.DecodeOptions,
         predicate: MIDIFile.DecodePredicate?
     ) throws(MIDIFile.DecodeError) -> [MIDIFile.Chunk] {
         var newChunks: [MIDIFile.Chunk] = []
         for (index, chunkDescriptor) in fileDescriptor.chunkDescriptors.enumerated() {
-            if let predicate { guard predicate(chunkDescriptor.chunkType, index) else { continue } }
+            if let predicate {
+                guard predicate(chunkDescriptor.chunkType, index) else { continue }
+            }
             
-            let newChunk = try data.withDataParser { parser throws(MIDIFile.DecodeError) in
+            let chunk = try data.withDataParser { parser throws(MIDIFile.DecodeError) in
                 try parser.toMIDIFileDecodeError(
                     try parser.seek(to: chunkDescriptor.bodyByteStartOffset)
                 )
@@ -55,13 +56,14 @@ extension MIDIFile.Parser {
                     chunkDescriptor: chunkDescriptor,
                     chunkIndex: index,
                     timebase: fileDescriptor.header.timebase,
-                    bundleRPNAndNRPNEvents: bundleRPNAndNRPNEvents,
-                    maxTrackEventCount: maxTrackEventCount,
+                    options: options.trackDecodeOptions,
                     in: chunkData
                 )
             }
             
-            newChunks.append(newChunk)
+            if let chunk {
+                newChunks.append(chunk)
+            }
         }
         return newChunks
     }
@@ -69,18 +71,19 @@ extension MIDIFile.Parser {
     /// Parses all chunks concurrently and returns all chunks in order once all tracks have been parsed.
     @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
     func chunks(
-        bundleRPNAndNRPNEvents: Bool,
-        maxTrackEventCount: Int?,
+        options: MIDIFile.DecodeOptions,
         predicate: MIDIFile.DecodePredicate?
     ) async throws(MIDIFile.DecodeError) -> [MIDIFile.Chunk] {
         let result: Result<[MIDIFile.Chunk], MIDIFile.DecodeError> = await withTaskGroup(
-            of: Result<(index: Int, chunk: MIDIFile.Chunk), MIDIFile.DecodeError>.self,
+            of: Result<(index: Int, chunk: MIDIFile.Chunk?), MIDIFile.DecodeError>.self,
             returning: Result<[MIDIFile.Chunk], MIDIFile.DecodeError>.self
         ) { group in
             var newChunks: [Int: MIDIFile.Chunk] = [:]
             
             for (index, chunkDescriptor) in fileDescriptor.chunkDescriptors.enumerated() {
-                if let predicate { guard predicate(chunkDescriptor.chunkType, index) else { continue } }
+                if let predicate {
+                    guard predicate(chunkDescriptor.chunkType, index) else { continue }
+                }
                 
                 group.addTask {
                     do throws(MIDIFile.DecodeError) {
@@ -95,8 +98,7 @@ extension MIDIFile.Parser {
                                 chunkDescriptor: chunkDescriptor,
                                 chunkIndex: index,
                                 timebase: fileDescriptor.header.timebase,
-                                bundleRPNAndNRPNEvents: bundleRPNAndNRPNEvents,
-                                maxTrackEventCount: maxTrackEventCount,
+                                options: options.trackDecodeOptions,
                                 in: chunkData
                             )
                         }
@@ -127,18 +129,19 @@ extension MIDIFile.Parser {
     /// Parses multiple chunks concurrently and emits them from an async sequence in random order.
     @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
     func chunksAsyncSequence(
-        bundleRPNAndNRPNEvents: Bool,
-        maxTrackEventCount: Int?,
+        options: MIDIFile.DecodeOptions,
         predicate: MIDIFile.DecodePredicate?
     ) -> AsyncStream<(index: Int, result: Result<MIDIFile.Chunk, MIDIFile.DecodeError>)> {
         AsyncStream { continuation in
-            Task { [data, predicate, continuation] in
+            Task { [data, options, predicate, continuation] in
                 await withTaskGroup(
-                    of: (index: Int, result: Result<MIDIFile.Chunk, MIDIFile.DecodeError>).self,
+                    of: (index: Int, result: Result<MIDIFile.Chunk, MIDIFile.DecodeError>)?.self,
                     returning: Void.self
-                ) { [data, predicate, continuation] group in
+                ) { [data, options, predicate, continuation] group in
                     for (index, chunkDescriptor) in fileDescriptor.chunkDescriptors.enumerated() {
-                        if let predicate { guard predicate(chunkDescriptor.chunkType, index) else { continue } }
+                        if let predicate {
+                            guard predicate(chunkDescriptor.chunkType, index) else { continue }
+                        }
                         
                         group.addTask {
                             do throws(MIDIFile.DecodeError) {
@@ -153,13 +156,16 @@ extension MIDIFile.Parser {
                                         chunkDescriptor: chunkDescriptor,
                                         chunkIndex: index,
                                         timebase: fileDescriptor.header.timebase,
-                                        bundleRPNAndNRPNEvents: bundleRPNAndNRPNEvents,
-                                        maxTrackEventCount: maxTrackEventCount,
+                                        options: options.trackDecodeOptions,
                                         in: chunkData
                                     )
                                 }
                                 
-                                return (index: index, result: .success(chunk))
+                                if let chunk {
+                                    return (index: index, result: .success(chunk))
+                                } else {
+                                    return nil
+                                }
                             } catch {
                                 return (index: index, result: .failure(error))
                             }
@@ -167,7 +173,9 @@ extension MIDIFile.Parser {
                     }
                     
                     for await result in group {
-                        continuation.yield(with: .init { result })
+                        if let result {
+                            continuation.yield(with: .init { result })
+                        }
                         
                         if Task.isCancelled {
                             group.cancelAll()
@@ -188,7 +196,7 @@ extension MIDIFile.Parser {
 extension MIDIFile.Parser {
     static func parseFileDescriptor(
         fileData: some DataProtocol,
-        ignoreBytesPastEOF: Bool
+        options: MIDIFile.DecodeOptions
     ) throws(MIDIFile.DecodeError) -> FileDescriptor {
         guard !fileData.isEmpty else {
             throw .malformed("MIDI data is empty (contains no bytes).")
@@ -197,15 +205,18 @@ extension MIDIFile.Parser {
         return try fileData.withDataParser { parser throws(MIDIFile.DecodeError) in
             // ____ Header ____
             
-            guard let readHeader = try? parser
-                .read(bytes: MIDIFile.Chunk.Header.midi1SMFFixedRawBytesLength)
-            else {
-                throw .malformed(
-                    "Header is not correct. File may not be a MIDI file."
-                )
-            }
-            
-            let (header, expectedTrackCount) = try MIDIFile.Chunk.Header.initFrom(midi1SMFRawBytes: readHeader)
+            let headerStream = try parser.toMIDIFileDecodeError(
+                malformedReason: "Error reading data for MIDI file header.",
+                try parser.read(advance: false)
+            )
+            let (header, expectedTrackCount, headerLength) = try MIDIFile.Chunk.Header.initFrom(
+                midi1SMFRawBytesStream: headerStream,
+                allowMultiTrackFormat0: options.allowMultiTrackFormat0
+            )
+            try parser.toMIDIFileDecodeError(
+                malformedReason: "Error reading data past MIDI file header.",
+                try parser.seek(by: headerLength)
+            )
             
             // chunks
             
@@ -229,7 +240,7 @@ extension MIDIFile.Parser {
                     }
                     
                     // chunk length
-                    guard let chunkLength = (try? parser.read(bytes: 4))?
+                    guard var chunkLength = (try? parser.read(bytes: 4))?
                         .toUInt32(from: .bigEndian)
                     else {
                         let offsetString = parser.readOffset.hexString(prefix: true)
@@ -242,19 +253,37 @@ extension MIDIFile.Parser {
                     let dataBodyOffset = parser.readOffset
                     
                     // advance parser
-                    try parser.toMIDIFileDecodeError(
-                        malformedReason: "There was a problem reading chunk data at byte offset \(parser.readOffset.hexString(prefix: true)). Encountered end of file early.",
-                        try parser.seek(by: Int(chunkLength))
-                    )
+                    var discard = false
+                    do throws(MIDIFile.DecodeError) {
+                        try parser.toMIDIFileDecodeError(
+                            malformedReason: "There was a problem reading data while parsing the chunk that starts at byte offset \(chunkStartByteOffset.hexString(prefix: true)). Attempted to read byte offset \((parser.readOffset + Int(chunkLength)).hexString(prefix: true)) but encountered end of file early.",
+                            try parser.seek(by: Int(chunkLength))
+                        )
+                    } catch {
+                        // not enough bytes - EOF reached
+                        switch options.trackDecodeOptions.errorStrategy {
+                        case .decodePartialTracksWithErrors:
+                            // fix chunk length to end at the last byte available
+                            chunkLength = UInt32(exactly: parser.remainingByteCount.clamped(to: 0...)) ?? 0
+                            isParsing = false
+                        case .discardTracksWithErrors:
+                            discard = true
+                            isParsing = false
+                        case .throwOnError:
+                            throw error
+                        }
+                    }
                     
                     // append chunk descriptor
-                    let chunkDescriptor = ChunkDescriptor(
-                        chunkType: chunkType,
-                        startOffset: chunkStartByteOffset,
-                        bodyByteStartOffset: dataBodyOffset,
-                        bodyByteLength: Int(chunkLength)
-                    )
-                    chunkDescriptors.append(chunkDescriptor)
+                    if !discard {
+                        let chunkDescriptor = ChunkDescriptor(
+                            chunkType: chunkType,
+                            startOffset: chunkStartByteOffset,
+                            bodyByteStartOffset: dataBodyOffset,
+                            bodyByteLength: Int(chunkLength)
+                        )
+                        chunkDescriptors.append(chunkDescriptor)
+                    }
                 } catch {
                     // a parsing error here could be a legitimately malformed file. however, if there's
                     // more bytes remaining but we've already parsed all of the expected tracks,
@@ -263,7 +292,7 @@ extension MIDIFile.Parser {
                     // if `ignoreBytesPastEOF` is false, then consider the file malformed and throw the error.
                     if chunkDescriptors.filter({ $0.chunkType == .track }).count == expectedTrackCount,
                        isParsing,
-                       ignoreBytesPastEOF
+                       options.ignoreBytesPastEOF
                     {
                         isParsing = false
                     } else {
@@ -286,20 +315,18 @@ extension MIDIFile.Parser {
         chunkDescriptor: ChunkDescriptor,
         chunkIndex: Int,
         timebase: MIDIFile.Timebase,
-        bundleRPNAndNRPNEvents: Bool,
-        maxTrackEventCount: Int?,
+        options: MIDIFile.Chunk.Track.DecodeOptions,
         in chunkData: some DataProtocol
-    ) throws(MIDIFile.DecodeError) -> MIDIFile.Chunk {
+    ) throws(MIDIFile.DecodeError) -> MIDIFile.Chunk? {
         do throws(MIDIFile.DecodeError) {
             switch chunkDescriptor.chunkType {
             case .track:
-                let newTrack = try MIDIFile.Chunk.Track(
+                let track = try MIDIFile.Chunk.Track(
                     midi1SMFRawBytes: chunkData,
                     timebase: timebase,
-                    bundleRPNAndNRPNEvents: bundleRPNAndNRPNEvents,
-                    maxEventCount: maxTrackEventCount
+                    options: options
                 )
-                return .track(newTrack)
+                return if let track { .track(track) } else { nil }
                 
             case let .other(identifier: fourCharString):
                 // as per Standard MIDI File 1.0 Spec:
@@ -307,7 +334,7 @@ extension MIDIFile.Parser {
                 
                 let newUnrecognizedChunk = MIDIFile.Chunk.UnrecognizedChunk(
                     id: fourCharString,
-                    rawData: chunkData.toData()
+                    data: chunkData.toData()
                 )
                 return .other(newUnrecognizedChunk)
             }

@@ -119,7 +119,7 @@ import Testing
         // test if midiFile structs are equal by way of Equatable
         
         // Note: It's ok if this throws a deprecation warning. We need to test this specific method.
-        let dp8MarkersRawData = try /* NOT AWAIT! */ MIDIFile(rawData: kMIDIFile.dp8Markers)
+        let dp8MarkersRawData = try /* NOT AWAIT! */ MIDIFile(data: kMIDIFile.dp8Markers)
         #expect(midiFile == dp8MarkersRawData)
         
         // test if raw data is equal
@@ -220,7 +220,7 @@ import Testing
         
         // test if midiFile structs are equal by way of Equatable
         
-        let dp8MarkersRawData = try await MIDIFile(rawData: kMIDIFile.dp8Markers)
+        let dp8MarkersRawData = try await MIDIFile(data: kMIDIFile.dp8Markers)
         #expect(midiFile == dp8MarkersRawData)
         
         // test if raw data is equal

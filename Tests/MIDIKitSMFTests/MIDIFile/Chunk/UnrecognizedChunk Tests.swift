@@ -49,7 +49,7 @@ import Testing
         
         let chunk = MIDIFile.Chunk.UnrecognizedChunk(
             id: id,
-            rawData: data.toData()
+            data: data.toData()
         )
         
         #expect(chunk.identifier == id)

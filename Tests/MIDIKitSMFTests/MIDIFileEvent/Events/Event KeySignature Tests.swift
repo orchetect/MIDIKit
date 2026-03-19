@@ -13,7 +13,7 @@ import Testing
     
     @Test
     func init_midi1SMFRawBytes_A() async throws {
-        let bytes: [UInt8] = [0xFF, 0x59, 0x02, 4, 0x00]
+        let bytes: [UInt8] = [0xFF, 0x59, 0x02, 0x04, 0x00]
         
         let event = try MIDIFileEvent.KeySignature(midi1SMFRawBytes: bytes)
         
@@ -27,7 +27,7 @@ import Testing
         
         let bytes = event.midi1SMFRawBytes(as: [UInt8].self)
         
-        #expect(bytes == [0xFF, 0x59, 0x02, 4, 0x00])
+        #expect(bytes == [0xFF, 0x59, 0x02, 0x04, 0x00])
     }
     
     @Test

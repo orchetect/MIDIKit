@@ -16,8 +16,8 @@ Channel Voice Message: Note On
 
 ### Constructors
 
-- ``MIDIFileEvent/noteOn(delta:note:velocity:channel:)-560m``
-- ``MIDIFileEvent/noteOn(delta:note:velocity:channel:)-4jcss``
+- ``MIDIFileEvent/noteOn(delta:note:velocity:channel:)-(_,MIDINote,_,_)``
+- ``MIDIFileEvent/noteOn(delta:note:velocity:channel:)-(_,UInt7,_,_)``
 
 ### Switch Case Unwrapping
 

@@ -1,5 +1,5 @@
 //
-//  MIDIFile DecodeOptions.swift
+//  DecodeOptions.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
@@ -7,13 +7,9 @@
 extension MIDIFile {
     /// MIDI file decoding options.
     public struct DecodeOptions {
-        /// Bundle RPN/NRPN CC message sequences into `rpn`/`nrpn` event types.
-        /// If `false`, the message sequences will be parsed as individual CC messages.
-        public var bundleRPNAndNRPNEvents: Bool
-        
-        /// The maximum number of events parsed from each track.
-        /// If `nil`, all events are parsed.
-        public var maxTrackEventCount: Int?
+        /// Allows malformed MIDI files that declare they are format 0 (single track) but contain zero or multiple tracks.
+        /// If `false`, this is an error condition and the file is considered malformed.
+        public var allowMultiTrackFormat0: Bool
         
         /// Ignore any bytes that may be present past the "end of file".
         /// If `false`, if any extraneous bytes are present it is considered a malformed file and an error is thrown.
@@ -29,14 +25,17 @@ extension MIDIFile {
         /// See issue for more details: https://github.com/orchetect/MIDIKit/issues/177
         public var ignoreBytesPastEOF: Bool
         
+        /// MIDI file track decoding options.
+        public var trackDecodeOptions: Chunk.Track.DecodeOptions
+        
         public init(
-            bundleRPNAndNRPNEvents: Bool = true,
-            maxTrackEventCount: Int? = nil,
-            ignoreBytesPastEOF: Bool = true
+            allowMultiTrackFormat0: Bool = true,
+            ignoreBytesPastEOF: Bool = true,
+            trackDecodeOptions: Chunk.Track.DecodeOptions = .init()
         ) {
-            self.bundleRPNAndNRPNEvents = bundleRPNAndNRPNEvents
-            self.maxTrackEventCount = maxTrackEventCount
+            self.allowMultiTrackFormat0 = allowMultiTrackFormat0
             self.ignoreBytesPastEOF = ignoreBytesPastEOF
+            self.trackDecodeOptions = trackDecodeOptions
         }
     }
 }

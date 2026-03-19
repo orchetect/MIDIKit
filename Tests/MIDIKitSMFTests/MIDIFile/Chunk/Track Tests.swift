@@ -41,14 +41,14 @@ import Testing
         let parsedTrackA = try? MIDIFile.Chunk.Track(
             midi1SMFRawBytesStream: generatedData,
             timebase: timebase,
-            bundleRPNAndNRPNEvents: true
+            options: .init(bundleRPNAndNRPNEvents: true)
         )
         #expect(parsedTrackA == track)
         
         let parsedTrackB = try? MIDIFile.Chunk.Track(
             midi1SMFRawBytes: generatedData[8...], // exclude header and length
             timebase: timebase,
-            bundleRPNAndNRPNEvents: true
+            options: .init(bundleRPNAndNRPNEvents: true)
         )
         #expect(parsedTrackB == track)
     }
@@ -87,20 +87,20 @@ import Testing
         let parsedTrackA = try? MIDIFile.Chunk.Track(
             midi1SMFRawBytesStream: generatedData,
             timebase: timebase,
-            bundleRPNAndNRPNEvents: true
+            options: .init(bundleRPNAndNRPNEvents: true)
         )
         #expect(parsedTrackA == track)
         
         let parsedTrackB = try? MIDIFile.Chunk.Track(
             midi1SMFRawBytes: generatedData[8...], // exclude header and length
             timebase: timebase,
-            bundleRPNAndNRPNEvents: true
+            options: .init(bundleRPNAndNRPNEvents: true)
         )
         #expect(parsedTrackB == track)
     }
     
     @Test
-    func eventsAtBeatPositions() async throws {
+    func eventsAtQuarterNotePositions() async throws {
         let ppq: UInt16 = 480
         var midiFile = MIDIFile(timebase: .musical(ticksPerQuarterNote: UInt16(ppq)))
         
@@ -141,7 +141,7 @@ import Testing
         
         let trackOne = try #require(midiFile.tracks.first)
         
-        let eventsAtBeatPositions = trackOne.eventsAtBeatPositions(ppq: ppq)
+        let eventsAtBeatPositions = trackOne.eventsAtQuarterNotePositions(atPPQ: ppq)
         
         #expect(eventsAtBeatPositions.count == 11)
         
@@ -183,16 +183,14 @@ import Testing
         let parsedTrackA = try? MIDIFile.Chunk.Track(
             midi1SMFRawBytesStream: generatedData,
             timebase: timebase,
-            bundleRPNAndNRPNEvents: true,
-            maxEventCount: 2
+            options: .init(bundleRPNAndNRPNEvents: true, maxEventCount: 2)
         )
         #expect(parsedTrackA == limitedTrack)
         
         let parsedTrackB = try? MIDIFile.Chunk.Track(
             midi1SMFRawBytes: generatedData[8...], // exclude header and length
             timebase: timebase,
-            bundleRPNAndNRPNEvents: true,
-            maxEventCount: 2
+            options: .init(bundleRPNAndNRPNEvents: true, maxEventCount: 2)
         )
         #expect(parsedTrackB == limitedTrack)
     }
@@ -230,7 +228,7 @@ import Testing
         
         // encode and decode
         let midiFileData = try await midiFile.rawData()
-        let decodedMIDIFile = try await MIDIFile(rawData: midiFileData)
+        let decodedMIDIFile = try await MIDIFile(data: midiFileData)
         
         // compare events
         let decodedTrack = try #require(decodedMIDIFile.tracks.first)

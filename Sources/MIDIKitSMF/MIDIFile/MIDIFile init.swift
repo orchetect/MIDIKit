@@ -15,15 +15,13 @@ extension MIDIFile {
     ///
     /// - Tip: Consider using the `async` overload of this initializer, as it is much more performant.
     public init(
-        rawData: some DataProtocol & Sendable,
+        data: some DataProtocol & Sendable,
         options: DecodeOptions = DecodeOptions(),
         predicate: DecodePredicate? = nil
     ) throws(DecodeError) {
         try decode(
-            rawData: rawData,
-            bundleRPNAndNRPNEvents: options.bundleRPNAndNRPNEvents,
-            maxTrackEventCount: options.maxTrackEventCount,
-            ignoreBytesPastEOF: options.ignoreBytesPastEOF,
+            data: data,
+            options: options,
             predicate: predicate
         )
     }
@@ -31,15 +29,13 @@ extension MIDIFile {
     /// Initialize by loading the contents of a MIDI file's raw data, parsing chunks concurrently for improved performance.
     @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
     public init(
-        rawData: some DataProtocol & Sendable,
+        data: some DataProtocol & Sendable,
         options: DecodeOptions = DecodeOptions(),
         predicate: DecodePredicate? = nil
     ) async throws(DecodeError) {
         try await decode(
-            rawData: rawData,
-            bundleRPNAndNRPNEvents: options.bundleRPNAndNRPNEvents,
-            maxTrackEventCount: options.maxTrackEventCount,
-            ignoreBytesPastEOF: options.ignoreBytesPastEOF,
+            data: data,
+            options: options,
             predicate: predicate
         )
     }
@@ -51,16 +47,14 @@ extension MIDIFile {
     /// Errors encountered during individual chunk parsing are returned within the result closure and not thrown from this method.
     @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
     public init(
-        rawData: some DataProtocol & Sendable,
+        data: some DataProtocol & Sendable,
         options: DecodeOptions = DecodeOptions(),
         predicate: DecodePredicate? = nil,
         parsedChunk: @escaping ChunkDecodeBlock
     ) async throws(DecodeError) {
         try await decode(
-            rawData: rawData,
-            bundleRPNAndNRPNEvents: options.bundleRPNAndNRPNEvents,
-            maxTrackEventCount: options.maxTrackEventCount,
-            ignoreBytesPastEOF: options.ignoreBytesPastEOF,
+            data: data,
+            options: options,
             predicate: predicate,
             parsedChunk: parsedChunk
         )
@@ -74,23 +68,23 @@ extension MIDIFile {
     ///
     /// - Tip: Consider using the `async` overload of this initializer, as it is much more performant.
     public init(
-        midiFile path: String,
+        path: String,
         options: DecodeOptions = DecodeOptions(),
         predicate: DecodePredicate? = nil
     ) throws(DecodeError) {
         let url = try Self.url(forFilePath: path)
-        try self.init(midiFile: url, options: options, predicate: predicate)
+        try self.init(url: url, options: options, predicate: predicate)
     }
     
     /// Initialize by loading the contents of a MIDI file from disk, parsing chunks concurrently for improved performance.
     @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
     public init(
-        midiFile path: String,
+        path: String,
         options: DecodeOptions = DecodeOptions(),
         predicate: DecodePredicate? = nil
     ) async throws(DecodeError) {
         let url = try Self.url(forFilePath: path)
-        try await self.init(midiFile: url, options: options, predicate: predicate)
+        try await self.init(url: url, options: options, predicate: predicate)
     }
     
     /// Initialize by loading the contents of a MIDI file from disk, parsing chunks concurrently for improved performance.
@@ -100,13 +94,13 @@ extension MIDIFile {
     /// Errors encountered during individual chunk parsing are returned within the result closure and not thrown from this method.
     @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
     public init(
-        midiFile path: String,
+        path: String,
         options: DecodeOptions = DecodeOptions(),
         predicate: DecodePredicate? = nil,
         parsedChunk: @escaping ChunkDecodeBlock
     ) async throws(DecodeError) {
         let url = try Self.url(forFilePath: path)
-        try await self.init(midiFile: url, options: options, predicate: predicate, parsedChunk: parsedChunk)
+        try await self.init(url: url, options: options, predicate: predicate, parsedChunk: parsedChunk)
     }
     
     static func url(forFilePath path: String) throws(DecodeError) -> URL {
@@ -129,16 +123,14 @@ extension MIDIFile {
     ///
     /// - Tip: Consider using the `async` overload of this initializer, as it is much more performant.
     public init(
-        midiFile url: URL,
+        url: URL,
         options: DecodeOptions = DecodeOptions(),
         predicate: DecodePredicate? = nil
     ) throws(DecodeError) {
         let data = try Self.data(forFileURL: url)
         try decode(
-            rawData: data,
-            bundleRPNAndNRPNEvents: options.bundleRPNAndNRPNEvents,
-            maxTrackEventCount: options.maxTrackEventCount,
-            ignoreBytesPastEOF: options.ignoreBytesPastEOF,
+            data: data,
+            options: options,
             predicate: predicate
         )
     }
@@ -146,16 +138,14 @@ extension MIDIFile {
     /// Initialize by loading the contents of a MIDI file from disk, parsing chunks concurrently for improved performance.
     @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
     public init(
-        midiFile url: URL,
+        url: URL,
         options: DecodeOptions = DecodeOptions(),
         predicate: DecodePredicate? = nil
     ) async throws(DecodeError) {
         let data = try Self.data(forFileURL: url)
         try await decode(
-            rawData: data,
-            bundleRPNAndNRPNEvents: options.bundleRPNAndNRPNEvents,
-            maxTrackEventCount: options.maxTrackEventCount,
-            ignoreBytesPastEOF: options.ignoreBytesPastEOF,
+            data: data,
+            options: options,
             predicate: predicate
         )
     }
@@ -167,17 +157,15 @@ extension MIDIFile {
     /// Errors encountered during individual chunk parsing are returned within the result closure and not thrown from this method.
     @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
     public init(
-        midiFile url: URL,
+        url: URL,
         options: DecodeOptions = DecodeOptions(),
         predicate: DecodePredicate? = nil,
         parsedChunk: @escaping ChunkDecodeBlock
     ) async throws(DecodeError) {
         let data = try Self.data(forFileURL: url)
         try await decode(
-            rawData: data,
-            bundleRPNAndNRPNEvents: options.bundleRPNAndNRPNEvents,
-            maxTrackEventCount: options.maxTrackEventCount,
-            ignoreBytesPastEOF: options.ignoreBytesPastEOF,
+            data: data,
+            options: options,
             predicate: predicate,
             parsedChunk: parsedChunk
         )

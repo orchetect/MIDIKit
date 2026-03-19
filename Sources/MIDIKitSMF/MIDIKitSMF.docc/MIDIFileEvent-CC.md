@@ -16,8 +16,8 @@ Channel Voice Message: Control Change (CC)
 
 ### Constructors
 
-- ``MIDIFileEvent/cc(delta:controller:value:channel:)-145k9``
-- ``MIDIFileEvent/cc(delta:controller:value:channel:)-3m14a``
+- ``MIDIFileEvent/cc(delta:controller:value:channel:)-(_,MIDIEvent.CC.Controller,_,_)``
+- ``MIDIFileEvent/cc(delta:controller:value:channel:)-(_,UInt7,_,_)``
 
 ### Switch Case Unwrapping
 
