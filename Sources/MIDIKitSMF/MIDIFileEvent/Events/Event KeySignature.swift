@@ -134,7 +134,7 @@ extension MIDIFileEvent.KeySignature: MIDIFileEventPayload {
             
             guard (0 ... 1).contains(readMajMinKey) else {
                 throw .malformed(
-                    "Illegal value found when reading Key Signature event major/minor key byte. Got \(readFlatsOrSharps) but value must be between 0 ... 1."
+                    "Illegal value found when reading Key Signature event major/minor key byte. Got \(readMajMinKey) but value must be between 0 ... 1."
                 )
             }
             
