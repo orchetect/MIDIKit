@@ -34,21 +34,3 @@ extension BinaryInteger {
         }
     }
 }
-
-// MARK: - Binary & Bitwise
-
-extension UnsignedInteger {
-    /// Access binary bits, zero-based from right-to-left
-    @_disfavoredOverload
-    package func bit(_ position: Int) -> Int {
-        Int((self & (0b1 << position)) >> position)
-    }
-}
-
-extension Int8 {
-    /// Returns a two's complement bit format of an `Int8` so it can be stored as a byte (`UInt8`)
-    @_disfavoredOverload
-    package var twosComplement: UInt8 {
-        UInt8(bitPattern: self)
-    }
-}
