@@ -23,7 +23,7 @@ extension MIDIFileEvent {
     /// Includes copyright, marker, cue point, track/sequence name, instrument name, generic text,
     /// program name, device name, or lyric.
     ///
-    /// Text is restricted to ASCII format only. If extended characters or encodings are used, it
+    /// Text is restricted to ASCII characters only. If extended characters or other encodings are used, it
     /// will be converted to ASCII lossily before encoding into the MIDI file.
     public struct Text {
         /// Type of text event.
@@ -235,22 +235,54 @@ extension MIDIFileEvent.Text: MIDIFileEventPayload {
 // MARK: - TextEventType
 
 extension MIDIFileEvent.Text {
+    /// Specialized text-based MIDI file track events.
     public enum EventType: String {
         // MARK: Track Events - First track
+        
         // MARK: ... head of track
+        
+        /// Copyright text.
+        /// If present, this event should only exist at the start of the first track.
         case copyright
+        
         // MARK: ... anywhere in track
+        
+        /// Marker text event.
+        /// If present, this event can appear anywhere within a track, but should only exist in the first track.
         case marker
+        
+        /// Cue point text event.
+        /// If present, this event can appear anywhere within a track, but should only exist in the first track.
         case cuePoint
 
         // MARK: Track Events - Any track
+        
         // MARK: ... head of track
+        
+        /// Track or sequence name text event.
+        /// If present, this event can be used in one or more tracks, but should only exist at the start of each track.
         case trackOrSequenceName
+        
+        /// Instrument name text event.
+        /// If present, this event can be used in one or more tracks, but should only exist at the start of each track.
         case instrumentName
+        
+        /// Generic text event.
+        /// If present, this event can be used in one or more tracks, but should only exist at the start of each track.
         case text
+        
         // MARK: ... anywhere in track
+        
+        /// Program name text event.
+        /// This event can be used as often as desired anywhere within any track(s).
         case programName
+        
+        /// Device name text event.
+        /// This event can be used as often as desired anywhere within any track(s).
         case deviceName
+        
+        /// Lyric text event.
+        /// This event can be used as often as desired anywhere within any track(s).
         case lyric
     }
 }
