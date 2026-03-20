@@ -81,6 +81,10 @@ extension MIDIFileEvent.ChannelPrefix {
 // MARK: - Encoding
 
 extension MIDIFileEvent.ChannelPrefix: MIDIFileEventPayload {
+    public func smfWrappedEvent(delta: MIDIFileEvent.DeltaTime) -> MIDIFileEvent {
+        .channelPrefix(delta: delta, event: self)
+    }
+    
     public static let smfEventType: MIDIFileEventType = .channelPrefix
     
     public init(

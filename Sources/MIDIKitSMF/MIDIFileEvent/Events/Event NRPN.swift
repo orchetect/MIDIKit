@@ -44,6 +44,10 @@ extension MIDIFileEvent {
 // MARK: - Encoding
 
 extension MIDIEvent.NRPN: MIDIFileEventPayload {
+    public func smfWrappedEvent(delta: MIDIFileEvent.DeltaTime) -> MIDIFileEvent {
+        .nrpn(delta: delta, event: self)
+    }
+    
     public static let smfEventType: MIDIFileEventType = .nrpn
     
     public init(

@@ -123,6 +123,10 @@ extension MIDIFileEvent.KeySignature {
 // MARK: - Encoding
 
 extension MIDIFileEvent.KeySignature: MIDIFileEventPayload {
+    public func smfWrappedEvent(delta: MIDIFileEvent.DeltaTime) -> MIDIFileEvent {
+        .keySignature(delta: delta, event: self)
+    }
+    
     public static let smfEventType: MIDIFileEventType = .keySignature
     
     public init(

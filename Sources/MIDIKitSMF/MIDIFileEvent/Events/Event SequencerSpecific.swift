@@ -66,6 +66,10 @@ extension MIDIFileEvent.SequencerSpecific {
 // MARK: - Encoding
 
 extension MIDIFileEvent.SequencerSpecific: MIDIFileEventPayload {
+    public func smfWrappedEvent(delta: MIDIFileEvent.DeltaTime) -> MIDIFileEvent {
+        .sequencerSpecific(delta: delta, event: self)
+    }
+    
     public static let smfEventType: MIDIFileEventType = .sequencerSpecific
     
     public init(

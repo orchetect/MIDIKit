@@ -102,6 +102,10 @@ extension MIDIFileEvent.XMFPatchTypePrefix {
 // MARK: - Encoding
 
 extension MIDIFileEvent.XMFPatchTypePrefix: MIDIFileEventPayload {
+    public func smfWrappedEvent(delta: MIDIFileEvent.DeltaTime) -> MIDIFileEvent {
+        .xmfPatchTypePrefix(delta: delta, event: self)
+    }
+    
     public static let smfEventType: MIDIFileEventType = .xmfPatchTypePrefix
     
     public init(

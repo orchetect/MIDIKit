@@ -54,6 +54,10 @@ extension MIDIFileEvent {
 // MARK: - Encoding
 
 extension MIDIEvent.ProgramChange: MIDIFileEventPayload {
+    public func smfWrappedEvent(delta: MIDIFileEvent.DeltaTime) -> MIDIFileEvent {
+        .programChange(delta: delta, event: self)
+    }
+    
     public static let smfEventType: MIDIFileEventType = .programChange
     
     public init(

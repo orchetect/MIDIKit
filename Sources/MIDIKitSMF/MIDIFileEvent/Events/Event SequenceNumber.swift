@@ -83,6 +83,10 @@ extension MIDIFileEvent.SequenceNumber {
 // MARK: - Encoding
 
 extension MIDIFileEvent.SequenceNumber: MIDIFileEventPayload {
+    public func smfWrappedEvent(delta: MIDIFileEvent.DeltaTime) -> MIDIFileEvent {
+        .sequenceNumber(delta: delta, event: self)
+    }
+    
     public static let smfEventType: MIDIFileEventType = .sequenceNumber
     
     public init(

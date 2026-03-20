@@ -100,6 +100,10 @@ extension MIDIFileEvent.Tempo {
 // MARK: - Encoding
 
 extension MIDIFileEvent.Tempo: MIDIFileEventPayload {
+    public func smfWrappedEvent(delta: MIDIFileEvent.DeltaTime) -> MIDIFileEvent {
+        .tempo(delta: delta, event: self)
+    }
+    
     public static let smfEventType: MIDIFileEventType = .tempo
     
     public init(

@@ -9,6 +9,9 @@ import MIDIKitCore
 
 /// Protocol describing a MIDI event payload for use in ``MIDIFileEvent`` cases.
 public protocol MIDIFileEventPayload where Self: Sendable {
+    /// Wraps the concrete struct in its corresponding ``MIDIFileEvent`` enum case wrapper.
+    func smfWrappedEvent(delta: MIDIFileEvent.DeltaTime) -> MIDIFileEvent
+    
     /// MIDI File event type.
     static var smfEventType: MIDIFileEventType { get }
     

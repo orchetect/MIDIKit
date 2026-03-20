@@ -110,6 +110,10 @@ extension MIDIFileEvent {
 // MARK: - Encoding
 
 extension MIDIFileEvent.UnrecognizedMeta: MIDIFileEventPayload {
+    public func smfWrappedEvent(delta: MIDIFileEvent.DeltaTime) -> MIDIFileEvent {
+        .unrecognizedMeta(delta: delta, event: self)
+    }
+    
     public static let smfEventType: MIDIFileEventType = .unrecognizedMeta
     
     public init(
