@@ -127,8 +127,8 @@ extension MIDIFile.Chunk.Track {
                     
                     // first check for end of track
                     
-                    if readBuffer.count == Self.chunkEnd.count,
-                       readBuffer.elementsEqual(Self.chunkEnd)
+                    if readBuffer.count == Self.trackEndByes.count,
+                       readBuffer.elementsEqual(Self.trackEndByes)
                     {
                         endOfChunk = true
                         break

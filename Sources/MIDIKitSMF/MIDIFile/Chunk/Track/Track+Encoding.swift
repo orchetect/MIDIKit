@@ -29,7 +29,7 @@ extension MIDIFile.Chunk.Track {
         }
         
         bodyData.append(deltaTime: 0)
-        bodyData += Self.chunkEnd
+        bodyData += Self.trackEndByes
         
         // assemble full chunk data with header and length
         

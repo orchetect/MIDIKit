@@ -9,8 +9,6 @@ import MIDIKitCore
 // MARK: - Global Constants
 
 extension MIDIFile {
-    static let kChunkMIDITrackEnd: [UInt8] = [0xFF, 0x2F, 0x00]
-    
     // TODO: refactor as standalone static properties instead of a dictionary
     static let kEventHeaders: [MIDIFileEventType: [UInt8]] = [
         .sequenceNumber:     [0xFF, 0x00, 0x02],

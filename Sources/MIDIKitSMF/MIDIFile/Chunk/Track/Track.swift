@@ -130,7 +130,8 @@ extension MIDIFile.Chunk.Track {
     public static let staticIdentifier: String = "MTrk"
     public static let staticChunkType: MIDIFile.ChunkType = .track
     
-    static let chunkEnd: [UInt8] = [0xFF, 0x2F, 0x00]
+    /// The 3-byte sequence that must appear at the end of every track.
+    public static let trackEndByes: [UInt8] = [0xFF, 0x2F, 0x00]
 }
 
 // MARK: - Static Constructors
