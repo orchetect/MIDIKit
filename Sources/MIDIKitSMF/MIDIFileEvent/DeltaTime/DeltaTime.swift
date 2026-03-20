@@ -28,6 +28,8 @@ extension MIDIFileEvent.DeltaTime: Hashable { }
 
 extension MIDIFileEvent.DeltaTime: Sendable { }
 
+// MARK: - Static Constructors
+
 extension MIDIFileEvent.DeltaTime {
     /// Construct zero delta time.
     public static let none = Self(ticks: 0)
@@ -81,7 +83,7 @@ extension MIDIFileEvent.DeltaTime {
     /// The `ppq` (ticks per quarter note) value must match the value in the MIDI file header.)
     public static func note256th(ppq: UInt16) -> Self { Self(ticks: UInt32(ppq) / 64) }
     
-    // TODO: Could add other convnience calculations
+    // TODO: Could add other convenience calculations
     // public static func seconds(TimeInterval)
     // public static func milliseconds(Double)
 }
