@@ -58,15 +58,13 @@ extension MIDIFile {
     }
 }
 
-// MARK: - MIDIFile.AnyChunk
+// MARK: - MIDIFile.Chunk
 
-extension MIDIFile {
-    @_documentation(visibility: internal)
-    @available(*, deprecated, renamed: "AnyChunk")
-    public typealias Chunk = AnyChunk
-}
+@_documentation(visibility: internal)
+@available(*, deprecated, renamed: "MIDIFile.Chunk")
+public typealias MIDIFileChunk = MIDIFile.Chunk
 
-extension MIDIFile.AnyChunk {
+extension MIDIFile.Chunk {
     @_documentation(visibility: internal)
     @available(*, deprecated, renamed: "MIDIFile.HeaderChunk")
     public typealias Header = MIDIFile.HeaderChunk

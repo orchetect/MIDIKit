@@ -30,7 +30,7 @@ Refer to MIDIKit's own package documentation for information on using MIDI I/O a
 
 ### Protocols
 
-- ``MIDIFileChunk``
+- ``MIDIFile/Chunk``
 
 ### Related Types
 

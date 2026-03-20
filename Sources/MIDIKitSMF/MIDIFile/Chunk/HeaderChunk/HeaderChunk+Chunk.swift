@@ -1,10 +1,10 @@
 //
-//  HeaderChunk+MIDIFileChunk.swift
+//  HeaderChunk+Chunk.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
-extension MIDIFile.HeaderChunk: MIDIFileChunk {
+extension MIDIFile.HeaderChunk: MIDIFile.Chunk {
     public struct Identifier: MIDIFile.ChunkIdentifier {
         public let string: String = "MThd"
         

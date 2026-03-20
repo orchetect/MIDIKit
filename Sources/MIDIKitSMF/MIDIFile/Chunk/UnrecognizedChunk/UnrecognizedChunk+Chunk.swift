@@ -1,5 +1,5 @@
 //
-//  UnrecognizedChunk+MIDIFileChunk.swift
+//  UnrecognizedChunk+Chunk.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
@@ -7,7 +7,7 @@
 import Foundation
 internal import MIDIKitInternals
 
-extension MIDIFile.UnrecognizedChunk: MIDIFileChunk {
+extension MIDIFile.UnrecognizedChunk: MIDIFile.Chunk {
     public struct Identifier: MIDIFile.ChunkIdentifier {
         public let string: String
         
