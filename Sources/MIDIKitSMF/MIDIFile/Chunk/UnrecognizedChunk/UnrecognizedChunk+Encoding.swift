@@ -7,7 +7,7 @@
 import Foundation
 import MIDIKitCore
 
-extension MIDIFile.AnyChunk.UnrecognizedChunk {
+extension MIDIFile.UnrecognizedChunk {
     public func midi1SMFRawBytes() throws(MIDIFile.EncodeError) -> Data {
         try midi1SMFRawBytes(as: Data.self)
     }

@@ -35,11 +35,11 @@ extension MIDIFile.AnyChunkIdentifier {
     public init?(string: String) {
         switch string {
         case MIDIFile.HeaderChunk.identifier.string:
-            wrapped = .track
-        case MIDIFile.HeaderChunk.identifier.string:
             wrapped = .header
+        case MIDIFile.TrackChunk.identifier.string:
+            wrapped = .track
         default:
-            guard let id = MIDIFile.AnyChunk.UnrecognizedChunk.Identifier(string: string) else {
+            guard let id = MIDIFile.UnrecognizedChunk.Identifier(string: string) else {
                 return nil
             }
             wrapped = id

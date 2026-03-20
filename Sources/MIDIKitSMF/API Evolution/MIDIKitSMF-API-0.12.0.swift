@@ -68,14 +68,16 @@ extension MIDIFile {
 
 extension MIDIFile.AnyChunk {
     @_documentation(visibility: internal)
-    @available(*, deprecated, renamed: "HeaderChunk")
+    @available(*, deprecated, renamed: "MIDIFile.HeaderChunk")
     public typealias Header = MIDIFile.HeaderChunk
-}
-
-extension MIDIFile.AnyChunk {
+    
     @_documentation(visibility: internal)
-    @available(*, deprecated, renamed: "TrackChunk")
+    @available(*, deprecated, renamed: "MIDIFile.TrackChunk")
     public typealias Track = MIDIFile.TrackChunk
+    
+    @_documentation(visibility: internal)
+    @available(*, deprecated, renamed: "MIDIFile.UnrecognizedChunk")
+    public typealias UnrecognizedChunk = MIDIFile.UnrecognizedChunk
 }
 
 // MARK: - MIDIFile.HeaderChunk
@@ -107,9 +109,9 @@ extension MIDIFile.TrackChunk {
     }
 }
 
-// MARK: - MIDIFile.AnyChunk.UnrecognizedChunk
+// MARK: - MIDIFile.UnrecognizedChunk
 
-extension MIDIFile.AnyChunk.UnrecognizedChunk {
+extension MIDIFile.UnrecognizedChunk {
     @_documentation(visibility: internal)
     @available(*, deprecated, renamed: "init(identifier:data:)")
     @_disfavoredOverload
@@ -129,7 +131,7 @@ extension MIDIFile.AnyChunk {
     @_documentation(visibility: internal)
     @available(*, deprecated, renamed: "unrecognized(_:)")
     @_disfavoredOverload
-    public static func other(_ chunk: UnrecognizedChunk) -> Self {
+    public static func other(_ chunk: MIDIFile.UnrecognizedChunk) -> Self {
         .unrecognized(chunk)
     }
 }

@@ -328,11 +328,11 @@ extension MIDIFile.Parser {
                 )
                 return if let track { .track(track) } else { nil }
                 
-            case let identifier as MIDIFile.AnyChunk.UnrecognizedChunk.Identifier:
+            case let identifier as MIDIFile.UnrecognizedChunk.Identifier:
                 // as per Standard MIDI File 1.0 Spec:
                 // unrecognized chunks should be skipped and not throw an error
                 
-                let newUnrecognizedChunk = MIDIFile.AnyChunk.UnrecognizedChunk(
+                let newUnrecognizedChunk = MIDIFile.UnrecognizedChunk(
                     identifier: identifier,
                     data: chunkData.toData()
                 )

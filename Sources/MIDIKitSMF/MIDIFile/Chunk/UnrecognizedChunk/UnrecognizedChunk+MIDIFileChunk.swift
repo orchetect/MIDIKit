@@ -7,7 +7,7 @@
 import Foundation
 internal import MIDIKitInternals
 
-extension MIDIFile.AnyChunk.UnrecognizedChunk: MIDIFileChunk {
+extension MIDIFile.UnrecognizedChunk: MIDIFileChunk {
     public struct Identifier: MIDIFileChunkIdentifier {
         public let string: String
         
@@ -55,7 +55,7 @@ extension MIDIFile.AnyChunk.UnrecognizedChunk: MIDIFileChunk {
 extension MIDIFile.AnyChunk {
     /// Unrecognized MIDI File Chunk.
     public static func unrecognized(
-        identifier: UnrecognizedChunk.Identifier,
+        identifier: MIDIFile.UnrecognizedChunk.Identifier,
         data: Data? = nil
     ) -> Self {
         .unrecognized(.init(identifier: identifier, data: data))
@@ -67,7 +67,7 @@ extension MIDIFile.AnyChunk {
         identifier identifierString: String,
         data: Data? = nil
     ) -> Self? {
-        guard let id = UnrecognizedChunk.Identifier(string: identifierString) else {
+        guard let id = MIDIFile.UnrecognizedChunk.Identifier(string: identifierString) else {
             return nil
         }
         return .unrecognized(.init(identifier: id, data: data))

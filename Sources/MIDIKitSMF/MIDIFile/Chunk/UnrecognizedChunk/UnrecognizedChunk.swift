@@ -7,7 +7,7 @@
 import Foundation
 import MIDIKitCore
 
-extension MIDIFile.AnyChunk {
+extension MIDIFile {
     /// Unrecognized MIDI File Chunk.
     public struct UnrecognizedChunk {
         public let identifier: Identifier
@@ -27,13 +27,13 @@ extension MIDIFile.AnyChunk {
     }
 }
 
-extension MIDIFile.AnyChunk.UnrecognizedChunk: Equatable { }
+extension MIDIFile.UnrecognizedChunk: Equatable { }
 
-extension MIDIFile.AnyChunk.UnrecognizedChunk: Hashable { }
+extension MIDIFile.UnrecognizedChunk: Hashable { }
 
-extension MIDIFile.AnyChunk.UnrecognizedChunk: Sendable { }
+extension MIDIFile.UnrecognizedChunk: Sendable { }
 
-extension MIDIFile.AnyChunk.UnrecognizedChunk: CustomStringConvertible {
+extension MIDIFile.UnrecognizedChunk: CustomStringConvertible {
     public var description: String {
         var outputString = ""
         
@@ -46,7 +46,7 @@ extension MIDIFile.AnyChunk.UnrecognizedChunk: CustomStringConvertible {
     }
 }
 
-extension MIDIFile.AnyChunk.UnrecognizedChunk: CustomDebugStringConvertible {
+extension MIDIFile.UnrecognizedChunk: CustomDebugStringConvertible {
     public var debugDescription: String {
         let rawDataBlock = rawData
             .hexString(padEachTo: 2, prefixes: false)

@@ -236,9 +236,9 @@ import Testing
     /// Test that track count is encoded in the file header (and not total chunk count instead).
     @Test
     func trackCount() async throws {
-        let chunk1: MIDIFile.AnyChunk.Track = .init(events: [])
-        let chunk2: MIDIFile.AnyChunk.UnrecognizedChunk = .init(identifier: .unrecognized(identifier: "ABCD")!, data: Data([0x01, 0x02]))
-        let chunk3: MIDIFile.AnyChunk.Track = .init(events: [])
+        let chunk1: MIDIFile.TrackChunk = .init(events: [])
+        let chunk2: MIDIFile.UnrecognizedChunk = .init(identifier: .unrecognized(identifier: "ABCD")!, data: Data([0x01, 0x02]))
+        let chunk3: MIDIFile.TrackChunk = .init(events: [])
         let chunks: [MIDIFile.AnyChunk] = [.track(chunk1), .unrecognized(chunk2), .track(chunk3)]
         let midiFile = MIDIFile(
             format: .multipleTracksSynchronous,
