@@ -5,7 +5,7 @@
 //
 
 extension MIDIFile.TrackChunk: MIDIFileChunk {
-    public struct Identifier: MIDIFileChunkIdentifier {
+    public struct Identifier: MIDIFile.ChunkIdentifier {
         public let string: String = "MTrk"
         
         public init() { }

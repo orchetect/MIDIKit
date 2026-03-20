@@ -6,7 +6,7 @@
 
 // MARK: - Static Constructor
 
-extension MIDIFileChunkIdentifier where Self == MIDIFile.UnrecognizedChunk.Identifier {
+extension MIDIFile.ChunkIdentifier where Self == MIDIFile.UnrecognizedChunk.Identifier {
     /// Initialize from an unrecognized (non-standard) chunk identifier.
     /// This identifier must be different from the header identifier (`MThd`) and the track identifier (`MTrk`).
     public static func unrecognized(identifier: String) -> MIDIFile.UnrecognizedChunk.Identifier? {

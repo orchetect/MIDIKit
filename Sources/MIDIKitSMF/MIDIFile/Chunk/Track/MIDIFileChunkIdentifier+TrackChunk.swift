@@ -6,7 +6,7 @@
 
 // MARK: - Static Constructor
 
-extension MIDIFileChunkIdentifier where Self == MIDIFile.TrackChunk.Identifier {
+extension MIDIFile.ChunkIdentifier where Self == MIDIFile.TrackChunk.Identifier {
     /// Track: `MTrk` chunk identifier.
     public static var track: MIDIFile.TrackChunk.Identifier {
         MIDIFile.TrackChunk.Identifier()

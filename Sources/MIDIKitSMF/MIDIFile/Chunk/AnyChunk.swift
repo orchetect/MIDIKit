@@ -67,7 +67,7 @@ extension MIDIFile.AnyChunk {
     }
     
     /// MIDI file chunk identifier.
-    public var identifier: any MIDIFileChunkIdentifier {
+    public var identifier: any MIDIFile.ChunkIdentifier {
         switch self {
         case let .track(chunk): chunk.identifier
         case let .unrecognized(chunk): chunk.identifier

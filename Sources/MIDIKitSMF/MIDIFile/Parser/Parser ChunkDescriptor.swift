@@ -7,7 +7,7 @@
 extension MIDIFile.Parser {
     struct ChunkDescriptor {
         /// Chunk type (4-character identifier).
-        var identifier: any MIDIFileChunkIdentifier
+        var identifier: any MIDIFile.ChunkIdentifier
         
         /// Byte offset of the start of the chunk.
         var startOffset: Int

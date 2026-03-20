@@ -8,7 +8,7 @@ import Foundation
 internal import MIDIKitInternals
 
 extension MIDIFile.UnrecognizedChunk: MIDIFileChunk {
-    public struct Identifier: MIDIFileChunkIdentifier {
+    public struct Identifier: MIDIFile.ChunkIdentifier {
         public let string: String
         
         /// Initialize from an unrecognized (non-standard) 4-character ASCII chunk identifier.

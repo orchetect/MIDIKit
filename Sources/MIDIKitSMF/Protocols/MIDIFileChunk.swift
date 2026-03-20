@@ -6,7 +6,7 @@
 
 public protocol MIDIFileChunk: Sendable {
     /// MIDI file chunk identifier type.
-    associatedtype Identifier: MIDIFileChunkIdentifier
+    associatedtype Identifier: MIDIFile.ChunkIdentifier
     
     /// MIDI file chunk identifier.
     var identifier: Identifier { get }

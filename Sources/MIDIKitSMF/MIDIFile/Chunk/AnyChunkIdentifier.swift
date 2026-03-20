@@ -7,9 +7,9 @@
 extension MIDIFile {
     /// Type-erased box for a MIDI file chunk identifier.
     public struct AnyChunkIdentifier {
-        public let wrapped: any MIDIFileChunkIdentifier
+        public let wrapped: any ChunkIdentifier
         
-        public init(_ wrapped: any MIDIFileChunkIdentifier) {
+        public init(_ wrapped: any ChunkIdentifier) {
             self.wrapped = wrapped
         }
     }
