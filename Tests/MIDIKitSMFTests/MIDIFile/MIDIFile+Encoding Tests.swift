@@ -1,5 +1,5 @@
 //
-//  MIDI File encode Tests.swift
+//  MIDIFile+Encoding Tests.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
@@ -7,7 +7,7 @@
 import MIDIKitSMF
 import Testing
 
-@Suite struct MIDIFileEncodeTests {
+@Suite struct MIDIFile_Encoding_Tests {
     @Test
     func type0() async {
         var midiFile = MIDIFile()

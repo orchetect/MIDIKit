@@ -1,5 +1,5 @@
 //
-//  MIDI File decode Tests.swift
+//  MIDIFile+Decoding Tests.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
@@ -9,7 +9,7 @@ import MIDIKitInternals
 import MIDIKitSMF
 import Testing
 
-@Suite struct MIDIFileDecodeTests {
+@Suite struct MIDIFile_Decoding_Tests {
     // swiftformat:options --wrapcollections preserve
     // swiftformat:disable spaceInsideParens spaceInsideBrackets spacearoundoperators
     // swiftformat:options --maxwidth none

@@ -1,5 +1,5 @@
 //
-//  MIDI File Utilities Tests.swift
+//  MIDIFile Utilities Tests.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
@@ -8,7 +8,7 @@ import Foundation
 @testable import MIDIKitSMF
 import Testing
 
-@Suite struct MIDIFileUtilities_Tests {
+@Suite struct MIDIFile_Utilities_Tests {
     @Test
     func encodeVariableLengthValue() async {
         #expect(MIDIFile.encodeVariableLengthValue(0, as: [UInt8].self) == [0x00])
