@@ -315,13 +315,13 @@ extension MIDIFile.Parser {
         chunkDescriptor: ChunkDescriptor,
         chunkIndex: Int,
         timebase: MIDIFile.Timebase,
-        options: MIDIFile.AnyChunk.Track.DecodeOptions,
+        options: MIDIFile.TrackChunk.DecodeOptions,
         in chunkData: some DataProtocol
     ) throws(MIDIFile.DecodeError) -> MIDIFile.AnyChunk? {
         do throws(MIDIFile.DecodeError) {
             switch chunkDescriptor.identifier {
-            case is MIDIFile.AnyChunk.Track.Identifier:
-                let track = try MIDIFile.AnyChunk.Track(
+            case is MIDIFile.TrackChunk.Identifier:
+                let track = try MIDIFile.TrackChunk(
                     midi1SMFRawBytes: chunkData,
                     timebase: timebase,
                     options: options

@@ -1,5 +1,5 @@
 //
-//  Track+Decoding.swift
+//  TrackChunk+Decoding.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
@@ -8,7 +8,7 @@ import Foundation
 import MIDIKitCore
 internal import SwiftDataParsing
 
-extension MIDIFile.AnyChunk.Track {
+extension MIDIFile.TrackChunk {
     /// Init from MIDI file data stream.
     /// If the initializer returns `nil`, discard the track without throwing an error.
     public init?<D: DataProtocol>(
@@ -293,7 +293,7 @@ extension MIDIFile.AnyChunk.Track {
                 }
             }
             
-            return MIDIFile.AnyChunk.Track(events: newEvents)
+            return MIDIFile.TrackChunk(events: newEvents)
         }
         
         if let track { self = track } else { return nil }

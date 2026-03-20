@@ -1,5 +1,5 @@
 //
-//  Track+Encoding.swift
+//  TrackChunk+Encoding.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
@@ -7,7 +7,7 @@
 import Foundation
 import MIDIKitCore
 
-extension MIDIFile.AnyChunk.Track {
+extension MIDIFile.TrackChunk {
     public func midi1SMFRawBytes(
         using timebase: MIDIFile.Timebase
     ) throws(MIDIFile.EncodeError) -> Data {

@@ -16,7 +16,7 @@ extension MIDIFile {
     /// In ``MIDIFile``, the ``HeaderChunk`` chunk is managed automatically and is not present as
     /// a ``MIDIFile/chunks`` member.
     public enum AnyChunk {
-        case track(Track)
+        case track(TrackChunk)
         case unrecognized(UnrecognizedChunk)
     }
 }

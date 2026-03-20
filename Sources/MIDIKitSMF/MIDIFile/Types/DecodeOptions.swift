@@ -26,12 +26,12 @@ extension MIDIFile {
         public var ignoreBytesPastEOF: Bool
         
         /// MIDI file track decoding options.
-        public var trackDecodeOptions: AnyChunk.Track.DecodeOptions
+        public var trackDecodeOptions: TrackChunk.DecodeOptions
         
         public init(
             allowMultiTrackFormat0: Bool = true,
             ignoreBytesPastEOF: Bool = true,
-            trackDecodeOptions: AnyChunk.Track.DecodeOptions = .init()
+            trackDecodeOptions: TrackChunk.DecodeOptions = .init()
         ) {
             self.allowMultiTrackFormat0 = allowMultiTrackFormat0
             self.ignoreBytesPastEOF = ignoreBytesPastEOF

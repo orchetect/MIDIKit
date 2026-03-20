@@ -1,10 +1,10 @@
 //
-//  Track+MIDIFileChunk.swift
+//  TrackChunk+MIDIFileChunk.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
-extension MIDIFile.AnyChunk.Track: MIDIFileChunk {
+extension MIDIFile.TrackChunk: MIDIFileChunk {
     public struct Identifier: MIDIFileChunkIdentifier {
         public let string: String = "MTrk"
         

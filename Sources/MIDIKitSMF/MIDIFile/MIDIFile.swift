@@ -32,9 +32,9 @@ public struct MIDIFile {
     public var chunks: [AnyChunk] = []
     
     /// Returns copies of the tracks contained in the MIDI file.
-    /// (Computed convenience to filter ``chunks`` and return ``AnyChunk/Track`` instances.)
+    /// (Computed convenience to filter ``chunks`` and return ``TrackChunk`` instances.)
     /// To add new tracks or modify existing tracks, mutate the ``chunks`` collection.
-    public var tracks: [AnyChunk.Track] {
+    public var tracks: [TrackChunk] {
         chunks.compactMap {
             guard case let .track(track) = $0 else { return nil }
             return track
@@ -73,7 +73,7 @@ public struct MIDIFile {
     public init(
         format: Format = .multipleTracksSynchronous,
         timebase: Timebase = .default(),
-        tracks: [AnyChunk.Track]
+        tracks: [TrackChunk]
     ) {
         self.format = format
         self.timebase = timebase
@@ -85,7 +85,7 @@ public struct MIDIFile {
     public init(
         format: Format = .multipleTracksSynchronous,
         timebase: Timebase = .default(),
-        tracks: some Sequence<AnyChunk.Track>
+        tracks: some Sequence<TrackChunk>
     ) {
         self.format = format
         self.timebase = timebase

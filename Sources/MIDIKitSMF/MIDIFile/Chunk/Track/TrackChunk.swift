@@ -1,5 +1,5 @@
 //
-//  Track.swift
+//  TrackChunk.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
@@ -10,9 +10,9 @@ internal import SwiftDataParsing
 
 // MARK: - Track
 
-extension MIDIFile.AnyChunk {
+extension MIDIFile {
     /// Track: `MTrk` chunk type.
-    public struct Track {
+    public struct TrackChunk {
         /// Storage for events in the track.
         public var events: [MIDIFileEvent] = []
         
@@ -32,13 +32,13 @@ extension MIDIFile.AnyChunk {
     }
 }
 
-extension MIDIFile.AnyChunk.Track: Equatable { }
+extension MIDIFile.TrackChunk: Equatable { }
 
-extension MIDIFile.AnyChunk.Track: Hashable { }
+extension MIDIFile.TrackChunk: Hashable { }
 
-extension MIDIFile.AnyChunk.Track: Sendable { }
+extension MIDIFile.TrackChunk: Sendable { }
 
-extension MIDIFile.AnyChunk.Track: CustomStringConvertible {
+extension MIDIFile.TrackChunk: CustomStringConvertible {
     public var description: String {
         description(maxEventCount: 10) // by default, limit number of events
     }
@@ -54,7 +54,7 @@ extension MIDIFile.AnyChunk.Track: CustomStringConvertible {
     }
 }
 
-extension MIDIFile.AnyChunk.Track: CustomDebugStringConvertible {
+extension MIDIFile.TrackChunk: CustomDebugStringConvertible {
     public var debugDescription: String {
         debugDescription(maxEventCount: 10) // by default, limit number of events
     }
@@ -70,7 +70,7 @@ extension MIDIFile.AnyChunk.Track: CustomDebugStringConvertible {
     }
 }
 
-extension MIDIFile.AnyChunk.Track {
+extension MIDIFile.TrackChunk {
     func descriptionBuilder(
         maxEventCount: Int?,
         deltaPadLength: Int,
@@ -120,14 +120,14 @@ extension MIDIFile.AnyChunk.Track {
 
 // MARK: - Static
 
-extension MIDIFile.AnyChunk.Track {
+extension MIDIFile.TrackChunk {
     /// The 3-byte sequence that must appear at the end of every track.
     public static let trackEndByes: [UInt8] = [0xFF, 0x2F, 0x00]
 }
 
 // MARK: - Methods
 
-extension MIDIFile.AnyChunk.Track {
+extension MIDIFile.TrackChunk {
     /// Returns ``events`` mapped to their quarter-note beat position from the start of the track.
     /// This is computed, so avoid repeated calls to this method.
     /// Ensure the `ppq` (ticks per quarter note) supplied is the same as used in the MIDI file.

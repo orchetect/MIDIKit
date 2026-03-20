@@ -72,6 +72,12 @@ extension MIDIFile.AnyChunk {
     public typealias Header = MIDIFile.HeaderChunk
 }
 
+extension MIDIFile.AnyChunk {
+    @_documentation(visibility: internal)
+    @available(*, deprecated, renamed: "TrackChunk")
+    public typealias Track = MIDIFile.TrackChunk
+}
+
 // MARK: - MIDIFile.HeaderChunk
 
 extension MIDIFile.HeaderChunk {
@@ -90,7 +96,9 @@ extension MIDIFile.HeaderChunk {
     }
 }
 
-extension MIDIFile.AnyChunk.Track {
+// MARK: - MIDIFile.TrackChunk
+
+extension MIDIFile.TrackChunk {
     @_documentation(visibility: internal)
     @available(*, deprecated, renamed: "eventsAtQuarterNotePositions(atPPQ:)")
     @_disfavoredOverload
