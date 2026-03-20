@@ -220,6 +220,13 @@ extension MIDIFileEvent {
     }
 }
 
+// MARK: - Static
+
+extension MIDIFileEvent.SMPTEOffset {
+    /// The prefix bytes that define the start of the event.
+    public static let prefixBytes: [UInt8] = [0xFF, 0x54, 0x05]
+}
+
 // MARK: - Encoding
 
 extension MIDIFileEvent.SMPTEOffset: MIDIFileEventPayload {
@@ -246,9 +253,8 @@ extension MIDIFileEvent.SMPTEOffset: MIDIFileEventPayload {
             UInt8, UInt8, UInt8, UInt8, UInt8, UInt8
         ) in
             // 3-byte preamble
-            let header = MIDIFile.kEventHeaders[Self.smfEventType]!
-            guard let headerBytes = try? parser.read(bytes: header.count),
-                  headerBytes.elementsEqual(header)
+            guard let headerBytes = try? parser.read(bytes: Self.prefixBytes.count),
+                  headerBytes.elementsEqual(Self.prefixBytes)
             else {
                 throw .malformed("Event does not start with expected bytes.")
             }
@@ -343,7 +349,7 @@ extension MIDIFileEvent.SMPTEOffset: MIDIFileEventPayload {
         
         var data = D()
         
-        data += MIDIFile.kEventHeaders[.smpteOffset]! // start bytes
+        data += Self.prefixBytes // start bytes
         data += [(frameRate.rawValue << 5) + hours] // hour & frame rate
         data += [minutes] // minutes
         data += [seconds] // seconds

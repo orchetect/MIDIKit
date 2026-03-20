@@ -176,11 +176,10 @@ extension MIDIFileEvent.Text: MIDIFileEventPayload {
                 malformedReason: "Missing event header bytes.",
                 try parser.read(bytes: 2)
             )
-            guard let textTypeMatch = MIDIFile.kTextEventHeaders
-                .first(where: { headerBytes.elementsEqual($0.value) })
+            guard let textTypeMatch = EventType(midi1SMFRawBytes: headerBytes)
             else {
                 throw .malformed(
-                    "Event is not a textual event."
+                    "Event is not a text event."
                 )
             }
             
@@ -200,7 +199,7 @@ extension MIDIFileEvent.Text: MIDIFileEventPayload {
             let formedText = byteSlice.asciiDataToStringLossy() // .removing(.newlines)
             
             let newInstance = Self(
-                type: textTypeMatch.key,
+                type: textTypeMatch,
                 string: formedText
             )
             
@@ -216,11 +215,11 @@ extension MIDIFileEvent.Text: MIDIFileEventPayload {
         
         let stringData = text.data(using: .nonLossyASCII) ?? Data()
         
-        return MIDIFile.kTextEventHeaders[textType]! +
+        return textType.prefixBytes
             // length
-            MIDIFile.encodeVariableLengthValue(stringData.count, as: D.self) +
+            + MIDIFile.encodeVariableLengthValue(stringData.count, as: D.self)
             // text
-            stringData
+            + stringData
     }
     
     public var smfDescription: String {
@@ -232,7 +231,7 @@ extension MIDIFileEvent.Text: MIDIFileEventPayload {
     }
 }
 
-// MARK: - TextEventType
+// MARK: - EventType
 
 extension MIDIFileEvent.Text {
     /// Specialized text-based MIDI file track events.
@@ -294,3 +293,33 @@ extension MIDIFileEvent.Text.EventType: Hashable { }
 extension MIDIFileEvent.Text.EventType: CaseIterable { }
 
 extension MIDIFileEvent.Text.EventType: Sendable { }
+
+// MARK: - EventType init
+
+extension MIDIFileEvent.Text.EventType {
+    public init?(midi1SMFRawBytes rawBytes: some DataProtocol) {
+        guard let match = Self.allCases.first(where: {
+            $0.prefixBytes.elementsEqual(rawBytes)
+        }) else { return nil }
+        self = match
+    }
+}
+
+// MARK: - TextEventType Static
+
+extension MIDIFileEvent.Text.EventType {
+    /// The prefix bytes that define the start of the event.
+    public var prefixBytes: [UInt8] {
+        switch self {
+        case .text:                [0xFF, 0x01]
+        case .copyright:           [0xFF, 0x02]
+        case .trackOrSequenceName: [0xFF, 0x03]
+        case .instrumentName:      [0xFF, 0x04]
+        case .lyric:               [0xFF, 0x05]
+        case .marker:              [0xFF, 0x06]
+        case .cuePoint:            [0xFF, 0x07]
+        case .programName:         [0xFF, 0x08]
+        case .deviceName:          [0xFF, 0x09]
+        }
+    }
+}

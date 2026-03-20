@@ -73,6 +73,13 @@ extension MIDIFileEvent {
     }
 }
 
+// MARK: - Static
+
+extension MIDIFileEvent.SequenceNumber {
+    /// The prefix bytes that define the start of the event.
+    public static let prefixBytes: [UInt8] = [0xFF, 0x00, 0x02]
+}
+
 // MARK: - Encoding
 
 extension MIDIFileEvent.SequenceNumber: MIDIFileEventPayload {
@@ -95,9 +102,8 @@ extension MIDIFileEvent.SequenceNumber: MIDIFileEventPayload {
         
         try rawBytes.withDataParser { parser throws(MIDIFile.DecodeError) in
             // 3-byte preamble
-            let header = MIDIFile.kEventHeaders[Self.smfEventType]!
-            guard let headerBytes = try? parser.read(bytes: header.count),
-                  headerBytes.elementsEqual(header)
+            guard let headerBytes = try? parser.read(bytes: Self.prefixBytes.count),
+                  headerBytes.elementsEqual(Self.prefixBytes)
             else {
                 throw .malformed("Event does not start with expected bytes.")
             }
@@ -138,7 +144,7 @@ extension MIDIFileEvent.SequenceNumber: MIDIFileEventPayload {
         // FF 00 02 ssss
         // ssss is UIn16 big-endian sequence number
         
-        D(MIDIFile.kEventHeaders[.sequenceNumber]! + sequence.toData(.bigEndian))
+        D(Self.prefixBytes + sequence.toData(.bigEndian))
     }
     
     static let midi1SMFFixedRawBytesLength = 5

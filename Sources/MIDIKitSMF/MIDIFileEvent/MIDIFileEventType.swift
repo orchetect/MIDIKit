@@ -147,25 +147,25 @@ extension MIDIFileEventType {
         
         switch data.prefix(3) {
         // 0xFF events
-        case let d where d.starts(with: MIDIFile.kEventHeaders[.sequenceNumber]!): return .sequenceNumber
-        case let d where d.starts(with: MIDIFile.kEventHeaders[.channelPrefix]!): return .channelPrefix
-        case let d where d.starts(with: MIDIFile.kEventHeaders[.portPrefix]!): return .portPrefix
-        case let d where d.starts(with: MIDIFile.kEventHeaders[.tempo]!): return .tempo
-        case let d where d.starts(with: MIDIFile.kEventHeaders[.smpteOffset]!): return .smpteOffset
-        case let d where d.starts(with: MIDIFile.kEventHeaders[.timeSignature]!): return .timeSignature
-        case let d where d.starts(with: MIDIFile.kEventHeaders[.keySignature]!): return .keySignature
-        case let d where d.starts(with: MIDIFile.kEventHeaders[.xmfPatchTypePrefix]!): return .xmfPatchTypePrefix
-        case let d where d.starts(with: MIDIFile.kEventHeaders[.sequencerSpecific]!): return .sequencerSpecific
+        case let d where d.starts(with: MIDIFileEvent.SequenceNumber.prefixBytes): return .sequenceNumber
+        case let d where d.starts(with: MIDIFileEvent.ChannelPrefix.prefixBytes): return .channelPrefix
+        case let d where d.starts(with: MIDIFileEvent.PortPrefix.prefixBytes): return .portPrefix
+        case let d where d.starts(with: MIDIFileEvent.Tempo.prefixBytes): return .tempo
+        case let d where d.starts(with: MIDIFileEvent.SMPTEOffset.prefixBytes): return .smpteOffset
+        case let d where d.starts(with: MIDIFileEvent.TimeSignature.prefixBytes): return .timeSignature
+        case let d where d.starts(with: MIDIFileEvent.KeySignature.prefixBytes): return .keySignature
+        case let d where d.starts(with: MIDIFileEvent.XMFPatchTypePrefix.prefixBytes): return .xmfPatchTypePrefix
+        case let d where d.starts(with: MIDIFileEvent.SequencerSpecific.prefixBytes): return .sequencerSpecific
         // text events
-        case let d where d.starts(with: MIDIFile.kTextEventHeaders[.text]!): return .text
-        case let d where d.starts(with: MIDIFile.kTextEventHeaders[.copyright]!): return .text
-        case let d where d.starts(with: MIDIFile.kTextEventHeaders[.trackOrSequenceName]!): return .text
-        case let d where d.starts(with: MIDIFile.kTextEventHeaders[.instrumentName]!): return .text
-        case let d where d.starts(with: MIDIFile.kTextEventHeaders[.lyric]!): return .text
-        case let d where d.starts(with: MIDIFile.kTextEventHeaders[.marker]!): return .text
-        case let d where d.starts(with: MIDIFile.kTextEventHeaders[.cuePoint]!): return .text
-        case let d where d.starts(with: MIDIFile.kTextEventHeaders[.programName]!): return .text
-        case let d where d.starts(with: MIDIFile.kTextEventHeaders[.deviceName]!): return .text
+        case let d where d.starts(with: MIDIFileEvent.Text.EventType.text.prefixBytes): return .text
+        case let d where d.starts(with: MIDIFileEvent.Text.EventType.copyright.prefixBytes): return .text
+        case let d where d.starts(with: MIDIFileEvent.Text.EventType.trackOrSequenceName.prefixBytes): return .text
+        case let d where d.starts(with: MIDIFileEvent.Text.EventType.instrumentName.prefixBytes): return .text
+        case let d where d.starts(with: MIDIFileEvent.Text.EventType.lyric.prefixBytes): return .text
+        case let d where d.starts(with: MIDIFileEvent.Text.EventType.marker.prefixBytes): return .text
+        case let d where d.starts(with: MIDIFileEvent.Text.EventType.cuePoint.prefixBytes): return .text
+        case let d where d.starts(with: MIDIFileEvent.Text.EventType.programName.prefixBytes): return .text
+        case let d where d.starts(with: MIDIFileEvent.Text.EventType.deviceName.prefixBytes): return .text
         default: break
         }
         

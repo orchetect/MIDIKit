@@ -113,6 +113,13 @@ extension MIDIFileEvent {
     }
 }
 
+// MARK: - Static
+
+extension MIDIFileEvent.KeySignature {
+    /// The prefix bytes that define the start of the event.
+    public static let prefixBytes: [UInt8] = [0xFF, 0x59, 0x02]
+}
+
 // MARK: - Encoding
 
 extension MIDIFileEvent.KeySignature: MIDIFileEventPayload {
@@ -135,9 +142,8 @@ extension MIDIFileEvent.KeySignature: MIDIFileEventPayload {
         
         let (readFlatsOrSharps, readIsMajor) = try rawBytes.withDataParser { parser throws(MIDIFile.DecodeError) in
             // 3-byte preamble
-            let header = MIDIFile.kEventHeaders[Self.smfEventType]!
-            guard let headerBytes = try? parser.read(bytes: header.count),
-                  headerBytes.elementsEqual(header)
+            guard let headerBytes = try? parser.read(bytes: Self.prefixBytes.count),
+                  headerBytes.elementsEqual(Self.prefixBytes)
             else {
                 throw .malformed("Event does not start with expected bytes.")
             }
@@ -200,7 +206,7 @@ extension MIDIFileEvent.KeySignature: MIDIFileEventPayload {
         // mi is a byte specifying a major (0) or minor (1) key.
         
         D(
-            MIDIFile.kEventHeaders[.keySignature]!
+            Self.prefixBytes
                 // flats/sharps - two's complement signed Int8
                 + [flatsOrSharps.toUInt8(as: .twosComplement)]
                 // major/minor key - 1 or 0

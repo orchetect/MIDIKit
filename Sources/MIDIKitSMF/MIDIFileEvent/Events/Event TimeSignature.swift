@@ -97,6 +97,13 @@ extension MIDIFileEvent {
     }
 }
 
+// MARK: - Static
+
+extension MIDIFileEvent.TimeSignature {
+    /// The prefix bytes that define the start of the event.
+    public static let prefixBytes: [UInt8] = [0xFF, 0x58, 0x04]
+}
+
 // MARK: - Encoding
 
 extension MIDIFileEvent.TimeSignature: MIDIFileEventPayload {
@@ -119,9 +126,8 @@ extension MIDIFileEvent.TimeSignature: MIDIFileEventPayload {
         
         try rawBytes.withDataParser { parser throws(MIDIFile.DecodeError) in
             // 3-byte preamble
-            let header = MIDIFile.kEventHeaders[Self.smfEventType]!
-            guard let headerBytes = try? parser.read(bytes: header.count),
-                  headerBytes.elementsEqual(header)
+            guard let headerBytes = try? parser.read(bytes: Self.prefixBytes.count),
+                  headerBytes.elementsEqual(Self.prefixBytes)
             else {
                 throw .malformed("Event does not start with expected bytes.")
             }
@@ -156,7 +162,7 @@ extension MIDIFileEvent.TimeSignature: MIDIFileEventPayload {
         
         var data = D()
         
-        data += MIDIFile.kEventHeaders[.timeSignature]!
+        data += Self.prefixBytes
         
         data += [numerator, denominator]
         

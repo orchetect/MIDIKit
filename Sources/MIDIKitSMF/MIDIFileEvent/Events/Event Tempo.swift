@@ -86,6 +86,13 @@ extension MIDIFileEvent {
     }
 }
 
+// MARK: - Static
+
+extension MIDIFileEvent.Tempo {
+    /// The prefix bytes that define the start of the event.
+    public static let prefixBytes: [UInt8] = [0xFF, 0x51, 0x03]
+}
+
 // MARK: - Encoding
 
 extension MIDIFileEvent.Tempo: MIDIFileEventPayload {
@@ -108,9 +115,8 @@ extension MIDIFileEvent.Tempo: MIDIFileEventPayload {
         
         try rawBytes.withDataParser { parser throws(MIDIFile.DecodeError) in
             // 3-byte preamble
-            let header = MIDIFile.kEventHeaders[Self.smfEventType]!
-            guard let headerBytes = try? parser.read(bytes: header.count),
-                  headerBytes.elementsEqual(header)
+            guard let headerBytes = try? parser.read(bytes: Self.prefixBytes.count),
+                  headerBytes.elementsEqual(Self.prefixBytes)
             else {
                 throw .malformed("Event does not start with expected bytes.")
             }
@@ -151,7 +157,7 @@ extension MIDIFileEvent.Tempo: MIDIFileEventPayload {
         
         var data = D()
         
-        data += MIDIFile.kEventHeaders[.tempo]!
+        data += Self.prefixBytes
         
         var tempoUInt32 = microseconds
         data += Array(NSData(bytes: &tempoUInt32, length: 3) as Data)

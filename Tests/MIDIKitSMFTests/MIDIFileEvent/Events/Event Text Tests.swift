@@ -66,15 +66,6 @@ import Testing
     // MARK: Text Types
     
     @Test
-    func textHeaders() async {
-        // ensure all text event header IDs exist
-        
-        for eventType in MIDIFileEvent.Text.EventType.allCases {
-            #expect(MIDIFile.kTextEventHeaders[eventType] != nil)
-        }
-    }
-    
-    @Test
     func textTypes() async throws {
         func textTypeTest(
             eventType: MIDIFileEvent.Text.EventType,
