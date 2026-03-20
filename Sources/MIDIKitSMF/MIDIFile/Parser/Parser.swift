@@ -209,7 +209,7 @@ extension MIDIFile.Parser {
                 malformedReason: "Error reading data for MIDI file header.",
                 try parser.read(advance: false)
             )
-            let (header, expectedTrackCount, headerLength) = try MIDIFile.AnyChunk.Header.initFrom(
+            let (header, expectedTrackCount, headerLength) = try MIDIFile.HeaderChunk.initFrom(
                 midi1SMFRawBytesStream: headerStream,
                 allowMultiTrackFormat0: options.allowMultiTrackFormat0
             )

@@ -42,8 +42,8 @@ extension MIDIFile.AnyChunk.UnrecognizedChunk: MIDIFileChunk {
         }
         
         static let disallowedIdentifiers: [String] = [
-            MIDIFile.AnyChunk.Header.Identifier().string,
-            MIDIFile.AnyChunk.Track.Identifier().string
+            MIDIFile.HeaderChunk.identifier.string,
+            MIDIFile.AnyChunk.Track.identifier.string
         ]
     }
     

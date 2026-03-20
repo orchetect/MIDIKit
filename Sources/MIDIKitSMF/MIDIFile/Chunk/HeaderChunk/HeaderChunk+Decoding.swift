@@ -1,5 +1,5 @@
 //
-//  Header+Decoding.swift
+//  HeaderChunk+Decoding.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
@@ -9,7 +9,7 @@ import MIDIKitCore
 internal import MIDIKitInternals
 internal import SwiftDataParsing
 
-extension MIDIFile.AnyChunk.Header {
+extension MIDIFile.HeaderChunk {
     /// The original Standard MIDI File spec defines the header as 14 bytes:
     /// - MThd (4 bytes)
     /// - header length (4 bytes)

@@ -1,5 +1,5 @@
 //
-//  Header.swift
+//  HeaderChunk.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
@@ -74,14 +74,14 @@ internal import MIDIKitInternals
 // that it does not know about (ie: besides MThd and MTrk), which it can easily do by reading the
 // offending chunk's chunklen.
 
-extension MIDIFile.AnyChunk {
+extension MIDIFile {
     /// Header: `MThd` chunk type.
     ///
     /// > Note:
     /// >
     /// > The header model omits the chunk (track) count property. It is automatically synthesized
     /// > based on the track count in the `MIDIFile.chunks` array when calling `MIDIFile.rawData()`.
-    public struct Header {
+    public struct HeaderChunk {
         /// MIDI file format.
         public var format: MIDIFile.Format = .multipleTracksSynchronous
         
@@ -119,8 +119,8 @@ extension MIDIFile.AnyChunk {
     }
 }
 
-extension MIDIFile.AnyChunk.Header: Equatable { }
+extension MIDIFile.HeaderChunk: Equatable { }
 
-extension MIDIFile.AnyChunk.Header: Hashable { }
+extension MIDIFile.HeaderChunk: Hashable { }
 
-extension MIDIFile.AnyChunk.Header: Sendable { }
+extension MIDIFile.HeaderChunk: Sendable { }

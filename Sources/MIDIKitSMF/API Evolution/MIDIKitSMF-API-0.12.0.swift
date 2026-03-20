@@ -66,9 +66,15 @@ extension MIDIFile {
     public typealias Chunk = AnyChunk
 }
 
-// MARK: - MIDIFile.AnyChunk.Header
+extension MIDIFile.AnyChunk {
+    @_documentation(visibility: internal)
+    @available(*, deprecated, renamed: "HeaderChunk")
+    public typealias Header = MIDIFile.HeaderChunk
+}
 
-extension MIDIFile.AnyChunk.Header {
+// MARK: - MIDIFile.HeaderChunk
+
+extension MIDIFile.HeaderChunk {
     @_documentation(visibility: internal)
     @available(*, deprecated, renamed: "timebase")
     public var timeBase: MIDIFile.Timebase { timebase }

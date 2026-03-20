@@ -6,7 +6,7 @@
 
 extension MIDIFile.Parser {
     struct FileDescriptor {
-        var header: MIDIFile.AnyChunk.Header
+        var header: MIDIFile.HeaderChunk
         var chunkDescriptors: [ChunkDescriptor]
     }
 }

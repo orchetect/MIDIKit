@@ -13,7 +13,7 @@ extension MIDIFile {
     /// As of the Standard MIDI File 1.0 Spec, `MThd` (header) and `MTrk` (track) are the only
     /// defined MIDI file chunks. However, others may be defined in the future.
     ///
-    /// In ``MIDIFile``, the ``AnyChunk/Header`` chunk is managed automatically and is not instanced as
+    /// In ``MIDIFile``, the ``HeaderChunk`` chunk is managed automatically and is not present as
     /// a ``MIDIFile/chunks`` member.
     public enum AnyChunk {
         case track(Track)

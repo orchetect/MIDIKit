@@ -1,5 +1,5 @@
 //
-//  Header+Encoding.swift
+//  HeaderChunk+Encoding.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
@@ -8,7 +8,7 @@ import Foundation
 import MIDIKitCore
 internal import MIDIKitInternals
 
-extension MIDIFile.AnyChunk.Header {
+extension MIDIFile.HeaderChunk {
     public func midi1SMFRawBytes(withTrackCount trackCount: Int) throws(MIDIFile.EncodeError) -> Data {
         try midi1SMFRawBytes(as: Data.self, withTrackCount: trackCount)
     }

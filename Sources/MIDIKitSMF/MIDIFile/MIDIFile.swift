@@ -11,7 +11,7 @@ import MIDIKitCore
 public struct MIDIFile {
     // MARK: - Properties
     
-    var header: AnyChunk.Header = .init()
+    var header: HeaderChunk = .init()
     
     /// MIDI File Format to use when writing MIDI file.
     public var format: Format {
@@ -27,7 +27,7 @@ public struct MIDIFile {
     
     /// Storage for tracks in the MIDI file.
     ///
-    /// The ``AnyChunk/Header`` chunk is managed automatically and is not instanced as a
+    /// The ``HeaderChunk`` chunk is managed automatically and is not instanced as a
     /// ``MIDIFile/chunks`` member.
     public var chunks: [AnyChunk] = []
     

@@ -16,7 +16,7 @@ import Testing
     
     @Test
     func init_Type0() async throws {
-        let header = MIDIFile.AnyChunk.Header(
+        let header = MIDIFile.HeaderChunk(
             format: .singleTrack,
             timebase: .musical(ticksPerQuarterNote: 720)
         )
@@ -43,7 +43,7 @@ import Testing
                                 0x02, 0xD0] // timebase
         
         // note track count is NOT total chunk count; non-track chunks are not included in the number
-        let (header, trackCount) = try MIDIFile.AnyChunk.Header.initFrom(midi1SMFRawBytes: rawData, allowMultiTrackFormat0: false)
+        let (header, trackCount) = try MIDIFile.HeaderChunk.initFrom(midi1SMFRawBytes: rawData, allowMultiTrackFormat0: false)
         
         #expect(header.format == .singleTrack)
         #expect(header.timebase == .musical(ticksPerQuarterNote: 720))
@@ -53,7 +53,7 @@ import Testing
     
     @Test
     func init_Type1() async throws {
-        let header = MIDIFile.AnyChunk.Header(
+        let header = MIDIFile.HeaderChunk(
             format: .multipleTracksSynchronous,
             timebase: .musical(ticksPerQuarterNote: 720)
         )
@@ -80,7 +80,7 @@ import Testing
                                 0x02, 0xD0] // timebase
         
         // note track count is NOT total chunk count; non-track chunks are not included in the number
-        let (header, trackCount) = try MIDIFile.AnyChunk.Header.initFrom(midi1SMFRawBytes: rawData, allowMultiTrackFormat0: false)
+        let (header, trackCount) = try MIDIFile.HeaderChunk.initFrom(midi1SMFRawBytes: rawData, allowMultiTrackFormat0: false)
         
         #expect(header.format == .multipleTracksSynchronous)
         #expect(header.timebase == .musical(ticksPerQuarterNote: 720))
@@ -90,7 +90,7 @@ import Testing
     
     @Test
     func init_Type2() async throws {
-        let header = MIDIFile.AnyChunk.Header(
+        let header = MIDIFile.HeaderChunk(
             format: .multipleTracksAsynchronous,
             timebase: .musical(ticksPerQuarterNote: 720)
         )
@@ -117,7 +117,7 @@ import Testing
                                 0x02, 0xD0] // timebase
         
         // note track count is NOT total chunk count; non-track chunks are not included in the number
-        let (header, trackCount) = try MIDIFile.AnyChunk.Header.initFrom(midi1SMFRawBytes: rawData, allowMultiTrackFormat0: false)
+        let (header, trackCount) = try MIDIFile.HeaderChunk.initFrom(midi1SMFRawBytes: rawData, allowMultiTrackFormat0: false)
         
         #expect(header.format == .multipleTracksAsynchronous)
         #expect(header.timebase == .musical(ticksPerQuarterNote: 720))
@@ -134,7 +134,7 @@ import Testing
                                 0x02, 0xD0] // timebase
         
         // note track count is NOT total chunk count; non-track chunks are not included in the number
-        let (header, trackCount, bufferLength) = try MIDIFile.AnyChunk.Header.initFrom(midi1SMFRawBytesStream: rawData, allowMultiTrackFormat0: false)
+        let (header, trackCount, bufferLength) = try MIDIFile.HeaderChunk.initFrom(midi1SMFRawBytesStream: rawData, allowMultiTrackFormat0: false)
         
         #expect(header.format == .multipleTracksAsynchronous)
         #expect(header.timebase == .musical(ticksPerQuarterNote: 720))
@@ -155,7 +155,7 @@ import Testing
         // decode
         do {
             // note track count is NOT total chunk count; non-track chunks are not included in the number
-            let (header, trackCount, bufferLength) = try MIDIFile.AnyChunk.Header.initFrom(midi1SMFRawBytesStream: rawData, allowMultiTrackFormat0: false)
+            let (header, trackCount, bufferLength) = try MIDIFile.HeaderChunk.initFrom(midi1SMFRawBytesStream: rawData, allowMultiTrackFormat0: false)
             
             #expect(header.format == .multipleTracksAsynchronous)
             #expect(header.timebase == .musical(ticksPerQuarterNote: 720))
@@ -166,7 +166,7 @@ import Testing
         
         // encode
         do {
-            let header = MIDIFile.AnyChunk.Header(
+            let header = MIDIFile.HeaderChunk(
                 format: .multipleTracksAsynchronous,
                 timebase: .musical(ticksPerQuarterNote: 720),
                 additionalBytes: [0x17, 0x18]
@@ -186,7 +186,7 @@ import Testing
                                 0x00, 0x01, // track count
                                 0x02, 0xD0] // timebase
         #expect(throws: (any Error).self) {
-            _ = try MIDIFile.AnyChunk.Header.initFrom(midi1SMFRawBytes: rawData, allowMultiTrackFormat0: false)
+            _ = try MIDIFile.HeaderChunk.initFrom(midi1SMFRawBytes: rawData, allowMultiTrackFormat0: false)
         }
     }
     
@@ -198,7 +198,7 @@ import Testing
                                 0x00, 0x01, // track count
                                 0x02, 0xD0] // timebase
         #expect(throws: (any Error).self) {
-            _ = try MIDIFile.AnyChunk.Header.initFrom(midi1SMFRawBytes: rawData, allowMultiTrackFormat0: false)
+            _ = try MIDIFile.HeaderChunk.initFrom(midi1SMFRawBytes: rawData, allowMultiTrackFormat0: false)
         }
     }
     
@@ -211,7 +211,7 @@ import Testing
                                 0x02] // timebase, but too few bytes (wrong)
         
         #expect(throws: (any Error).self) {
-            _ = try MIDIFile.AnyChunk.Header.initFrom(midi1SMFRawBytes: rawData, allowMultiTrackFormat0: false)
+            _ = try MIDIFile.HeaderChunk.initFrom(midi1SMFRawBytes: rawData, allowMultiTrackFormat0: false)
         }
     }
     
@@ -229,7 +229,7 @@ import Testing
         // since the header is always a known total number of bytes,
         // init will succeed and ignore any additional subsequent bytes
         #expect(throws: Never.self) {
-            _ = try MIDIFile.AnyChunk.Header.initFrom(midi1SMFRawBytes: rawData, allowMultiTrackFormat0: false)
+            _ = try MIDIFile.HeaderChunk.initFrom(midi1SMFRawBytes: rawData, allowMultiTrackFormat0: false)
         }
     }
     
@@ -283,12 +283,12 @@ import Testing
         
         // not allowed
         #expect(throws: MIDIFile.DecodeError.self) {
-            let _ = try MIDIFile.AnyChunk.Header.initFrom(midi1SMFRawBytes: rawData, allowMultiTrackFormat0: false)
+            let _ = try MIDIFile.HeaderChunk.initFrom(midi1SMFRawBytes: rawData, allowMultiTrackFormat0: false)
         }
         
         // allowed
         do {
-            let (header, trackCount) = try MIDIFile.AnyChunk.Header.initFrom(midi1SMFRawBytes: rawData, allowMultiTrackFormat0: true)
+            let (header, trackCount) = try MIDIFile.HeaderChunk.initFrom(midi1SMFRawBytes: rawData, allowMultiTrackFormat0: true)
             #expect(header.format == .singleTrack)
             #expect(header.timebase == .musical(ticksPerQuarterNote: 720))
             #expect(trackCount == 0)
@@ -306,12 +306,12 @@ import Testing
         
         // not allowed
         #expect(throws: MIDIFile.DecodeError.self) {
-            let _ = try MIDIFile.AnyChunk.Header.initFrom(midi1SMFRawBytes: rawData, allowMultiTrackFormat0: false)
+            let _ = try MIDIFile.HeaderChunk.initFrom(midi1SMFRawBytes: rawData, allowMultiTrackFormat0: false)
         }
         
         // allowed
         do {
-            let (header, trackCount) = try MIDIFile.AnyChunk.Header.initFrom(midi1SMFRawBytes: rawData, allowMultiTrackFormat0: true)
+            let (header, trackCount) = try MIDIFile.HeaderChunk.initFrom(midi1SMFRawBytes: rawData, allowMultiTrackFormat0: true)
             #expect(header.format == .singleTrack)
             #expect(header.timebase == .musical(ticksPerQuarterNote: 720))
             #expect(trackCount == 2)
