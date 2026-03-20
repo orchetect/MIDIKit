@@ -35,28 +35,6 @@ extension MIDIFileEvent {
             bpm = bpm.clamped(to: 3.58 ... 60_000_000.0)
         }
         
-        /// (Computed property)
-        /// Returns current ``bpm`` property as it will be read from the MIDI file after encoding.
-        /// This is the effective tempo that DAWs will read when importing the MIDI file.
-        public var bpmEncoded: Double {
-            Self.microsecondsToBPM(ms: Self.bpmToMicroseconds(bpm: bpm))
-        }
-        
-        /// (Computed property, not stored.)
-        ///
-        /// - Get: Calculates microseconds-per-quarter note based on `bpm` property.
-        ///
-        /// - Set: Sets ``bpm`` property to the calculated tempo from the passed
-        /// microseconds-per-quarter note value.
-        public var microseconds: UInt32 {
-            get {
-                Self.bpmToMicroseconds(bpm: bpm)
-            }
-            set {
-                bpm = Self.microsecondsToBPM(ms: newValue)
-            }
-        }
-        
         public init(bpm: Double) {
             self.bpm = bpm
         }
@@ -83,6 +61,32 @@ extension MIDIFileEvent {
             delta: delta,
             event: .init(bpm: bpm)
         )
+    }
+}
+
+// MARK: - Properties
+
+extension MIDIFileEvent.Tempo {
+    /// (Computed property)
+    /// Returns current ``bpm`` property as it will be read from the MIDI file after encoding.
+    /// This is the effective tempo that DAWs will read when importing the MIDI file.
+    public var bpmEncoded: Double {
+        Self.microsecondsToBPM(ms: Self.bpmToMicroseconds(bpm: bpm))
+    }
+    
+    /// (Computed property, not stored.)
+    ///
+    /// - Get: Calculates microseconds-per-quarter note based on ``bpm`` property.
+    ///
+    /// - Set: Sets ``bpm`` property to the calculated tempo from the passed
+    /// microseconds-per-quarter note value.
+    public var microseconds: UInt32 {
+        get {
+            Self.bpmToMicroseconds(bpm: bpm)
+        }
+        set {
+            bpm = Self.microsecondsToBPM(ms: newValue)
+        }
     }
 }
 

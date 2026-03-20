@@ -97,6 +97,7 @@ extension MIDIFileEvent {
             subframes = subframes.clamped(to: 0 ... 99)
         }
         
+        /// The frame rate associated with the SMPTE offset.
         public var frameRate: MIDIFile.SMPTEOffsetFrameRate = .fps30
         
         /// Returns a new `Timecode` instance from the SMPTE offset.
