@@ -6,15 +6,16 @@
 
 import Foundation
 import MIDIKitCore
+internal import MIDIKitInternals
 
 extension MIDIFile {
-    /// MIDI File Chunk.
+    /// Type-erased box containing a specialized MIDI file chunk.
     ///
     /// As of the Standard MIDI File 1.0 Spec, `MThd` (header) and `MTrk` (track) are the only
     /// defined MIDI file chunks. However, others may be defined in the future.
     ///
-    /// In ``MIDIFile``, the ``HeaderChunk`` chunk is managed automatically and is not present as
-    /// a ``MIDIFile/chunks`` member.
+    /// The ``HeaderChunk`` chunk is managed automatically and is not included in this collection.
+    /// Its properties can be accessed directly on the ``MIDIFile`` instance.
     public enum AnyChunk {
         case track(MIDIFile.TrackChunk)
         case unrecognized(MIDIFile.UnrecognizedChunk)
@@ -30,11 +31,8 @@ extension MIDIFile.AnyChunk: Sendable { }
 extension MIDIFile.AnyChunk: CustomStringConvertible {
     public var description: String {
         switch self {
-        case let .track(track):
-            track.description
-            
-        case let .unrecognized(unrecognizedChunk):
-            unrecognizedChunk.description
+        case let .track(track): track.description
+        case let .unrecognized(unrecognizedChunk): unrecognizedChunk.description
         }
     }
 }
@@ -42,11 +40,8 @@ extension MIDIFile.AnyChunk: CustomStringConvertible {
 extension MIDIFile.AnyChunk: CustomDebugStringConvertible {
     public var debugDescription: String {
         switch self {
-        case let .track(track):
-            track.debugDescription
-            
-        case let .unrecognized(unrecognizedChunk):
-            unrecognizedChunk.debugDescription
+        case let .track(track): track.debugDescription
+        case let .unrecognized(unrecognizedChunk): unrecognizedChunk.debugDescription
         }
     }
 }
@@ -67,6 +62,14 @@ extension MIDIFile.AnyChunk {
         switch self {
         case let .track(chunk): chunk.identifier
         case let .unrecognized(chunk): chunk.identifier
+        }
+    }
+    
+    /// Returns `true` if the chunk is a track.
+    public var isTrackChunk: Bool {
+        switch self {
+        case .track: true
+        default: false
         }
     }
 }

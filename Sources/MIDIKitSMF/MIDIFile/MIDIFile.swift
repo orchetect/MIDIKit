@@ -25,22 +25,42 @@ public struct MIDIFile {
         set { header.timebase = newValue }
     }
     
-    /// Storage for tracks in the MIDI file.
+    /// Chunks contained in the MIDI file.
+    /// This includes tracks and non-track chunks if present.
+    /// (If only tracks access is desired, accessing the ``tracks`` property to read and write track data is more convenient.)
     ///
-    /// The ``HeaderChunk`` chunk is managed automatically and is not instanced as a
-    /// ``MIDIFile/chunks`` member.
-    public var chunks: [AnyChunk] = []
-    
-    /// Returns copies of the tracks contained in the MIDI file.
-    /// (Computed convenience to filter ``chunks`` and return ``TrackChunk`` instances.)
-    /// To add new tracks or modify existing tracks, mutate the ``chunks`` collection.
-    public var tracks: [TrackChunk] {
-        chunks.compactMap {
-            guard case let .track(track) = $0 else { return nil }
-            return track
+    /// The ``HeaderChunk`` chunk is managed automatically and is not included in this collection.
+    /// Its properties can be accessed directly on the ``MIDIFile`` instance.
+    public var chunks: [AnyChunk] {
+        _read { yield _chunks }
+        _modify {
+            yield &_chunks
+            _tracks = Array(_chunks.tracks)
+        }
+        set {
+            _chunks = newValue
+            _tracks = Array(newValue.tracks)
         }
     }
-    
+    private var _chunks: [AnyChunk] = []
+        
+    /// Access the track chunks contained in ``chunks``.
+    /// Indexes are rebased to zero when accessing this collection.
+    /// 
+    /// Updating this collection automatically updates the corresponding track chunks in ``chunks``.
+    public var tracks: [TrackChunk] {
+        _read { yield _tracks }
+        _modify {
+            yield &_tracks
+            _chunks.updateTracks(with: _tracks)
+        }
+        set {
+            _tracks = newValue
+            _chunks.updateTracks(with: newValue)
+        }
+    }
+    private var _tracks: [TrackChunk] = []
+        
     // Identifiable protocol conformance implementation
     public let id: UUID = .init()
     

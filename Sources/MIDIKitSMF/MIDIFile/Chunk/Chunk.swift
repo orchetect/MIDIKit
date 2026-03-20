@@ -5,6 +5,7 @@
 //
 
 extension MIDIFile {
+    /// Protocol defining a Standard MIDI File chunk.
     public protocol Chunk: Sendable {
         /// MIDI file chunk identifier type.
         associatedtype Identifier: ChunkIdentifier
