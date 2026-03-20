@@ -123,6 +123,8 @@ extension MIDIFile.Timebase {
     }
 }
 
+// MARK: - MIDIFileEvent.DeltaTime
+
 extension MIDIFileEvent.DeltaTime {
     @_documentation(visibility: internal)
     @available(*, deprecated, renamed: "init(ticks:)")
@@ -139,5 +141,40 @@ extension MIDIFileEvent.DeltaTime {
     @_disfavoredOverload
     public func ticksValue(using timebase: MIDIFile.Timebase) -> UInt32 {
         ticks
+    }
+}
+
+// MARK: - MIDIFileEvent.KeySignature
+
+extension MIDIFileEvent.KeySignature {
+    @_documentation(visibility: internal)
+    @available(*, deprecated, renamed: "isMajor")
+    @_disfavoredOverload
+    public var majorKey: Bool {
+        isMajor
+    }
+    
+    @_documentation(visibility: internal)
+    @available(*, deprecated, renamed: "init(flatsOrSharps:isMajor:)")
+    @_disfavoredOverload
+    public init(
+        flatsOrSharps: Int8,
+        majorKey: Bool
+    ) {
+        self = Self(flatsOrSharps: flatsOrSharps, isMajor: majorKey) ?? .cMajor
+    }
+}
+
+extension MIDIFileEvent {
+    @_documentation(visibility: internal)
+    @available(*, deprecated, renamed: "keySignature(delta:flatsOrSharps:isMajor:)")
+    @_disfavoredOverload
+    public static func keySignature(
+        delta: DeltaTime = .none,
+        flatsOrSharps: Int8,
+        majorKey: Bool
+    ) -> Self {
+        .keySignature(delta: delta, flatsOrSharps: flatsOrSharps, isMajor: majorKey)
+            ?? .keySignature(delta: delta, event: .cMajor)
     }
 }

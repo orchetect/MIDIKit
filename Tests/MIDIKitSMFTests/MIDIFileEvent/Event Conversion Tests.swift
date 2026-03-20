@@ -837,11 +837,11 @@ import Testing
     
     @Test
     func midi_File_Event_KeySignature_event() async throws {
-        let smfEvent = MIDIFileEvent.keySignature(
+        let smfEvent = try #require(MIDIFileEvent.keySignature(
             delta: .none,
             flatsOrSharps: -2,
-            majorKey: true
-        )
+            isMajor: true
+        ))
         
         // convert MIDIFileEvent case to MIDIEvent case, preserving payloads
         let event = smfEvent.event()
