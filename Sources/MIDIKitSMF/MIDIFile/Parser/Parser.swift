@@ -231,7 +231,7 @@ extension MIDIFile.Parser {
                     let chunkStartByteOffset = parser.readOffset
                     guard let identifierBytes = try? parser.read(bytes: 4),
                           let identifierString = identifierBytes.asciiDataToString(),
-                          let identifier = AnyMIDIFileChunkIdentifier(string: identifierString)
+                          let identifier = MIDIFile.AnyChunkIdentifier(string: identifierString)
                     else {
                         let offsetString = parser.readOffset.hexString(prefix: true)
                         throw .malformed(
