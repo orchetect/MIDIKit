@@ -5,14 +5,9 @@
 //
 
 public protocol MIDIFileChunk: Sendable {
-    /// 4-character ASCII string identifying the chunk.
-    ///
-    /// For standard MIDI tracks, this is `MTrk`.
-    /// For non-track chunks, any 4-character identifier can be used except for `MTrk` or `MThd`.
-    var identifier: String { get }
+    /// MIDI file chunk identifier type.
+    associatedtype Identifier: MIDIFileChunkIdentifier
     
-    /// MIDI file chunk type.
-    var chunkType: MIDIFile.ChunkType { get }
-    
-    // TODO: add init from raw data, passing in midi header timing info etc.
+    /// MIDI file chunk identifier.
+    var identifier: Identifier { get }
 }

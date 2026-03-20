@@ -237,9 +237,9 @@ import Testing
     @Test
     func trackCount() async throws {
         let chunk1: MIDIFile.Chunk.Track = .init(events: [])
-        let chunk2: MIDIFile.Chunk.UnrecognizedChunk = .init(id: "ABCD", data: Data([0x01, 0x02]))
+        let chunk2: MIDIFile.Chunk.UnrecognizedChunk = .init(identifier: .unrecognized(identifier: "ABCD")!, data: Data([0x01, 0x02]))
         let chunk3: MIDIFile.Chunk.Track = .init(events: [])
-        let chunks: [MIDIFile.Chunk] = [.track(chunk1), .other(chunk2), .track(chunk3)]
+        let chunks: [MIDIFile.Chunk] = [.track(chunk1), .unrecognized(chunk2), .track(chunk3)]
         let midiFile = MIDIFile(
             format: .multipleTracksSynchronous,
             timebase: .musical(ticksPerQuarterNote: 720),

@@ -42,7 +42,7 @@ extension MIDIFile.Parser {
         var newChunks: [MIDIFile.Chunk] = []
         for (index, chunkDescriptor) in fileDescriptor.chunkDescriptors.enumerated() {
             if let predicate {
-                guard predicate(chunkDescriptor.chunkType, index) else { continue }
+                guard predicate(chunkDescriptor.identifier, index) else { continue }
             }
             
             let chunk = try data.withDataParser { parser throws(MIDIFile.DecodeError) in
@@ -82,7 +82,7 @@ extension MIDIFile.Parser {
             
             for (index, chunkDescriptor) in fileDescriptor.chunkDescriptors.enumerated() {
                 if let predicate {
-                    guard predicate(chunkDescriptor.chunkType, index) else { continue }
+                    guard predicate(chunkDescriptor.identifier, index) else { continue }
                 }
                 
                 group.addTask {
@@ -140,7 +140,7 @@ extension MIDIFile.Parser {
                 ) { [data, options, predicate, continuation] group in
                     for (index, chunkDescriptor) in fileDescriptor.chunkDescriptors.enumerated() {
                         if let predicate {
-                            guard predicate(chunkDescriptor.chunkType, index) else { continue }
+                            guard predicate(chunkDescriptor.identifier, index) else { continue }
                         }
                         
                         group.addTask {
@@ -229,9 +229,9 @@ extension MIDIFile.Parser {
                 do throws(MIDIFile.DecodeError) {
                     // chunk header
                     let chunkStartByteOffset = parser.readOffset
-                    guard let chunkTypeBytes = try? parser.read(bytes: 4),
-                          let chunkTypeString = chunkTypeBytes.asciiDataToString(),
-                          let chunkType = MIDIFile.ChunkType(rawValue: chunkTypeString)
+                    guard let identifierBytes = try? parser.read(bytes: 4),
+                          let identifierString = identifierBytes.asciiDataToString(),
+                          let identifier = AnyMIDIFileChunkIdentifier(string: identifierString)
                     else {
                         let offsetString = parser.readOffset.hexString(prefix: true)
                         throw .malformed(
@@ -277,7 +277,7 @@ extension MIDIFile.Parser {
                     // append chunk descriptor
                     if !discard {
                         let chunkDescriptor = ChunkDescriptor(
-                            chunkType: chunkType,
+                            identifier: identifier.wrapped,
                             startOffset: chunkStartByteOffset,
                             bodyByteStartOffset: dataBodyOffset,
                             bodyByteLength: Int(chunkLength)
@@ -290,7 +290,7 @@ extension MIDIFile.Parser {
                     // then as long as `ignoreBytesPastEOF` is true we will ignore any spurious bytes
                     // that follow that are not properly encoded chunks.
                     // if `ignoreBytesPastEOF` is false, then consider the file malformed and throw the error.
-                    if chunkDescriptors.filter({ $0.chunkType == .track }).count == expectedTrackCount,
+                    if chunkDescriptors.filter({ $0.identifier == .track }).count == expectedTrackCount,
                        isParsing,
                        options.ignoreBytesPastEOF
                     {
@@ -319,8 +319,8 @@ extension MIDIFile.Parser {
         in chunkData: some DataProtocol
     ) throws(MIDIFile.DecodeError) -> MIDIFile.Chunk? {
         do throws(MIDIFile.DecodeError) {
-            switch chunkDescriptor.chunkType {
-            case .track:
+            switch chunkDescriptor.identifier {
+            case is MIDIFile.Chunk.Track.Identifier:
                 let track = try MIDIFile.Chunk.Track(
                     midi1SMFRawBytes: chunkData,
                     timebase: timebase,
@@ -328,15 +328,20 @@ extension MIDIFile.Parser {
                 )
                 return if let track { .track(track) } else { nil }
                 
-            case let .other(identifier: fourCharString):
+            case let identifier as MIDIFile.Chunk.UnrecognizedChunk.Identifier:
                 // as per Standard MIDI File 1.0 Spec:
                 // unrecognized chunks should be skipped and not throw an error
                 
                 let newUnrecognizedChunk = MIDIFile.Chunk.UnrecognizedChunk(
-                    id: fourCharString,
+                    identifier: identifier,
                     data: chunkData.toData()
                 )
-                return .other(newUnrecognizedChunk)
+                return .unrecognized(newUnrecognizedChunk)
+                
+            default:
+                // TODO: this is where we would handle custom chunks implemented by end-users
+                assertionFailure("Unhandled chunk identifier: \(chunkDescriptor.identifier.string)")
+                return nil
             }
         } catch {
             // append some context for the error and rethrow it

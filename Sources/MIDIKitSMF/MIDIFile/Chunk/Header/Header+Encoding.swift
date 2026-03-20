@@ -24,7 +24,7 @@ extension MIDIFile.Chunk.Header {
         var data = D()
         
         // Header descriptor
-        data += identifier.toASCIIData()
+        data += identifier.string.toASCIIData()
         
         // Header length (after this point - format, track count, delta-time values, and optionally additional bytes if present)
         let headerLength = 6 + (additionalBytes?.count ?? 0)

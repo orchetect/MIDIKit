@@ -25,7 +25,7 @@ extension MIDIFile.Chunk.Track {
         // track header
         
         let track: Self? = try stream.withDataParser { parser throws(MIDIFile.DecodeError) in
-            let chunkTypeString = try parser.toMIDIFileDecodeError(
+            let identifierString = try parser.toMIDIFileDecodeError(
                 malformedReason: "Missing chunk type bytes.",
                 try parser.read(bytes: 4).asciiDataToString() ?? "????"
             )
@@ -39,9 +39,9 @@ extension MIDIFile.Chunk.Track {
             }
             let chunkLength = Int(chunkLengthInt32)
             
-            guard chunkTypeString == Self.staticIdentifier else {
+            guard identifierString == Self.identifier.string else {
                 throw .malformed(
-                    "Chunk header does not contain track header identifier. Found \(chunkTypeString.quoted) instead."
+                    "Chunk header does not contain track header identifier. Found \(identifierString.quoted) instead."
                 )
             }
         

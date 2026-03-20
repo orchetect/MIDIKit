@@ -17,7 +17,7 @@ extension MIDIFile {
     /// a ``MIDIFile/chunks`` member.
     public enum Chunk {
         case track(Track)
-        case other(UnrecognizedChunk)
+        case unrecognized(UnrecognizedChunk)
     }
 }
 
@@ -33,7 +33,7 @@ extension MIDIFile.Chunk: CustomStringConvertible {
         case let .track(track):
             track.description
             
-        case let .other(unrecognizedChunk):
+        case let .unrecognized(unrecognizedChunk):
             unrecognizedChunk.description
         }
     }
@@ -45,7 +45,7 @@ extension MIDIFile.Chunk: CustomDebugStringConvertible {
         case let .track(track):
             track.debugDescription
             
-        case let .other(unrecognizedChunk):
+        case let .unrecognized(unrecognizedChunk):
             unrecognizedChunk.debugDescription
         }
     }
@@ -56,21 +56,21 @@ extension MIDIFile.Chunk: CustomDebugStringConvertible {
 extension MIDIFile.Chunk {
     /// Unwraps the enum case and returns the ``MIDIFile/Chunk`` contained within, typed as
     /// ``MIDIFileChunk`` protocol.
-    public var unwrappedChunk: MIDIFileChunk {
+    public var unwrappedChunk: any MIDIFileChunk {
         switch self {
         case let .track(chunk):
             chunk
             
-        case let .other(chunk):
+        case let .unrecognized(chunk):
             chunk
         }
     }
     
-    /// MIDI file chunk type.
-    public var chunkType: MIDIFile.ChunkType {
+    /// MIDI file chunk identifier.
+    public var identifier: any MIDIFileChunkIdentifier {
         switch self {
-        case let .track(chunk): chunk.chunkType
-        case let .other(chunk): chunk.chunkType
+        case let .track(chunk): chunk.identifier
+        case let .unrecognized(chunk): chunk.identifier
         }
     }
 }

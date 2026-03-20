@@ -19,7 +19,7 @@ extension MIDIFile.Chunk.UnrecognizedChunk {
         
         // track header
         
-        let (id, dataBody) = try stream.withDataParser { parser throws(MIDIFile.DecodeError) -> (String, Data) in
+        let (identifierString, dataBody) = try stream.withDataParser { parser throws(MIDIFile.DecodeError) -> (String, Data) in
             let readChunkType = try parser.toMIDIFileDecodeError(
                 malformedReason: "Missing chunk type identifier.",
                 try parser.read(bytes: 4)
@@ -34,13 +34,7 @@ extension MIDIFile.Chunk.UnrecognizedChunk {
             }
             let chunkLength = Int(chunkLengthInt32)
             
-            let chunkTypeString = readChunkType.asciiDataToString() ?? "????"
-            
-            guard !Self.disallowedIdentifiers.contains(chunkTypeString) else {
-                throw .malformed(
-                    "Chunk type matches known identifier \(chunkTypeString.quoted). Forming an unrecognized chunk using this identifier is not allowed."
-                )
-            }
+            let identifierString = readChunkType.asciiDataToString() ?? "????"
             
             guard let dataBody = try? parser.read(bytes: chunkLength) else {
                 throw .malformed(
@@ -50,11 +44,19 @@ extension MIDIFile.Chunk.UnrecognizedChunk {
             
             // we can't pass pointer ranges outside of the data reader closure,
             // so we must use them within the closure
-            return (id: chunkTypeString, dataBody.toData())
+            return (identifierString: identifierString, dataBody.toData())
+        }
+        
+        guard !Self.Identifier.disallowedIdentifiers.contains(identifierString),
+              let identifier = Identifier(string: identifierString)
+        else {
+            throw .malformed(
+                "Chunk type matches known identifier \(identifierString.quoted). Forming an unrecognized chunk using this identifier is not allowed."
+            )
         }
         
         self.init(
-            id: id,
+            identifier: identifier,
             data: dataBody
         )
     }

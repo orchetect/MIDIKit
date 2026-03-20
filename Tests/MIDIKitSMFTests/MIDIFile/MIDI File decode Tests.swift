@@ -95,12 +95,12 @@ import Testing
         
         // chunk 2 - unknown chunk
         
-        guard case let .other(unknownChunk) = midiFile.chunks[1] else {
+        guard case let .unrecognized(unknownChunk) = midiFile.chunks[1] else {
             Issue.record()
             return
         }
         
-        #expect(unknownChunk.identifier == "Kdoc")
+        #expect(unknownChunk.identifier.string == "Kdoc")
         
         #expect(unknownChunk.rawData.count == 35)
         #expect(
@@ -336,8 +336,8 @@ import Testing
     @Test
     func predicate() /* NOT ASYNC! */ throws {
         // Note: It's ok if this throws a deprecation warning. We need to test this specific method.
-        let midiFile = try /* NOT AWAIT! */ MIDIFile(data: kMIDIFile.dp8Markers) { chunkType, chunkIndex in
-            chunkType == .track && chunkIndex == 1
+        let midiFile = try /* NOT AWAIT! */ MIDIFile(data: kMIDIFile.dp8Markers) { identifier, chunkIndex in
+            identifier == .track && chunkIndex == 1
         }
         try #require(midiFile.chunks.count == 1)
         let track = midiFile.tracks[0]
@@ -346,8 +346,8 @@ import Testing
     
     @Test
     func predicate_async() async throws {
-        let midiFile = try await MIDIFile(data: kMIDIFile.dp8Markers) { chunkType, chunkIndex in
-            chunkType == .track && chunkIndex == 1
+        let midiFile = try await MIDIFile(data: kMIDIFile.dp8Markers) { identifier, chunkIndex in
+            identifier == .track && chunkIndex == 1
         }
         try #require(midiFile.chunks.count == 1)
         let track = midiFile.tracks[0]

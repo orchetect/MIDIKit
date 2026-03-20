@@ -38,7 +38,7 @@ extension MIDIFile.Chunk.Header {
         return try stream.withDataParser { parser throws(MIDIFile.DecodeError) in
             // Header descriptor
             
-            guard (try? parser.read(bytes: 4).toUInt8Bytes()) == Self.staticIdentifier.toASCIIBytes()
+            guard (try? parser.read(bytes: 4).toUInt8Bytes()) == Self.identifier.string.toASCIIBytes()
             else {
                 throw .malformed(
                     "File header identifier is not correct. File may not be a MIDI file."
@@ -89,7 +89,7 @@ extension MIDIFile.Chunk.Header {
         return try midi1SMFRawBytes.withDataParser { parser throws(MIDIFile.DecodeError) in
             // Header descriptor
             
-            guard (try? parser.read(bytes: 4).toUInt8Bytes()) == Self.staticIdentifier.toASCIIBytes()
+            guard (try? parser.read(bytes: 4).toUInt8Bytes()) == Self.identifier.string.toASCIIBytes()
             else {
                 throw .malformed(
                     "File header identifier is not correct. File may not be a MIDI file."

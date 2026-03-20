@@ -118,35 +118,11 @@ extension MIDIFile.Chunk.Track {
     }
 }
 
-extension MIDIFile.Chunk.Track: MIDIFileChunk {
-    public var identifier: String { Self.staticIdentifier }
-    
-    public var chunkType: MIDIFile.ChunkType { Self.staticChunkType }
-}
-
 // MARK: - Static
 
 extension MIDIFile.Chunk.Track {
-    public static let staticIdentifier: String = "MTrk"
-    public static let staticChunkType: MIDIFile.ChunkType = .track
-    
     /// The 3-byte sequence that must appear at the end of every track.
     public static let trackEndByes: [UInt8] = [0xFF, 0x2F, 0x00]
-}
-
-// MARK: - Static Constructors
-
-extension MIDIFile.Chunk {
-    /// Track: `MTrk` chunk type.
-    public static func track(_ events: [MIDIFileEvent]) -> Self {
-        .track(.init(events: events))
-    }
-    
-    /// Track: `MTrk` chunk type.
-    @_disfavoredOverload
-    public static func track(_ events: some Sequence<MIDIFileEvent>) -> Self {
-        .track(.init(events: events))
-    }
 }
 
 // MARK: - Methods

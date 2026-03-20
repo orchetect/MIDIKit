@@ -89,19 +89,26 @@ extension MIDIFile.Chunk.Track {
 
 extension MIDIFile.Chunk.UnrecognizedChunk {
     @_documentation(visibility: internal)
-    @available(*, deprecated, renamed: "init(id:data:)")
+    @available(*, deprecated, renamed: "init(identifier:data:)")
     @_disfavoredOverload
     public init(id: String, rawData: Data? = nil) {
-        self.init(id: id, data: rawData)
+        self.init(identifier: .init(lossy: id), data: rawData)
     }
 }
 
 extension MIDIFile.Chunk {
     @_documentation(visibility: internal)
-    @available(*, deprecated, renamed: "other(id:data:)")
+    @available(*, deprecated, renamed: "unrecognized(identifier:data:)")
     @_disfavoredOverload
     public static func other(id: String, rawData: Data? = nil) -> Self {
-        .other(id: id, data: rawData)
+        .unrecognized(.init(identifier: .init(lossy: id), data: rawData))
+    }
+    
+    @_documentation(visibility: internal)
+    @available(*, deprecated, renamed: "unrecognized(_:)")
+    @_disfavoredOverload
+    public static func other(_ chunk: UnrecognizedChunk) -> Self {
+        .unrecognized(chunk)
     }
 }
 

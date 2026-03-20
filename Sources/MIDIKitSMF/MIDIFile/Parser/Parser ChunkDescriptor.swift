@@ -7,7 +7,7 @@
 extension MIDIFile.Parser {
     struct ChunkDescriptor {
         /// Chunk type (4-character identifier).
-        var chunkType: MIDIFile.ChunkType
+        var identifier: any MIDIFileChunkIdentifier
         
         /// Byte offset of the start of the chunk.
         var startOffset: Int
@@ -20,8 +20,22 @@ extension MIDIFile.Parser {
     }
 }
 
-extension MIDIFile.Parser.ChunkDescriptor: Equatable { }
+extension MIDIFile.Parser.ChunkDescriptor: Equatable {
+    static func == (lhs: Self, rhs: Self) -> Bool {
+        lhs.identifier.string == rhs.identifier.string
+            && lhs.startOffset == rhs.startOffset
+            && lhs.bodyByteStartOffset == rhs.bodyByteStartOffset
+            && lhs.bodyByteLength == rhs.bodyByteLength
+    }
+}
 
-extension MIDIFile.Parser.ChunkDescriptor: Hashable { }
+extension MIDIFile.Parser.ChunkDescriptor: Hashable {
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(identifier.string)
+        hasher.combine(startOffset)
+        hasher.combine(bodyByteStartOffset)
+        hasher.combine(bodyByteLength)
+    }
+}
 
 extension MIDIFile.Parser.ChunkDescriptor: Sendable { }

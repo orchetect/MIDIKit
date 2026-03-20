@@ -37,7 +37,7 @@ extension MIDIFile: CustomStringConvertible {
             chunkDesc: {
                 switch $0 {
                 case let .track(track): track.description(maxEventCount: maxTrackEventCount)
-                case let .other(unrecognizedChunk): unrecognizedChunk.description
+                case let .unrecognized(unrecognizedChunk): unrecognizedChunk.description
                 }
             }
         )
@@ -57,7 +57,7 @@ extension MIDIFile: CustomDebugStringConvertible {
             chunkDesc: {
                 switch $0 {
                 case let .track(track): track.debugDescription(maxEventCount: maxTrackEventCount)
-                case let .other(unrecognizedChunk): unrecognizedChunk.debugDescription
+                case let .unrecognized(unrecognizedChunk): unrecognizedChunk.debugDescription
                 }
             }
         )

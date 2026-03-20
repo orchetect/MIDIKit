@@ -65,7 +65,7 @@ extension MIDIFile {
             case let .track(track):
                 try data += (track.midi1SMFRawBytes(as: D.self, using: timebase))
 
-            case let .other(unrecognizedChunk):
+            case let .unrecognized(unrecognizedChunk):
                 try data += (unrecognizedChunk.midi1SMFRawBytes(as: D.self))
             }
         }
@@ -106,7 +106,7 @@ extension MIDIFile {
                         case let .track(track):
                             try track.midi1SMFRawBytes(as: D.self, using: timebase)
                             
-                        case let .other(unrecognizedChunk):
+                        case let .unrecognized(unrecognizedChunk):
                             try unrecognizedChunk.midi1SMFRawBytes(as: D.self)
                         }
                         return .success((index: index, data: encodedChunkData))

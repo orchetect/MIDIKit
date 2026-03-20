@@ -16,9 +16,9 @@ import Testing
     
     @Test
     func emptyData() async throws {
-        let id = "ABCD"
+        let id: MIDIFile.Chunk.UnrecognizedChunk.Identifier = .unrecognized(identifier: "ABCD")!
         
-        let chunk = MIDIFile.Chunk.UnrecognizedChunk(id: id)
+        let chunk = MIDIFile.Chunk.UnrecognizedChunk(identifier: id)
         
         #expect(chunk.identifier == id)
         
@@ -45,10 +45,10 @@ import Testing
     func withData() async throws {
         let data: [UInt8] = [0x12, 0x34, 0x56, 0x78]
         
-        let id = "ABCD"
+        let id: MIDIFile.Chunk.UnrecognizedChunk.Identifier = .unrecognized(identifier: "ABCD")!
         
         let chunk = MIDIFile.Chunk.UnrecognizedChunk(
-            id: id,
+            identifier: id,
             data: data.toData()
         )
         

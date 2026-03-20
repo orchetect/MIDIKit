@@ -36,7 +36,7 @@ extension MIDIFile.Chunk.Track {
         var data = D()
         
         // 4-byte chunk identifier
-        data += identifier.toASCIIData()
+        data += identifier.string.toASCIIData()
         
         // chunk data length (32-bit 4 byte big endian integer)
         if let trackLength = UInt32(exactly: bodyData.count) {
