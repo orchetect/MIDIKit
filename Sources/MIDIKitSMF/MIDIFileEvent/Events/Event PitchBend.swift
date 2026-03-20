@@ -60,7 +60,7 @@ extension MIDIEvent.PitchBend: MIDIFileEvent.Payload {
         .pitchBend(delta: delta, event: self)
     }
     
-    public static let smfEventType: MIDIFileEventType = .pitchBend
+    public static let smfEventType: MIDIFileEvent.EventType = .pitchBend
     
     public init(
         midi1SMFRawBytes rawBytes: some DataProtocol,

@@ -69,7 +69,7 @@ extension MIDIEvent.SysEx7: MIDIFileEvent.Payload {
         .sysEx7(delta: delta, event: self)
     }
     
-    public static let smfEventType: MIDIFileEventType = .sysEx7
+    public static let smfEventType: MIDIFileEvent.EventType = .sysEx7
     
     public init(
         midi1SMFRawBytes rawBytes: some DataProtocol,
@@ -229,7 +229,7 @@ extension MIDIEvent.UniversalSysEx7: MIDIFileEvent.Payload {
         .universalSysEx7(delta: delta, event: self)
     }
     
-    public static let smfEventType: MIDIFileEventType = .universalSysEx7
+    public static let smfEventType: MIDIFileEvent.EventType = .universalSysEx7
     
     public init(
         midi1SMFRawBytes rawBytes: some DataProtocol,

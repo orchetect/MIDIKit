@@ -85,7 +85,7 @@ extension MIDIFileEvent.ChannelPrefix: MIDIFileEvent.Payload {
         .channelPrefix(delta: delta, event: self)
     }
     
-    public static let smfEventType: MIDIFileEventType = .channelPrefix
+    public static let smfEventType: MIDIFileEvent.EventType = .channelPrefix
     
     public init(
         midi1SMFRawBytes rawBytes: some DataProtocol,

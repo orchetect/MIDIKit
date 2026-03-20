@@ -14,7 +14,7 @@ extension MIDIFileEvent {
         func smfWrappedEvent(delta: MIDIFileEvent.DeltaTime) -> MIDIFileEvent
         
         /// MIDI File event type.
-        static var smfEventType: MIDIFileEventType { get }
+        static var smfEventType: EventType { get }
         
         /// Initialize from raw event bytes.
         /// Throws an error if data is malformed or cannot otherwise be used to construct the event.

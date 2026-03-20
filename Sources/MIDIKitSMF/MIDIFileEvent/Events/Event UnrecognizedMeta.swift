@@ -114,7 +114,7 @@ extension MIDIFileEvent.UnrecognizedMeta: MIDIFileEvent.Payload {
         .unrecognizedMeta(delta: delta, event: self)
     }
     
-    public static let smfEventType: MIDIFileEventType = .unrecognizedMeta
+    public static let smfEventType: MIDIFileEvent.EventType = .unrecognizedMeta
     
     public init(
         midi1SMFRawBytes rawBytes: some DataProtocol,

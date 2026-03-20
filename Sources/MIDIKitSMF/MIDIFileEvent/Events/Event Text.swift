@@ -138,7 +138,7 @@ extension MIDIFileEvent.Text: MIDIFileEvent.Payload {
         .text(delta: delta, event: self)
     }
     
-    public static let smfEventType: MIDIFileEventType = .text
+    public static let smfEventType: MIDIFileEvent.EventType = .text
     
     public init(
         midi1SMFRawBytes rawBytes: some DataProtocol,

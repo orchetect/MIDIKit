@@ -143,7 +143,7 @@ extension MIDIFile.TrackChunk {
                     var foundEvent: (newEvent: MIDIFileEvent.Payload, bufferLength: Int, statusByte: UInt8)?
                     
                     let effectiveRunningStatus: UInt8? = isStatusBytePresent ? nil : runningStatusByte
-                    if let eventType = MIDIFileEventType.eventType(
+                    if let eventType = MIDIFileEvent.EventType(
                         atStartOf: readBuffer,
                         runningStatus: effectiveRunningStatus,
                         detectParameterNumberSequence: false

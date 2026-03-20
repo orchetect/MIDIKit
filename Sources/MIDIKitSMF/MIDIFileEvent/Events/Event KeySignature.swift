@@ -127,7 +127,7 @@ extension MIDIFileEvent.KeySignature: MIDIFileEvent.Payload {
         .keySignature(delta: delta, event: self)
     }
     
-    public static let smfEventType: MIDIFileEventType = .keySignature
+    public static let smfEventType: MIDIFileEvent.EventType = .keySignature
     
     public init(
         midi1SMFRawBytes rawBytes: some DataProtocol,

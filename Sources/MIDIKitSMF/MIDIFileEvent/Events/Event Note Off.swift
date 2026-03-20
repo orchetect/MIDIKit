@@ -68,7 +68,7 @@ extension MIDIEvent.NoteOff: MIDIFileEvent.Payload {
         .noteOff(delta: delta, event: self)
     }
     
-    public static let smfEventType: MIDIFileEventType = .noteOff
+    public static let smfEventType: MIDIFileEvent.EventType = .noteOff
     
     public init(
         midi1SMFRawBytes rawBytes: some DataProtocol,

@@ -73,7 +73,7 @@ extension MIDIFileEvent.PortPrefix: MIDIFileEvent.Payload {
         .portPrefix(delta: delta, event: self)
     }
     
-    public static let smfEventType: MIDIFileEventType = .portPrefix
+    public static let smfEventType: MIDIFileEvent.EventType = .portPrefix
     
     public init(
         midi1SMFRawBytes rawBytes: some DataProtocol,

@@ -58,7 +58,7 @@ extension MIDIEvent.ProgramChange: MIDIFileEvent.Payload {
         .programChange(delta: delta, event: self)
     }
     
-    public static let smfEventType: MIDIFileEventType = .programChange
+    public static let smfEventType: MIDIFileEvent.EventType = .programChange
     
     public init(
         midi1SMFRawBytes rawBytes: some DataProtocol,

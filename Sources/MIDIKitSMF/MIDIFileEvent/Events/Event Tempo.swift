@@ -104,7 +104,7 @@ extension MIDIFileEvent.Tempo: MIDIFileEvent.Payload {
         .tempo(delta: delta, event: self)
     }
     
-    public static let smfEventType: MIDIFileEventType = .tempo
+    public static let smfEventType: MIDIFileEvent.EventType = .tempo
     
     public init(
         midi1SMFRawBytes rawBytes: some DataProtocol,

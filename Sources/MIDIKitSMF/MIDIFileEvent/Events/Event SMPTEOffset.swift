@@ -266,7 +266,7 @@ extension MIDIFileEvent.SMPTEOffset: MIDIFileEvent.Payload {
         .smpteOffset(delta: delta, event: self)
     }
     
-    public static let smfEventType: MIDIFileEventType = .smpteOffset
+    public static let smfEventType: MIDIFileEvent.EventType = .smpteOffset
     
     public init(
         midi1SMFRawBytes rawBytes: some DataProtocol,

@@ -48,7 +48,7 @@ extension MIDIEvent.NRPN: MIDIFileEvent.Payload {
         .nrpn(delta: delta, event: self)
     }
     
-    public static let smfEventType: MIDIFileEventType = .nrpn
+    public static let smfEventType: MIDIFileEvent.EventType = .nrpn
     
     public init(
         midi1SMFRawBytes rawBytes: some DataProtocol,

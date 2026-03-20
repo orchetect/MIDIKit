@@ -87,7 +87,7 @@ extension MIDIFileEvent.SequenceNumber: MIDIFileEvent.Payload {
         .sequenceNumber(delta: delta, event: self)
     }
     
-    public static let smfEventType: MIDIFileEventType = .sequenceNumber
+    public static let smfEventType: MIDIFileEvent.EventType = .sequenceNumber
     
     public init(
         midi1SMFRawBytes rawBytes: some DataProtocol,

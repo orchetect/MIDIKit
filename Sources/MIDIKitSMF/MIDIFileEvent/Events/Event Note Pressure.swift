@@ -83,7 +83,7 @@ extension MIDIEvent.NotePressure: MIDIFileEvent.Payload {
         .notePressure(delta: delta, event: self)
     }
     
-    public static let smfEventType: MIDIFileEventType = .notePressure
+    public static let smfEventType: MIDIFileEvent.EventType = .notePressure
     
     public init(
         midi1SMFRawBytes rawBytes: some DataProtocol,

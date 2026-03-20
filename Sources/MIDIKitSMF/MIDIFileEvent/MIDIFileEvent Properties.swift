@@ -8,9 +8,9 @@ import Foundation
 import MIDIKitCore
 
 extension MIDIFileEvent {
-    /// Returns the ``MIDIFileEventType`` case describing the type of the MIDI File event.
+    /// Returns the ``EventType`` case describing the type of the MIDI File event.
     @inline(__always)
-    public var eventType: MIDIFileEventType {
+    public var eventType: EventType {
         switch self {
         case .cc:                 .cc
         case .channelPrefix:      .channelPrefix

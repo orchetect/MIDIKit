@@ -111,7 +111,7 @@ extension MIDIFileEvent.TimeSignature: MIDIFileEvent.Payload {
         .timeSignature(delta: delta, event: self)
     }
     
-    public static let smfEventType: MIDIFileEventType = .timeSignature
+    public static let smfEventType: MIDIFileEvent.EventType = .timeSignature
     
     public init(
         midi1SMFRawBytes rawBytes: some DataProtocol,

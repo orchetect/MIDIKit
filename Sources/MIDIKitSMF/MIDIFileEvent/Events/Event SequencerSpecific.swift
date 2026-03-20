@@ -70,7 +70,7 @@ extension MIDIFileEvent.SequencerSpecific: MIDIFileEvent.Payload {
         .sequencerSpecific(delta: delta, event: self)
     }
     
-    public static let smfEventType: MIDIFileEventType = .sequencerSpecific
+    public static let smfEventType: MIDIFileEvent.EventType = .sequencerSpecific
     
     public init(
         midi1SMFRawBytes rawBytes: some DataProtocol,

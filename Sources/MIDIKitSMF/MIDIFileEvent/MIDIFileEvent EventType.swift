@@ -1,5 +1,5 @@
 //
-//  MIDIFileEventType.swift
+//  MIDIFileEvent EventType.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
@@ -7,43 +7,45 @@
 import Foundation
 import MIDIKitCore
 
-/// Cases describing MIDI file event types.
-public enum MIDIFileEventType: String {
-    case cc
-    case channelPrefix
-    case keySignature
-    case noteOff
-    case noteOn
-    case notePressure // polyphonic (per-note) pressure
-    case pitchBend
-    case portPrefix
-    case pressure // channel pressure
-    case programChange
-    case rpn
-    case nrpn
-    case sequenceNumber
-    case sequencerSpecific
-    case smpteOffset
-    case sysEx7
-    case tempo
-    case text
-    case timeSignature
-    case universalSysEx7
-    case unrecognizedMeta
-    case xmfPatchTypePrefix
+extension MIDIFileEvent {
+    /// Cases describing MIDI file event types.
+    public enum EventType: String {
+        case cc
+        case channelPrefix
+        case keySignature
+        case noteOff
+        case noteOn
+        case notePressure // polyphonic (per-note) pressure
+        case pitchBend
+        case portPrefix
+        case pressure // channel pressure
+        case programChange
+        case rpn
+        case nrpn
+        case sequenceNumber
+        case sequencerSpecific
+        case smpteOffset
+        case sysEx7
+        case tempo
+        case text
+        case timeSignature
+        case universalSysEx7
+        case unrecognizedMeta
+        case xmfPatchTypePrefix
+    }
 }
 
-extension MIDIFileEventType: Equatable { }
+extension MIDIFileEvent.EventType: Equatable { }
 
-extension MIDIFileEventType: Hashable { }
+extension MIDIFileEvent.EventType: Hashable { }
 
-extension MIDIFileEventType: CaseIterable { }
+extension MIDIFileEvent.EventType: CaseIterable { }
 
-extension MIDIFileEventType: Sendable { }
+extension MIDIFileEvent.EventType: Sendable { }
 
 // MARK: - Concrete Type
 
-extension MIDIFileEventType {
+extension MIDIFileEvent.EventType {
     /// Returns the concrete type associated with the MIDI file event.
     @inline(__always)
     public var concreteType: MIDIFileEvent.Payload.Type {
@@ -74,7 +76,7 @@ extension MIDIFileEventType {
     }
 }
 
-extension Collection<MIDIFileEventType> {
+extension Collection<MIDIFileEvent.EventType> {
     /// Returns the collection mapped to concrete types.
     public var concreteTypes: [MIDIFileEvent.Payload.Type] {
         map(\.concreteType.self)
@@ -83,8 +85,22 @@ extension Collection<MIDIFileEventType> {
 
 // MARK: - Parsing
 
-extension MIDIFileEventType {
-    static func eventType(
+extension MIDIFileEvent.EventType {
+    init?(
+        atStartOf data: some DataProtocol,
+        runningStatus: UInt8?,
+        detectParameterNumberSequence: Bool
+    ) {
+        guard let eventType = Self.eventType(
+            atStartOf: data,
+            runningStatus: runningStatus,
+            detectParameterNumberSequence: detectParameterNumberSequence
+        ) else { return nil }
+        
+        self = eventType
+    }
+    
+    private static func eventType(
         atStartOf data: some DataProtocol,
         runningStatus: UInt8?,
         detectParameterNumberSequence: Bool

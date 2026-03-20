@@ -106,7 +106,7 @@ extension MIDIFileEvent.XMFPatchTypePrefix: MIDIFileEvent.Payload {
         .xmfPatchTypePrefix(delta: delta, event: self)
     }
     
-    public static let smfEventType: MIDIFileEventType = .xmfPatchTypePrefix
+    public static let smfEventType: MIDIFileEvent.EventType = .xmfPatchTypePrefix
     
     public init(
         midi1SMFRawBytes rawBytes: some DataProtocol,

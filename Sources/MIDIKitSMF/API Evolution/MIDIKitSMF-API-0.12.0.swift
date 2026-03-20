@@ -179,6 +179,12 @@ extension MIDIFileEvent.DeltaTime {
     }
 }
 
+// MARK: - MIDIFileEventType
+
+@_documentation(visibility: internal)
+@available(*, deprecated, renamed: "MIDIFileEvent.EventType")
+public typealias MIDIFileEventType = MIDIFileEvent.EventType
+
 // MARK: - MIDIFileEvent.KeySignature
 
 extension MIDIFileEvent.KeySignature {

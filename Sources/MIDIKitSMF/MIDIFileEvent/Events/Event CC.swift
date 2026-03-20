@@ -68,7 +68,7 @@ extension MIDIEvent.CC: MIDIFileEvent.Payload {
         .cc(delta: delta, event: self)
     }
     
-    public static let smfEventType: MIDIFileEventType = .cc
+    public static let smfEventType: MIDIFileEvent.EventType = .cc
     
     public init(
         midi1SMFRawBytes rawBytes: some DataProtocol,
