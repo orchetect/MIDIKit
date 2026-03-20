@@ -39,10 +39,10 @@ extension MIDIFileEvent {
 }
 
 extension MIDIFileEvent {
-    /// Returns the concrete type that contains the event payload, typed as ``MIDIFileEventPayload``
+    /// Returns the concrete type that contains the event payload, typed as ``Payload``
     /// protocol.
     @inline(__always)
-    public var concreteType: MIDIFileEventPayload.Type {
+    public var concreteType: Payload.Type {
         switch self {
         case .cc:                 CC.self
         case .channelPrefix:      ChannelPrefix.self
@@ -71,13 +71,12 @@ extension MIDIFileEvent {
 }
 
 extension MIDIFileEvent {
-    /// Unwraps the enum case and returns the ``MIDIFileEvent`` contained within, typed as
-    /// ``MIDIFileEventPayload`` protocol. (Convenience)
+    /// Unwraps the enum case and returns the ``MIDIFileEvent`` contained within, typed as ``Payload`` protocol. (Convenience)
     /// To unwrap the concrete event type, use switch case unwrapping instead.
     @inlinable
     public var smfUnwrappedEvent: (
         delta: DeltaTime,
-        event: MIDIFileEventPayload
+        event: Payload
     ) {
         switch self {
         case let .cc(delta, event):

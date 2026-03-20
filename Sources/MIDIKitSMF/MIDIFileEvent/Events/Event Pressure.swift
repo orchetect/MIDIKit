@@ -54,7 +54,7 @@ extension MIDIFileEvent {
 
 // MARK: - Encoding
 
-extension MIDIEvent.Pressure: MIDIFileEventPayload {
+extension MIDIEvent.Pressure: MIDIFileEvent.Payload {
     public func smfWrappedEvent(delta: MIDIFileEvent.DeltaTime) -> MIDIFileEvent {
         .pressure(delta: delta, event: self)
     }

@@ -261,7 +261,7 @@ extension MIDIFileEvent.SMPTEOffset {
 
 // MARK: - Encoding
 
-extension MIDIFileEvent.SMPTEOffset: MIDIFileEventPayload {
+extension MIDIFileEvent.SMPTEOffset: MIDIFileEvent.Payload {
     public func smfWrappedEvent(delta: MIDIFileEvent.DeltaTime) -> MIDIFileEvent {
         .smpteOffset(delta: delta, event: self)
     }

@@ -68,7 +68,7 @@ extension MIDIFileEvent.PortPrefix {
 
 // MARK: - Encoding
 
-extension MIDIFileEvent.PortPrefix: MIDIFileEventPayload {
+extension MIDIFileEvent.PortPrefix: MIDIFileEvent.Payload {
     public func smfWrappedEvent(delta: MIDIFileEvent.DeltaTime) -> MIDIFileEvent {
         .portPrefix(delta: delta, event: self)
     }

@@ -106,7 +106,7 @@ extension MIDIFileEvent.TimeSignature {
 
 // MARK: - Encoding
 
-extension MIDIFileEvent.TimeSignature: MIDIFileEventPayload {
+extension MIDIFileEvent.TimeSignature: MIDIFileEvent.Payload {
     public func smfWrappedEvent(delta: MIDIFileEvent.DeltaTime) -> MIDIFileEvent {
         .timeSignature(delta: delta, event: self)
     }

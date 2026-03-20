@@ -64,7 +64,7 @@ extension MIDIFileEvent {
 
 // MARK: - SysEx7 Encoding
 
-extension MIDIEvent.SysEx7: MIDIFileEventPayload {
+extension MIDIEvent.SysEx7: MIDIFileEvent.Payload {
     public func smfWrappedEvent(delta: MIDIFileEvent.DeltaTime) -> MIDIFileEvent {
         .sysEx7(delta: delta, event: self)
     }
@@ -224,7 +224,7 @@ extension MIDIFileEvent {
 
 // MARK: - UniversalSysEx7 Encoding
 
-extension MIDIEvent.UniversalSysEx7: MIDIFileEventPayload {
+extension MIDIEvent.UniversalSysEx7: MIDIFileEvent.Payload {
     public func smfWrappedEvent(delta: MIDIFileEvent.DeltaTime) -> MIDIFileEvent {
         .universalSysEx7(delta: delta, event: self)
     }

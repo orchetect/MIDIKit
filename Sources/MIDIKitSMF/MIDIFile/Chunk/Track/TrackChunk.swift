@@ -75,7 +75,7 @@ extension MIDIFile.TrackChunk {
         maxEventCount: Int?,
         deltaPadLength: Int,
         deltaDesc: (MIDIFileEvent.DeltaTime) -> String,
-        eventDesc: (any MIDIFileEventPayload) -> String
+        eventDesc: (any MIDIFileEvent.Payload) -> String
     ) -> String {
         // sanitize inputs
         let maxEventCount = maxEventCount?.clamped(to: 0...)

@@ -5,7 +5,7 @@
 ### MIDI File Internals
 
 - ``MIDIFileEventType``
-- ``MIDIFileEventPayload``
+- ``MIDIFileEvent/Payload``
 
 ### Timecode Related
 

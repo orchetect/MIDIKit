@@ -152,6 +152,12 @@ extension MIDIFile.Timebase {
     }
 }
 
+// MARK: - MIDIFileEventPayload
+
+@_documentation(visibility: internal)
+@available(*, deprecated, renamed: "MIDIFileEvent.Payload")
+public typealias MIDIFileEventPayload = MIDIFileEvent.Payload
+
 // MARK: - MIDIFileEvent.DeltaTime
 
 extension MIDIFileEvent.DeltaTime {
