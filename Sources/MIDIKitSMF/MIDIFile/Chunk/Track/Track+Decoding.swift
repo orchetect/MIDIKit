@@ -8,7 +8,7 @@ import Foundation
 import MIDIKitCore
 internal import SwiftDataParsing
 
-extension MIDIFile.Chunk.Track {
+extension MIDIFile.AnyChunk.Track {
     /// Init from MIDI file data stream.
     /// If the initializer returns `nil`, discard the track without throwing an error.
     public init?<D: DataProtocol>(
@@ -293,7 +293,7 @@ extension MIDIFile.Chunk.Track {
                 }
             }
             
-            return MIDIFile.Chunk.Track(events: newEvents)
+            return MIDIFile.AnyChunk.Track(events: newEvents)
         }
         
         if let track { self = track } else { return nil }

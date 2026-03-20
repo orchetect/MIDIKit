@@ -44,8 +44,8 @@ import Testing
     @Test
     func midiFileParse_AsyncSequence() async throws {
         actor Receiver {
-            var chunks: [Int: MIDIFile.Chunk] = [:]
-            func addChunk(index: Int, chunk: MIDIFile.Chunk) { chunks[index] = chunk }
+            var chunks: [Int: MIDIFile.AnyChunk] = [:]
+            func addChunk(index: Int, chunk: MIDIFile.AnyChunk) { chunks[index] = chunk }
             init() { }
         }
         let receiver = Receiver()
@@ -160,16 +160,16 @@ import Testing
     
     @Test
     func decodeOptions_trackDecodeOptions_errorStrategy_malformedEvent() async throws {
-        let track1 = MIDIFile.Chunk.Track(events: [
+        let track1 = MIDIFile.AnyChunk.Track(events: [
             .noteOn(delta: .none, note: 0x3C, velocity: .midi1(0x40), channel: 0),
             .cc(delta: .ticks(240), controller: 0x0B, value: .midi1(0x14), channel: 1)
         ])
         
-        let partialTrack2 = MIDIFile.Chunk.Track(events: [
+        let partialTrack2 = MIDIFile.AnyChunk.Track(events: [
             .noteOn(delta: .none, note: 0x3C, velocity: .midi1(0x40), channel: 0)
         ])
         
-        let track3 = MIDIFile.Chunk.Track(events: [
+        let track3 = MIDIFile.AnyChunk.Track(events: [
             .noteOn(delta: .none, note: 0x3D, velocity: .midi1(0x41), channel: 2),
         ])
         
@@ -241,12 +241,12 @@ import Testing
     
     @Test
     func decodeOptions_trackDecodeOptions_errorStrategy_truncatedTrack() async throws {
-        let track1 = MIDIFile.Chunk.Track(events: [
+        let track1 = MIDIFile.AnyChunk.Track(events: [
             .noteOn(delta: .none, note: 0x3C, velocity: .midi1(0x40), channel: 0),
             .cc(delta: .ticks(240), controller: 0x0B, value: .midi1(0x14), channel: 1)
         ])
         
-        let partialTrack2 = MIDIFile.Chunk.Track(events: [
+        let partialTrack2 = MIDIFile.AnyChunk.Track(events: [
             .noteOn(delta: .none, note: 0x3C, velocity: .midi1(0x40), channel: 0),
             .cc(delta: .ticks(240), controller: 0x0C, value: .midi1(0x24), channel: 0)
         ])
@@ -363,7 +363,7 @@ import Testing
         let event: MIDIFileEvent = .rpn(delta: .none, event: rpnEvent)
         let events: [MIDIFileEvent] = [event]
         
-        let track = MIDIFile.Chunk.Track(events: events)
+        let track = MIDIFile.AnyChunk.Track(events: events)
         let midiFile = MIDIFile(chunks: [.track(track)])
         
         let rawData = try await midiFile.rawData()
@@ -463,7 +463,7 @@ import Testing
         let midiFile = try await MIDIFile(data: kMIDIFile.customChunk)
         let baseRawData: [UInt8] = try await midiFile.rawData(as: [UInt8].self)
         
-        let extraTrack = MIDIFile.Chunk.Track(events: [
+        let extraTrack = MIDIFile.AnyChunk.Track(events: [
             .cc(delta: .none, event: .init(controller: .breath, value: .midi1(42), channel: 0))
         ])
         let extraTrackRawData = try extraTrack.midi1SMFRawBytes(as: [UInt8].self, using: midiFile.timebase)

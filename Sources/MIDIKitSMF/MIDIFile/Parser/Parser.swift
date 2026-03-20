@@ -38,8 +38,8 @@ extension MIDIFile.Parser {
     func chunks(
         options: MIDIFile.DecodeOptions,
         predicate: MIDIFile.DecodePredicate?
-    ) throws(MIDIFile.DecodeError) -> [MIDIFile.Chunk] {
-        var newChunks: [MIDIFile.Chunk] = []
+    ) throws(MIDIFile.DecodeError) -> [MIDIFile.AnyChunk] {
+        var newChunks: [MIDIFile.AnyChunk] = []
         for (index, chunkDescriptor) in fileDescriptor.chunkDescriptors.enumerated() {
             if let predicate {
                 guard predicate(chunkDescriptor.identifier, index) else { continue }
@@ -73,12 +73,12 @@ extension MIDIFile.Parser {
     func chunks(
         options: MIDIFile.DecodeOptions,
         predicate: MIDIFile.DecodePredicate?
-    ) async throws(MIDIFile.DecodeError) -> [MIDIFile.Chunk] {
-        let result: Result<[MIDIFile.Chunk], MIDIFile.DecodeError> = await withTaskGroup(
-            of: Result<(index: Int, chunk: MIDIFile.Chunk?), MIDIFile.DecodeError>.self,
-            returning: Result<[MIDIFile.Chunk], MIDIFile.DecodeError>.self
+    ) async throws(MIDIFile.DecodeError) -> [MIDIFile.AnyChunk] {
+        let result: Result<[MIDIFile.AnyChunk], MIDIFile.DecodeError> = await withTaskGroup(
+            of: Result<(index: Int, chunk: MIDIFile.AnyChunk?), MIDIFile.DecodeError>.self,
+            returning: Result<[MIDIFile.AnyChunk], MIDIFile.DecodeError>.self
         ) { group in
-            var newChunks: [Int: MIDIFile.Chunk] = [:]
+            var newChunks: [Int: MIDIFile.AnyChunk] = [:]
             
             for (index, chunkDescriptor) in fileDescriptor.chunkDescriptors.enumerated() {
                 if let predicate {
@@ -131,11 +131,11 @@ extension MIDIFile.Parser {
     func chunksAsyncSequence(
         options: MIDIFile.DecodeOptions,
         predicate: MIDIFile.DecodePredicate?
-    ) -> AsyncStream<(index: Int, result: Result<MIDIFile.Chunk, MIDIFile.DecodeError>)> {
+    ) -> AsyncStream<(index: Int, result: Result<MIDIFile.AnyChunk, MIDIFile.DecodeError>)> {
         AsyncStream { continuation in
             Task { [data, options, predicate, continuation] in
                 await withTaskGroup(
-                    of: (index: Int, result: Result<MIDIFile.Chunk, MIDIFile.DecodeError>)?.self,
+                    of: (index: Int, result: Result<MIDIFile.AnyChunk, MIDIFile.DecodeError>)?.self,
                     returning: Void.self
                 ) { [data, options, predicate, continuation] group in
                     for (index, chunkDescriptor) in fileDescriptor.chunkDescriptors.enumerated() {
@@ -209,7 +209,7 @@ extension MIDIFile.Parser {
                 malformedReason: "Error reading data for MIDI file header.",
                 try parser.read(advance: false)
             )
-            let (header, expectedTrackCount, headerLength) = try MIDIFile.Chunk.Header.initFrom(
+            let (header, expectedTrackCount, headerLength) = try MIDIFile.AnyChunk.Header.initFrom(
                 midi1SMFRawBytesStream: headerStream,
                 allowMultiTrackFormat0: options.allowMultiTrackFormat0
             )
@@ -315,24 +315,24 @@ extension MIDIFile.Parser {
         chunkDescriptor: ChunkDescriptor,
         chunkIndex: Int,
         timebase: MIDIFile.Timebase,
-        options: MIDIFile.Chunk.Track.DecodeOptions,
+        options: MIDIFile.AnyChunk.Track.DecodeOptions,
         in chunkData: some DataProtocol
-    ) throws(MIDIFile.DecodeError) -> MIDIFile.Chunk? {
+    ) throws(MIDIFile.DecodeError) -> MIDIFile.AnyChunk? {
         do throws(MIDIFile.DecodeError) {
             switch chunkDescriptor.identifier {
-            case is MIDIFile.Chunk.Track.Identifier:
-                let track = try MIDIFile.Chunk.Track(
+            case is MIDIFile.AnyChunk.Track.Identifier:
+                let track = try MIDIFile.AnyChunk.Track(
                     midi1SMFRawBytes: chunkData,
                     timebase: timebase,
                     options: options
                 )
                 return if let track { .track(track) } else { nil }
                 
-            case let identifier as MIDIFile.Chunk.UnrecognizedChunk.Identifier:
+            case let identifier as MIDIFile.AnyChunk.UnrecognizedChunk.Identifier:
                 // as per Standard MIDI File 1.0 Spec:
                 // unrecognized chunks should be skipped and not throw an error
                 
-                let newUnrecognizedChunk = MIDIFile.Chunk.UnrecognizedChunk(
+                let newUnrecognizedChunk = MIDIFile.AnyChunk.UnrecognizedChunk(
                     identifier: identifier,
                     data: chunkData.toData()
                 )

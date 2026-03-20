@@ -9,7 +9,7 @@ import MIDIKitCore
 internal import MIDIKitInternals
 internal import SwiftDataParsing
 
-extension MIDIFile.Chunk.Header {
+extension MIDIFile.AnyChunk.Header {
     /// The original Standard MIDI File spec defines the header as 14 bytes:
     /// - MThd (4 bytes)
     /// - header length (4 bytes)

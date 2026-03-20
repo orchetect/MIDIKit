@@ -7,7 +7,7 @@
 import Foundation
 internal import MIDIKitInternals
 
-extension MIDIFile.Chunk.UnrecognizedChunk: MIDIFileChunk {
+extension MIDIFile.AnyChunk.UnrecognizedChunk: MIDIFileChunk {
     public struct Identifier: MIDIFileChunkIdentifier {
         public let string: String
         
@@ -42,8 +42,8 @@ extension MIDIFile.Chunk.UnrecognizedChunk: MIDIFileChunk {
         }
         
         static let disallowedIdentifiers: [String] = [
-            MIDIFile.Chunk.Header.Identifier().string,
-            MIDIFile.Chunk.Track.Identifier().string
+            MIDIFile.AnyChunk.Header.Identifier().string,
+            MIDIFile.AnyChunk.Track.Identifier().string
         ]
     }
     
@@ -52,7 +52,7 @@ extension MIDIFile.Chunk.UnrecognizedChunk: MIDIFileChunk {
 
 // MARK: - Static Constructors
 
-extension MIDIFile.Chunk {
+extension MIDIFile.AnyChunk {
     /// Unrecognized MIDI File Chunk.
     public static func unrecognized(
         identifier: UnrecognizedChunk.Identifier,

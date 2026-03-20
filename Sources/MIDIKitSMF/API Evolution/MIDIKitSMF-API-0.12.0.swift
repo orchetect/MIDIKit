@@ -25,7 +25,7 @@ extension MIDIFile {
     public init(
         format: Format = .multipleTracksSynchronous,
         timeBase: Timebase = .default(),
-        chunks: [Chunk] = []
+        chunks: [AnyChunk] = []
     ) {
         self.init(format: format, timebase: timeBase, chunks: chunks)
     }
@@ -58,9 +58,17 @@ extension MIDIFile {
     }
 }
 
-// MARK: - MIDIFile.Chunk.Header
+// MARK: - MIDIFile.AnyChunk
 
-extension MIDIFile.Chunk.Header {
+extension MIDIFile {
+    @_documentation(visibility: internal)
+    @available(*, deprecated, renamed: "AnyChunk")
+    public typealias Chunk = AnyChunk
+}
+
+// MARK: - MIDIFile.AnyChunk.Header
+
+extension MIDIFile.AnyChunk.Header {
     @_documentation(visibility: internal)
     @available(*, deprecated, renamed: "timebase")
     public var timeBase: MIDIFile.Timebase { timebase }
@@ -76,7 +84,7 @@ extension MIDIFile.Chunk.Header {
     }
 }
 
-extension MIDIFile.Chunk.Track {
+extension MIDIFile.AnyChunk.Track {
     @_documentation(visibility: internal)
     @available(*, deprecated, renamed: "eventsAtQuarterNotePositions(atPPQ:)")
     @_disfavoredOverload
@@ -85,9 +93,9 @@ extension MIDIFile.Chunk.Track {
     }
 }
 
-// MARK: - MIDIFile.Chunk.UnrecognizedChunk
+// MARK: - MIDIFile.AnyChunk.UnrecognizedChunk
 
-extension MIDIFile.Chunk.UnrecognizedChunk {
+extension MIDIFile.AnyChunk.UnrecognizedChunk {
     @_documentation(visibility: internal)
     @available(*, deprecated, renamed: "init(identifier:data:)")
     @_disfavoredOverload
@@ -96,7 +104,7 @@ extension MIDIFile.Chunk.UnrecognizedChunk {
     }
 }
 
-extension MIDIFile.Chunk {
+extension MIDIFile.AnyChunk {
     @_documentation(visibility: internal)
     @available(*, deprecated, renamed: "unrecognized(identifier:data:)")
     @_disfavoredOverload

@@ -8,7 +8,7 @@ import Foundation
 import MIDIKitCore
 internal import MIDIKitInternals
 
-extension MIDIFile.Chunk.Header {
+extension MIDIFile.AnyChunk.Header {
     public func midi1SMFRawBytes(withTrackCount trackCount: Int) throws(MIDIFile.EncodeError) -> Data {
         try midi1SMFRawBytes(as: Data.self, withTrackCount: trackCount)
     }

@@ -7,9 +7,9 @@
 extension MIDIFile {
     /// MIDI file chunk decode result block.
     public typealias ChunkDecodeBlock = @Sendable (
-        _ fileHeader: Chunk.Header,
+        _ fileHeader: AnyChunk.Header,
         _ chunkCount: Int,
         _ chunkIndex: Int,
-        _ result: Result<Chunk, DecodeError>
+        _ result: Result<AnyChunk, DecodeError>
     ) -> Void
 }

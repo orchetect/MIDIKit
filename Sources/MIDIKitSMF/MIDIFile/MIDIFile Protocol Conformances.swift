@@ -68,7 +68,7 @@ extension MIDIFile {
     func descriptionBuilder(
         formatDesc: (Format) -> String,
         timebaseDesc: (Timebase) -> String,
-        chunkDesc: (_ chunk: Chunk) -> String
+        chunkDesc: (_ chunk: AnyChunk) -> String
     ) -> String {
         var outputString = ""
         

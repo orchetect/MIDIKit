@@ -10,7 +10,7 @@ internal import SwiftDataParsing
 
 // MARK: - Track
 
-extension MIDIFile.Chunk {
+extension MIDIFile.AnyChunk {
     /// Track: `MTrk` chunk type.
     public struct Track {
         /// Storage for events in the track.
@@ -32,13 +32,13 @@ extension MIDIFile.Chunk {
     }
 }
 
-extension MIDIFile.Chunk.Track: Equatable { }
+extension MIDIFile.AnyChunk.Track: Equatable { }
 
-extension MIDIFile.Chunk.Track: Hashable { }
+extension MIDIFile.AnyChunk.Track: Hashable { }
 
-extension MIDIFile.Chunk.Track: Sendable { }
+extension MIDIFile.AnyChunk.Track: Sendable { }
 
-extension MIDIFile.Chunk.Track: CustomStringConvertible {
+extension MIDIFile.AnyChunk.Track: CustomStringConvertible {
     public var description: String {
         description(maxEventCount: 10) // by default, limit number of events
     }
@@ -54,7 +54,7 @@ extension MIDIFile.Chunk.Track: CustomStringConvertible {
     }
 }
 
-extension MIDIFile.Chunk.Track: CustomDebugStringConvertible {
+extension MIDIFile.AnyChunk.Track: CustomDebugStringConvertible {
     public var debugDescription: String {
         debugDescription(maxEventCount: 10) // by default, limit number of events
     }
@@ -70,7 +70,7 @@ extension MIDIFile.Chunk.Track: CustomDebugStringConvertible {
     }
 }
 
-extension MIDIFile.Chunk.Track {
+extension MIDIFile.AnyChunk.Track {
     func descriptionBuilder(
         maxEventCount: Int?,
         deltaPadLength: Int,
@@ -120,14 +120,14 @@ extension MIDIFile.Chunk.Track {
 
 // MARK: - Static
 
-extension MIDIFile.Chunk.Track {
+extension MIDIFile.AnyChunk.Track {
     /// The 3-byte sequence that must appear at the end of every track.
     public static let trackEndByes: [UInt8] = [0xFF, 0x2F, 0x00]
 }
 
 // MARK: - Methods
 
-extension MIDIFile.Chunk.Track {
+extension MIDIFile.AnyChunk.Track {
     /// Returns ``events`` mapped to their quarter-note beat position from the start of the track.
     /// This is computed, so avoid repeated calls to this method.
     /// Ensure the `ppq` (ticks per quarter note) supplied is the same as used in the MIDI file.

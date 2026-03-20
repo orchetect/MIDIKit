@@ -11,7 +11,7 @@ import MIDIKitCore
 public struct MIDIFile {
     // MARK: - Properties
     
-    var header: Chunk.Header = .init()
+    var header: AnyChunk.Header = .init()
     
     /// MIDI File Format to use when writing MIDI file.
     public var format: Format {
@@ -27,14 +27,14 @@ public struct MIDIFile {
     
     /// Storage for tracks in the MIDI file.
     ///
-    /// The ``Chunk/Header`` chunk is managed automatically and is not instanced as a
+    /// The ``AnyChunk/Header`` chunk is managed automatically and is not instanced as a
     /// ``MIDIFile/chunks`` member.
-    public var chunks: [Chunk] = []
+    public var chunks: [AnyChunk] = []
     
     /// Returns copies of the tracks contained in the MIDI file.
-    /// (Computed convenience to filter ``chunks`` and return ``Chunk/Track`` instances.)
+    /// (Computed convenience to filter ``chunks`` and return ``AnyChunk/Track`` instances.)
     /// To add new tracks or modify existing tracks, mutate the ``chunks`` collection.
-    public var tracks: [Chunk.Track] {
+    public var tracks: [AnyChunk.Track] {
         chunks.compactMap {
             guard case let .track(track) = $0 else { return nil }
             return track
@@ -50,7 +50,7 @@ public struct MIDIFile {
     public init(
         format: Format = .multipleTracksSynchronous,
         timebase: Timebase = .default(),
-        chunks: [Chunk] = []
+        chunks: [AnyChunk] = []
     ) {
         self.format = format
         self.timebase = timebase
@@ -62,7 +62,7 @@ public struct MIDIFile {
     public init(
         format: Format = .multipleTracksSynchronous,
         timebase: Timebase = .default(),
-        chunks: some Sequence<Chunk> = []
+        chunks: some Sequence<AnyChunk> = []
     ) {
         self.format = format
         self.timebase = timebase
@@ -73,7 +73,7 @@ public struct MIDIFile {
     public init(
         format: Format = .multipleTracksSynchronous,
         timebase: Timebase = .default(),
-        tracks: [Chunk.Track]
+        tracks: [AnyChunk.Track]
     ) {
         self.format = format
         self.timebase = timebase
@@ -85,7 +85,7 @@ public struct MIDIFile {
     public init(
         format: Format = .multipleTracksSynchronous,
         timebase: Timebase = .default(),
-        tracks: some Sequence<Chunk.Track>
+        tracks: some Sequence<AnyChunk.Track>
     ) {
         self.format = format
         self.timebase = timebase

@@ -4,7 +4,7 @@
 //  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
-extension MIDIFile.Chunk.Header: MIDIFileChunk {
+extension MIDIFile.AnyChunk.Header: MIDIFileChunk {
     public struct Identifier: MIDIFileChunkIdentifier {
         public let string: String = "MThd"
         

@@ -4,7 +4,7 @@
 //  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
-extension MIDIFile.Chunk.Track.DecodeOptions {
+extension MIDIFile.AnyChunk.Track.DecodeOptions {
     public enum ErrorStrategy {
         /// An error is thrown upon the first decoding error encountered.
         ///
@@ -27,8 +27,8 @@ extension MIDIFile.Chunk.Track.DecodeOptions {
     }
 }
 
-extension MIDIFile.Chunk.Track.DecodeOptions.ErrorStrategy: Equatable { }
+extension MIDIFile.AnyChunk.Track.DecodeOptions.ErrorStrategy: Equatable { }
 
-extension MIDIFile.Chunk.Track.DecodeOptions.ErrorStrategy: Hashable { }
+extension MIDIFile.AnyChunk.Track.DecodeOptions.ErrorStrategy: Hashable { }
 
-extension MIDIFile.Chunk.Track.DecodeOptions.ErrorStrategy: Sendable { }
+extension MIDIFile.AnyChunk.Track.DecodeOptions.ErrorStrategy: Sendable { }

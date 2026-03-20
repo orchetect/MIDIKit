@@ -29,12 +29,12 @@ extension AnyMIDIFileChunkIdentifier: Sendable { }
 extension AnyMIDIFileChunkIdentifier {
     public init?(string: String) {
         switch string {
-        case MIDIFile.Chunk.Track.identifier.string:
+        case MIDIFile.AnyChunk.Track.identifier.string:
             wrapped = .track
-        case MIDIFile.Chunk.Header.identifier.string:
+        case MIDIFile.AnyChunk.Header.identifier.string:
             wrapped = .header
         default:
-            guard let id = MIDIFile.Chunk.UnrecognizedChunk.Identifier(string: string) else {
+            guard let id = MIDIFile.AnyChunk.UnrecognizedChunk.Identifier(string: string) else {
                 return nil
             }
             wrapped = id

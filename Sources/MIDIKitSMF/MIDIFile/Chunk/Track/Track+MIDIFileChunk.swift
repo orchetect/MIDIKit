@@ -4,7 +4,7 @@
 //  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
-extension MIDIFile.Chunk.Track: MIDIFileChunk {
+extension MIDIFile.AnyChunk.Track: MIDIFileChunk {
     public struct Identifier: MIDIFileChunkIdentifier {
         public let string: String = "MTrk"
         
@@ -18,7 +18,7 @@ extension MIDIFile.Chunk.Track: MIDIFileChunk {
 
 // MARK: - Static Constructors
 
-extension MIDIFile.Chunk {
+extension MIDIFile.AnyChunk {
     /// Track: `MTrk` chunk type.
     public static func track(_ events: [MIDIFileEvent]) -> Self {
         .track(.init(events: events))

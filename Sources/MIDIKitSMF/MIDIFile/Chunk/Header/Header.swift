@@ -74,7 +74,7 @@ internal import MIDIKitInternals
 // that it does not know about (ie: besides MThd and MTrk), which it can easily do by reading the
 // offending chunk's chunklen.
 
-extension MIDIFile.Chunk {
+extension MIDIFile.AnyChunk {
     /// Header: `MThd` chunk type.
     ///
     /// > Note:
@@ -119,8 +119,8 @@ extension MIDIFile.Chunk {
     }
 }
 
-extension MIDIFile.Chunk.Header: Equatable { }
+extension MIDIFile.AnyChunk.Header: Equatable { }
 
-extension MIDIFile.Chunk.Header: Hashable { }
+extension MIDIFile.AnyChunk.Header: Hashable { }
 
-extension MIDIFile.Chunk.Header: Sendable { }
+extension MIDIFile.AnyChunk.Header: Sendable { }

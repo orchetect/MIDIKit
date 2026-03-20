@@ -60,7 +60,7 @@ extension MIDIFile {
         
         header = parser.fileDescriptor.header
         
-        var parsedChunks: [Int: Chunk] = [:]
+        var parsedChunks: [Int: AnyChunk] = [:]
         for await (chunkIndex, result) in parser.chunksAsyncSequence(
             options: options,
             predicate: predicate

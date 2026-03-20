@@ -8,7 +8,7 @@ import Foundation
 import MIDIKitCore
 internal import SwiftDataParsing
 
-extension MIDIFile.Chunk.UnrecognizedChunk {
+extension MIDIFile.AnyChunk.UnrecognizedChunk {
     /// Init from MIDI file buffer.
     public init<D: DataProtocol>(midi1SMFRawBytesStream stream: D) throws(MIDIFile.DecodeError) {
         guard stream.count >= 8 else {

@@ -7,7 +7,7 @@
 import Foundation
 import MIDIKitCore
 
-extension MIDIFile.Chunk.Track {
+extension MIDIFile.AnyChunk.Track {
     public func midi1SMFRawBytes(
         using timebase: MIDIFile.Timebase
     ) throws(MIDIFile.EncodeError) -> Data {

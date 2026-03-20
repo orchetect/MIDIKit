@@ -16,9 +16,9 @@ import Testing
     
     @Test
     func emptyData() async throws {
-        let id: MIDIFile.Chunk.UnrecognizedChunk.Identifier = .unrecognized(identifier: "ABCD")!
+        let id: MIDIFile.AnyChunk.UnrecognizedChunk.Identifier = .unrecognized(identifier: "ABCD")!
         
-        let chunk = MIDIFile.Chunk.UnrecognizedChunk(identifier: id)
+        let chunk = MIDIFile.AnyChunk.UnrecognizedChunk(identifier: id)
         
         #expect(chunk.identifier == id)
         
@@ -35,7 +35,7 @@ import Testing
         
         // parse raw bytes
         
-        let parsedChunk = try MIDIFile.Chunk
+        let parsedChunk = try MIDIFile.AnyChunk
             .UnrecognizedChunk(midi1SMFRawBytesStream: generatedBytes)
 
         #expect(parsedChunk == parsedChunk)
@@ -45,9 +45,9 @@ import Testing
     func withData() async throws {
         let data: [UInt8] = [0x12, 0x34, 0x56, 0x78]
         
-        let id: MIDIFile.Chunk.UnrecognizedChunk.Identifier = .unrecognized(identifier: "ABCD")!
+        let id: MIDIFile.AnyChunk.UnrecognizedChunk.Identifier = .unrecognized(identifier: "ABCD")!
         
-        let chunk = MIDIFile.Chunk.UnrecognizedChunk(
+        let chunk = MIDIFile.AnyChunk.UnrecognizedChunk(
             identifier: id,
             data: data.toData()
         )
@@ -67,7 +67,7 @@ import Testing
         
         // parse raw bytes
         
-        let parsedChunk = try MIDIFile.Chunk
+        let parsedChunk = try MIDIFile.AnyChunk
             .UnrecognizedChunk(midi1SMFRawBytesStream: generatedBytes)
 
         #expect(parsedChunk == parsedChunk)

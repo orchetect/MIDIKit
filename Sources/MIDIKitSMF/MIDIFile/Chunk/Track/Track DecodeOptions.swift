@@ -4,7 +4,7 @@
 //  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
-extension MIDIFile.Chunk.Track {
+extension MIDIFile.AnyChunk.Track {
     /// MIDI file track decoding options.
     public struct DecodeOptions {
         /// Bundle RPN/NRPN CC message sequences into `rpn`/`nrpn` event types.
@@ -30,8 +30,8 @@ extension MIDIFile.Chunk.Track {
     }
 }
 
-extension MIDIFile.Chunk.Track.DecodeOptions: Equatable { }
+extension MIDIFile.AnyChunk.Track.DecodeOptions: Equatable { }
 
-extension MIDIFile.Chunk.Track.DecodeOptions: Hashable { }
+extension MIDIFile.AnyChunk.Track.DecodeOptions: Hashable { }
 
-extension MIDIFile.Chunk.Track.DecodeOptions: Sendable { }
+extension MIDIFile.AnyChunk.Track.DecodeOptions: Sendable { }
