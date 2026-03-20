@@ -61,29 +61,42 @@ midiFile.format // type 0, 1, or 2 MIDI file
 midiFile.timebase // musical or timecode-based
 ```
 
-Accessing chunks, including tracks:
+Read and write tracks using the `tracks` property can be accessed to return only the tracks as a typed array:
 
 ```swift
-// all chunks, which includes tracks:
-midiFile.chunks // [MIDIFile.Chunk]
-
-// track 1 events
-for chunk in midiFile.chunks {
-    switch chunk {
-    case let .track(track): // `track` is MIDIFile.Chunk.Track
-        // chunk is a track
-    case let .other(chunk): // `chunk` is MIDIFile.Chunk.UnrecognizedChunk
-        // chunk is a non-track chunk
+for track in midiFile.tracks {
+    for event in track.events {
+        print(event)
     }
 }
+
+// read first event from first track
+let event = midiFile.tracks[0].events[0]
+
+// add an event to first track
+midiFile.tracks[0].events.append( ... )
+
+// add a track
+let newTrack = MIDIFile.TrackChunk()
+midiFile.tracks.append(newTrack)
+
+// replace a track
+let newTrack = MIDIFile.TrackChunk()
+midiFile.tracks[0] = newTrack
+
+// remove a track
+midiFile.tracks.remove(at: 0)
 ```
 
-For convenience, a read-only `tracks` property can be accessed to return only the tracks as a typed array:
+Accessing all chunks, including non-track chunks:
 
 ```swift
-midiFile.tracks // [MIDIFile.Chunk.Track]
-
-for track in midiFile.tracks {
-    // ...
+for chunk in midiFile.chunks {
+    switch chunk {
+    case let .track(track): // `track` is MIDIFile.TrackChunk
+        // chunk is a track
+    case let .unrecognized(chunk): // `chunk` is MIDIFile.UnrecognizedChunk
+        // chunk is a non-track chunk
+    }
 }
 ```
