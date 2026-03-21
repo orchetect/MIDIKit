@@ -99,6 +99,47 @@ import Testing
         #expect(parsedTrackB == track)
     }
     
+    /// Encode and decode non-zero delta time before end-of-track bytes.
+    @Test
+    func deltaTimeBeforeEndOfTrack() async throws {
+        let events: [MIDIFileEvent] = []
+        
+        var track = MIDIFile.TrackChunk(events: events)
+        track.deltaTimeBeforeEndOfTrack = .ticks(960)
+        
+        #expect(track.events == events)
+        
+        let bytes: [UInt8] = [
+            0x4D, 0x54, 0x72, 0x6B, // MTrk
+            0x00, 0x00, 0x00, 0x05, // length: 5 bytes to follow
+            0x87, 0x40,             // delta time prior to chunk end (960 ticks)
+            0xFF, 0x2F, 0x00        // chunk end
+        ]
+        
+        // generate raw bytes
+        
+        let timebase: MIDIFile.Timebase = .musical(ticksPerQuarterNote: 960)
+        let generatedData: Data = try track.midi1SMFRawBytes(using: timebase)
+        
+        #expect(generatedData.toUInt8Bytes() == bytes)
+        
+        // parse raw bytes
+        
+        let parsedTrackA = try? MIDIFile.TrackChunk(
+            midi1SMFRawBytesStream: generatedData,
+            timebase: timebase,
+            options: .init(bundleRPNAndNRPNEvents: true)
+        )
+        #expect(parsedTrackA == track)
+        
+        let parsedTrackB = try? MIDIFile.TrackChunk(
+            midi1SMFRawBytes: generatedData[8...], // exclude header and length
+            timebase: timebase,
+            options: .init(bundleRPNAndNRPNEvents: true)
+        )
+        #expect(parsedTrackB == track)
+    }
+    
     @Test
     func eventsAtQuarterNotePositions() async throws {
         let ppq: UInt16 = 480
