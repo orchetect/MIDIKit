@@ -16,6 +16,10 @@ extension MIDIFile {
         /// Storage for events in the track.
         public var events: [MIDIFileEvent] = []
         
+        /// The delta time after the final event, just before the end-of-track.
+        /// Typically this is `0`. A non-zero value is tantamount to empty track length prior to the end-of-track.
+        public var deltaTimeBeforeEndOfTrack: MIDIFileEvent.DeltaTime = .none
+        
         /// Instance a new empty MIDI file track.
         public init() { }
         

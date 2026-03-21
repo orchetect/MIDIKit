@@ -86,6 +86,7 @@ extension MIDIFile.TrackChunk {
             
             var endOfChunk = false
             var newEvents: [MIDIFileEvent] = []
+            var deltaTimeBeforeEndOfTrack: MIDIFileEvent.DeltaTime = .none
             
             // running status
             
@@ -131,6 +132,7 @@ extension MIDIFile.TrackChunk {
                        readBuffer.elementsEqual(Self.trackEndByes)
                     {
                         endOfChunk = true
+                        deltaTimeBeforeEndOfTrack = .ticks(UInt32(eventDeltaTime.value))
                         break
                     }
                     
@@ -293,7 +295,9 @@ extension MIDIFile.TrackChunk {
                 }
             }
             
-            return MIDIFile.TrackChunk(events: newEvents)
+            var track = MIDIFile.TrackChunk(events: newEvents)
+            track.deltaTimeBeforeEndOfTrack = deltaTimeBeforeEndOfTrack
+            return track
         }
         
         if let track { self = track } else { return nil }

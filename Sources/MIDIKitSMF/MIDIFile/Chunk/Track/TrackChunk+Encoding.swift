@@ -28,7 +28,7 @@ extension MIDIFile.TrackChunk {
             bodyData.append(contentsOf: unwrapped.event.midi1SMFRawBytes(as: D.self))
         }
         
-        bodyData.append(deltaTime: 0)
+        bodyData.append(deltaTime: deltaTimeBeforeEndOfTrack.ticks)
         bodyData += Self.trackEndByes
         
         // assemble full chunk data with header and length
