@@ -13,7 +13,7 @@ extension MIDIFile.TrackChunk {
     /// If the initializer returns `nil`, discard the track without throwing an error.
     public init?<D: DataProtocol>(
         midi1SMFRawBytesStream stream: D,
-        timebase: MIDIFile.Timebase,
+        timebase: MIDIFile.AnyTimebase,
         options: DecodeOptions
     ) throws(MIDIFile.DecodeError) {
         guard stream.count >= 8 else {
@@ -73,7 +73,7 @@ extension MIDIFile.TrackChunk {
     /// If the initializer returns `nil`, discard the track without throwing an error.
     init?<D: DataProtocol>(
         midi1SMFRawBytes rawData: D,
-        timebase: MIDIFile.Timebase,
+        timebase: MIDIFile.AnyTimebase,
         options: DecodeOptions
     ) throws(MIDIFile.DecodeError) {
         // sanitize inputs

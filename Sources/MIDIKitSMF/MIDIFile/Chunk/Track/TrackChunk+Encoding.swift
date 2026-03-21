@@ -9,14 +9,14 @@ import MIDIKitCore
 
 extension MIDIFile.TrackChunk {
     public func midi1SMFRawBytes(
-        using timebase: MIDIFile.Timebase
+        using timebase: MIDIFile.AnyTimebase
     ) throws(MIDIFile.EncodeError) -> Data {
         try midi1SMFRawBytes(as: Data.self, using: timebase)
     }
     
     public func midi1SMFRawBytes<D: MutableDataProtocol>(
         as dataType: D.Type,
-        using timebase: MIDIFile.Timebase
+        using timebase: MIDIFile.AnyTimebase
     ) throws(MIDIFile.EncodeError) -> D {
         // assemble chunk body without header or length
         

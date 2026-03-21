@@ -17,8 +17,8 @@ extension MIDIFile {
     /// The ``HeaderChunk`` chunk is managed automatically and is not included in this collection.
     /// Its properties can be accessed directly on the ``MIDIFile`` instance.
     public enum AnyChunk {
-        case track(MIDIFile.TrackChunk)
-        case unrecognized(MIDIFile.UnrecognizedChunk)
+        case track(_ track: MIDIFile.TrackChunk)
+        case unrecognized(_ chunk: MIDIFile.UnrecognizedChunk)
     }
 }
 
@@ -32,7 +32,7 @@ extension MIDIFile.AnyChunk: CustomStringConvertible {
     public var description: String {
         switch self {
         case let .track(track): track.description
-        case let .unrecognized(unrecognizedChunk): unrecognizedChunk.description
+        case let .unrecognized(chunk): chunk.description
         }
     }
 }
@@ -41,7 +41,7 @@ extension MIDIFile.AnyChunk: CustomDebugStringConvertible {
     public var debugDescription: String {
         switch self {
         case let .track(track): track.debugDescription
-        case let .unrecognized(unrecognizedChunk): unrecognizedChunk.debugDescription
+        case let .unrecognized(chunk): chunk.debugDescription
         }
     }
 }
@@ -52,7 +52,7 @@ extension MIDIFile.AnyChunk {
     /// Unwraps the enum case and returns the chunk contained within, typed as ``MIDIFile/Chunk`` protocol.
     public var unwrappedChunk: any MIDIFile.Chunk {
         switch self {
-        case let .track(chunk): chunk
+        case let .track(track): track
         case let .unrecognized(chunk): chunk
         }
     }
@@ -60,7 +60,7 @@ extension MIDIFile.AnyChunk {
     /// MIDI file chunk identifier.
     public var identifier: any MIDIFile.ChunkIdentifier {
         switch self {
-        case let .track(chunk): chunk.identifier
+        case let .track(track): track.identifier
         case let .unrecognized(chunk): chunk.identifier
         }
     }
@@ -69,6 +69,14 @@ extension MIDIFile.AnyChunk {
     public var isTrackChunk: Bool {
         switch self {
         case .track: true
+        default: false
+        }
+    }
+    
+    /// Returns `true` if the chunk is an unrecognized (non-track) chunk.
+    public var isUnrecognizedChunk: Bool {
+        switch self {
+        case .unrecognized: true
         default: false
         }
     }

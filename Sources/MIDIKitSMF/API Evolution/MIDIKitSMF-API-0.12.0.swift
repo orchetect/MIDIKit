@@ -10,12 +10,12 @@ import Foundation
 
 extension MIDIFile {
     @_documentation(visibility: internal)
-    @available(*, deprecated, renamed: "Timebase")
-    public typealias TimeBase = Timebase
+    @available(*, deprecated, renamed: "AnyTimebase")
+    public typealias TimeBase = AnyTimebase
     
     @_documentation(visibility: internal)
     @available(*, deprecated, renamed: "timebase")
-    public var timeBase: Timebase { timebase }
+    public var timeBase: AnyTimebase { timebase }
 }
 
 extension MIDIFile {
@@ -24,7 +24,7 @@ extension MIDIFile {
     @_disfavoredOverload
     public init(
         format: Format = .multipleTracksSynchronous,
-        timeBase: Timebase = .default(),
+        timeBase: AnyTimebase = .default(),
         chunks: [AnyChunk] = []
     ) {
         self.init(format: format, timebase: timeBase, chunks: chunks)
@@ -83,14 +83,14 @@ extension MIDIFile.Chunk {
 extension MIDIFile.HeaderChunk {
     @_documentation(visibility: internal)
     @available(*, deprecated, renamed: "timebase")
-    public var timeBase: MIDIFile.Timebase { timebase }
+    public var timeBase: MIDIFile.AnyTimebase { timebase }
     
     @_documentation(visibility: internal)
     @available(*, deprecated, renamed: "init(format:timebase:)")
     @_disfavoredOverload
     public init(
         format: MIDIFile.Format,
-        timeBase: MIDIFile.Timebase
+        timeBase: MIDIFile.AnyTimebase
     ) {
         self.init(format: format, timebase: timeBase)
     }
@@ -182,7 +182,7 @@ extension MIDIFileEvent.DeltaTime {
     @_disfavoredOverload
     public init?(
         ticks: UInt32,
-        using timebase: MIDIFile.Timebase
+        using timebase: MIDIFile.AnyTimebase
     ) {
         self.init(ticks: ticks)
     }
@@ -190,7 +190,7 @@ extension MIDIFileEvent.DeltaTime {
     @_documentation(visibility: internal)
     @available(*, deprecated, renamed: "ticks")
     @_disfavoredOverload
-    public func ticksValue(using timebase: MIDIFile.Timebase) -> UInt32 {
+    public func ticksValue(using timebase: MIDIFile.AnyTimebase) -> UInt32 {
         ticks
     }
 }

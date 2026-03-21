@@ -67,7 +67,7 @@ extension MIDIFile: CustomDebugStringConvertible {
 extension MIDIFile {
     func descriptionBuilder(
         formatDesc: (Format) -> String,
-        timebaseDesc: (Timebase) -> String,
+        timebaseDesc: (AnyTimebase) -> String,
         chunkDesc: (_ chunk: AnyChunk) -> String
     ) -> String {
         var outputString = ""

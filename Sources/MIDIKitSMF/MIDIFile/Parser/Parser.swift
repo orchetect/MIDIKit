@@ -314,7 +314,7 @@ extension MIDIFile.Parser {
     static func parseChunk(
         chunkDescriptor: ChunkDescriptor,
         chunkIndex: Int,
-        timebase: MIDIFile.Timebase,
+        timebase: MIDIFile.AnyTimebase,
         options: MIDIFile.TrackChunk.DecodeOptions,
         in chunkData: some DataProtocol
     ) throws(MIDIFile.DecodeError) -> MIDIFile.AnyChunk? {

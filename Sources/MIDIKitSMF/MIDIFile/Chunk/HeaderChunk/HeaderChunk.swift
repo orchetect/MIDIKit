@@ -83,10 +83,10 @@ extension MIDIFile {
     /// > based on the track count in the `MIDIFile.chunks` array when calling `MIDIFile.rawData()`.
     public struct HeaderChunk {
         /// MIDI file format.
-        public var format: MIDIFile.Format = .multipleTracksSynchronous
+        public var format: MIDIFile.Format
         
         /// MIDI file timebase (for duration calculations).
-        public var timebase: MIDIFile.Timebase = .default()
+        public var timebase: MIDIFile.AnyTimebase
         
         /// Additional bytes found at the end of the header. Typically this should be left empty.
         ///
@@ -96,11 +96,9 @@ extension MIDIFile {
         /// should preserve and ignore these bytes.
         public var additionalBytes: Data? = nil
         
-        public init() { }
-        
         public init(
-            format: MIDIFile.Format,
-            timebase: MIDIFile.Timebase
+            format: MIDIFile.Format = .multipleTracksSynchronous,
+            timebase: MIDIFile.AnyTimebase = .default()
         ) {
             self.format = format
             self.timebase = timebase
@@ -108,8 +106,8 @@ extension MIDIFile {
         }
         
         public init(
-            format: MIDIFile.Format,
-            timebase: MIDIFile.Timebase,
+            format: MIDIFile.Format = .multipleTracksSynchronous,
+            timebase: MIDIFile.AnyTimebase = .default(),
             additionalBytes: some DataProtocol
         ) {
             self.format = format

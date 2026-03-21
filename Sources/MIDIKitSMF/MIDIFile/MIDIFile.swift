@@ -20,7 +20,7 @@ public struct MIDIFile {
     }
     
     /// Specify whether the MIDI file stores time values in bars & beats (musical) or timecode
-    public var timebase: Timebase {
+    public var timebase: AnyTimebase {
         get { header.timebase }
         set { header.timebase = newValue }
     }
@@ -69,7 +69,7 @@ public struct MIDIFile {
     /// Initialize from header parameters and chunks.
     public init(
         format: Format = .multipleTracksSynchronous,
-        timebase: Timebase = .default(),
+        timebase: AnyTimebase = .default(),
         chunks: [AnyChunk] = []
     ) {
         self.format = format
@@ -81,7 +81,7 @@ public struct MIDIFile {
     @_disfavoredOverload
     public init(
         format: Format = .multipleTracksSynchronous,
-        timebase: Timebase = .default(),
+        timebase: AnyTimebase = .default(),
         chunks: some Sequence<AnyChunk> = []
     ) {
         self.format = format
@@ -92,7 +92,7 @@ public struct MIDIFile {
     /// Initialize from header parameters and track chunks.
     public init(
         format: Format = .multipleTracksSynchronous,
-        timebase: Timebase = .default(),
+        timebase: AnyTimebase = .default(),
         tracks: [TrackChunk]
     ) {
         self.format = format
@@ -104,7 +104,7 @@ public struct MIDIFile {
     @_disfavoredOverload
     public init(
         format: Format = .multipleTracksSynchronous,
-        timebase: Timebase = .default(),
+        timebase: AnyTimebase = .default(),
         tracks: some Sequence<TrackChunk>
     ) {
         self.format = format
