@@ -98,7 +98,7 @@ extension MIDIFileEvent {
         }
         
         /// The frame rate associated with the SMPTE offset.
-        public var frameRate: MIDIFile.SMPTEOffsetFrameRate = .fps30
+        public var frameRate: MIDIFile.FrameRate = .fps30
         
         // MARK: - Init
         
@@ -119,7 +119,7 @@ extension MIDIFileEvent {
             sec: UInt8,
             fr: UInt8,
             subFr: UInt8 = 0,
-            frRate: MIDIFile.SMPTEOffsetFrameRate = .fps30
+            frRate: MIDIFile.FrameRate = .fps30
         ) {
             frameRate = frRate
             
@@ -193,7 +193,7 @@ extension MIDIFileEvent {
         sec: UInt8,
         fr: UInt8,
         subFr: UInt8 = 0,
-        frRate: MIDIFile.SMPTEOffsetFrameRate = .fps30
+        frRate: MIDIFile.FrameRate = .fps30
     ) -> Self {
         .smpteOffset(
             delta: delta,
@@ -318,7 +318,7 @@ extension MIDIFileEvent.SMPTEOffset: MIDIFileEvent.Payload {
             }
         }
         
-        guard let readFrameRate = MIDIFile.SMPTEOffsetFrameRate(rawValue: readFrameRateBits)
+        guard let readFrameRate = MIDIFile.FrameRate(midi1SMFRawTrackOffsetByte: readFrameRateBits)
         else {
             // this should never happen, but trap error any way
             throw .malformed(
@@ -386,7 +386,7 @@ extension MIDIFileEvent.SMPTEOffset: MIDIFileEvent.Payload {
         var data = D()
         
         data += Self.prefixBytes // start bytes
-        data += [(frameRate.rawValue << 5) + hours] // hour & frame rate
+        data += [(frameRate.midi1SMFRawTrackOffsetEventByte << 5) + hours] // hour & frame rate
         data += [minutes] // minutes
         data += [seconds] // seconds
         data += [frames] // frames
@@ -441,9 +441,9 @@ extension Timecode {
     /// > SMPTE- based tracks which specify a different frame subdivision for delta-times.
     public var scaledToMIDIFileSMPTEFrameRate: (
         scaledTimecode: Timecode?,
-        smpteFR: MIDIFile.SMPTEOffsetFrameRate
+        smpteFR: MIDIFile.FrameRate
     ) {
-        let midiFileSMPTEFrameRate = frameRate.midiFileSMPTEOffsetRate
+        let midiFileSMPTEFrameRate = frameRate.midiFileSMPTEFrameRate
         
         var scaledTC = try? converted(to: midiFileSMPTEFrameRate.timecodeRate)
         
@@ -475,7 +475,7 @@ extension Timecode {
 extension TimecodeFrameRate {
     /// Returns the best corresponding MIDI File SMPTE Offset frame rate to represent the timecode
     /// frame rate.
-    public var midiFileSMPTEOffsetRate: MIDIFile.SMPTEOffsetFrameRate {
+    public var midiFileSMPTEFrameRate: MIDIFile.FrameRate {
         switch self {
         case .fps23_976: .fps24 // as output from Pro Tools
         case .fps24: .fps24 // as output from Pro Tools
@@ -504,7 +504,7 @@ extension TimecodeFrameRate {
     }
 }
 
-extension MIDIFile.SMPTEOffsetFrameRate {
+extension MIDIFile.FrameRate {
     /// Returns exact `Timecode` frame rate that matches the MIDI File SMPTE Offset frame rate.
     public var timecodeRate: TimecodeFrameRate {
         switch self {

@@ -83,7 +83,7 @@ extension MIDIFile.Timebase {
             self = .musical(ticksPerQuarterNote: ticks)
             
         case 0b1: // timecode
-            guard let fr = MIDIFile.FrameRate(rawValue: byte1 & 0b01111111) else {
+            guard let fr = MIDIFile.FrameRate(midi1SMFRawHeaderByte: byte1 & 0b01111111) else {
                 return nil
             }
             let ticks = byte2
@@ -113,7 +113,7 @@ extension MIDIFile.Timebase {
             
         case let .timecode(smpteFormat, ticksPerFrame):
             [
-                smpteFormat.rawValue + 0b10000000,
+                smpteFormat.midi1SMFRawFileHeaderByte + 0b10000000,
                 ticksPerFrame
             ]
                 .toData()

@@ -134,6 +134,22 @@ extension MIDIFile.AnyChunk {
     }
 }
 
+// MARK: - MIDIFile.SMPTEOffsetFrameRate
+
+extension MIDIFile {
+    @_documentation(visibility: internal)
+    @available(*, deprecated, renamed: "FrameRate")
+    public typealias SMPTEOffsetFrameRate = FrameRate
+}
+
+extension TimecodeFrameRate {
+    @_documentation(visibility: internal)
+    @available(*, deprecated, renamed: "midiFileSMPTEFrameRate")
+    public var midiFileSMPTEOffsetRate: MIDIFile.FrameRate {
+        midiFileSMPTEFrameRate
+    }
+}
+
 // MARK: - MIDIFile.Timebase
 
 extension MIDIFile.Timebase {
