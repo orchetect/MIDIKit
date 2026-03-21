@@ -61,7 +61,7 @@ midiFile.format // type 0, 1, or 2 MIDI file
 midiFile.timebase // musical or timecode-based
 ```
 
-Read and write tracks using the `tracks` property can be accessed to return only the tracks as a typed array:
+Read and write tracks using the `tracks` property:
 
 ```swift
 for track in midiFile.tracks {
@@ -88,7 +88,7 @@ midiFile.tracks[0] = newTrack
 midiFile.tracks.remove(at: 0)
 ```
 
-Accessing all chunks, including non-track chunks:
+Alternatively, all chunks can be accessed (including non-track chunks):
 
 ```swift
 for chunk in midiFile.chunks {
