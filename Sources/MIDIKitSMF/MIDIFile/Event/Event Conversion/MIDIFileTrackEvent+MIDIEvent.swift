@@ -1,5 +1,5 @@
 //
-//  MIDIFile Track Event+MIDIEvent.swift
+//  MIDIFileTrackEvent+MIDIEvent.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //

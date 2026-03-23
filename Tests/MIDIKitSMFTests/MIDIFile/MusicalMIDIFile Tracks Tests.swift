@@ -1,5 +1,5 @@
 //
-//  MIDIFile Tracks Tests.swift
+//  MusicalMIDIFile Tracks Tests.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
@@ -8,7 +8,7 @@ import Foundation
 import MIDIKitSMF
 import Testing
 
-@Suite struct MIDIFile_Tracks_Tests {
+@Suite struct MusicalMIDIFile_Tracks_Tests {
     @Test
     func tracksProperty_NoOtherChunksPresent() async throws {
         let trackA = MusicalMIDIFile.TrackChunk(events: [
