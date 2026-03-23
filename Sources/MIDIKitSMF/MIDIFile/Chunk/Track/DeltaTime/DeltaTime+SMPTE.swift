@@ -4,6 +4,8 @@
 //  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
+import SwiftTimecodeCore
+
 // MARK: - Static Constructors
 
 extension MIDIFile.TrackChunk.DeltaTime where Timebase == SMPTEMIDIFileTimebase {
@@ -35,5 +37,26 @@ extension MIDIFile.TrackChunk.DeltaTime where Timebase == SMPTEMIDIFileTimebase 
             rate: rate
         )
         return .offset(smpteOffset, ticksPerFrame: ticksPerFrame)
+    }
+}
+
+// MARK: - Methods
+
+extension MIDIFile.TrackChunk.DeltaTime where Timebase == SMPTEMIDIFileTimebase {
+    /// Returns the SMPTE timecode duration of the delta time using the specified timebase.
+    /// Ensure the frame rate and `ticksPerFrame` value are the same values specified in the MIDI file header.
+    public func timecodeInterval(
+        frameRate: MIDIFileFrameRate,
+        ticksPerFrame: UInt8
+    ) -> TimecodeInterval {
+        let frames = Double(ticks) / Double(ticksPerFrame)
+        do {
+            let tc = try Timecode(.frames(.combined(frames: frames)), at: frameRate.timecodeRate)
+            return TimecodeInterval(tc)
+        } catch {
+            assertionFailure("Failed to form timecode from MIDI file delta time.")
+            let tc = Timecode(.zero, at: frameRate.timecodeRate)
+            return TimecodeInterval(tc)
+        }
     }
 }
