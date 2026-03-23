@@ -13,9 +13,9 @@ extension MIDIFile {
     /// Decode sequentially, without concurrency.
     mutating func decode(
         data: some DataProtocol & Sendable,
-        options: DecodeOptions,
+        options: MIDIFileDecodeOptions,
         predicate: DecodePredicate?
-    ) throws(MIDIFile.DecodeError) {
+    ) throws(MIDIFileDecodeError) {
         let parser = try Parser(data: data, options: options)
         
         header = parser.fileDescriptor.header
@@ -31,9 +31,9 @@ extension MIDIFile {
     @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
     mutating func decode(
         data: some DataProtocol & Sendable,
-        options: DecodeOptions,
+        options: MIDIFileDecodeOptions,
         predicate: DecodePredicate?
-    ) async throws(MIDIFile.DecodeError) {
+    ) async throws(MIDIFileDecodeError) {
         let parser = try Parser(data: data, options: options)
         
         header = parser.fileDescriptor.header
@@ -52,10 +52,10 @@ extension MIDIFile {
     @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
     mutating func decode(
         data: some DataProtocol & Sendable,
-        options: DecodeOptions,
+        options: MIDIFileDecodeOptions,
         predicate: DecodePredicate?,
         parsedChunk: @escaping ChunkDecodeBlock
-    ) async throws(MIDIFile.DecodeError) {
+    ) async throws(MIDIFileDecodeError) {
         let parser = try Parser(data: data, options: options)
         
         header = parser.fileDescriptor.header

@@ -8,11 +8,13 @@ import Foundation
 import MIDIKitCore
 internal import MIDIKitInternals
 
-extension [MIDIFile.AnyChunk] {
+extension Array {
     /// Updates tracks in-place with new tracks. If the number of tracks differ, outstanding tracks will be
     /// appended or removed as necessary.
-    mutating func updateTracks(with newTracks: [MIDIFile.TrackChunk]) {
-        let oldTracksIndices = trackIndices
+    mutating func updateTracks<Timebase: MIDIFileTimebase>(
+        with newTracks: [MIDIFile<Timebase>.TrackChunk]
+    ) where Element == MIDIFile<Timebase>.AnyChunk {
+        let oldTracksIndices = trackIndices()
         let newTracksIndices = newTracks.indices
         
         // determine list of operations

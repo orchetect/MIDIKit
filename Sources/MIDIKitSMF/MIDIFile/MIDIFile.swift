@@ -8,19 +8,22 @@ import Foundation
 import MIDIKitCore
 
 /// Standard MIDI Files (SMF) object. Read or write MIDI file contents.
-public struct MIDIFile {
+public struct MIDIFile<Timebase: MIDIFileTimebase> {
+    /// The timebase of the MIDI file.
+    public typealias Timebase = Timebase
+    
     // MARK: - Properties
     
-    var header: HeaderChunk = .init()
+    var header: HeaderChunk = HeaderChunk()
     
-    /// MIDI File Format to use when writing MIDI file.
-    public var format: Format {
+    /// MIDI file format to use when writing MIDI file.
+    public var format: MIDIFileFormat {
         get { header.format }
         set { header.format = newValue }
     }
     
     /// Specify whether the MIDI file stores time values in bars & beats (musical) or timecode
-    public var timebase: AnyTimebase {
+    public var timebase: Timebase {
         get { header.timebase }
         set { header.timebase = newValue }
     }
@@ -35,11 +38,11 @@ public struct MIDIFile {
         _read { yield _chunks }
         _modify {
             yield &_chunks
-            _tracks = Array(_chunks.tracks)
+            _tracks = Array(_chunks.tracks())
         }
         set {
             _chunks = newValue
-            _tracks = Array(newValue.tracks)
+            _tracks = Array(newValue.tracks())
         }
     }
     private var _chunks: [AnyChunk] = []
@@ -68,8 +71,8 @@ public struct MIDIFile {
     
     /// Initialize from header parameters and chunks.
     public init(
-        format: Format = .multipleTracksSynchronous,
-        timebase: AnyTimebase = .default(),
+        format: MIDIFileFormat = .multipleTracksSynchronous,
+        timebase: Timebase = .default(),
         chunks: [AnyChunk] = []
     ) {
         self.format = format
@@ -80,9 +83,9 @@ public struct MIDIFile {
     /// Initialize from header parameters and chunks.
     @_disfavoredOverload
     public init(
-        format: Format = .multipleTracksSynchronous,
-        timebase: AnyTimebase = .default(),
-        chunks: some Sequence<AnyChunk> = []
+        format: MIDIFileFormat = .multipleTracksSynchronous,
+        timebase: Timebase = .default(),
+        chunks: some Sequence<AnyChunk>
     ) {
         self.format = format
         self.timebase = timebase
@@ -91,8 +94,8 @@ public struct MIDIFile {
     
     /// Initialize from header parameters and track chunks.
     public init(
-        format: Format = .multipleTracksSynchronous,
-        timebase: AnyTimebase = .default(),
+        format: MIDIFileFormat = .multipleTracksSynchronous,
+        timebase: Timebase = .default(),
         tracks: [TrackChunk]
     ) {
         self.format = format
@@ -103,8 +106,8 @@ public struct MIDIFile {
     /// Initialize from header parameters and track chunks.
     @_disfavoredOverload
     public init(
-        format: Format = .multipleTracksSynchronous,
-        timebase: AnyTimebase = .default(),
+        format: MIDIFileFormat = .multipleTracksSynchronous,
+        timebase: Timebase = .default(),
         tracks: some Sequence<TrackChunk>
     ) {
         self.format = format

@@ -14,23 +14,23 @@ extension MIDIFile {
     /// Track: `MTrk` chunk type.
     public struct TrackChunk {
         /// Storage for events in the track.
-        public var events: [MIDIFileEvent] = []
+        public var events: [Event] = []
         
         /// The delta time after the final event, just before the end-of-track.
         /// Typically this is `0`. A non-zero value is tantamount to empty track length prior to the end-of-track.
-        public var deltaTimeBeforeEndOfTrack: MIDIFileEvent.DeltaTime = .none
+        public var deltaTimeBeforeEndOfTrack: DeltaTime = .none
         
         /// Instance a new empty MIDI file track.
         public init() { }
         
         /// Instance a new MIDI file track with events.
-        public init(events: [MIDIFileEvent]) {
+        public init(events: [Event]) {
             self.events = events
         }
         
         /// Instance a new MIDI file track with events.
         @_disfavoredOverload
-        public init(events: some Sequence<MIDIFileEvent>) {
+        public init(events: some Sequence<Event>) {
             self.events = Array(events)
         }
     }
@@ -78,8 +78,8 @@ extension MIDIFile.TrackChunk {
     func descriptionBuilder(
         maxEventCount: Int?,
         deltaPadLength: Int,
-        deltaDesc: (MIDIFileEvent.DeltaTime) -> String,
-        eventDesc: (any MIDIFileEvent.Payload) -> String
+        deltaDesc: (DeltaTime) -> String,
+        eventDesc: (any MIDIFileTrackEventPayload) -> String
     ) -> String {
         // sanitize inputs
         let maxEventCount = maxEventCount?.clamped(to: 0...)
@@ -98,10 +98,10 @@ extension MIDIFile.TrackChunk {
             }
             
             for event in outputEvents {
-                let deltaString = deltaDesc(event.smfUnwrappedEvent.delta)
+                let deltaString = deltaDesc(event.delta)
                     .padding(toLength: deltaPadLength, withPad: " ", startingAt: 0)
                 
-                outputString += "    \(deltaString) \(eventDesc(event.smfUnwrappedEvent.event))"
+                outputString += "    \(deltaString) \(eventDesc(event.event.unwrapped))"
                     .newLined
             }
             
@@ -126,20 +126,5 @@ extension MIDIFile.TrackChunk {
 
 extension MIDIFile.TrackChunk {
     /// The 3-byte sequence that must appear at the end of every track.
-    public static let trackEndByes: [UInt8] = [0xFF, 0x2F, 0x00]
-}
-
-// MARK: - Methods
-
-extension MIDIFile.TrackChunk {
-    /// Returns ``events`` mapped to their quarter-note beat position from the start of the track.
-    /// This is computed, so avoid repeated calls to this method.
-    /// Ensure the `ppq` (ticks per quarter note) supplied is the same as used in the MIDI file.
-    public func eventsAtQuarterNotePositions(atPPQ ppq: UInt16) -> [(beat: Double, event: MIDIFileEvent)] {
-        var position = 0.0
-        return events.map {
-            position += $0.delta.quarterNoteBeats(atPPQ: ppq)
-            return (beat: position, event: $0)
-        }
-    }
+    public static var trackEndByes: [UInt8] { [0xFF, 0x2F, 0x00] }
 }

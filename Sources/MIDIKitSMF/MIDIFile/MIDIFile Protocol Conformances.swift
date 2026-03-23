@@ -37,7 +37,7 @@ extension MIDIFile: CustomStringConvertible {
             chunkDesc: {
                 switch $0 {
                 case let .track(track): track.description(maxEventCount: maxTrackEventCount)
-                case let .unrecognized(unrecognizedChunk): unrecognizedChunk.description
+                case let .undefined(chunk): chunk.description
                 }
             }
         )
@@ -57,7 +57,7 @@ extension MIDIFile: CustomDebugStringConvertible {
             chunkDesc: {
                 switch $0 {
                 case let .track(track): track.debugDescription(maxEventCount: maxTrackEventCount)
-                case let .unrecognized(unrecognizedChunk): unrecognizedChunk.debugDescription
+                case let .undefined(chunk): chunk.debugDescription
                 }
             }
         )
@@ -66,8 +66,8 @@ extension MIDIFile: CustomDebugStringConvertible {
 
 extension MIDIFile {
     func descriptionBuilder(
-        formatDesc: (Format) -> String,
-        timebaseDesc: (AnyTimebase) -> String,
+        formatDesc: (MIDIFileFormat) -> String,
+        timebaseDesc: (Timebase) -> String,
         chunkDesc: (_ chunk: AnyChunk) -> String
     ) -> String {
         var outputString = ""

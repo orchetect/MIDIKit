@@ -21,13 +21,13 @@ extension MIDIFile.HeaderChunk {
     /// header bytes past the first 14 bytes and continue parsing as normal. Additional bytes are possible
     /// if/when there is an addition to the Standard MIDI File spec that formally defines them.
     /// (At which point, we can update our parser to parse the additional bytes.)
-    static let midi1SMFMinimumRawBytesLength = 14
+    static var midi1SMFMinimumRawBytesLength: Int { 14 }
     
     /// Init from MIDI file data stream.
     static func initFrom<D: DataProtocol>(
         midi1SMFRawBytesStream stream: D,
         allowMultiTrackFormat0: Bool
-    ) throws(MIDIFile.DecodeError) -> (header: Self, trackCount: Int, bufferLength: Int) {
+    ) throws(MIDIFileDecodeError) -> (header: Self, trackCount: Int, bufferLength: Int) {
         // check for at least the minimum expected byte count
         guard stream.count >= Self.midi1SMFMinimumRawBytesLength else {
             throw .malformed(
@@ -35,7 +35,7 @@ extension MIDIFile.HeaderChunk {
             )
         }
         
-        return try stream.withDataParser { parser throws(MIDIFile.DecodeError) in
+        return try stream.withDataParser { parser throws(MIDIFileDecodeError) in
             // Header descriptor
             
             guard (try? parser.read(bytes: 4).toUInt8Bytes()) == Self.identifier.string.toASCIIBytes()
@@ -78,7 +78,7 @@ extension MIDIFile.HeaderChunk {
     static func initFrom<D: DataProtocol>(
         midi1SMFRawBytes: D,
         allowMultiTrackFormat0: Bool
-    ) throws(MIDIFile.DecodeError) -> (header: Self, trackCount: Int) {
+    ) throws(MIDIFileDecodeError) -> (header: Self, trackCount: Int) {
         // check for at least the minimum expected byte count
         guard midi1SMFRawBytes.count >= Self.midi1SMFMinimumRawBytesLength else {
             throw .malformed(
@@ -86,7 +86,7 @@ extension MIDIFile.HeaderChunk {
             )
         }
         
-        return try midi1SMFRawBytes.withDataParser { parser throws(MIDIFile.DecodeError) in
+        return try midi1SMFRawBytes.withDataParser { parser throws(MIDIFileDecodeError) in
             // Header descriptor
             
             guard (try? parser.read(bytes: 4).toUInt8Bytes()) == Self.identifier.string.toASCIIBytes()
@@ -127,7 +127,7 @@ extension MIDIFile.HeaderChunk {
                 .toUInt16(from: .bigEndian),
                 (0 ... 2).contains(rawFileFormat),
                 let fileFormatUInt8 = UInt8(exactly: rawFileFormat),
-                let format = MIDIFile.Format(rawValue: fileFormatUInt8)
+                let format = MIDIFileFormat(rawValue: fileFormatUInt8)
             else {
                 throw .malformed(
                     "Could not read MIDI file format from file header."
@@ -152,7 +152,7 @@ extension MIDIFile.HeaderChunk {
                 )
             }
             
-            guard let timebase = MIDIFile.AnyTimebase(data: timeDivision) else {
+            guard let timebase = Timebase(data: timeDivision) else {
                 throw .malformed(
                     "Could not decode timebase."
                 )

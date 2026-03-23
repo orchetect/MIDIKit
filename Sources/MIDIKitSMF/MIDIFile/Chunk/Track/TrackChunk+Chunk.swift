@@ -4,29 +4,10 @@
 //  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
-extension MIDIFile.TrackChunk: MIDIFile.Chunk {
-    public struct Identifier: MIDIFile.ChunkIdentifier {
-        public let string: String = "MTrk"
-        
-        public init() { }
-    }
+extension MIDIFile.TrackChunk: MIDIFileChunk {
+    public typealias Identifier = TrackMIDIFileChunkIdentifier
     
     public var identifier: Identifier { Self.identifier }
     
-    public static let identifier: Identifier = .init()
-}
-
-// MARK: - Static Constructors
-
-extension MIDIFile.AnyChunk {
-    /// Track: `MTrk` chunk type.
-    public static func track(_ events: [MIDIFileEvent]) -> Self {
-        .track(.init(events: events))
-    }
-    
-    /// Track: `MTrk` chunk type.
-    @_disfavoredOverload
-    public static func track(_ events: some Sequence<MIDIFileEvent>) -> Self {
-        .track(.init(events: events))
-    }
+    public static var identifier: Identifier { .init() }
 }

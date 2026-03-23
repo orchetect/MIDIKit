@@ -17,8 +17,8 @@ extension MIDIFile {
     /// The ``HeaderChunk`` chunk is managed automatically and is not included in this collection.
     /// Its properties can be accessed directly on the ``MIDIFile`` instance.
     public enum AnyChunk {
-        case track(_ track: MIDIFile.TrackChunk)
-        case unrecognized(_ chunk: MIDIFile.UnrecognizedChunk)
+        case track(_ track: TrackChunk)
+        case undefined(_ chunk: UndefinedChunk)
     }
 }
 
@@ -32,7 +32,7 @@ extension MIDIFile.AnyChunk: CustomStringConvertible {
     public var description: String {
         switch self {
         case let .track(track): track.description
-        case let .unrecognized(chunk): chunk.description
+        case let .undefined(chunk): chunk.description
         }
     }
 }
@@ -41,7 +41,7 @@ extension MIDIFile.AnyChunk: CustomDebugStringConvertible {
     public var debugDescription: String {
         switch self {
         case let .track(track): track.debugDescription
-        case let .unrecognized(chunk): chunk.debugDescription
+        case let .undefined(chunk): chunk.debugDescription
         }
     }
 }
@@ -49,19 +49,19 @@ extension MIDIFile.AnyChunk: CustomDebugStringConvertible {
 // MARK: - Properties
 
 extension MIDIFile.AnyChunk {
-    /// Unwraps the enum case and returns the chunk contained within, typed as ``MIDIFile/Chunk`` protocol.
-    public var unwrappedChunk: any MIDIFile.Chunk {
+    /// Unwraps the enum case and returns the chunk contained within, typed as ``MIDIFileChunk`` protocol.
+    public var unwrapped: any MIDIFileChunk {
         switch self {
         case let .track(track): track
-        case let .unrecognized(chunk): chunk
+        case let .undefined(chunk): chunk
         }
     }
     
     /// MIDI file chunk identifier.
-    public var identifier: any MIDIFile.ChunkIdentifier {
+    public var identifier: any MIDIFileChunkIdentifier {
         switch self {
         case let .track(track): track.identifier
-        case let .unrecognized(chunk): chunk.identifier
+        case let .undefined(chunk): chunk.identifier
         }
     }
     
@@ -73,10 +73,10 @@ extension MIDIFile.AnyChunk {
         }
     }
     
-    /// Returns `true` if the chunk is an unrecognized (non-track) chunk.
-    public var isUnrecognizedChunk: Bool {
+    /// Returns `true` if the chunk is an undefined (non-track) chunk.
+    public var isUndefinedChunk: Bool {
         switch self {
-        case .unrecognized: true
+        case .undefined: true
         default: false
         }
     }

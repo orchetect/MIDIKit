@@ -13,9 +13,9 @@ extension MIDIFile.TrackChunk {
     /// If the initializer returns `nil`, discard the track without throwing an error.
     public init?<D: DataProtocol>(
         midi1SMFRawBytesStream stream: D,
-        timebase: MIDIFile.AnyTimebase,
-        options: DecodeOptions
-    ) throws(MIDIFile.DecodeError) {
+        timebase: Timebase,
+        options: MIDIFileTrackDecodeOptions
+    ) throws(MIDIFileDecodeError) {
         guard stream.count >= 8 else {
             throw .malformed(
                 "There was a problem reading chunk header. Encountered end of file early."
@@ -24,7 +24,7 @@ extension MIDIFile.TrackChunk {
         
         // track header
         
-        let track: Self? = try stream.withDataParser { parser throws(MIDIFile.DecodeError) in
+        let track: Self? = try stream.withDataParser { parser throws(MIDIFileDecodeError) in
             let identifierString = try parser.toMIDIFileDecodeError(
                 malformedReason: "Missing chunk type bytes.",
                 try parser.read(bytes: 4).asciiDataToString() ?? "????"
@@ -73,27 +73,27 @@ extension MIDIFile.TrackChunk {
     /// If the initializer returns `nil`, discard the track without throwing an error.
     init?<D: DataProtocol>(
         midi1SMFRawBytes rawData: D,
-        timebase: MIDIFile.AnyTimebase,
-        options: DecodeOptions
-    ) throws(MIDIFile.DecodeError) {
+        timebase: Timebase,
+        options: MIDIFileTrackDecodeOptions
+    ) throws(MIDIFileDecodeError) {
         // sanitize inputs
         let maxEventCount = options.maxEventCount?.clamped(to: 0...)
         
         // chunk data
         
-        let track: Self? = try rawData.withDataParser { parser throws(MIDIFile.DecodeError) in
+        let track: Self? = try rawData.withDataParser { parser throws(MIDIFileDecodeError) in
             // events
             
             var endOfChunk = false
-            var newEvents: [MIDIFileEvent] = []
-            var deltaTimeBeforeEndOfTrack: MIDIFileEvent.DeltaTime = .none
+            var newEvents: [Event] = []
+            var deltaTimeBeforeEndOfTrack: DeltaTime = .none
             
             // running status
             
             var parsedEventCount = 0
             var runningStatusByte: UInt8?
             
-            do throws(MIDIFile.DecodeError) {
+            do throws(MIDIFileDecodeError) {
                 while !endOfChunk {
                     // check for early return if event count is being limited
                     if let maxEventCount, parsedEventCount >= maxEventCount { break }
@@ -105,8 +105,7 @@ extension MIDIFile.TrackChunk {
                         try parser.read(bytes: 4, advance: false)
                     )
                     
-                    guard let eventDeltaTime = MIDIFile
-                        .decodeVariableLengthValue(from: eventDeltaTimeRead)
+                    guard let eventDeltaTime = eventDeltaTimeRead.decodeVariableLengthValue()
                     else {
                         throw .malformed(
                             "Delta time variable length value could not be read and may be malformed."
@@ -142,10 +141,10 @@ extension MIDIFile.TrackChunk {
                     
                     // parse out next event
                     
-                    var foundEvent: (newEvent: MIDIFileEvent.Payload, bufferLength: Int, statusByte: UInt8)?
+                    var foundEvent: (newEvent: any MIDIFileTrackEventPayload, bufferLength: Int, statusByte: UInt8)?
                     
                     let effectiveRunningStatus: UInt8? = isStatusBytePresent ? nil : runningStatusByte
-                    if let eventType = MIDIFileEvent.EventType(
+                    if let eventType = MIDIFileTrackEventType(
                         atStartOf: readBuffer,
                         runningStatus: effectiveRunningStatus,
                         detectParameterNumberSequence: false
@@ -181,10 +180,10 @@ extension MIDIFile.TrackChunk {
                     }
                     
                     // inject delta time into event
-                    let newEventDelta: MIDIFileEvent.DeltaTime = .ticks(UInt32(eventDeltaTime.value))
+                    let newEventDelta: DeltaTime = .ticks(UInt32(eventDeltaTime.value))
                     
                     // add new event to new track
-                    newEvents.append(foundEvent.newEvent.smfWrappedEvent(delta: newEventDelta))
+                    newEvents.append(Event(delta: newEventDelta, event: foundEvent.newEvent.wrapped))
                     try parser.toMIDIFileDecodeError(try parser.seek(by: foundEvent.bufferLength))
                     
                     // store event in running status
@@ -212,85 +211,9 @@ extension MIDIFile.TrackChunk {
             // bundle RPN and NRPN events
             
             if options.bundleRPNAndNRPNEvents {
-                func bundleRPNAndNRPN(index: [MIDIFileEvent].Index) {
-                    if newEvents[eventsIndex].eventType == .cc,
-                       case let .cc(_, msbEvent) = newEvents[eventsIndex],
-                       msbEvent.controller == .rpnMSB || msbEvent.controller == .nrpnMSB,
-                       newEvents.indices.contains(eventsIndex.advanced(by: 2)), // minimum 3 events required, also prevents crash
-                       newEvents[eventsIndex ... eventsIndex.advanced(by: 2)].allSatisfy({ $0.eventType == .cc }), // all CC events
-                       newEvents[eventsIndex ... eventsIndex.advanced(by: 2)].map({ $0.event()?.channel }).allSatisfy({ $0 == msbEvent.channel }) // same channel
-                    {
-                        let dataEntryLSBIndex = eventsIndex.advanced(by: 3)
-                        let dataEntryLSB: (
-                            delta: MIDIFileEvent.DeltaTime, value: UInt7
-                        )? = if newEvents.indices.contains(dataEntryLSBIndex),
-                                                      case let .cc(dataEntryLSBDelta, dataEntryLSBCCEvent) = newEvents[dataEntryLSBIndex],
-                                                      dataEntryLSBCCEvent.controller == .lsb(for: .dataEntry),
-                                                      dataEntryLSBCCEvent.channel == msbEvent.channel // must match channel
-                        { (dataEntryLSBDelta, dataEntryLSBCCEvent.value.midi1Value) } else { nil }
-                        
-                        let eventsSlice = newEvents[eventsIndex ... eventsIndex.advanced(by: 2)]
-                        let extractedEvents: [(delta: MIDIFileEvent.DeltaTime, event: MIDIEvent.CC)] = eventsSlice.compactMap {
-                            guard case let .cc(_, e) = $0 else { return nil }
-                            return (delta: $0.delta, event: e)
-                        }
-                        guard extractedEvents.count == eventsSlice.count else {
-                            assertionFailure("Error unwrapping CC events while bundling RPN/NRPN messages. This should never happen.")
-                            return
-                        }
-                        
-                        let channel = extractedEvents[0].event.channel
-                        
-                        let param = UInt7Pair(
-                            msb: extractedEvents[0].event.value.midi1Value,
-                            lsb: extractedEvents[1].event.value.midi1Value
-                        )
-                        let dataEntryMSB = extractedEvents[2].event.value.midi1Value
-                        let totalDelta = extractedEvents.map(\.delta).reduce(into: 0) {
-                            $0 += $1.ticks
-                        } + (dataEntryLSB?.delta.ticks ?? 0)
-                        
-                        var replacementEvent: MIDIFileEvent?
-                        
-                        if extractedEvents[0].event.controller == .rpnMSB,
-                           extractedEvents[1].event.controller == .rpnLSB,
-                           extractedEvents[2].event.controller == .dataEntry
-                        {
-                            let rc = MIDIEvent.RegisteredController(
-                                parameter: param,
-                                data: (msb: dataEntryMSB, lsb: dataEntryLSB?.value)
-                            )
-                            let event: MIDIEvent.RPN = .init(rc, channel: channel)
-                            
-                            let rpn: MIDIFileEvent = .rpn(delta: .ticks(totalDelta), event: event)
-                            replacementEvent = rpn
-                        } else if extractedEvents[0].event.controller == .nrpnMSB,
-                                  extractedEvents[1].event.controller == .nrpnLSB,
-                                  extractedEvents[2].event.controller == .dataEntry
-                        {
-                            let rc = MIDIEvent.AssignableController(
-                                parameter: param,
-                                data: (msb: dataEntryMSB, lsb: dataEntryLSB?.value)
-                            )
-                            let event: MIDIEvent.NRPN = .init(rc, channel: channel)
-                            
-                            let nrpn: MIDIFileEvent = .nrpn(delta: .ticks(totalDelta), event: event)
-                            replacementEvent = nrpn
-                        }
-                        
-                        if let replacementEvent {
-                            let oldEventCount = dataEntryLSB != nil ? 4 : 3
-                            newEvents.replaceSubrange(
-                                eventsIndex ..< eventsIndex.advanced(by: oldEventCount),
-                                with: [replacementEvent]
-                            )
-                        }
-                    }
-                }
-                
                 var eventsIndex = newEvents.startIndex
                 while eventsIndex < newEvents.endIndex {
-                    bundleRPNAndNRPN(index: eventsIndex)
+                    Self.bundleRPNAndNRPN(index: eventsIndex, in: &newEvents)
                     eventsIndex += 1
                 }
             }
@@ -301,5 +224,95 @@ extension MIDIFile.TrackChunk {
         }
         
         if let track { self = track } else { return nil }
+    }
+    
+    static func bundleRPNAndNRPN(index eventsIndex: [Event].Index, in newEvents: inout [Event]) {
+        guard newEvents[eventsIndex].event.eventType == .cc
+        else { return }
+        
+        guard case let .cc(msbEvent) = newEvents[eventsIndex].event
+        else { return }
+        
+        guard msbEvent.controller == .rpnMSB || msbEvent.controller == .nrpnMSB
+        else { return }
+        
+        // minimum 3 events required, also prevents crash
+        guard newEvents.indices.contains(eventsIndex.advanced(by: 2))
+        else { return }
+        
+        // all CC events
+        guard newEvents[eventsIndex ... eventsIndex.advanced(by: 2)]
+            .allSatisfy({ $0.event.eventType == .cc })
+        else { return }
+        
+        // same channel
+        guard newEvents[eventsIndex ... eventsIndex.advanced(by: 2)]
+            .map({ $0.event.midiEvent()?.channel })
+            .allSatisfy({ $0 == msbEvent.channel })
+        else { return }
+        
+        let dataEntryLSBIndex = eventsIndex.advanced(by: 3)
+        let dataEntryLSB: (
+            delta: MIDIFile.TrackChunk.DeltaTime, value: UInt7
+        )? = if newEvents.indices.contains(dataEntryLSBIndex),
+                case let .cc(dataEntryLSBCCEvent) = newEvents[dataEntryLSBIndex].event,
+                dataEntryLSBCCEvent.controller == .lsb(for: .dataEntry),
+                dataEntryLSBCCEvent.channel == msbEvent.channel // must match channel
+        { (newEvents[dataEntryLSBIndex].delta, dataEntryLSBCCEvent.value.midi1Value) } else { nil }
+        
+        let eventsSlice = newEvents[eventsIndex ... eventsIndex.advanced(by: 2)]
+        let extractedEvents: [(delta: DeltaTime, event: MIDIEvent.CC)] = eventsSlice.compactMap {
+            guard case let .cc(e) = $0.event else { return nil }
+            return (delta: $0.delta, event: e)
+        }
+        guard extractedEvents.count == eventsSlice.count else {
+            assertionFailure("Error unwrapping CC events while bundling RPN/NRPN messages. This should never happen.")
+            return
+        }
+        
+        let channel = extractedEvents[0].event.channel
+        
+        let param = UInt7Pair(
+            msb: extractedEvents[0].event.value.midi1Value,
+            lsb: extractedEvents[1].event.value.midi1Value
+        )
+        let dataEntryMSB = extractedEvents[2].event.value.midi1Value
+        let totalDelta = extractedEvents.map(\.delta).reduce(into: 0) {
+            $0 += $1.ticks
+        } + (dataEntryLSB?.delta.ticks ?? 0)
+        
+        var replacementEvent: Event?
+        
+        if extractedEvents[0].event.controller == .rpnMSB,
+           extractedEvents[1].event.controller == .rpnLSB,
+           extractedEvents[2].event.controller == .dataEntry
+        {
+            let rc = MIDIEvent.RegisteredController(
+                parameter: param,
+                data: (msb: dataEntryMSB, lsb: dataEntryLSB?.value)
+            )
+            let midiEvent: MIDIEvent.RPN = .init(rc, channel: channel)
+            let midiTrackEvent: MIDIFileTrackEvent = .rpn(midiEvent)
+            replacementEvent = Event(delta: .ticks(totalDelta), event: midiTrackEvent)
+        } else if extractedEvents[0].event.controller == .nrpnMSB,
+                  extractedEvents[1].event.controller == .nrpnLSB,
+                  extractedEvents[2].event.controller == .dataEntry
+        {
+            let rc = MIDIEvent.AssignableController(
+                parameter: param,
+                data: (msb: dataEntryMSB, lsb: dataEntryLSB?.value)
+            )
+            let midiEvent: MIDIEvent.NRPN = .init(rc, channel: channel)
+            let midiTrackEvent: MIDIFileTrackEvent = .nrpn(midiEvent)
+            replacementEvent = Event(delta: .ticks(totalDelta), event: midiTrackEvent)
+        }
+        
+        if let replacementEvent {
+            let oldEventCount = dataEntryLSB != nil ? 4 : 3
+            newEvents.replaceSubrange(
+                eventsIndex ..< eventsIndex.advanced(by: oldEventCount),
+                with: [replacementEvent]
+            )
+        }
     }
 }

@@ -10,10 +10,11 @@ internal import MIDIKitInternals
 
 // MARK: - Sequence Methods
 
-extension Sequence<MIDIFile.AnyChunk> {
+extension Sequence {
     /// Lazily returns tracks contained in the sequence.
-    public var tracks: LazyMapSequence<LazyFilterSequence<LazyMapSequence<LazySequence<Self>.Elements, MIDIFile.TrackChunk?>>, MIDIFile.TrackChunk> {
-        lazy.compactMap { (anyChunk) -> MIDIFile.TrackChunk? in
+    public func tracks<Timebase: MIDIFileTimebase>() -> some Collection<MIDIFile<Timebase>.TrackChunk>
+    where Element == MIDIFile<Timebase>.AnyChunk {
+        lazy.compactMap { (anyChunk) -> MIDIFile<Timebase>.TrackChunk? in
             guard case let .track(track) = anyChunk else { return nil }
             return track
         }
@@ -22,9 +23,10 @@ extension Sequence<MIDIFile.AnyChunk> {
 
 // MARK: - Collection Methods
 
-extension Collection<MIDIFile.AnyChunk> where Self: RangeReplaceableCollection, Index == Int {
+extension Collection where Self: RangeReplaceableCollection, Index == Int {
     /// Returns all indices of tracks contained in the sequence.
-    public var trackIndices: IndexSet {
+    public func trackIndices<Timebase: MIDIFileTimebase>() -> IndexSet
+    where Element == MIDIFile<Timebase>.AnyChunk {
         let f = indices.filter { self[$0].isTrackChunk }
         return IndexSet(f)
     }

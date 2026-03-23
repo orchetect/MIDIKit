@@ -1,5 +1,5 @@
 //
-//  MusicalTimebase.swift
+//  MusicalMIDIFileTimebase.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
@@ -8,47 +8,45 @@ import Foundation
 import MIDIKitCore
 //internal import MIDIKitInternals
 
-extension MIDIFile {
-    /// Musical MIDI file timebase: Ticks per quarter note (PPQN / PPQ / PPQBase / TPQN).
-    ///
-    /// Common values: `96`, `120`, `480`, `960`.
-    /// Can also be a larger value if needed.
-    ///
-    /// It is recommended to consider evenly divisible sub-divisions when determining this value.
-    /// When in doubt, a value of 480 or 960 is sufficient for most use cases.
-    /// Cubase, for example, exports at `480` by default but is user-definable.
-    ///
-    /// > Tip:
-    /// >
-    /// > This is by far the most common timebase used in MIDI files.
-    public struct MusicalTimebase {
-        /// The number of ticks per musical quarter-note.
-        /// A tick represents the timing resolution - the smallest, most finite unit of time duration possible in a MIDI file track.
-        public var ticksPerQuarterNote: UInt16
-        
-        public init(ticksPerQuarterNote ppq: UInt16) {
-            self.ticksPerQuarterNote = ppq
-        }
+/// Musical MIDI file timebase: Ticks per quarter note (PPQN / PPQ / PPQBase / TPQN).
+///
+/// Common values: `96`, `120`, `480`, `960`.
+/// Can also be a larger value if needed.
+///
+/// It is recommended to consider evenly divisible sub-divisions when determining this value.
+/// When in doubt, a value of 480 or 960 is sufficient for most use cases.
+/// Cubase, for example, exports at `480` by default but is user-definable.
+///
+/// > Tip:
+/// >
+/// > This is by far the most common timebase used in MIDI files.
+public struct MusicalMIDIFileTimebase {
+    /// The number of ticks per musical quarter-note.
+    /// A tick represents the timing resolution - the smallest, most finite unit of time duration possible in a MIDI file track.
+    public var ticksPerQuarterNote: UInt16
+    
+    public init(ticksPerQuarterNote ppq: UInt16) {
+        self.ticksPerQuarterNote = ppq
     }
 }
 
-extension MIDIFile.MusicalTimebase: Equatable { }
+extension MusicalMIDIFileTimebase: Equatable { }
 
-extension MIDIFile.MusicalTimebase: Hashable { }
+extension MusicalMIDIFileTimebase: Hashable { }
 
-extension MIDIFile.MusicalTimebase: Identifiable {
+extension MusicalMIDIFileTimebase: Identifiable {
     public var id: Self { self }
 }
 
-extension MIDIFile.MusicalTimebase: Sendable { }
+extension MusicalMIDIFileTimebase: Sendable { }
 
-extension MIDIFile.MusicalTimebase: CustomStringConvertible {
+extension MusicalMIDIFileTimebase: CustomStringConvertible {
     public var description: String {
         "Musical: \(ticksPerQuarterNote) ticks per quarter"
     }
 }
 
-extension MIDIFile.MusicalTimebase: CustomDebugStringConvertible {
+extension MusicalMIDIFileTimebase: CustomDebugStringConvertible {
     public var debugDescription: String {
         "Timebase(" + description + ")"
     }
@@ -56,7 +54,11 @@ extension MIDIFile.MusicalTimebase: CustomDebugStringConvertible {
 
 // MARK: - Static Constructors
 
-extension MIDIFile.Timebase where Self == MIDIFile.MusicalTimebase {
+extension MIDIFileTimebase where Self == MusicalMIDIFileTimebase {
+    public static func `default`() -> MusicalMIDIFileTimebase {
+        MusicalMIDIFileTimebase(ticksPerQuarterNote: 960)
+    }
+        
     /// Musical MIDI file timebase: Ticks per quarter note (PPQN / PPQ / PPQBase / TPQN).
     ///
     /// Common values: `96`, `120`, `480`, `960`.
@@ -70,11 +72,11 @@ extension MIDIFile.Timebase where Self == MIDIFile.MusicalTimebase {
     /// >
     /// > This is by far the most common timebase used in MIDI files.
     public static func musical(ticksPerQuarterNote ppq: UInt16) -> Self {
-        MIDIFile.MusicalTimebase(ticksPerQuarterNote: ppq)
+        MusicalMIDIFileTimebase(ticksPerQuarterNote: ppq)
     }
 }
 
-extension MIDIFile.AnyTimebase {
+extension AnyMIDIFileTimebase {
     /// Musical MIDI file timebase: Ticks per quarter note (PPQN / PPQ / PPQBase / TPQN).
     ///
     /// Common values: `96`, `120`, `480`, `960`.
@@ -88,11 +90,11 @@ extension MIDIFile.AnyTimebase {
     /// >
     /// > This is by far the most common timebase used in MIDI files.
     public static func musical(ticksPerQuarterNote ppq: UInt16) -> Self {
-        .musical(MIDIFile.MusicalTimebase(ticksPerQuarterNote: ppq))
+        .musical(MusicalMIDIFileTimebase(ticksPerQuarterNote: ppq))
     }
 }
 
-extension MIDIFile.MusicalTimebase: MIDIFile.Timebase {
+extension MusicalMIDIFileTimebase: MIDIFileTimebase {
     // MARK: - Decoding
     
     public init?(data: some DataProtocol) {

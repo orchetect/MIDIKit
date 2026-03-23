@@ -8,49 +8,47 @@ import Foundation
 import MIDIKitCore
 //internal import MIDIKitInternals
 
-extension MIDIFile {
-    /// SMPTE timecode MIDI file timebase: Ticks per frame at a SMPTE frame rate.
-    ///
-    /// Typical `ticksPerFrame` values are:
-    /// - `4` (corresponding to MIDI Timecode)
-    /// - `8`
-    /// - `10`
-    /// - `80` (corresponding to SMPTE bit resolution)
-    /// - `100` (corresponding to percent of a frame)
-    ///
-    /// For example, a timing resolution of 1 ms can be achieved by specifying 25 fps and 40 sub-frames (ticks per frame).
-    ///
-    /// > Tip:
-    /// >
-    /// > SMPTE timebase is *very rarely* used as a MIDI file timebase. The most common timebase is ``MusicalTimebase``.
-    public struct SMPTETimebase {
-        public var frameRate: FrameRate
-        public var ticksPerFrame: UInt8
-        
-        public init(frameRate: FrameRate, ticksPerFrame: UInt8) {
-            self.frameRate = frameRate
-            self.ticksPerFrame = ticksPerFrame
-        }
+/// SMPTE timecode MIDI file timebase: Ticks per frame at a SMPTE frame rate.
+///
+/// Typical `ticksPerFrame` values are:
+/// - `4` (corresponding to MIDI Timecode)
+/// - `8`
+/// - `10`
+/// - `80` (corresponding to SMPTE bit resolution)
+/// - `100` (corresponding to percent of a frame)
+///
+/// For example, a timing resolution of 1 ms can be achieved by specifying 25 fps and 40 sub-frames (ticks per frame).
+///
+/// > Tip:
+/// >
+/// > SMPTE timebase is *very rarely* used as a MIDI file timebase. The most common timebase is ``MusicalTimebase``.
+public struct SMPTEMIDIFileTimebase {
+    public var frameRate: MIDIFileFrameRate
+    public var ticksPerFrame: UInt8
+    
+    public init(frameRate: MIDIFileFrameRate, ticksPerFrame: UInt8) {
+        self.frameRate = frameRate
+        self.ticksPerFrame = ticksPerFrame
     }
 }
 
-extension MIDIFile.SMPTETimebase: Equatable { }
+extension SMPTEMIDIFileTimebase: Equatable { }
 
-extension MIDIFile.SMPTETimebase: Hashable { }
+extension SMPTEMIDIFileTimebase: Hashable { }
 
-extension MIDIFile.SMPTETimebase: Identifiable {
+extension SMPTEMIDIFileTimebase: Identifiable {
     public var id: Self { self }
 }
 
-extension MIDIFile.SMPTETimebase: Sendable { }
+extension SMPTEMIDIFileTimebase: Sendable { }
 
-extension MIDIFile.SMPTETimebase: CustomStringConvertible {
+extension SMPTEMIDIFileTimebase: CustomStringConvertible {
     public var description: String {
         "Timecode: \(ticksPerFrame) ticks per frame @ \(frameRate)"
     }
 }
 
-extension MIDIFile.SMPTETimebase: CustomDebugStringConvertible {
+extension SMPTEMIDIFileTimebase: CustomDebugStringConvertible {
     public var debugDescription: String {
         "Timebase(" + description + ")"
     }
@@ -58,7 +56,11 @@ extension MIDIFile.SMPTETimebase: CustomDebugStringConvertible {
 
 // MARK: - Static Constructors
 
-extension MIDIFile.Timebase where Self == MIDIFile.SMPTETimebase {
+extension MIDIFileTimebase where Self == SMPTEMIDIFileTimebase {
+    public static func `default`() -> SMPTEMIDIFileTimebase {
+        SMPTEMIDIFileTimebase(frameRate: .fps30, ticksPerFrame: 40)
+    }
+    
     /// SMPTE timecode MIDI file timebase: Ticks per frame at a SMPTE frame rate.
     ///
     /// Typical `ticksPerFrame` values are:
@@ -74,14 +76,14 @@ extension MIDIFile.Timebase where Self == MIDIFile.SMPTETimebase {
     /// >
     /// > SMPTE timebase is *very rarely* used as a MIDI file timebase. The most common timebase is ``MusicalTimebase``.
     public static func smpte(
-        frameRate: MIDIFile.FrameRate,
+        frameRate: MIDIFileFrameRate,
         ticksPerFrame: UInt8
     ) -> Self {
-        MIDIFile.SMPTETimebase(frameRate: frameRate, ticksPerFrame: ticksPerFrame)
+        SMPTEMIDIFileTimebase(frameRate: frameRate, ticksPerFrame: ticksPerFrame)
     }
 }
 
-extension MIDIFile.AnyTimebase {
+extension AnyMIDIFileTimebase {
     /// SMPTE timecode MIDI file timebase: Ticks per frame at a SMPTE frame rate.
     ///
     /// Typical `ticksPerFrame` values are:
@@ -97,14 +99,14 @@ extension MIDIFile.AnyTimebase {
     /// >
     /// > SMPTE timebase is *very rarely* used as a MIDI file timebase. The most common timebase is ``MusicalTimebase``.
     public static func smpte(
-        frameRate: MIDIFile.FrameRate,
+        frameRate: MIDIFileFrameRate,
         ticksPerFrame: UInt8
     ) -> Self {
-        .smpte(MIDIFile.SMPTETimebase(frameRate: frameRate, ticksPerFrame: ticksPerFrame))
+        .smpte(SMPTEMIDIFileTimebase(frameRate: frameRate, ticksPerFrame: ticksPerFrame))
     }
 }
 
-extension MIDIFile.SMPTETimebase: MIDIFile.Timebase {
+extension SMPTEMIDIFileTimebase: MIDIFileTimebase {
     // MARK: - Decoding
     
     public init?(data: some DataProtocol) {
@@ -115,7 +117,7 @@ extension MIDIFile.SMPTETimebase: MIDIFile.Timebase {
         let byte1 = data[atOffset: 0]
         let byte2 = data[atOffset: 1]
         
-        guard let fr = MIDIFile.FrameRate(midi1SMFRawHeaderByte: byte1 & 0b01111111) else {
+        guard let fr = MIDIFileFrameRate(midi1SMFRawHeaderByte: byte1 & 0b01111111) else {
             return nil
         }
         let ticks = byte2

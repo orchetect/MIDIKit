@@ -9,23 +9,22 @@ import MIDIKitCore
 
 extension MIDIFile.TrackChunk {
     public func midi1SMFRawBytes(
-        using timebase: MIDIFile.AnyTimebase
-    ) throws(MIDIFile.EncodeError) -> Data {
+        using timebase: Timebase
+    ) throws(MIDIFileEncodeError) -> Data {
         try midi1SMFRawBytes(as: Data.self, using: timebase)
     }
     
     public func midi1SMFRawBytes<D: MutableDataProtocol>(
         as dataType: D.Type,
-        using timebase: MIDIFile.AnyTimebase
-    ) throws(MIDIFile.EncodeError) -> D {
+        using timebase: Timebase
+    ) throws(MIDIFileEncodeError) -> D {
         // assemble chunk body without header or length
         
         var bodyData = D()
         
         for event in events {
-            let unwrapped = event.smfUnwrappedEvent
-            bodyData.append(deltaTime: unwrapped.delta.ticks)
-            bodyData.append(contentsOf: unwrapped.event.midi1SMFRawBytes(as: D.self))
+            bodyData.append(deltaTime: event.delta.ticks)
+            bodyData.append(contentsOf: event.event.unwrapped.midi1SMFRawBytes(as: D.self))
         }
         
         bodyData.append(deltaTime: deltaTimeBeforeEndOfTrack.ticks)

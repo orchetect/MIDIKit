@@ -4,14 +4,10 @@
 //  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
-extension MIDIFile.HeaderChunk: MIDIFile.Chunk {
-    public struct Identifier: MIDIFile.ChunkIdentifier {
-        public let string: String = "MThd"
-        
-        public init() { }
-    }
+extension MIDIFile.HeaderChunk: MIDIFileChunk {
+    public typealias Identifier = HeaderMIDIFileChunkIdentifier
     
     public var identifier: Identifier { Self.identifier }
     
-    public static let identifier: Identifier = .init()
+    public static var identifier: Identifier { .init() }
 }

@@ -16,9 +16,9 @@ extension MIDIFile {
     /// - Tip: Consider using the `async` overload of this initializer, as it is much more performant.
     public init(
         data: some DataProtocol & Sendable,
-        options: DecodeOptions = DecodeOptions(),
+        options: MIDIFileDecodeOptions = MIDIFileDecodeOptions(),
         predicate: DecodePredicate? = nil
-    ) throws(DecodeError) {
+    ) throws(MIDIFileDecodeError) {
         try decode(
             data: data,
             options: options,
@@ -30,9 +30,9 @@ extension MIDIFile {
     @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
     public init(
         data: some DataProtocol & Sendable,
-        options: DecodeOptions = DecodeOptions(),
+        options: MIDIFileDecodeOptions = MIDIFileDecodeOptions(),
         predicate: DecodePredicate? = nil
-    ) async throws(DecodeError) {
+    ) async throws(MIDIFileDecodeError) {
         try await decode(
             data: data,
             options: options,
@@ -48,10 +48,10 @@ extension MIDIFile {
     @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
     public init(
         data: some DataProtocol & Sendable,
-        options: DecodeOptions = DecodeOptions(),
+        options: MIDIFileDecodeOptions = MIDIFileDecodeOptions(),
         predicate: DecodePredicate? = nil,
         parsedChunk: @escaping ChunkDecodeBlock
-    ) async throws(DecodeError) {
+    ) async throws(MIDIFileDecodeError) {
         try await decode(
             data: data,
             options: options,
@@ -69,9 +69,9 @@ extension MIDIFile {
     /// - Tip: Consider using the `async` overload of this initializer, as it is much more performant.
     public init(
         path: String,
-        options: DecodeOptions = DecodeOptions(),
+        options: MIDIFileDecodeOptions = MIDIFileDecodeOptions(),
         predicate: DecodePredicate? = nil
-    ) throws(DecodeError) {
+    ) throws(MIDIFileDecodeError) {
         let url = try Self.url(forFilePath: path)
         try self.init(url: url, options: options, predicate: predicate)
     }
@@ -80,9 +80,9 @@ extension MIDIFile {
     @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
     public init(
         path: String,
-        options: DecodeOptions = DecodeOptions(),
+        options: MIDIFileDecodeOptions = MIDIFileDecodeOptions(),
         predicate: DecodePredicate? = nil
-    ) async throws(DecodeError) {
+    ) async throws(MIDIFileDecodeError) {
         let url = try Self.url(forFilePath: path)
         try await self.init(url: url, options: options, predicate: predicate)
     }
@@ -95,15 +95,15 @@ extension MIDIFile {
     @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
     public init(
         path: String,
-        options: DecodeOptions = DecodeOptions(),
+        options: MIDIFileDecodeOptions = MIDIFileDecodeOptions(),
         predicate: DecodePredicate? = nil,
         parsedChunk: @escaping ChunkDecodeBlock
-    ) async throws(DecodeError) {
+    ) async throws(MIDIFileDecodeError) {
         let url = try Self.url(forFilePath: path)
         try await self.init(url: url, options: options, predicate: predicate, parsedChunk: parsedChunk)
     }
     
-    static func url(forFilePath path: String) throws(DecodeError) -> URL {
+    static func url(forFilePath path: String) throws(MIDIFileDecodeError) -> URL {
         guard FileManager.sendableDefault.fileExists(atPath: path) else {
             throw .fileNotFound
         }
@@ -124,9 +124,9 @@ extension MIDIFile {
     /// - Tip: Consider using the `async` overload of this initializer, as it is much more performant.
     public init(
         url: URL,
-        options: DecodeOptions = DecodeOptions(),
+        options: MIDIFileDecodeOptions = MIDIFileDecodeOptions(),
         predicate: DecodePredicate? = nil
-    ) throws(DecodeError) {
+    ) throws(MIDIFileDecodeError) {
         let data = try Self.data(forFileURL: url)
         try decode(
             data: data,
@@ -139,9 +139,9 @@ extension MIDIFile {
     @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
     public init(
         url: URL,
-        options: DecodeOptions = DecodeOptions(),
+        options: MIDIFileDecodeOptions = MIDIFileDecodeOptions(),
         predicate: DecodePredicate? = nil
-    ) async throws(DecodeError) {
+    ) async throws(MIDIFileDecodeError) {
         let data = try Self.data(forFileURL: url)
         try await decode(
             data: data,
@@ -158,10 +158,10 @@ extension MIDIFile {
     @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
     public init(
         url: URL,
-        options: DecodeOptions = DecodeOptions(),
+        options: MIDIFileDecodeOptions = MIDIFileDecodeOptions(),
         predicate: DecodePredicate? = nil,
         parsedChunk: @escaping ChunkDecodeBlock
-    ) async throws(DecodeError) {
+    ) async throws(MIDIFileDecodeError) {
         let data = try Self.data(forFileURL: url)
         try await decode(
             data: data,
@@ -171,7 +171,7 @@ extension MIDIFile {
         )
     }
     
-    static func data(forFileURL url: URL) throws(DecodeError) -> Data {
+    static func data(forFileURL url: URL) throws(MIDIFileDecodeError) -> Data {
         do { return try Data(contentsOf: url) }
         catch { throw .fileReadError }
     }

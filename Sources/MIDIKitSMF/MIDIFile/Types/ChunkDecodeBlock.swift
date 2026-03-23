@@ -10,6 +10,6 @@ extension MIDIFile {
         _ fileHeader: HeaderChunk,
         _ chunkCount: Int,
         _ chunkIndex: Int,
-        _ result: Result<AnyChunk, DecodeError>
+        _ result: Result<AnyChunk, MIDIFileDecodeError>
     ) -> Void
 }

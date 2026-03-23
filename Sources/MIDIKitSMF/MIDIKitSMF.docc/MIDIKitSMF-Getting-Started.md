@@ -95,7 +95,7 @@ for chunk in midiFile.chunks {
     switch chunk {
     case let .track(track): // `track` is MIDIFile.TrackChunk
         // chunk is a track
-    case let .unrecognized(chunk): // `chunk` is MIDIFile.UnrecognizedChunk
+    case let .undefined(chunk): // `chunk` is MIDIFile.UndefinedChunk
         // chunk is a non-track chunk
     }
 }
