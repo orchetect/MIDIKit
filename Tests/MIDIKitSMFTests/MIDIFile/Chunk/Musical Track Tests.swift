@@ -1,5 +1,5 @@
 //
-//  Track Tests.swift
+//  Musical Track Tests.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
@@ -9,7 +9,7 @@ import MIDIKitInternals
 @testable import MIDIKitSMF
 import Testing
 
-@Suite struct Chunk_Track_Tests {
+@Suite struct Musical_Track_Tests {
     // swiftformat:options --wrapcollections preserve
     // swiftformat:disable spaceInsideParens spaceInsideBrackets spacearoundoperators
     // swiftformat:options --maxwidth none
