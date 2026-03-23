@@ -9,16 +9,17 @@ import MIDIKitInternals
 @testable import MIDIKitSMF
 import Testing
 
-@Suite struct DeltaTime_Tests {
+@Suite struct Musical_DeltaTime_Tests {
     // swiftformat:options --wrapcollections preserve
     // swiftformat:disable spaceInsideParens spaceInsideBrackets spacearoundoperators
     // swiftformat:options --maxwidth none
     
     /// Test the Musical timebase-specific static constructors on `DeltaTime`.
     @Test
-    func musicalStaticConstructors() async throws {
+    func musicalStaticConstructors_240ppq() async throws {
         typealias Delta = MusicalMIDIFile.TrackChunk.DeltaTime
         
+        // triplet == false (default)
         #expect(Delta.noteWhole(ppq: 240).ticks == 960)
         #expect(Delta.noteHalf(ppq: 240).ticks == 480)
         #expect(Delta.noteQuarter(ppq: 240).ticks == 240)
@@ -29,6 +30,20 @@ import Testing
         #expect(Delta.note128th(ppq: 240).ticks == 8) // note: 7.5 aliased (rounded)
         #expect(Delta.note256th(ppq: 240).ticks == 4) // note: 3.75 aliased (rounded)
         
+        // triplet == true
+        #expect(Delta.note8th(triplet: true, ppq: 240).ticks == 80)
+        #expect(Delta.note16th(triplet: true, ppq: 240).ticks == 40)
+        #expect(Delta.note32nd(triplet: true, ppq: 240).ticks == 20)
+        #expect(Delta.note64th(triplet: true, ppq: 240).ticks == 10)
+        #expect(Delta.note128th(triplet: true, ppq: 240).ticks == 5)
+        #expect(Delta.note256th(triplet: true, ppq: 240).ticks == 3) // note: 2.5 aliased (rounded)
+    }
+    
+    @Test
+    func musicalStaticConstructors_480ppq() async throws {
+        typealias Delta = MusicalMIDIFile.TrackChunk.DeltaTime
+        
+        // triplet == false (default)
         #expect(Delta.noteWhole(ppq: 480).ticks == 1920)
         #expect(Delta.noteHalf(ppq: 480).ticks == 960)
         #expect(Delta.noteQuarter(ppq: 480).ticks == 480)
@@ -39,6 +54,20 @@ import Testing
         #expect(Delta.note128th(ppq: 480).ticks == 15)
         #expect(Delta.note256th(ppq: 480).ticks == 8) // note: 7.5 aliased (rounded)
         
+        // triplet == true
+        #expect(Delta.note8th(triplet: true, ppq: 480).ticks == 160)
+        #expect(Delta.note16th(triplet: true, ppq: 480).ticks == 80)
+        #expect(Delta.note32nd(triplet: true, ppq: 480).ticks == 40)
+        #expect(Delta.note64th(triplet: true, ppq: 480).ticks == 20)
+        #expect(Delta.note128th(triplet: true, ppq: 480).ticks == 10)
+        #expect(Delta.note256th(triplet: true, ppq: 480).ticks == 5)
+    }
+    
+    @Test
+    func musicalStaticConstructors_960ppq() async throws {
+        typealias Delta = MusicalMIDIFile.TrackChunk.DeltaTime
+        
+        // triplet == false (default)
         #expect(Delta.noteWhole(ppq: 960).ticks == 3840)
         #expect(Delta.noteHalf(ppq: 960).ticks == 1920)
         #expect(Delta.noteQuarter(ppq: 960).ticks == 960)
@@ -48,6 +77,19 @@ import Testing
         #expect(Delta.note64th(ppq: 960).ticks == 60)
         #expect(Delta.note128th(ppq: 960).ticks == 30)
         #expect(Delta.note256th(ppq: 960).ticks == 15)
+        
+        // triplet == true
+        #expect(Delta.note8th(triplet: true, ppq: 960).ticks == 320)
+        #expect(Delta.note16th(triplet: true, ppq: 960).ticks == 160)
+        #expect(Delta.note32nd(triplet: true, ppq: 960).ticks == 80)
+        #expect(Delta.note64th(triplet: true, ppq: 960).ticks == 40)
+        #expect(Delta.note128th(triplet: true, ppq: 960).ticks == 20)
+        #expect(Delta.note256th(triplet: true, ppq: 960).ticks == 10)
+    }
+    
+    @Test
+    func musicalStaticConstructors_beats() async throws {
+        typealias Delta = MusicalMIDIFile.TrackChunk.DeltaTime
         
         #expect(Delta.beats(-1.0, ppq: 480).ticks == 0)
         #expect(Delta.beats(0.0, ppq: 480).ticks == 0)
@@ -71,10 +113,12 @@ import Testing
         #expect(Delta.note256th(ppq: 0).ticks == 0)
         #expect(Delta.note256th(ppq: UInt16.max).ticks == 1024) // 1023.984375 rounded
     }
-    
+}
+
+@Suite struct SMPTE_DeltaTime_Tests {
     /// Test the SMPTE timebase-specific static constructors on `DeltaTime`.
     @Test
-    func smpteStaticConstructors() async throws {
+    func smpteStaticConstructors_fromSMPTEOffset() async throws {
         typealias Delta = SMPTEMIDIFile.TrackChunk.DeltaTime
         
         // MIDIFileTrackEvent.SMPTEOffset
@@ -86,6 +130,11 @@ import Testing
         #expect(Delta.offset(MIDIFileTrackEvent.SMPTEOffset(hr: 00, min: 00, sec: 00, fr: 00, rate: .fps25), ticksPerFrame: 40).ticks == 0)
         #expect(Delta.offset(MIDIFileTrackEvent.SMPTEOffset(hr: 00, min: 01, sec: 20, fr: 10, rate: .fps25), ticksPerFrame: 40).ticks == 80_400)
         #expect(Delta.offset(MIDIFileTrackEvent.SMPTEOffset(hr: 01, min: 01, sec: 20, fr: 10, rate: .fps25), ticksPerFrame: 40).ticks == 3_680_400)
+    }
+    
+    @Test
+    func smpteStaticConstructors_offset() async throws {
+        typealias Delta = SMPTEMIDIFile.TrackChunk.DeltaTime
         
         // offset(hr:min:sec:fr:subFr:rate:ticksPerFrame:)
         
