@@ -141,7 +141,7 @@ import Testing
     }
     
     @Test
-    func eventsAtQuarterNotePositions() async throws {
+    func eventsAtQuarterNotePositions_eventsAtStart() async throws {
         let ppq: UInt16 = 480
         var midiFile = MusicalMIDIFile(timebase: .musical(ticksPerQuarterNote: UInt16(ppq)))
         
@@ -182,21 +182,36 @@ import Testing
         
         let trackOne = try #require(midiFile.tracks.first)
         
-        let eventsAtBeatPositions = trackOne.eventsAtQuarterNotePositions(atPPQ: ppq)
+        // eventsAtQuarterNotePositions
+        do {
+            let events = trackOne.eventsAtQuarterNotePositions(atPPQ: ppq)
+            
+            #expect(events.count == 11)
+            
+            #expect(events[0].beat == 0.0) // text
+            #expect(events[1].beat == 0.0) // smpte offset
+            #expect(events[2].beat == 0.0) // time sig
+            #expect(events[3].beat == 0.0) // tempo
+            #expect(events[4].beat == 1.0) // cc
+            #expect(events[5].beat == 2.0) // cc
+            #expect(events[6].beat == 3.0) // cc
+            #expect(events[7].beat == 4.0) // cc
+            #expect(events[8].beat == 5.0) // cc
+            #expect(events[9].beat == 5.5) // cc
+            #expect(events[10].beat == 5.625) // cc
+        }
         
-        #expect(eventsAtBeatPositions.count == 11)
-        
-        #expect(eventsAtBeatPositions[0].beat == 0.0) // text
-        #expect(eventsAtBeatPositions[1].beat == 0.0) // smpte
-        #expect(eventsAtBeatPositions[2].beat == 0.0) // time sig
-        #expect(eventsAtBeatPositions[3].beat == 0.0) // tempo
-        #expect(eventsAtBeatPositions[4].beat == 1.0) // cc
-        #expect(eventsAtBeatPositions[5].beat == 2.0) // cc
-        #expect(eventsAtBeatPositions[6].beat == 3.0) // cc
-        #expect(eventsAtBeatPositions[7].beat == 4.0) // cc
-        #expect(eventsAtBeatPositions[8].beat == 5.0) // cc
-        #expect(eventsAtBeatPositions[9].beat == 5.5) // cc
-        #expect(eventsAtBeatPositions[10].beat == 5.625) // cc
+        //
+        do {
+            let events = trackOne.eventsAtStart
+            
+            #expect(events.count == 4)
+            
+            #expect(events[0] == .text(type: .trackOrSequenceName, string: "Seq-1")) // text
+            #expect(events[1] == .smpteOffset(hr: 0, min: 0, sec: 0, fr: 0, subFr: 0, rate: .fps29_97d)) // smpte offset
+            #expect(events[2] == .timeSignature(numerator: 4, denominator: 2)) // time sig
+            #expect(events[3] == .tempo(bpm: 120.0)) // tempo
+        }
     }
     
     @Test

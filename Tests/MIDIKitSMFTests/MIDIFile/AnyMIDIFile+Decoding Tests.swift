@@ -29,7 +29,7 @@ import Testing
         let anyMIDIFile = try await AnyMIDIFile(data: kMIDIFile.smpte)
         
         #expect(anyMIDIFile.format == .multipleTracksSynchronous)
-        #expect(anyMIDIFile.timebase == .smpte(frameRate: .fps30, ticksPerFrame: 40))
+        #expect(anyMIDIFile.timebase == .smpte(frameRate: .fps25, ticksPerFrame: 40))
         
         guard case let .smpte(midiFile) = anyMIDIFile else {
             Issue.record()

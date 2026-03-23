@@ -28,7 +28,7 @@ import Testing
                 ),
                 .smpteOffset(
                     delta: .none,
-                    hr: 0,
+                    hr: 1,
                     min: 0,
                     sec: 0,
                     fr: 0,
@@ -47,18 +47,20 @@ import Testing
         
         let trackOne = try #require(midiFile.tracks.first)
         
+        // note that by default, this method checks for a SMPTE Offset event at time==0 (start of the track)
+        // and uses it as the track's origin (offset) with which to offset all track event timecodes
         let e = trackOne.eventsAtTimecodeLocations(frameRate: .fps25, ticksPerFrame: tpf)
         
         #expect(e.count == 9)
         
-        #expect(try e[0].timecode == Timecode(.components(h: 00, m: 00, s: 00, f: 00, sf: 00), at: .fps25)) // text
-        #expect(try e[1].timecode == Timecode(.components(h: 00, m: 00, s: 00, f: 00, sf: 00), at: .fps25)) // smpte offset
-        #expect(try e[2].timecode == Timecode(.components(h: 00, m: 00, s: 00, f: 12, sf: 50), at: .fps25)) // cc
-        #expect(try e[3].timecode == Timecode(.components(h: 00, m: 00, s: 01, f: 00, sf: 00), at: .fps25)) // cc
-        #expect(try e[4].timecode == Timecode(.components(h: 00, m: 00, s: 01, f: 12, sf: 50), at: .fps25)) // cc
-        #expect(try e[5].timecode == Timecode(.components(h: 00, m: 00, s: 02, f: 00, sf: 00), at: .fps25)) // cc
-        #expect(try e[6].timecode == Timecode(.components(h: 00, m: 00, s: 02, f: 04, sf: 00), at: .fps25)) // cc
-        #expect(try e[7].timecode == Timecode(.components(h: 00, m: 00, s: 03, f: 00, sf: 00), at: .fps25)) // cc
-        #expect(try e[8].timecode == Timecode(.components(h: 01, m: 00, s: 03, f: 00, sf: 00), at: .fps25)) // cc
+        #expect(try e[0].timecode == Timecode(.components(h: 01, m: 00, s: 00, f: 00, sf: 00), at: .fps25)) // text
+        #expect(try e[1].timecode == Timecode(.components(h: 01, m: 00, s: 00, f: 00, sf: 00), at: .fps25)) // smpte offset
+        #expect(try e[2].timecode == Timecode(.components(h: 01, m: 00, s: 00, f: 12, sf: 50), at: .fps25)) // cc
+        #expect(try e[3].timecode == Timecode(.components(h: 01, m: 00, s: 01, f: 00, sf: 00), at: .fps25)) // cc
+        #expect(try e[4].timecode == Timecode(.components(h: 01, m: 00, s: 01, f: 12, sf: 50), at: .fps25)) // cc
+        #expect(try e[5].timecode == Timecode(.components(h: 01, m: 00, s: 02, f: 00, sf: 00), at: .fps25)) // cc
+        #expect(try e[6].timecode == Timecode(.components(h: 01, m: 00, s: 02, f: 04, sf: 00), at: .fps25)) // cc
+        #expect(try e[7].timecode == Timecode(.components(h: 01, m: 00, s: 03, f: 00, sf: 00), at: .fps25)) // cc
+        #expect(try e[8].timecode == Timecode(.components(h: 02, m: 00, s: 03, f: 00, sf: 00), at: .fps25)) // cc
     }
 }
