@@ -15,13 +15,23 @@ extension MIDIFile.TrackChunk where Timebase == SMPTEMIDIFileTimebase {
     /// This is computed each time this method is called, so avoid repeated calls to this method where possible.
     public func eventsAtTimecodeLocations(
         frameRate: MIDIFileFrameRate,
-        ticksPerFrame: UInt8
+        ticksPerFrame: UInt8,
+        origin originOverride: Timecode? = nil
     ) -> [(timecode: Timecode, event: Event)] {
-        // TODO: origin might need to reference a SMPTE offset event if one appears at time==0 in the track, but could be overridden by a `originTimecode: Timecode` parameter to this method to force an origin offset
-        let origin: Timecode = .init(.zero, at: frameRate.timecodeRate)
+        // determine origin timecode for the track
+        // if a SMPTE offset event appears at time==0 in the track, use it
+        // but could be overridden by a `originTimecode: Timecode` parameter to this method to force an origin offset
+        let origin: Timecode = if let originOverride { originOverride } else {
+            if let origin,
+               let originConvertedIfNeeded = try? origin.converted(to: frameRate.timecodeRate)
+            {
+                originConvertedIfNeeded
+            } else {
+                Timecode(.zero, at: frameRate.timecodeRate)
+            }
+        }
         
         var position: Timecode = origin
-        
         return events.map {
             let interval = $0.delta
                 .timecodeInterval(frameRate: frameRate, ticksPerFrame: ticksPerFrame)

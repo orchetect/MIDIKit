@@ -138,4 +138,15 @@ extension MIDIFile.TrackChunk {
             .prefix(while: { $0.delta == .none })
             .map(\.event)
     }
+    
+    /// Returns the timecode represented by the SMPTE offset event that appears at delta time 0 (start of track),
+    /// if such an event exists.
+    public var origin: Timecode? {
+        guard let event = eventsAtStart.filter({ $0.eventType == .smpteOffset }).first,
+              case let .smpteOffset(payload) = event
+        else {
+            return nil
+        }
+        return payload.timecode
+    }
 }
