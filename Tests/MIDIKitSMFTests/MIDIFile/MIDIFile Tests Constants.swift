@@ -145,7 +145,7 @@ enum kMIDIFile {
         0x00, 0x00, 0x00, 0x06, // 6 header bytes
         0x00, 0x01, // type 1 file
         0x00, 0x03, // 3 tracks
-        0b1000_0000 + 0b110_0010, 0x28, // smpte divisions, 40 ticks per frame
+        0b1000_0000 + 0b110_0111, 0x28, // smpte 25fps, 40 ticks per frame
         
         // chunk 1 - track
         0x4D, 0x54, 0x72, 0x6B, // "MTrk"
