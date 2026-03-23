@@ -140,6 +140,7 @@ import Testing
         #expect(parsedTrackB == track)
     }
     
+    /// This tests both `eventsAtQuarterNotePositions()` and `eventsAtStart()` using the same source data.
     @Test
     func eventsAtQuarterNotePositions_eventsAtStart() async throws {
         let ppq: UInt16 = 480
@@ -201,7 +202,7 @@ import Testing
             #expect(events[10].beat == 5.625) // cc
         }
         
-        //
+        // eventsAtStart
         do {
             let events = trackOne.eventsAtStart
             
