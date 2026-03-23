@@ -128,3 +128,14 @@ extension MIDIFile.TrackChunk {
     /// The 3-byte sequence that must appear at the end of every track.
     public static var trackEndByes: [UInt8] { [0xFF, 0x2F, 0x00] }
 }
+
+// MARK: - Properties
+
+extension MIDIFile.TrackChunk {
+    /// Returns all ``events`` that have a delta time of zero from the start of the track.
+    public var eventsAtStart: [MIDIFileTrackEvent] {
+        events
+            .prefix(while: { $0.delta == .none })
+            .map(\.event)
+    }
+}
