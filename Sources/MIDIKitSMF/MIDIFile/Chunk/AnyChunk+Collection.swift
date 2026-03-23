@@ -11,8 +11,13 @@ internal import MIDIKitInternals
 // MARK: - Sequence Methods
 
 extension Sequence {
+    public typealias LazyTracksSequence<Timebase: MIDIFileTimebase> = LazyMapSequence<
+        LazyFilterSequence<LazyMapSequence<Self, MIDIFile<Timebase>.TrackChunk?>>,
+        MIDIFile<Timebase>.TrackChunk
+    >
+    
     /// Lazily returns tracks contained in the sequence.
-    public func tracks<Timebase: MIDIFileTimebase>() -> some Collection<MIDIFile<Timebase>.TrackChunk>
+    public func tracks<Timebase: MIDIFileTimebase>() -> LazyTracksSequence<Timebase>
     where Element == MIDIFile<Timebase>.AnyChunk {
         lazy.compactMap { (anyChunk) -> MIDIFile<Timebase>.TrackChunk? in
             guard case let .track(track) = anyChunk else { return nil }
