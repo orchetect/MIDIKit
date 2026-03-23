@@ -61,9 +61,16 @@ extension MIDIFile.TrackChunk.DeltaTime where Timebase == MusicalMIDIFileTimebas
     /// Passing a beat value less than `0.0` is invalid and will always return a delta time of `0`.
     ///
     /// For example:
+    /// - `0.25` beats would equal a 16th-note
     /// - `0.5` beats would equal an 8th-note
     /// - `1.5` beats would equal a quarter- & 8th- note tied duration
     /// - `4.0` beats would equal a whole-note (in 4/4 time signature)
+    ///
+    /// > Warning:
+    /// >
+    /// > Fractions of a beat that are intended to represent triplet notes should not be expressed
+    /// > using this constructor, as floating-point beat values cannot naturally express perfect
+    /// > divisions of 3 (0.33333... repeating) and may introduce cumulative rounding errors.
     public static func beats(_ beats: Double, ppq: UInt16) -> Self {
         Self(ticks: UInt32((Double(ppq) * beats.clamped(to: 0.0...)).rounded()))
     }
