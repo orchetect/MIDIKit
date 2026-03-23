@@ -1,5 +1,5 @@
 //
-//  MIDIFile Utilities.swift
+//  MIDIFile Data Utilities.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
@@ -39,6 +39,14 @@ extension MutableDataProtocol {
         }
         
         return result
+    }
+    
+    mutating func append(deltaTime ticks: UInt32) {
+        // Variable length delta timestamp representing the number of ticks that have elapsed
+        // According to the Standard MIDI File 1.0 Spec, the entire delta-time should be at most 4
+        // bytes long.
+        
+        append(contentsOf: Self.encodeVariableLengthValue(ticks))
     }
 }
 
@@ -88,15 +96,5 @@ extension DataProtocol {
         if result > uInt28Max { return nil }
         
         return (value: Int(result), byteLength: parsedByteCount + 1)
-    }
-}
-
-extension MutableDataProtocol {
-    mutating func append(deltaTime ticks: UInt32) {
-        // Variable length delta timestamp representing the number of ticks that have elapsed
-        // According to the Standard MIDI File 1.0 Spec, the entire delta-time should be at most 4
-        // bytes long.
-        
-        append(contentsOf: Self.encodeVariableLengthValue(ticks))
     }
 }
