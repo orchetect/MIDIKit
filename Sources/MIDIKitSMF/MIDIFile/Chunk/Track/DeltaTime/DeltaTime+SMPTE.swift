@@ -23,7 +23,7 @@ extension MIDIFile.TrackChunk.DeltaTime where Timebase == SMPTEMIDIFileTimebase 
         sec: UInt8,
         fr: UInt8,
         subFr: UInt8 = 0,
-        frRate: MIDIFileFrameRate,
+        rate: MIDIFileFrameRate,
         ticksPerFrame: UInt8
     ) -> Self {
         let smpteOffset = MIDIFileTrackEvent.SMPTEOffset(
@@ -32,7 +32,7 @@ extension MIDIFile.TrackChunk.DeltaTime where Timebase == SMPTEMIDIFileTimebase 
             sec: sec,
             fr: fr,
             subFr: subFr,
-            frRate: frRate
+            rate: rate
         )
         return .offset(smpteOffset, ticksPerFrame: ticksPerFrame)
     }

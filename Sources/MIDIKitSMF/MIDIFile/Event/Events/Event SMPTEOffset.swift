@@ -112,16 +112,16 @@ extension MIDIFileTrackEvent {
         ///   - sec: Seconds value.
         ///   - fr: Frames value.
         ///   - subFr: Subframes value.
-        ///   - frRate: SMPTE frame rate.
+        ///   - rate: SMPTE frame rate.
         public init(
             hr: UInt8,
             min: UInt8,
             sec: UInt8,
             fr: UInt8,
             subFr: UInt8 = 0,
-            frRate: MIDIFileFrameRate = .fps30
+            rate: MIDIFileFrameRate
         ) {
-            frameRate = frRate
+            frameRate = rate
             
             hours = hr; hours_Validate()
             minutes = min; minutes_Validate()
@@ -184,14 +184,14 @@ extension MIDIFileTrackEvent {
     ///   - sec: Seconds value.
     ///   - fr: Frames value.
     ///   - subFr: Subframes value.
-    ///   - frRate: SMPTE frame rate.
+    ///   - rate: SMPTE frame rate.
     public static func smpteOffset(
         hr: UInt8,
         min: UInt8,
         sec: UInt8,
         fr: UInt8,
         subFr: UInt8 = 0,
-        frRate: MIDIFileFrameRate = .fps30
+        rate: MIDIFileFrameRate
     ) -> Self {
         .smpteOffset(
             .init(
@@ -200,7 +200,7 @@ extension MIDIFileTrackEvent {
                 sec: sec,
                 fr: fr,
                 subFr: subFr,
-                frRate: frRate
+                rate: rate
             )
         )
     }
@@ -241,7 +241,7 @@ extension MIDIFile.TrackChunk.Event {
     ///   - sec: Seconds value.
     ///   - fr: Frames value.
     ///   - subFr: Subframes value.
-    ///   - frRate: SMPTE frame rate.
+    ///   - rate: SMPTE frame rate.
     public static func smpteOffset(
         delta: MIDIFile.TrackChunk.DeltaTime = .none,
         hr: UInt8,
@@ -249,7 +249,7 @@ extension MIDIFile.TrackChunk.Event {
         sec: UInt8,
         fr: UInt8,
         subFr: UInt8 = 0,
-        frRate: MIDIFileFrameRate = .fps30
+        rate: MIDIFileFrameRate = .fps30
     ) -> Self {
         let event: MIDIFileTrackEvent = .smpteOffset(
             hr: hr,
@@ -257,7 +257,7 @@ extension MIDIFile.TrackChunk.Event {
             sec: sec,
             fr: fr,
             subFr: subFr,
-            frRate: frRate
+            rate: rate
         )
         return Self(delta: delta, event: event)
     }
@@ -286,7 +286,7 @@ extension MIDIFile.TrackChunk.Event {
 extension MIDIFileTrackEvent.SMPTEOffset {
     /// Returns the raw SMPTE offset timecode components.
     public var components: Timecode.Components {
-        .init(
+        Timecode.Components(
             h: Int(hours),
             m: Int(minutes),
             s: Int(seconds),

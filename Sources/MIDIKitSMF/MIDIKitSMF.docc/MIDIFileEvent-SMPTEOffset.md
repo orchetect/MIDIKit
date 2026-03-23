@@ -28,7 +28,7 @@ For documentation on the `Timecode` type, see swift-timecode documentation.
 
 ### Constructors
 
-- ``MIDIFileEvent/smpteOffset(delta:hr:min:sec:fr:subFr:frRate:)``
+- ``MIDIFileEvent/smpteOffset(delta:hr:min:sec:fr:subFr:rate:)``
 - ``MIDIFileEvent/smpteOffset(delta:scaling:)``
 
 ### Switch Case Unwrapping

@@ -35,7 +35,7 @@ import SwiftTimecodeCore
             sec: 3,
             fr: 4,
             subFr: 5,
-            frRate: .fps25
+            rate: .fps25
         )
         
         let bytes = event.midi1SMFRawBytes(as: [UInt8].self)

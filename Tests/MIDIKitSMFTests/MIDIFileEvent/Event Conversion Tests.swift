@@ -818,7 +818,7 @@ import Testing
             sec: 3,
             fr: 4,
             subFr: 0,
-            frRate: .fps29_97d
+            rate: .fps29_97d
         )
 
         // convert MIDIFileEvent case to MIDIEvent case, preserving payloads

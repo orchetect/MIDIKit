@@ -126,7 +126,7 @@ import Testing
                     sec: 0,
                     fr: 0,
                     subFr: 0,
-                    frRate: .fps29_97d
+                    rate: .fps29_97d
                 ),
                 .timeSignature(
                     delta: .none,
