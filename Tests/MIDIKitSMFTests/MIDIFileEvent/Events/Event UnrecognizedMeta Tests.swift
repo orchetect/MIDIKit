@@ -18,7 +18,7 @@ import Testing
             0x00        // length: 0 bytes to follow
         ]
         
-        let event = try MIDIFileEvent.UnrecognizedMeta(midi1SMFRawBytes: bytes)
+        let event = try MIDIFileTrackEvent.UnrecognizedMeta(midi1SMFRawBytes: bytes)
         
         #expect(event.metaType == 0x30)
         #expect(event.data == [])
@@ -26,7 +26,7 @@ import Testing
     
     @Test
     func midi1SMFRawBytes_EmptyData() async {
-        let event = MIDIFileEvent.UnrecognizedMeta(
+        let event = MIDIFileTrackEvent.UnrecognizedMeta(
             metaType: 0x30,
             data: []
         )
@@ -47,7 +47,7 @@ import Testing
             0x12        // data byte
         ]
         
-        let event = try MIDIFileEvent.UnrecognizedMeta(midi1SMFRawBytes: bytes)
+        let event = try MIDIFileTrackEvent.UnrecognizedMeta(midi1SMFRawBytes: bytes)
         
         #expect(event.metaType == 0x30)
         #expect(event.data == [0x12])
@@ -55,7 +55,7 @@ import Testing
     
     @Test
     func midi1SMFRawBytes_WithData() async {
-        let event = MIDIFileEvent.UnrecognizedMeta(
+        let event = MIDIFileTrackEvent.UnrecognizedMeta(
             metaType: 0x30,
             data: [0x12]
         )
@@ -78,7 +78,7 @@ import Testing
              0x7F]       // length: 127 bytes to follow
             + data       // data
         
-        let event = try MIDIFileEvent.UnrecognizedMeta(midi1SMFRawBytes: bytes)
+        let event = try MIDIFileTrackEvent.UnrecognizedMeta(midi1SMFRawBytes: bytes)
         
         #expect(event.metaType == 0x30)
         #expect(event.data == data)
@@ -88,7 +88,7 @@ import Testing
     func MIDI1SMFRawBytes_127Bytes() async {
         let data: [UInt8] = .init(repeating: 0x12, count: 127)
         
-        let event = MIDIFileEvent.UnrecognizedMeta(
+        let event = MIDIFileTrackEvent.UnrecognizedMeta(
             metaType: 0x30,
             data: data
         )
@@ -112,7 +112,7 @@ import Testing
              0x81, 0x00] // length: 128 bytes to follow
             + data       // data
         
-        let event = try MIDIFileEvent.UnrecognizedMeta(midi1SMFRawBytes: bytes)
+        let event = try MIDIFileTrackEvent.UnrecognizedMeta(midi1SMFRawBytes: bytes)
         
         #expect(event.metaType == 0x30)
         #expect(event.data == data)
@@ -122,7 +122,7 @@ import Testing
     func MIDI1SMFRawBytes_128Bytes() async {
         let data: [UInt8] = .init(repeating: 0x12, count: 128)
         
-        let event = MIDIFileEvent.UnrecognizedMeta(
+        let event = MIDIFileTrackEvent.UnrecognizedMeta(
             metaType: 0x30,
             data: data
         )

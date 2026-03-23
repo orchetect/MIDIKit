@@ -10,7 +10,7 @@ import Testing
 @Suite struct MIDIFile_Encoding_Tests {
     @Test
     func type0() async {
-        var midiFile = MIDIFile()
+        var midiFile = MusicalMIDIFile()
         
         midiFile.format = .singleTrack // Type 1
         midiFile.timebase = .musical(ticksPerQuarterNote: 480)
@@ -28,7 +28,7 @@ import Testing
     
     @Test
     func encodeDP8Markers() /* NOT ASYNC! */ throws {
-        var midiFile = MIDIFile()
+        var midiFile = MusicalMIDIFile()
         
         midiFile.timebase = .musical(ticksPerQuarterNote: 480)
         
@@ -119,7 +119,7 @@ import Testing
         // test if midiFile structs are equal by way of Equatable
         
         // Note: It's ok if this throws a deprecation warning. We need to test this specific method.
-        let dp8MarkersRawData = try /* NOT AWAIT! */ MIDIFile(data: kMIDIFile.dp8Markers)
+        let dp8MarkersRawData = try /* NOT AWAIT! */ MusicalMIDIFile(data: kMIDIFile.dp8Markers)
         #expect(midiFile == dp8MarkersRawData)
         
         // test if raw data is equal
@@ -130,7 +130,7 @@ import Testing
     
     @Test
     func encodeDP8Markers_aysnc() async throws {
-        var midiFile = MIDIFile()
+        var midiFile = MusicalMIDIFile()
         
         midiFile.timebase = .musical(ticksPerQuarterNote: 480)
         
@@ -220,7 +220,7 @@ import Testing
         
         // test if midiFile structs are equal by way of Equatable
         
-        let dp8MarkersRawData = try await MIDIFile(data: kMIDIFile.dp8Markers)
+        let dp8MarkersRawData = try await MusicalMIDIFile(data: kMIDIFile.dp8Markers)
         #expect(midiFile == dp8MarkersRawData)
         
         // test if raw data is equal

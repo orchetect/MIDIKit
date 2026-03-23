@@ -15,7 +15,7 @@ import Testing
     func init_midi1SMFRawBytes_A() async throws {
         let bytes: [UInt8] = [0xFF, 0x59, 0x02, 0x04, 0x00]
         
-        let event = try MIDIFileEvent.KeySignature(midi1SMFRawBytes: bytes)
+        let event = try MIDIFileTrackEvent.KeySignature(midi1SMFRawBytes: bytes)
         
         #expect(event.flatsOrSharps == 4)
         #expect(event.isMajor)
@@ -23,7 +23,7 @@ import Testing
     
     @Test
     func midi1SMFRawBytes_A() async throws {
-        let event = try #require(MIDIFileEvent.KeySignature(flatsOrSharps: 4, isMajor: true))
+        let event = try #require(MIDIFileTrackEvent.KeySignature(flatsOrSharps: 4, isMajor: true))
         
         let bytes = event.midi1SMFRawBytes(as: [UInt8].self)
         
@@ -34,7 +34,7 @@ import Testing
     func init_midi1SMFRawBytes_B() async throws {
         let bytes: [UInt8] = [0xFF, 0x59, 0x02, 0xFD, 0x01]
         
-        let event = try MIDIFileEvent.KeySignature(midi1SMFRawBytes: bytes)
+        let event = try MIDIFileTrackEvent.KeySignature(midi1SMFRawBytes: bytes)
         
         #expect(event.flatsOrSharps == -3)
         #expect(!event.isMajor)
@@ -42,7 +42,7 @@ import Testing
     
     @Test
     func midi1SMFRawBytes_B() async throws {
-        let event = try #require(MIDIFileEvent.KeySignature(flatsOrSharps: -3, isMajor: false))
+        let event = try #require(MIDIFileTrackEvent.KeySignature(flatsOrSharps: -3, isMajor: false))
         
         let bytes = event.midi1SMFRawBytes(as: [UInt8].self)
         
@@ -52,7 +52,7 @@ import Testing
     /// Ensure all enum cases have unique set of properties and there are no duplicates.
     @Test
     func checkUniqueProperties() async throws {
-        let allCases = MIDIFileEvent.KeySignature.allCases
+        let allCases = MIDIFileTrackEvent.KeySignature.allCases
         let allCasesCount = allCases.count
         
         // check total possible cases
@@ -67,7 +67,7 @@ import Testing
     
     @Test
     func propertySetters() async throws {
-        var sig: MIDIFileEvent.KeySignature = .cMajor
+        var sig: MIDIFileTrackEvent.KeySignature = .cMajor
         
         sig.flatsOrSharps = -8 // invalid, silently fails
         #expect(sig == .cMajor)

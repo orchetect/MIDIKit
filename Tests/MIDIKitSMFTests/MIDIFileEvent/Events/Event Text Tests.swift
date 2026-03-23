@@ -18,7 +18,7 @@ import Testing
             0x00        // length: 0 bytes
         ]
         
-        let event = try MIDIFileEvent.Text(midi1SMFRawBytes: bytes)
+        let event = try MIDIFileTrackEvent.Text(midi1SMFRawBytes: bytes)
         
         #expect(event.textType == .text)
         #expect(event.text == "")
@@ -26,7 +26,7 @@ import Testing
     
     @Test
     func midi1SMFRawBytes_EmptyString() async {
-        let event = MIDIFileEvent.Text(type: .text, string: "")
+        let event = MIDIFileTrackEvent.Text(type: .text, string: "")
         
         let bytes = event.midi1SMFRawBytes(as: [UInt8].self)
         
@@ -44,7 +44,7 @@ import Testing
             0x61, 0x62, 0x63, 0x64 // string characters
         ]
         
-        let event = try MIDIFileEvent.Text(midi1SMFRawBytes: bytes)
+        let event = try MIDIFileTrackEvent.Text(midi1SMFRawBytes: bytes)
         
         #expect(event.textType == .text)
         #expect(event.text == "abcd")
@@ -52,7 +52,7 @@ import Testing
     
     @Test
     func midi1SMFRawBytes_WithString() async {
-        let event = MIDIFileEvent.Text(type: .text, string: "abcd")
+        let event = MIDIFileTrackEvent.Text(type: .text, string: "abcd")
         
         let bytes = event.midi1SMFRawBytes(as: [UInt8].self)
         
@@ -68,7 +68,7 @@ import Testing
     @Test
     func textTypes() async throws {
         func textTypeTest(
-            eventType: MIDIFileEvent.Text.EventType,
+            eventType: MIDIFileTrackEvent.Text.EventType,
             eventID: UInt8
         ) throws {
             let bytes: [UInt8] = [
@@ -77,14 +77,14 @@ import Testing
                 0x61           // string characters
             ]
             
-            let event1 = MIDIFileEvent.Text(type: eventType, string: "a")
+            let event1 = MIDIFileTrackEvent.Text(type: eventType, string: "a")
             #expect(event1.midi1SMFRawBytes(as: [UInt8].self) == bytes)
             
-            let event2 = try MIDIFileEvent.Text(midi1SMFRawBytes: bytes)
+            let event2 = try MIDIFileTrackEvent.Text(midi1SMFRawBytes: bytes)
             #expect(event1 == event2)
         }
         
-        let textTypes: [MIDIFileEvent.Text.EventType: UInt8] = [
+        let textTypes: [MIDIFileTrackEvent.Text.EventType: UInt8] = [
             .text                : 0x01,
             .copyright           : 0x02,
             .trackOrSequenceName : 0x03,
@@ -114,14 +114,14 @@ import Testing
             0x48, 0x65, 0x6C, 0x6C, 0x6F
         ]
         
-        let text = try MIDIFileEvent.Text(midi1SMFRawBytes: rawData)
+        let text = try MIDIFileTrackEvent.Text(midi1SMFRawBytes: rawData)
         
         // check string integrity
         let str = "Copyright © 2000 by Some Guy Hello"
         #expect(text.text == str)
         
         // check instance equality
-        #expect(text == MIDIFileEvent.Text(copyright: str))
+        #expect(text == MIDIFileTrackEvent.Text(copyright: str))
     }
     
     @Test
@@ -133,14 +133,14 @@ import Testing
             0x6E, 0x79, 0x20, 0x44, 0x6F, 0x65, 0x0A
         ]
         
-        let text = try MIDIFileEvent.Text(midi1SMFRawBytes: rawData)
+        let text = try MIDIFileTrackEvent.Text(midi1SMFRawBytes: rawData)
         
         // check string integrity
         let str = "Sequenced by Mr. Johnny Doe\n"
         #expect(text.text == str)
         
         // check instance equality
-        #expect(text == MIDIFileEvent.Text(text: str))
+        #expect(text == MIDIFileTrackEvent.Text(text: str))
     }
     
     // TODO: add tests - edge cases etc.

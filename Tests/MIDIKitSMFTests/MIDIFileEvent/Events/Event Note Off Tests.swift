@@ -15,7 +15,7 @@ import Testing
     func init_midi1SMFRawBytes_A() async throws {
         let bytes: [UInt8] = [0x80, 0x01, 0x40]
         
-        let event = try MIDIFileEvent.NoteOff(midi1SMFRawBytes: bytes)
+        let event = try MIDIFileTrackEvent.NoteOff(midi1SMFRawBytes: bytes)
         
         #expect(event.note.number == 1)
         #expect(event.velocity == .midi1(0x40))
@@ -24,7 +24,7 @@ import Testing
     
     @Test
     func midi1SMFRawBytes_A() async {
-        let event = MIDIFileEvent.NoteOff(
+        let event = MIDIFileTrackEvent.NoteOff(
             note: 1,
             velocity: .midi1(0x40),
             channel: 0
@@ -39,7 +39,7 @@ import Testing
     func init_midi1SMFRawBytes_B() async throws {
         let bytes: [UInt8] = [0x81, 0x3C, 0x7F]
         
-        let event = try MIDIFileEvent.NoteOff(midi1SMFRawBytes: bytes)
+        let event = try MIDIFileTrackEvent.NoteOff(midi1SMFRawBytes: bytes)
         
         #expect(event.note.number == 60)
         #expect(event.velocity == .midi1(0x7F))
@@ -48,7 +48,7 @@ import Testing
     
     @Test
     func midi1SMFRawBytes_B() async {
-        let event = MIDIFileEvent.NoteOff(
+        let event = MIDIFileTrackEvent.NoteOff(
             note: 60,
             velocity: .midi1(0x7F),
             channel: 1

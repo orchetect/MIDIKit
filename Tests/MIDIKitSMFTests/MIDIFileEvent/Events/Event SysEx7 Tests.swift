@@ -149,11 +149,11 @@ import Testing
         #expect(event.data == [0x12, 0x34])
     }
     
-    // MARK: - MIDIFileEvent.SysEx7
+    // MARK: - MIDIFileTrackEvent.SysEx7
     
     @Test
     func sysEx7_midi1SMFRawBytes_EmptyData() async throws {
-        let sysEx = try MIDIFileEvent.SysEx7(
+        let sysEx = try MIDIFileTrackEvent.SysEx7(
             manufacturer: .oneByte(0x7D),
             data: []
         )
@@ -170,7 +170,7 @@ import Testing
     
     @Test
     func sysEx7_midi1SMFRawBytes_WithData() async throws {
-        let sysEx = try MIDIFileEvent.SysEx7(
+        let sysEx = try MIDIFileTrackEvent.SysEx7(
             manufacturer: .oneByte(0x7D),
             data: [0x12, 0x34]
         )
@@ -191,7 +191,7 @@ import Testing
     func sysEx7_midi1SMFRawBytes_128Bytes() async throws {
         let data: [UInt8] = .init(repeating: 0x12, count: 128 - 2)
         
-        let sysEx = try MIDIFileEvent.SysEx7(
+        let sysEx = try MIDIFileTrackEvent.SysEx7(
             manufacturer: .oneByte(0x7D),
             data: data
         )
@@ -210,11 +210,11 @@ import Testing
         )
     }
     
-    // MARK: - MIDIFileEvent.UniversalSysEx7
+    // MARK: - MIDIFileTrackEvent.UniversalSysEx7
     
     @Test
     func universalSysEx7_midi1SMFRawBytes_EmptyData() async throws {
-        let sysEx = try MIDIFileEvent.UniversalSysEx7(
+        let sysEx = try MIDIFileTrackEvent.UniversalSysEx7(
             universalType: .realTime,
             deviceID: 0x01,
             subID1: 0x02,
@@ -237,7 +237,7 @@ import Testing
     
     @Test
     func universalSysEx7_midi1SMFRawBytes_WithData() async throws {
-        let sysEx = try MIDIFileEvent.UniversalSysEx7(
+        let sysEx = try MIDIFileTrackEvent.UniversalSysEx7(
             universalType: .nonRealTime,
             deviceID: 0x7F,
             subID1: 0x00,
@@ -264,7 +264,7 @@ import Testing
     func universalSysEx7_midi1SMFRawBytes_128Bytes() async throws {
         let data: [UInt8] = .init(repeating: 0x12, count: 128 - 5)
         
-        let sysEx = try MIDIFileEvent.UniversalSysEx7(
+        let sysEx = try MIDIFileTrackEvent.UniversalSysEx7(
             universalType: .nonRealTime,
             deviceID: 0x7F,
             subID1: 0x01,

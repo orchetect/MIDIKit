@@ -16,9 +16,9 @@ import Testing
     
     @Test
     func emptyEvents() async throws {
-        let events: [MIDIFileEvent] = []
+        let events: [MusicalMIDIFile.TrackChunk.Event] = []
         
-        let track = MIDIFile.TrackChunk(events: events)
+        let track = MusicalMIDIFile.TrackChunk(events: events)
         
         #expect(track.events == events)
         
@@ -31,7 +31,7 @@ import Testing
         
         // generate raw bytes
         
-        let timebase: MIDIFile.Timebase = .musical(ticksPerQuarterNote: 960)
+        let timebase: MusicalMIDIFile.Timebase = .musical(ticksPerQuarterNote: 960)
         let generatedData: Data = try track.midi1SMFRawBytes(using: timebase)
         
         #expect(generatedData.toUInt8Bytes() == bytes)
@@ -55,9 +55,9 @@ import Testing
     
     @Test
     func withEvents() async throws {
-        let events: [MIDIFileEvent] = [
-            .noteOn(delta: .none, note: 60, velocity: .midi1(64), channel: 0),
-            .cc(delta: .ticks(240), controller: .expression, value: .midi1(20), channel: 1)
+        let events: [MusicalMIDIFile.TrackChunk.Event] = [
+            .init(delta: .none, event: .noteOn(note: 60, velocity: .midi1(64), channel: 0)),
+            .init(delta: .ticks(240), event: .cc(controller: .expression, value: .midi1(20), channel: 1))
         ]
         
         let track = MIDIFile.TrackChunk(events: events)
@@ -77,7 +77,7 @@ import Testing
         
         // generate raw bytes
         
-        let timebase: MIDIFile.Timebase = .musical(ticksPerQuarterNote: 960)
+        let timebase: MusicalMIDIFile.Timebase = .musical(ticksPerQuarterNote: 960)
         let generatedData: Data = try track.midi1SMFRawBytes(using: timebase)
         
         #expect(generatedData.toUInt8Bytes() == bytes)
@@ -102,9 +102,9 @@ import Testing
     /// Encode and decode non-zero delta time before end-of-track bytes.
     @Test
     func deltaTimeBeforeEndOfTrack() async throws {
-        let events: [MIDIFileEvent] = []
+        let events: [MusicalMIDIFile.TrackChunk.Event] = []
         
-        var track = MIDIFile.TrackChunk(events: events)
+        var track = MusicalMIDIFile.TrackChunk(events: events)
         track.deltaTimeBeforeEndOfTrack = .ticks(960)
         
         #expect(track.events == events)
@@ -118,7 +118,7 @@ import Testing
         
         // generate raw bytes
         
-        let timebase: MIDIFile.Timebase = .musical(ticksPerQuarterNote: 960)
+        let timebase: MusicalMIDIFile.Timebase = .musical(ticksPerQuarterNote: 960)
         let generatedData: Data = try track.midi1SMFRawBytes(using: timebase)
         
         #expect(generatedData.toUInt8Bytes() == bytes)
@@ -143,7 +143,7 @@ import Testing
     @Test
     func eventsAtQuarterNotePositions() async throws {
         let ppq: UInt16 = 480
-        var midiFile = MIDIFile(timebase: .musical(ticksPerQuarterNote: UInt16(ppq)))
+        var midiFile = MusicalMIDIFile(timebase: .musical(ticksPerQuarterNote: UInt16(ppq)))
         
         midiFile.chunks = [
             .track([
@@ -201,27 +201,27 @@ import Testing
     
     @Test
     func maxEventCount() async throws {
-        let events: [MIDIFileEvent] = [
+        let events: [MusicalMIDIFile.TrackChunk.Event] = [
             .noteOn(delta: .none, note: 60, velocity: .midi1(64), channel: 0),
             .cc(delta: .ticks(240), controller: .expression, value: .midi1(20), channel: 0),
             .cc(delta: .ticks(240), controller: .expression, value: .midi1(40), channel: 0),
             .noteOff(delta: .none, note: 60, velocity: .midi1(0), channel: 0)
         ]
         
-        let track = MIDIFile.TrackChunk(events: events)
+        let track = MusicalMIDIFile.TrackChunk(events: events)
         
         // generate raw bytes
         
-        let timebase: MIDIFile.Timebase = .musical(ticksPerQuarterNote: 960)
+        let timebase: MusicalMIDIFile.Timebase = .musical(ticksPerQuarterNote: 960)
         let generatedData: Data = try track.midi1SMFRawBytes(using: timebase)
         
         // create comparison track
         
-        let limitedTrack = MIDIFile.TrackChunk(events: events[0 ... 1])
+        let limitedTrack = MusicalMIDIFile.TrackChunk(events: events[0 ... 1])
         
         // parse raw bytes and check event count
         
-        let parsedTrackA = try? MIDIFile.TrackChunk(
+        let parsedTrackA = try? MusicalMIDIFile.TrackChunk(
             midi1SMFRawBytesStream: generatedData,
             timebase: timebase,
             options: .init(bundleRPNAndNRPNEvents: true, maxEventCount: 2)
@@ -251,36 +251,36 @@ import Testing
                 .map { _ in "ABCDEFabcdef1234567890-_ ".randomElement()! }
         )
         #expect(textString.count == textCharCount)
-        let textEventPayload: MIDIFileEvent.Text = .init(text: textString)
-        let textEvent: MIDIFileEvent = .text(delta: .none, event: textEventPayload)
+        let textEventPayload: MIDIFileTrackEvent.Text = .init(text: textString)
+        let textEvent: MusicalMIDIFile.TrackChunk.Event = .init(delta: .none, event: textEventPayload.wrapped)
         
         // sequencer-specific event
         let seqSpecificByteCount = Int.random(in: 10000 ... 20000)
         let seqSpecificData: [UInt8] = (0 ..< seqSpecificByteCount)
             .map { _ in UInt8.random(in: UInt8.min ... UInt8.max) }
         #expect(seqSpecificData.count == seqSpecificByteCount)
-        let seqSpecificEventPayload: MIDIFileEvent.SequencerSpecific = .init(data: seqSpecificData)
-        let seqSpecificEvent: MIDIFileEvent = .sequencerSpecific(delta: .none, event: seqSpecificEventPayload)
+        let seqSpecificEventPayload: MIDIFileTrackEvent.SequencerSpecific = .init(data: seqSpecificData)
+        let seqSpecificEvent: MusicalMIDIFile.TrackChunk.Event = .init(delta: .none, event: seqSpecificEventPayload.wrapped)
         
         // author MIDI file
-        let events: [MIDIFileEvent] = [textEvent, seqSpecificEvent]
+        let events: [MusicalMIDIFile.TrackChunk.Event] = [textEvent, seqSpecificEvent]
         let track = MIDIFile.TrackChunk(events: events)
         let midiFile = MIDIFile(format: .singleTrack, timebase: .musical(ticksPerQuarterNote: 480), chunks: [.track(track)])
         
         // encode and decode
         let midiFileData = try await midiFile.rawData()
-        let decodedMIDIFile = try await MIDIFile(data: midiFileData)
+        let decodedMIDIFile = try await MusicalMIDIFile(data: midiFileData)
         
         // compare events
         let decodedTrack = try #require(decodedMIDIFile.tracks.first)
         try #require(decodedTrack.events.count == 2)
         
         // extract events
-        let decodedTextEventPayload: MIDIFileEvent.Text = try #require(
-            decodedTrack.events[0].smfUnwrappedEvent.event as? MIDIFileEvent.Text
+        let decodedTextEventPayload: MIDIFileTrackEvent.Text = try #require(
+            decodedTrack.events[0].event.unwrapped as? MIDIFileTrackEvent.Text
         )
-        let decodedSeqSpecificEventPayload: MIDIFileEvent.SequencerSpecific = try #require(
-            decodedTrack.events[1].smfUnwrappedEvent.event as? MIDIFileEvent.SequencerSpecific
+        let decodedSeqSpecificEventPayload: MIDIFileTrackEvent.SequencerSpecific = try #require(
+            decodedTrack.events[1].event.unwrapped as? MIDIFileTrackEvent.SequencerSpecific
         )
         
         // compare events

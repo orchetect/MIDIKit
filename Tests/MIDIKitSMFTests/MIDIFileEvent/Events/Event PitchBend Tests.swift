@@ -15,7 +15,7 @@ import Testing
     func init_midi1SMFRawBytes_A() async throws {
         let bytes: [UInt8] = [0xE0, 0x00, 0x40]
         
-        let event = try MIDIFileEvent.PitchBend(midi1SMFRawBytes: bytes)
+        let event = try MIDIFileTrackEvent.PitchBend(midi1SMFRawBytes: bytes)
         
         #expect(event.value == .midi1(.midpoint))
         #expect(event.channel == 0)
@@ -23,7 +23,7 @@ import Testing
     
     @Test
     func midi1SMFRawBytes_A() async {
-        let event = MIDIFileEvent.PitchBend(
+        let event = MIDIFileTrackEvent.PitchBend(
             value: .midi1(.midpoint),
             channel: 0
         )
@@ -37,7 +37,7 @@ import Testing
     func init_midi1SMFRawBytes_B() async throws {
         let bytes: [UInt8] = [0xE1, 0x7F, 0x7F]
         
-        let event = try MIDIFileEvent.PitchBend(midi1SMFRawBytes: bytes)
+        let event = try MIDIFileTrackEvent.PitchBend(midi1SMFRawBytes: bytes)
         
         #expect(event.value == .midi1(.max))
         #expect(event.channel == 1)
@@ -45,7 +45,7 @@ import Testing
     
     @Test
     func midi1SMFRawBytes_B() async {
-        let event = MIDIFileEvent.PitchBend(
+        let event = MIDIFileTrackEvent.PitchBend(
             value: .midi1(.max),
             channel: 1
         )

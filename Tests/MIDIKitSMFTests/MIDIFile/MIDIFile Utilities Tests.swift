@@ -11,26 +11,26 @@ import Testing
 @Suite struct MIDIFile_Utilities_Tests {
     @Test
     func encodeVariableLengthValue() async {
-        #expect(MIDIFile.encodeVariableLengthValue(0, as: [UInt8].self) == [0x00])
-        #expect(MIDIFile.encodeVariableLengthValue(1, as: [UInt8].self) == [0x01])
-        #expect(MIDIFile.encodeVariableLengthValue(64, as: [UInt8].self) == [0x40])
+        #expect([UInt8].encodeVariableLengthValue(0) == [0x00])
+        #expect([UInt8].encodeVariableLengthValue(1) == [0x01])
+        #expect([UInt8].encodeVariableLengthValue(64) == [0x40])
         
-        #expect(MIDIFile.encodeVariableLengthValue(127, as: [UInt8].self) == [0x7F])
-        #expect(MIDIFile.encodeVariableLengthValue(128, as: [UInt8].self) == [0x81, 0x00])
-        #expect(MIDIFile.encodeVariableLengthValue(129, as: [UInt8].self) == [0x81, 0x01])
+        #expect([UInt8].encodeVariableLengthValue(127) == [0x7F])
+        #expect([UInt8].encodeVariableLengthValue(128) == [0x81, 0x00])
+        #expect([UInt8].encodeVariableLengthValue(129) == [0x81, 0x01])
         
-        #expect(MIDIFile.encodeVariableLengthValue(255, as: [UInt8].self) == [0x81, 0x7F])
-        #expect(MIDIFile.encodeVariableLengthValue(256, as: [UInt8].self) == [0x82, 0x00])
-        #expect(MIDIFile.encodeVariableLengthValue(257, as: [UInt8].self) == [0x82, 0x01])
+        #expect([UInt8].encodeVariableLengthValue(255) == [0x81, 0x7F])
+        #expect([UInt8].encodeVariableLengthValue(256) == [0x82, 0x00])
+        #expect([UInt8].encodeVariableLengthValue(257) == [0x82, 0x01])
         
-        #expect(MIDIFile.encodeVariableLengthValue(16383, as: [UInt8].self) == [0xFF, 0x7F])
-        #expect(MIDIFile.encodeVariableLengthValue(16384, as: [UInt8].self) == [0x81, 0x80, 0x00])
-        #expect(MIDIFile.encodeVariableLengthValue(16385, as: [UInt8].self) == [0x81, 0x80, 0x01])
+        #expect([UInt8].encodeVariableLengthValue(16383) == [0xFF, 0x7F])
+        #expect([UInt8].encodeVariableLengthValue(16384) == [0x81, 0x80, 0x00])
+        #expect([UInt8].encodeVariableLengthValue(16385) == [0x81, 0x80, 0x01])
     }
     
     @Test
     func decodeVariableLengthValue_Empty() async {
-        #expect(MIDIFile.decodeVariableLengthValue(from: []) == nil)
+        #expect(([] as [UInt8]).decodeVariableLengthValue() == nil)
     }
     
     @Test
@@ -43,7 +43,7 @@ import Testing
         let trailingBytesCases: [[UInt8]] = [[], [0x80], [0x12, 0x23]]
         
         for trailingBytes in trailingBytesCases {
-            let decode = { MIDIFile.decodeVariableLengthValue(from: $0 + trailingBytes) }
+            let decode = { ($0 + trailingBytes).decodeVariableLengthValue() }
             
             // 1 byte: max 7-bit value
             
@@ -99,7 +99,7 @@ import Testing
         // 1 byte: max 7-bit value
         
         try Data([0x7F, 0x00]).withContiguousStorageIfAvailable({
-            let result = try #require(MIDIFile.decodeVariableLengthValue(from: $0))
+            let result = try #require($0.decodeVariableLengthValue())
             #expect(result.value == 127)
             #expect(result.byteLength == 1)
         })!
@@ -107,7 +107,7 @@ import Testing
         // 2 bytes: max 14-bit value
         
         try Data([0x81, 0x00]).withContiguousStorageIfAvailable({
-            let result = try #require(MIDIFile.decodeVariableLengthValue(from: $0))
+            let result = try #require($0.decodeVariableLengthValue())
             #expect(result.value == 128)
             #expect(result.byteLength == 2)
         })!
@@ -115,7 +115,7 @@ import Testing
         // 3 bytes: max 21-bit value
         
         try Data([0x81, 0x80, 0x00]).withContiguousStorageIfAvailable({
-            let result = try #require(MIDIFile.decodeVariableLengthValue(from: $0))
+            let result = try #require($0.decodeVariableLengthValue())
             #expect(result.value == 16384)
             #expect(result.byteLength == 3)
         })!
@@ -123,7 +123,7 @@ import Testing
         // 4 bytes: max 28-bit value
         
         try Data([0xFF, 0xFF, 0xFF, 0x7F]).withContiguousStorageIfAvailable({
-            let result = try #require(MIDIFile.decodeVariableLengthValue(from: $0))
+            let result = try #require($0.decodeVariableLengthValue())
             #expect(result.value == 268_435_455)
             #expect(result.byteLength == 4)
         })!
@@ -135,7 +135,7 @@ import Testing
         
         try Data([0x01, 0x7F, 0x00]).withContiguousStorageIfAvailable({
             let slice = $0[1...]
-            let result = try #require(MIDIFile.decodeVariableLengthValue(from: slice))
+            let result = try #require(slice.decodeVariableLengthValue())
             #expect(result.value == 127)
             #expect(result.byteLength == 1)
         })!
@@ -144,7 +144,7 @@ import Testing
         
         try Data([0x01, 0x81, 0x00]).withContiguousStorageIfAvailable({
             let slice = $0[1...]
-            let result = try #require(MIDIFile.decodeVariableLengthValue(from: slice))
+            let result = try #require(slice.decodeVariableLengthValue())
             #expect(result.value == 128)
             #expect(result.byteLength == 2)
         })!
@@ -153,7 +153,7 @@ import Testing
         
         try Data([0x01, 0x81, 0x80, 0x00]).withContiguousStorageIfAvailable({
             let slice = $0[1...]
-            let result = try #require(MIDIFile.decodeVariableLengthValue(from: slice))
+            let result = try #require(slice.decodeVariableLengthValue())
             #expect(result.value == 16384)
             #expect(result.byteLength == 3)
         })!
@@ -162,7 +162,7 @@ import Testing
         
         try Data([0x01, 0xFF, 0xFF, 0xFF, 0x7F]).withContiguousStorageIfAvailable({
             let slice = $0[1...]
-            let result = try #require(MIDIFile.decodeVariableLengthValue(from: slice))
+            let result = try #require(slice.decodeVariableLengthValue())
             #expect(result.value == 268_435_455)
             #expect(result.byteLength == 4)
         })!
@@ -172,6 +172,6 @@ import Testing
     func decodeVariableLengthValue_EdgeCase() async {
         // ensure setting the top bit with no bytes following does not crash
         
-        #expect(MIDIFile.decodeVariableLengthValue(from: [0x80]) == nil)
+        #expect([0x80].decodeVariableLengthValue() == nil)
     }
 }

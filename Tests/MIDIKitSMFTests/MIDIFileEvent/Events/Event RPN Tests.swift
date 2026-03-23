@@ -34,17 +34,18 @@ import Testing
         ]
         
         // (not implemented, so we need to test parsing using a track instead)
-        // let event = try MIDIFileEvent.RPN(midi1SMFRawBytes: bytes)
+        // let event = try MIDIFileTrackEvent.RPN(midi1SMFRawBytes: bytes)
         
-        let timebase: MIDIFile.Timebase = .musical(ticksPerQuarterNote: 960)
+        let timebase: MusicalMIDIFile.Timebase = .musical(ticksPerQuarterNote: 960)
         
-        let parsedTrackA = try #require(try MIDIFile.TrackChunk(
+        let parsedTrackA = try #require(try MusicalMIDIFile.TrackChunk(
             midi1SMFRawBytesStream: bytes,
             timebase: timebase,
             options: .init(bundleRPNAndNRPNEvents: true)
         ))
         #expect(parsedTrackA.events.count == 1)
-        guard case let .rpn(delta, event) = parsedTrackA.events[0] else { Issue.record(); return }
+        guard case let .rpn(event) = parsedTrackA.events[0].event else { Issue.record(); return }
+        let delta = parsedTrackA.events[0].delta
         
         #expect(delta.ticks == 0)
         #expect(event.parameter == .channelFineTuning(1))
@@ -71,17 +72,18 @@ import Testing
         ]
         
         // (not implemented, so we need to test parsing using a track instead)
-        // let event = try MIDIFileEvent.RPN(midi1SMFRawBytes: bytes)
+        // let event = try MIDIFileTrackEvent.RPN(midi1SMFRawBytes: bytes)
         
-        let timebase: MIDIFile.Timebase = .musical(ticksPerQuarterNote: 960)
+        let timebase: MusicalMIDIFile.Timebase = .musical(ticksPerQuarterNote: 960)
         
-        let parsedTrackA = try #require(try MIDIFile.TrackChunk(
+        let parsedTrackA = try #require(try MusicalMIDIFile.TrackChunk(
             midi1SMFRawBytesStream: bytes,
             timebase: timebase,
             options: .init(bundleRPNAndNRPNEvents: true)
         ))
         #expect(parsedTrackA.events.count == 1)
-        guard case let .rpn(delta, event) = parsedTrackA.events[0] else { Issue.record(); return }
+        guard case let .rpn(event) = parsedTrackA.events[0].event else { Issue.record(); return }
+        let delta = parsedTrackA.events[0].delta
         
         #expect(delta.ticks == 0)
         #expect(event.parameter == .channelFineTuning(1))
@@ -90,7 +92,7 @@ import Testing
     
     @Test
     func event_MIDI1SMFRawBytes_SinglePacket_FullyFormedMessages() async {
-        let event = MIDIFileEvent.RPN(
+        let event = MIDIFileTrackEvent.RPN(
             .channelFineTuning(1),
             change: .absolute,
             channel: 1
@@ -130,17 +132,18 @@ import Testing
         ]
         
         // (not implemented, so we need to test parsing using a track instead)
-        // let event = try MIDIFileEvent.RPN(midi1SMFRawBytes: bytes)
+        // let event = try MIDIFileTrackEvent.RPN(midi1SMFRawBytes: bytes)
         
-        let timebase: MIDIFile.Timebase = .musical(ticksPerQuarterNote: 960)
+        let timebase: MusicalMIDIFile.Timebase = .musical(ticksPerQuarterNote: 960)
         
-        let parsedTrackA = try #require(try MIDIFile.TrackChunk(
+        let parsedTrackA = try #require(try MusicalMIDIFile.TrackChunk(
             midi1SMFRawBytesStream: bytes,
             timebase: timebase,
             options: .init(bundleRPNAndNRPNEvents: true)
         ))
         #expect(parsedTrackA.events.count == 1)
-        guard case let .rpn(delta, event) = parsedTrackA.events[0] else { Issue.record(); return }
+        guard case let .rpn(event) = parsedTrackA.events[0].event else { Issue.record(); return }
+        let delta = parsedTrackA.events[0].delta
         
         #expect(delta.ticks == 0)
         #expect(
@@ -168,17 +171,18 @@ import Testing
         ]
         
         // (not implemented, so we need to test parsing using a track instead)
-        // let event = try MIDIFileEvent.RPN(midi1SMFRawBytes: bytes)
+        // let event = try MIDIFileTrackEvent.RPN(midi1SMFRawBytes: bytes)
         
-        let timebase: MIDIFile.Timebase = .musical(ticksPerQuarterNote: 960)
+        let timebase: MusicalMIDIFile.Timebase = .musical(ticksPerQuarterNote: 960)
         
-        let parsedTrackA = try #require(try MIDIFile.TrackChunk(
+        let parsedTrackA = try #require(try MusicalMIDIFile.TrackChunk(
             midi1SMFRawBytesStream: bytes,
             timebase: timebase,
             options: .init(bundleRPNAndNRPNEvents: true)
         ))
         #expect(parsedTrackA.events.count == 1)
-        guard case let .rpn(delta, event) = parsedTrackA.events[0] else { Issue.record(); return }
+        guard case let .rpn(event) = parsedTrackA.events[0].event else { Issue.record(); return }
+        let delta = parsedTrackA.events[0].delta
         
         #expect(delta.ticks == 0)
         #expect(
@@ -190,7 +194,7 @@ import Testing
     
     @Test
     func event_MIDI1SMFRawBytes_SinglePacket_FullyFormedMessages_NoDataLSB() async {
-        let event = MIDIFileEvent.RPN(
+        let event = MIDIFileTrackEvent.RPN(
             .raw(parameter: .init(msb: 0x05, lsb: 0x10), dataEntryMSB: 0x08, dataEntryLSB: nil),
             change: .absolute,
             channel: 2
@@ -239,27 +243,29 @@ import Testing
         
         // parse raw bytes
         
-        let timebase: MIDIFile.Timebase = .musical(ticksPerQuarterNote: 960)
+        let timebase: MusicalMIDIFile.Timebase = .musical(ticksPerQuarterNote: 960)
         let rpnTotalTicks: UInt32 = 0x01 + 0x02 + 0x03 + 0x04
         
-        let parsedTrackA = try #require(try MIDIFile.TrackChunk(
+        let parsedTrackA = try #require(try MusicalMIDIFile.TrackChunk(
             midi1SMFRawBytesStream: bytes,
             timebase: timebase,
             options: .init(bundleRPNAndNRPNEvents: true)
         ))
         #expect(parsedTrackA.events.count == 2)
-        #expect(parsedTrackA.events[0] == .cc(delta: .none, event: ccEvent))
+        #expect(parsedTrackA.events[0].delta == .none)
+        #expect(parsedTrackA.events[0].event == ccEvent.wrapped)
         #expect(parsedTrackA.events[1].delta == .ticks(rpnTotalTicks))
-        #expect(parsedTrackA.events[1].event() == .rpn(rpnEvent))
+        #expect(parsedTrackA.events[1].event.midiEvent() == .rpn(rpnEvent))
         
-        let parsedTrackB = try #require(try MIDIFile.TrackChunk(
+        let parsedTrackB = try #require(try MusicalMIDIFile.TrackChunk(
             midi1SMFRawBytes: bytes[8...], // exclude header and length
             timebase: timebase,
             options: .init(bundleRPNAndNRPNEvents: true)
         ))
         #expect(parsedTrackB.events.count == 2)
-        #expect(parsedTrackB.events[0] == .cc(delta: .none, event: ccEvent))
+        #expect(parsedTrackB.events[0].delta == .none)
+        #expect(parsedTrackB.events[0].event == ccEvent.wrapped)
         #expect(parsedTrackB.events[1].delta == .ticks(rpnTotalTicks))
-        #expect(parsedTrackB.events[1].event() == .rpn(rpnEvent))
+        #expect(parsedTrackB.events[1].event.midiEvent() == .rpn(rpnEvent))
     }
 }

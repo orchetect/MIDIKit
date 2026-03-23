@@ -21,7 +21,7 @@ import Testing
             0x08  // numberOf32ndNotesInAQuarterNote
         ]
         
-        let event = try MIDIFileEvent.TimeSignature(midi1SMFRawBytes: bytes)
+        let event = try MIDIFileTrackEvent.TimeSignature(midi1SMFRawBytes: bytes)
         
         #expect(event.numerator == 2)
         #expect(event.denominator == 1)
@@ -31,7 +31,7 @@ import Testing
     
     @Test
     func midi1SMFRawBytes() async {
-        let event = MIDIFileEvent.TimeSignature(
+        let event = MIDIFileTrackEvent.TimeSignature(
             numerator: 2,
             denominator: 1
         )

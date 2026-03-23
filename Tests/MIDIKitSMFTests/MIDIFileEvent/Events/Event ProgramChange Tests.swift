@@ -15,7 +15,7 @@ import Testing
     func init_midi1SMFRawBytes_A() async throws {
         let bytes: [UInt8] = [0xC0, 0x40]
         
-        let event = try MIDIFileEvent.ProgramChange(midi1SMFRawBytes: bytes)
+        let event = try MIDIFileTrackEvent.ProgramChange(midi1SMFRawBytes: bytes)
         
         #expect(event.program == 0x40)
         #expect(event.channel == 0)
@@ -23,7 +23,7 @@ import Testing
     
     @Test
     func midi1SMFRawBytes_A() async {
-        let event = MIDIFileEvent.ProgramChange(
+        let event = MIDIFileTrackEvent.ProgramChange(
             program: 0x40,
             bank: .noBankSelect,
             channel: 0
@@ -38,7 +38,7 @@ import Testing
     func init_midi1SMFRawBytes_B() async throws {
         let bytes: [UInt8] = [0xC1, 0x7F]
         
-        let event = try MIDIFileEvent.ProgramChange(midi1SMFRawBytes: bytes)
+        let event = try MIDIFileTrackEvent.ProgramChange(midi1SMFRawBytes: bytes)
         
         #expect(event.program == 0x7F)
         #expect(event.channel == 1)
@@ -46,7 +46,7 @@ import Testing
     
     @Test
     func midi1SMFRawBytes_B() async {
-        let event = MIDIFileEvent.ProgramChange(
+        let event = MIDIFileTrackEvent.ProgramChange(
             program: 0x7F,
             bank: .noBankSelect,
             channel: 1

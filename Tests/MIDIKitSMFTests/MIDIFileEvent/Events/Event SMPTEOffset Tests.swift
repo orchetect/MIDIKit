@@ -17,7 +17,7 @@ import SwiftTimecodeCore
         let bytes: [UInt8] = [0xFF, 0x54, 0x05,
                               0b00100001, 2, 3, 4, 5]
         
-        let event = try MIDIFileEvent.SMPTEOffset(midi1SMFRawBytes: bytes)
+        let event = try MIDIFileTrackEvent.SMPTEOffset(midi1SMFRawBytes: bytes)
         
         #expect(event.hours == 1)
         #expect(event.minutes == 2)
@@ -29,7 +29,7 @@ import SwiftTimecodeCore
     
     @Test
     func midi1SMFRawBytes() async {
-        let event = MIDIFileEvent.SMPTEOffset(
+        let event = MIDIFileTrackEvent.SMPTEOffset(
             hr: 1,
             min: 2,
             sec: 3,
@@ -50,7 +50,7 @@ import SwiftTimecodeCore
             let rawData: [UInt8] = [0xFF, 0x54, 0x05,
                                     0b00000001, 2, 3, 4, 5]
             
-            let event = try MIDIFileEvent.SMPTEOffset(midi1SMFRawBytes: rawData)
+            let event = try MIDIFileTrackEvent.SMPTEOffset(midi1SMFRawBytes: rawData)
             
             #expect(event.frameRate == .fps24)
         }
@@ -59,7 +59,7 @@ import SwiftTimecodeCore
             let rawData: [UInt8] = [0xFF, 0x54, 0x05,
                                     0b00100001, 2, 3, 4, 5]
             
-            let event = try MIDIFileEvent.SMPTEOffset(midi1SMFRawBytes: rawData)
+            let event = try MIDIFileTrackEvent.SMPTEOffset(midi1SMFRawBytes: rawData)
             
             #expect(event.frameRate == .fps25)
         }
@@ -68,7 +68,7 @@ import SwiftTimecodeCore
             let rawData: [UInt8] = [0xFF, 0x54, 0x05,
                                     0b01000001, 2, 3, 4, 5]
             
-            let event = try MIDIFileEvent.SMPTEOffset(midi1SMFRawBytes: rawData)
+            let event = try MIDIFileTrackEvent.SMPTEOffset(midi1SMFRawBytes: rawData)
             
             #expect(event.frameRate == .fps29_97d)
         }
@@ -77,7 +77,7 @@ import SwiftTimecodeCore
             let rawData: [UInt8] = [0xFF, 0x54, 0x05,
                                     0b01100001, 2, 3, 4, 5]
             
-            let event = try MIDIFileEvent.SMPTEOffset(midi1SMFRawBytes: rawData)
+            let event = try MIDIFileTrackEvent.SMPTEOffset(midi1SMFRawBytes: rawData)
             
             #expect(event.frameRate == .fps30)
         }
@@ -92,7 +92,7 @@ import SwiftTimecodeCore
         do {
             let tc = Timecode(.components(h: 1, m: 2, s: 3, f: 4), at: .fps24, by: .allowingInvalid)
             
-            let smpte = try #require(MIDIFileEvent.SMPTEOffset(scaling: tc))
+            let smpte = try #require(MIDIFileTrackEvent.SMPTEOffset(scaling: tc))
             
             #expect(smpte.components == .init(h: 1, m: 2, s: 3, f: 4))
             #expect(smpte.frameRate == .fps24)
@@ -104,7 +104,7 @@ import SwiftTimecodeCore
         do {
             let tc = Timecode(.components(h: 1, m: 2, s: 3, f: 4), at: .fps25, by: .allowingInvalid)
             
-            let smpte = try #require(MIDIFileEvent.SMPTEOffset(scaling: tc))
+            let smpte = try #require(MIDIFileTrackEvent.SMPTEOffset(scaling: tc))
             
             #expect(smpte.components == .init(h: 1, m: 2, s: 3, f: 4))
             #expect(smpte.frameRate == .fps25)
@@ -116,7 +116,7 @@ import SwiftTimecodeCore
         do {
             let tc = Timecode(.components(h: 1, m: 2, s: 3, f: 4), at: .fps29_97d, by: .allowingInvalid)
             
-            let smpte = try #require(MIDIFileEvent.SMPTEOffset(scaling: tc))
+            let smpte = try #require(MIDIFileTrackEvent.SMPTEOffset(scaling: tc))
             
             #expect(smpte.components == .init(h: 1, m: 2, s: 3, f: 4))
             #expect(smpte.frameRate == .fps29_97d)
@@ -128,7 +128,7 @@ import SwiftTimecodeCore
         do {
             let tc = Timecode(.components(h: 1, m: 2, s: 3, f: 4), at: .fps30, by: .allowingInvalid)
             
-            let smpte = try #require(MIDIFileEvent.SMPTEOffset(scaling: tc))
+            let smpte = try #require(MIDIFileTrackEvent.SMPTEOffset(scaling: tc))
             
             #expect(smpte.components == .init(h: 1, m: 2, s: 3, f: 4))
             #expect(smpte.frameRate == .fps30)
@@ -142,7 +142,7 @@ import SwiftTimecodeCore
         do {
             let tc = Timecode(.components(h: 1, sf: 40), at: .fps24, base: .max80SubFrames, by: .allowingInvalid)
             
-            let smpte = try #require(MIDIFileEvent.SMPTEOffset(scaling: tc))
+            let smpte = try #require(MIDIFileTrackEvent.SMPTEOffset(scaling: tc))
             
             #expect(smpte.components == .init(h: 1, sf: 50))
             #expect(smpte.frameRate == .fps24)
@@ -151,7 +151,7 @@ import SwiftTimecodeCore
         do {
             let tc = Timecode(.components(h: 1, sf: 50), at: .fps25, base: .max100SubFrames, by: .allowingInvalid)
             
-            let smpte = try #require(MIDIFileEvent.SMPTEOffset(scaling: tc))
+            let smpte = try #require(MIDIFileTrackEvent.SMPTEOffset(scaling: tc))
             
             #expect(smpte.components == .init(h: 1, sf: 50))
             #expect(smpte.frameRate == .fps25)

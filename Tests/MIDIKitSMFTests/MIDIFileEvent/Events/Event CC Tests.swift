@@ -15,7 +15,7 @@ import Testing
     func init_midi1SMFRawBytes_A() async throws {
         let bytes: [UInt8] = [0xB0, 0x01, 0x40]
         
-        let event = try MIDIFileEvent.CC(midi1SMFRawBytes: bytes)
+        let event = try MIDIFileTrackEvent.CC(midi1SMFRawBytes: bytes)
         
         #expect(event.controller == .modWheel) // CC 1
         #expect(event.value == .midi1(0x40))
@@ -24,7 +24,7 @@ import Testing
     
     @Test
     func midi1SMFRawBytes_A() async {
-        let event = MIDIFileEvent.CC(
+        let event = MIDIFileTrackEvent.CC(
             controller: .modWheel,
             value: .midi1(0x40),
             channel: 0
@@ -39,7 +39,7 @@ import Testing
     func init_midi1SMFRawBytes_B() async throws {
         let bytes: [UInt8] = [0xB1, 0x0B, 0x7F]
         
-        let event = try MIDIFileEvent.CC(midi1SMFRawBytes: bytes)
+        let event = try MIDIFileTrackEvent.CC(midi1SMFRawBytes: bytes)
         
         #expect(event.controller == .expression) // CC 11
         #expect(event.value == .midi1(0x7F))
@@ -48,7 +48,7 @@ import Testing
     
     @Test
     func midi1SMFRawBytes_B() async {
-        let event = MIDIFileEvent.CC(
+        let event = MIDIFileTrackEvent.CC(
             controller: .expression,
             value: .midi1(0x7F),
             channel: 1

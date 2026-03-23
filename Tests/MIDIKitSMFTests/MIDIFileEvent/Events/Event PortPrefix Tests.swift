@@ -15,14 +15,14 @@ import Testing
     func init_midi1SMFRawBytes() async throws {
         let bytes: [UInt8] = [0xFF, 0x21, 0x01, 0x02]
         
-        let event = try MIDIFileEvent.PortPrefix(midi1SMFRawBytes: bytes)
+        let event = try MIDIFileTrackEvent.PortPrefix(midi1SMFRawBytes: bytes)
         
         #expect(event.port == 2)
     }
     
     @Test
     func midi1SMFRawBytes() async {
-        let event = MIDIFileEvent.PortPrefix(port: 2)
+        let event = MIDIFileTrackEvent.PortPrefix(port: 2)
         
         let bytes = event.midi1SMFRawBytes(as: [UInt8].self)
         
