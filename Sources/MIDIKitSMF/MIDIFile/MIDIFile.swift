@@ -9,6 +9,8 @@ import MIDIKitCore
 
 /// Standard MIDI Files (SMF) data structure.
 public struct MIDIFile<Timebase: MIDIFileTimebase> {
+    // MARK: - Typealiases
+    
     /// The timebase of the MIDI file.
     public typealias Timebase = Timebase
     
