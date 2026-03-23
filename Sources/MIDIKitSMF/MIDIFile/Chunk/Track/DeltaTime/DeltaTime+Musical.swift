@@ -21,27 +21,39 @@ extension MIDIFile.TrackChunk.DeltaTime where Timebase == MusicalMIDIFileTimebas
     
     /// Construct delta time of a 8th note.
     /// The `ppq` (ticks per quarter note) value must match the value in the MIDI file header.
-    public static func note8th(ppq: UInt16) -> Self { Self(ticks: UInt32((Double(ppq) / 2.0).rounded())) }
+    public static func note8th(triplet: Bool = false, ppq: UInt16) -> Self {
+        Self(ticks: UInt32((Double(ppq) / (triplet ? 3.0 : 2.0)).rounded()))
+    }
     
     /// Construct delta time of a 16th note.
     /// The `ppq` (ticks per quarter note) value must match the value in the MIDI file header.
-    public static func note16th(ppq: UInt16) -> Self { Self(ticks: UInt32((Double(ppq) / 4.0).rounded())) }
+    public static func note16th(triplet: Bool = false, ppq: UInt16) -> Self {
+        Self(ticks: UInt32((Double(ppq) / (triplet ? 6.0 : 4.0)).rounded()))
+    }
     
     /// Construct delta time of a 32nd note.
     /// The `ppq` (ticks per quarter note) value must match the value in the MIDI file header.
-    public static func note32nd(ppq: UInt16) -> Self { Self(ticks: UInt32((Double(ppq) / 8.0).rounded())) }
+    public static func note32nd(triplet: Bool = false, ppq: UInt16) -> Self {
+        Self(ticks: UInt32((Double(ppq) / (triplet ? 12.0 : 8.0)).rounded()))
+    }
     
     /// Construct delta time of a 64th note.
     /// The `ppq` (ticks per quarter note) value must match the value in the MIDI file header.
-    public static func note64th(ppq: UInt16) -> Self { Self(ticks: UInt32((Double(ppq) / 16.0).rounded())) }
+    public static func note64th(triplet: Bool = false, ppq: UInt16) -> Self {
+        Self(ticks: UInt32((Double(ppq) / (triplet ? 24.0 : 16.0)).rounded()))
+    }
     
     /// Construct delta time of a 128th note.
     /// The `ppq` (ticks per quarter note) value must match the value in the MIDI file header.
-    public static func note128th(ppq: UInt16) -> Self { Self(ticks: UInt32((Double(ppq) / 32.0).rounded())) }
+    public static func note128th(triplet: Bool = false, ppq: UInt16) -> Self {
+        Self(ticks: UInt32((Double(ppq) / (triplet ? 48.0 : 32.0)).rounded()))
+    }
     
     /// Construct delta time of a 256th note.
     /// The `ppq` (ticks per quarter note) value must match the value in the MIDI file header.
-    public static func note256th(ppq: UInt16) -> Self { Self(ticks: UInt32((Double(ppq) / 64.0).rounded())) }
+    public static func note256th(triplet: Bool = false, ppq: UInt16) -> Self {
+        Self(ticks: UInt32((Double(ppq) / (triplet ? 96.0 : 64.0)).rounded()))
+    }
     
     /// Construct delta time in beats (quarter-notes) as a floating-point value.
     /// The `ppq` (ticks per quarter note) value must match the value in the MIDI file header.
