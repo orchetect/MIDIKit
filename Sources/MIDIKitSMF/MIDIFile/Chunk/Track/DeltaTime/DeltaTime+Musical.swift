@@ -43,9 +43,16 @@ extension MIDIFile.TrackChunk.DeltaTime where Timebase == MusicalMIDIFileTimebas
     /// The `ppq` (ticks per quarter note) value must match the value in the MIDI file header.
     public static func note256th(ppq: UInt16) -> Self { Self(ticks: UInt32(ppq) / 64) }
     
-    // TODO: Could add other convenience calculations
-    // public static func seconds(TimeInterval)
-    // public static func milliseconds(Double)
+    /// Construct delta time in beats (quarter-notes) as a floating-point value.
+    /// The `ppq` (ticks per quarter note) value must match the value in the MIDI file header.
+    ///
+    /// For example:
+    /// - `0.5` beats would equal an 8th-note
+    /// - `1.5` beats would equal a quarter- & 8th- note tied duration
+    /// - `4.0` beats would equal a whole-note (in 4/4 time signature)
+    public static func beats(_ beats: Double, ppq: UInt16) -> Self {
+        Self(ticks: UInt32(Double(ppq) * beats) )
+    }
 }
 
 // MARK: - Methods
