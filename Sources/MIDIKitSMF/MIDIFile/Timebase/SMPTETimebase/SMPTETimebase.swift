@@ -67,17 +67,21 @@ extension MIDIFileTimebase where Self == SMPTEMIDIFileTimebase {
     /// SMPTE timecode MIDI file timebase: Ticks per frame at a SMPTE frame rate.
     ///
     /// Typical `ticksPerFrame` values are:
-    /// - `4` (corresponding to MIDI Timecode)
+    /// - `4` (quarter-frames commonly found in MIDI Timecode (MTC))
     /// - `8`
     /// - `10`
     /// - `80` (corresponding to SMPTE bit resolution)
-    /// - `100` (corresponding to percent of a frame)
+    /// - `100` ("percent" of a frame)
     ///
     /// For example, a timing resolution of 1 ms can be achieved by specifying 25 fps and 40 sub-frames (ticks per frame).
     ///
     /// > Tip:
     /// >
-    /// > SMPTE timebase is *very rarely* used as a MIDI file timebase. The most common timebase is ``MusicalTimebase``.
+    /// > SMPTE timecode timebase is *very rarely* used as a MIDI file timebase. It is only used in
+    /// > extremely specific applications. In fact, most (nearly all) software manufacturers do not support the
+    /// > format. However, it is included in MIDIKit because it is part of the Standard MIDI File spec.
+    /// >
+    /// > Musical timebase (``MusicalMIDIFileTimebase``) is the most common timebase used in MIDI files.
     public static func smpte(
         frameRate: MIDIFileFrameRate,
         ticksPerFrame: UInt8
@@ -90,17 +94,21 @@ extension AnyMIDIFileTimebase {
     /// SMPTE timecode MIDI file timebase: Ticks per frame at a SMPTE frame rate.
     ///
     /// Typical `ticksPerFrame` values are:
-    /// - `4` (corresponding to MIDI Timecode)
+    /// - `4` (quarter-frames commonly found in MIDI Timecode (MTC))
     /// - `8`
     /// - `10`
     /// - `80` (corresponding to SMPTE bit resolution)
-    /// - `100` (corresponding to percent of a frame)
+    /// - `100` ("percent" of a frame)
     ///
     /// For example, a timing resolution of 1 ms can be achieved by specifying 25 fps and 40 sub-frames (ticks per frame).
     ///
     /// > Tip:
     /// >
-    /// > SMPTE timebase is *very rarely* used as a MIDI file timebase. The most common timebase is ``MusicalTimebase``.
+    /// > SMPTE timecode timebase is *very rarely* used as a MIDI file timebase. It is only used in
+    /// > extremely specific applications. In fact, most (nearly all) software manufacturers do not support the
+    /// > format. However, it is included in MIDIKit because it is part of the Standard MIDI File spec.
+    /// >
+    /// > Musical timebase (``MusicalMIDIFileTimebase``) is the most common timebase used in MIDI files.
     public static func smpte(
         frameRate: MIDIFileFrameRate,
         ticksPerFrame: UInt8
