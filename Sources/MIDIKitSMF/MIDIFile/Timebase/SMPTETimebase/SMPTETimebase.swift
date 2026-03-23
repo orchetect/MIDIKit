@@ -139,4 +139,8 @@ extension SMPTEMIDIFileTimebase: MIDIFileTimebase {
         
         return D(data)
     }
+    
+    public var asAnyMIDIFileTimebase: AnyMIDIFileTimebase {
+        .smpte(self)
+    }
 }

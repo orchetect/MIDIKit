@@ -72,7 +72,7 @@ extension MIDIFile {
         options: MIDIFileDecodeOptions = MIDIFileDecodeOptions(),
         predicate: DecodePredicate? = nil
     ) throws(MIDIFileDecodeError) {
-        let url = try Self.url(forFilePath: path)
+        let url = try AnyMIDIFile.url(forFilePath: path)
         try self.init(url: url, options: options, predicate: predicate)
     }
     
@@ -83,7 +83,7 @@ extension MIDIFile {
         options: MIDIFileDecodeOptions = MIDIFileDecodeOptions(),
         predicate: DecodePredicate? = nil
     ) async throws(MIDIFileDecodeError) {
-        let url = try Self.url(forFilePath: path)
+        let url = try AnyMIDIFile.url(forFilePath: path)
         try await self.init(url: url, options: options, predicate: predicate)
     }
     
@@ -99,20 +99,8 @@ extension MIDIFile {
         predicate: DecodePredicate? = nil,
         parsedChunk: @escaping ChunkDecodeBlock
     ) async throws(MIDIFileDecodeError) {
-        let url = try Self.url(forFilePath: path)
+        let url = try AnyMIDIFile.url(forFilePath: path)
         try await self.init(url: url, options: options, predicate: predicate, parsedChunk: parsedChunk)
-    }
-    
-    static func url(forFilePath path: String) throws(MIDIFileDecodeError) -> URL {
-        guard FileManager.sendableDefault.fileExists(atPath: path) else {
-            throw .fileNotFound
-        }
-        
-        guard let url = URL(string: path) else {
-            throw .malformedURL
-        }
-        
-        return url
     }
 }
 
@@ -127,7 +115,7 @@ extension MIDIFile {
         options: MIDIFileDecodeOptions = MIDIFileDecodeOptions(),
         predicate: DecodePredicate? = nil
     ) throws(MIDIFileDecodeError) {
-        let data = try Self.data(forFileURL: url)
+        let data = try AnyMIDIFile.data(forFileURL: url)
         try decode(
             data: data,
             options: options,
@@ -142,7 +130,7 @@ extension MIDIFile {
         options: MIDIFileDecodeOptions = MIDIFileDecodeOptions(),
         predicate: DecodePredicate? = nil
     ) async throws(MIDIFileDecodeError) {
-        let data = try Self.data(forFileURL: url)
+        let data = try AnyMIDIFile.data(forFileURL: url)
         try await decode(
             data: data,
             options: options,
@@ -162,17 +150,12 @@ extension MIDIFile {
         predicate: DecodePredicate? = nil,
         parsedChunk: @escaping ChunkDecodeBlock
     ) async throws(MIDIFileDecodeError) {
-        let data = try Self.data(forFileURL: url)
+        let data = try AnyMIDIFile.data(forFileURL: url)
         try await decode(
             data: data,
             options: options,
             predicate: predicate,
             parsedChunk: parsedChunk
         )
-    }
-    
-    static func data(forFileURL url: URL) throws(MIDIFileDecodeError) -> Data {
-        do { return try Data(contentsOf: url) }
-        catch { throw .fileReadError }
     }
 }

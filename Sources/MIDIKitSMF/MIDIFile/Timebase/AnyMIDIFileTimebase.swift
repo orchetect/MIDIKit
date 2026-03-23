@@ -116,4 +116,10 @@ extension AnyMIDIFileTimebase: MIDIFileTimebase {
     public func rawData<D: MutableDataProtocol>(as dataType: D.Type) -> D {
         unwrapped.rawData(as: dataType)
     }
+    
+    // MARK: - AnyMIDIFileTimebase
+    
+    public var asAnyMIDIFileTimebase: AnyMIDIFileTimebase {
+        self
+    }
 }

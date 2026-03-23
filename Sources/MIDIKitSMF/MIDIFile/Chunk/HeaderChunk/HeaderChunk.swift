@@ -108,17 +108,30 @@ extension MIDIFile {
         public init(
             format: MIDIFileFormat = .multipleTracksSynchronous,
             timebase: Timebase = .default(),
-            additionalBytes: some DataProtocol
+            additionalBytes: (some DataProtocol)?
         ) {
             self.format = format
             self.timebase = timebase
-            self.additionalBytes = Data(additionalBytes)
+            self.additionalBytes = if let additionalBytes { Data(additionalBytes) } else { nil }
         }
     }
 }
+
+// MARK: - Properties
 
 extension MIDIFile.HeaderChunk: Equatable { }
 
 extension MIDIFile.HeaderChunk: Hashable { }
 
 extension MIDIFile.HeaderChunk: Sendable { }
+
+extension MIDIFile.HeaderChunk {
+    /// Returns the header chunk as a type-erased ``AnyMIDIFileHeaderChunk`` instance.
+    public var asAnyMIDIFileHeaderChunk: AnyMIDIFileHeaderChunk {
+        AnyMIDIFileHeaderChunk(
+            format: format,
+            timebase: timebase.asAnyMIDIFileTimebase,
+            additionalBytes: additionalBytes
+        )
+    }
+}

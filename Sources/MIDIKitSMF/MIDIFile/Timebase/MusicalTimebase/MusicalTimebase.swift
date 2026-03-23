@@ -121,4 +121,10 @@ extension MusicalMIDIFileTimebase: MIDIFileTimebase {
         
         return D(data)
     }
+    
+    // MARK: - AnyMIDIFileTimebase
+    
+    public var asAnyMIDIFileTimebase: AnyMIDIFileTimebase {
+        .musical(self)
+    }
 }

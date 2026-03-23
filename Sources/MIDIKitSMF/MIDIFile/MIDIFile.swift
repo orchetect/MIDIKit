@@ -7,22 +7,23 @@
 import Foundation
 import MIDIKitCore
 
-/// Standard MIDI Files (SMF) object. Read or write MIDI file contents.
+/// Standard MIDI Files (SMF) data structure.
 public struct MIDIFile<Timebase: MIDIFileTimebase> {
     /// The timebase of the MIDI file.
     public typealias Timebase = Timebase
     
     // MARK: - Properties
     
-    var header: HeaderChunk = HeaderChunk()
+    /// MIDI file header chunk.
+    public var header: HeaderChunk = HeaderChunk()
     
-    /// MIDI file format to use when writing MIDI file.
+    /// MIDI file format.
     public var format: MIDIFileFormat {
         get { header.format }
         set { header.format = newValue }
     }
     
-    /// Specify whether the MIDI file stores time values in bars & beats (musical) or timecode
+    /// MIDI file timebase (for duration calculations).
     public var timebase: Timebase {
         get { header.timebase }
         set { header.timebase = newValue }

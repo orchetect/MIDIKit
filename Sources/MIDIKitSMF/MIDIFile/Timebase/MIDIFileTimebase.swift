@@ -20,6 +20,9 @@ public protocol MIDIFileTimebase: Equatable, Hashable, Sendable, CustomStringCon
     /// Returns the timebase encoded as raw data.
     func rawData<D: MutableDataProtocol>(as dataType: D.Type) -> D
     
+    /// Returns the timebase as a type-erased ``AnyMIDIFileTimebase`` instance.
+    var asAnyMIDIFileTimebase: AnyMIDIFileTimebase { get }
+    
     /// Initialize from raw data.
     init?(data: some DataProtocol)
     

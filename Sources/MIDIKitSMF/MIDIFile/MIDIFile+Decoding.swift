@@ -10,7 +10,7 @@ import MIDIKitCore
 // MARK: - Internal Parsing Entry-point Methods
 
 extension MIDIFile {
-    /// Decode sequentially, without concurrency.
+    /// Decode chunks sequentially, without concurrency.
     mutating func decode(
         data: some DataProtocol & Sendable,
         options: MIDIFileDecodeOptions,
@@ -27,7 +27,7 @@ extension MIDIFile {
         chunks = parsedChunks
     }
     
-    /// Decode tracks concurrently for improved performance.
+    /// Decode chunks concurrently for improved performance.
     @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
     mutating func decode(
         data: some DataProtocol & Sendable,
