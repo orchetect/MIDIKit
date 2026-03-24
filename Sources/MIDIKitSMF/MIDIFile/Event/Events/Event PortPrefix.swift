@@ -63,7 +63,7 @@ extension MIDIFile.TrackChunk.Event {
     /// Specifies out of which MIDI Port (ie, buss) the MIDI events in the MIDI track go.
     /// The data byte is the port number, where 0 would be the first MIDI buss in the system.
     public static func portPrefix(
-        delta: MIDIFile.TrackChunk.DeltaTime = .none,
+        delta: DeltaTime = .none,
         port: UInt7
     ) -> Self {
         let event: MIDIFileTrackEvent = .portPrefix(

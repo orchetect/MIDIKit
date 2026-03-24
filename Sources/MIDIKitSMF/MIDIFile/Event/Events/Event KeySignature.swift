@@ -120,7 +120,7 @@ extension MIDIFile.TrackChunk.Event {
     ///
     /// If there are no key signature events in a MIDI file, C major is assumed.
     public static func keySignature(
-        delta: MIDIFile.TrackChunk.DeltaTime = .none,
+        delta: DeltaTime = .none,
         key event: MIDIFileTrackEvent.KeySignature
     ) -> Self {
         Self(delta: delta, event: .keySignature(event))
@@ -133,7 +133,7 @@ extension MIDIFile.TrackChunk.Event {
     ///
     /// If there are no key signature events in a MIDI file, C major is assumed.
     public static func keySignature(
-        delta: MIDIFile.TrackChunk.DeltaTime = .none,
+        delta: DeltaTime = .none,
         flatsOrSharps: Int8,
         isMajor: Bool
     ) -> Self? {

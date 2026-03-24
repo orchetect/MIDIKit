@@ -59,7 +59,7 @@ extension MIDIFile.TrackChunk.Event {
     ///
     /// - Throws: `MIDIEvent.ParseError` if any data bytes overflow 7 bits.
     public static func sysEx7(
-        delta: MIDIFile.TrackChunk.DeltaTime = .none,
+        delta: DeltaTime = .none,
         manufacturer: MIDIEvent.SysExManufacturer,
         data: [UInt8]
     ) throws(MIDIEvent.ParseError) -> Self {
@@ -73,7 +73,7 @@ extension MIDIFile.TrackChunk.Event {
     /// System Exclusive: Manufacturer-specific (7-bit)
     @_disfavoredOverload
     public static func sysEx7(
-        delta: MIDIFile.TrackChunk.DeltaTime = .none,
+        delta: DeltaTime = .none,
         manufacturer: MIDIEvent.SysExManufacturer,
         data: [UInt7]
     ) -> Self {
@@ -247,7 +247,7 @@ extension MIDIFile.TrackChunk.Event {
     ///
     /// - Throws: `MIDIEvent.ParseError` if any data bytes overflow 7 bits.
     public static func universalSysEx7(
-        delta: MIDIFile.TrackChunk.DeltaTime = .none,
+        delta: DeltaTime = .none,
         universalType: MIDIEvent.UniversalSysExType,
         deviceID: UInt7,
         subID1: UInt7,
@@ -272,7 +272,7 @@ extension MIDIFile.TrackChunk.Event {
     /// - `deviceID` of `0x7F` indicates "All Devices".
     @_disfavoredOverload
     public static func universalSysEx7(
-        delta: MIDIFile.TrackChunk.DeltaTime = .none,
+        delta: DeltaTime = .none,
         universalType: MIDIEvent.UniversalSysExType,
         deviceID: UInt7,
         subID1: UInt7,

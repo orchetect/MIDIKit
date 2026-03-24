@@ -137,7 +137,7 @@ extension MIDIFile.TrackChunk.Event {
     /// Text is restricted to ASCII format only. If extended characters or encodings are used, it
     /// will be converted to ASCII lossily before encoding into the MIDI file.
     public static func text(
-        delta: MIDIFile.TrackChunk.DeltaTime = .none,
+        delta: DeltaTime = .none,
         type: MIDIFileTrackEvent.Text.EventType,
         string: String
     ) -> Self {

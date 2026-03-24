@@ -84,13 +84,15 @@ extension MusicalMIDIFileTimebase: CustomStringConvertible {
 
 extension MusicalMIDIFileTimebase: CustomDebugStringConvertible {
     public var debugDescription: String {
-        "Timebase(" + description + ")"
+        "MusicalMIDIFileTimebase(" + description + ")"
     }
 }
 
 // MARK: - Static Constructors
 
 extension MIDIFileTimebase where Self == MusicalMIDIFileTimebase {
+    public typealias DeltaTime = MusicalMIDIFileTrackDeltaTime
+    
     public static func `default`() -> MusicalMIDIFileTimebase {
         MusicalMIDIFileTimebase(ticksPerQuarterNote: 960)
     }

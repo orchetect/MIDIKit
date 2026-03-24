@@ -43,7 +43,7 @@ extension MIDIFile.TrackChunk.Event {
     /// Channel Voice Message: RPN (Registered Parameter Number),
     /// also referred to as Registered Controller in MIDI 2.0.
     public static func rpn(
-        delta: MIDIFile.TrackChunk.DeltaTime = .none,
+        delta: DeltaTime = .none,
         parameter: MIDIEvent.RegisteredController,
         change: MIDI2ParameterNumberChange = .absolute,
         channel: UInt4 = 0

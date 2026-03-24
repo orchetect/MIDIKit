@@ -7,9 +7,12 @@
 import Foundation
 import MIDIKitCore
 
-/// Type-erased box for a specialized MIDI file timebase.
+/// Type-erased box containing a specialized MIDI file timebase.
 public enum AnyMIDIFileTimebase {
+    /// Musical timebase.
     case musical(_ timebase: MusicalMIDIFileTimebase)
+    
+    /// SMPTE timecode timebase.
     case smpte(_ timebase: SMPTEMIDIFileTimebase)
 }
 
@@ -44,7 +47,7 @@ extension AnyMIDIFileTimebase: CustomDebugStringConvertible {
 // MARK: - Properties
 
 extension AnyMIDIFileTimebase {
-    /// Unwraps the enum case and returns the chunk contained within, typed as ``MIDIFile/Chunk`` protocol.
+    /// Unwraps the enum case and returns the timebase contained within, typed as `any` ``MIDIFileTimebase``.
     public var unwrapped: any MIDIFileTimebase {
         switch self {
         case let .musical(timebase): timebase
@@ -80,7 +83,7 @@ extension AnyMIDIFileTimebase {
 
 // MARK: - Timebase
 
-extension AnyMIDIFileTimebase: MIDIFileTimebase {
+extension AnyMIDIFileTimebase {
     // MARK: - Decoding
     
     /// Initialize from raw data.

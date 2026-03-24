@@ -6,6 +6,7 @@
 
 import Foundation
 import MIDIKitCore
+import SwiftTimecodeCore
 internal import SwiftDataParsing
 
 // MARK: - Track
@@ -13,6 +14,13 @@ internal import SwiftDataParsing
 extension MIDIFile {
     /// Track: `MTrk` chunk type.
     public struct TrackChunk {
+        // MARK: - Typealiases
+        
+        /// Delta time advancement within a MIDI file track.
+        public typealias DeltaTime = Timebase.DeltaTime
+        
+        // MARK: - Properties
+        
         /// Storage for events in the track.
         public var events: [Event] = []
         

@@ -52,7 +52,7 @@ extension MIDIFileTrackEvent {
 extension MIDIFile.TrackChunk.Event {
     /// Channel Voice Message: Pitch Bend
     public static func pitchBend(
-        delta: MIDIFile.TrackChunk.DeltaTime = .none,
+        delta: DeltaTime = .none,
         lsb: UInt8,
         msb: UInt8,
         channel: UInt4 = 0
@@ -67,7 +67,7 @@ extension MIDIFile.TrackChunk.Event {
     
     /// Channel Voice Message: Pitch Bend
     public static func pitchBend(
-        delta: MIDIFile.TrackChunk.DeltaTime = .none,
+        delta: DeltaTime = .none,
         value: MIDIEvent.PitchBend.Value,
         channel: UInt4 = 0
     ) -> Self {

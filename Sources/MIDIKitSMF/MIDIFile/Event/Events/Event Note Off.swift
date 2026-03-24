@@ -56,7 +56,7 @@ extension MIDIFileTrackEvent {
 extension MIDIFile.TrackChunk.Event {
     /// Channel Voice Message: Note Off
     public static func noteOff(
-        delta: MIDIFile.TrackChunk.DeltaTime = .none,
+        delta: DeltaTime = .none,
         note: MIDINote,
         velocity: MIDIEvent.NoteVelocity,
         channel: UInt4 = 0
@@ -71,7 +71,7 @@ extension MIDIFile.TrackChunk.Event {
     
     /// Channel Voice Message: Note Off
     public static func noteOff(
-        delta: MIDIFile.TrackChunk.DeltaTime = .none,
+        delta: DeltaTime = .none,
         note: UInt7,
         velocity: MIDIEvent.NoteVelocity,
         channel: UInt4 = 0

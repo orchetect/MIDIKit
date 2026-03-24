@@ -43,7 +43,7 @@ extension MIDIFile.TrackChunk.Event {
     /// Channel Voice Message: NRPN (Non-Registered Parameter Number),
     /// also referred to as Assignable Controller in MIDI 2.0.
     public static func nrpn(
-        delta: MIDIFile.TrackChunk.DeltaTime = .none,
+        delta: DeltaTime = .none,
         parameter: MIDIEvent.AssignableController,
         change: MIDI2ParameterNumberChange = .absolute,
         channel: UInt4 = 0

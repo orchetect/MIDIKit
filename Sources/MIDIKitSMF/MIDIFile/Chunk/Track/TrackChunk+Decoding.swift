@@ -213,7 +213,7 @@ extension MIDIFile.TrackChunk {
             if options.bundleRPNAndNRPNEvents {
                 var eventsIndex = newEvents.startIndex
                 while eventsIndex < newEvents.endIndex {
-                    Self.bundleRPNAndNRPN(index: eventsIndex, in: &newEvents)
+                    Self.bundleRPNAndNRPN(index: eventsIndex, in: &newEvents, timebase: timebase)
                     eventsIndex += 1
                 }
             }
@@ -226,7 +226,11 @@ extension MIDIFile.TrackChunk {
         if let track { self = track } else { return nil }
     }
     
-    static func bundleRPNAndNRPN(index eventsIndex: [Event].Index, in newEvents: inout [Event]) {
+    static func bundleRPNAndNRPN(
+        index eventsIndex: [Event].Index,
+        in newEvents: inout [Event],
+        timebase: Timebase
+    ) {
         guard newEvents[eventsIndex].event.eventType == .cc
         else { return }
         
@@ -253,7 +257,7 @@ extension MIDIFile.TrackChunk {
         
         let dataEntryLSBIndex = eventsIndex.advanced(by: 3)
         let dataEntryLSB: (
-            delta: MIDIFile.TrackChunk.DeltaTime, value: UInt7
+            delta: DeltaTime, value: UInt7
         )? = if newEvents.indices.contains(dataEntryLSBIndex),
                 case let .cc(dataEntryLSBCCEvent) = newEvents[dataEntryLSBIndex].event,
                 dataEntryLSBCCEvent.controller == .lsb(for: .dataEntry),
@@ -277,9 +281,9 @@ extension MIDIFile.TrackChunk {
             lsb: extractedEvents[1].event.value.midi1Value
         )
         let dataEntryMSB = extractedEvents[2].event.value.midi1Value
-        let totalDelta = extractedEvents.map(\.delta).reduce(into: 0) {
-            $0 += $1.ticks
-        } + (dataEntryLSB?.delta.ticks ?? 0)
+        let totalDelta: UInt32 = extractedEvents.map(\.delta).reduce(into: 0) {
+            $0 += $1.ticks(using: timebase)
+        } + (dataEntryLSB?.delta.ticks(using: timebase) ?? 0)
         
         var replacementEvent: Event?
         

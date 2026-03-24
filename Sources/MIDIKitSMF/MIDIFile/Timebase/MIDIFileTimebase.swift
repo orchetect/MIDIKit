@@ -13,7 +13,10 @@ import MIDIKitCore
 ///
 /// All MIDI file tracks use ticks as timing resolution - the smallest, most finite unit of time duration possible.
 /// The timebase determines how those ticks are used to calculate real wall-time duration.
-public protocol MIDIFileTimebase: Equatable, Hashable, Sendable, CustomStringConvertible, CustomDebugStringConvertible {
+public protocol MIDIFileTimebase: Equatable, Hashable, Sendable, CustomStringConvertible, CustomDebugStringConvertible
+where DeltaTime.Timebase == Self {
+    associatedtype DeltaTime: MIDIFileTrackDeltaTime
+    
     /// Returns the timebase encoded as raw data.
     func rawData() -> Data
     

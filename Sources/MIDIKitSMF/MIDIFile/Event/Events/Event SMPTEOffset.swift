@@ -243,7 +243,7 @@ extension MIDIFile.TrackChunk.Event {
     ///   - subFr: Subframes value.
     ///   - rate: SMPTE frame rate.
     public static func smpteOffset(
-        delta: MIDIFile.TrackChunk.DeltaTime = .none,
+        delta: DeltaTime = .none,
         hr: UInt8,
         min: UInt8,
         sec: UInt8,
@@ -273,7 +273,7 @@ extension MIDIFile.TrackChunk.Event {
     /// > MIDI SMPTE Offset subframes (fractional frames) are always in 100ths of a frame, even in
     /// > SMPTE-based tracks which specify a different frame subdivision for delta-times.
     public static func smpteOffset(
-        delta: MIDIFile.TrackChunk.DeltaTime = .none,
+        delta: DeltaTime = .none,
         scaling timecode: Timecode
     ) -> Self? {
         guard let event: MIDIFileTrackEvent = .smpteOffset(scaling: timecode) else { return nil }

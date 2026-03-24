@@ -58,7 +58,7 @@ extension MIDIFile.TrackChunk.Event {
     /// Sequencer-specific data.
     /// Typically begins with a 1 or 3 byte manufacturer ID, similar to SysEx.
     public static func sequencerSpecific(
-        delta: MIDIFile.TrackChunk.DeltaTime = .none,
+        delta: DeltaTime = .none,
         data: [UInt8]
     ) -> Self {
         let event: MIDIFileTrackEvent = .sequencerSpecific(

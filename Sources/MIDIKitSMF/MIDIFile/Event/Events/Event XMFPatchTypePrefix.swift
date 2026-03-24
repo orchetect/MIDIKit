@@ -112,7 +112,7 @@ extension MIDIFile.TrackChunk.Event {
     /// >
     /// > See [RP-032](https://www.midi.org/specifications/file-format-specifications/standard-midi-files/xmf-patch-type-prefix-meta-event).
     public static func xmfPatchTypePrefix(
-        delta: MIDIFile.TrackChunk.DeltaTime = .none,
+        delta: DeltaTime = .none,
         patchSet: MIDIFileTrackEvent.XMFPatchTypePrefix.PatchSet
     ) -> Self {
         let event: MIDIFileTrackEvent = .xmfPatchTypePrefix(

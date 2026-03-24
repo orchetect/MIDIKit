@@ -67,7 +67,7 @@ extension MIDIFile.TrackChunk.Event {
     /// For a format 1 MIDI file, Tempo events should only occur within the first `MTrk` chunk.
     /// If there are no tempo events in a MIDI file, 120 bpm is assumed.
     public static func tempo(
-        delta: MIDIFile.TrackChunk.DeltaTime = .none,
+        delta: DeltaTime = .none,
         bpm: Double
     ) -> Self {
         let event: MIDIFileTrackEvent = .tempo(

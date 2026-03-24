@@ -56,7 +56,7 @@ extension MIDIFileTrackEvent {
 extension MIDIFile.TrackChunk.Event {
     /// Channel Voice Message: Control Change (CC)
     public static func cc(
-        delta: MIDIFile.TrackChunk.DeltaTime = .none,
+        delta: DeltaTime = .none,
         controller: MIDIEvent.CC.Controller,
         value: MIDIEvent.CC.Value,
         channel: UInt4 = 0
@@ -71,7 +71,7 @@ extension MIDIFile.TrackChunk.Event {
     
     /// Channel Voice Message: Control Change (CC)
     public static func cc(
-        delta: MIDIFile.TrackChunk.DeltaTime = .none,
+        delta: DeltaTime = .none,
         controller: UInt7,
         value: MIDIEvent.CC.Value,
         channel: UInt4 = 0

@@ -56,7 +56,7 @@ extension MIDIFile.TrackChunk.Event {
     /// > but will be decoded as individual CC messages. This may be addressed in a future release
     /// > of MIDIKit.
     public static func programChange(
-        delta: MIDIFile.TrackChunk.DeltaTime = .none,
+        delta: DeltaTime = .none,
         program: UInt7,
         channel: UInt4 = 0
     ) -> Self {

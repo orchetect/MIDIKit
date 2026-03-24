@@ -81,7 +81,7 @@ extension MIDIFile.TrackChunk.Event {
     /// > help jam several tracks into a format 0 file, keeping their non-MIDI data associated with
     /// > a track. This capability is also present in Yamaha's ESEQ file format.
     public static func channelPrefix(
-        delta: MIDIFile.TrackChunk.DeltaTime = .none,
+        delta: DeltaTime = .none,
         channel: UInt4
     ) -> Self {
         let event: MIDIFileTrackEvent = .channelPrefix(

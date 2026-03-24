@@ -14,6 +14,9 @@ public struct MIDIFile<Timebase: MIDIFileTimebase> {
     /// The timebase of the MIDI file.
     public typealias Timebase = Timebase
     
+    /// Delta time advancement within a MIDI file track.
+    public typealias DeltaTime = Timebase.DeltaTime
+    
     // MARK: - Properties
     
     /// MIDI file header chunk.
@@ -25,7 +28,7 @@ public struct MIDIFile<Timebase: MIDIFileTimebase> {
         set { header.format = newValue }
     }
     
-    /// MIDI file timebase (for duration calculations).
+    /// MIDI file timebase parameters (for duration calculations).
     public var timebase: Timebase {
         get { header.timebase }
         set { header.timebase = newValue }

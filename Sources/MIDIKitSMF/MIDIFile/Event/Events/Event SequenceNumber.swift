@@ -80,7 +80,7 @@ extension MIDIFile.TrackChunk.Event {
     ///
     /// - For MIDI file type 2, each track can contain a sequence number event.
     public static func sequenceNumber(
-        delta: MIDIFile.TrackChunk.DeltaTime = .none,
+        delta: DeltaTime = .none,
         sequence: UInt16
     ) -> Self {
         let event: MIDIFileTrackEvent = .sequenceNumber(

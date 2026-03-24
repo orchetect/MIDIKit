@@ -106,7 +106,7 @@ extension MIDIFile.TrackChunk.Event {
     ///   - numerator: Numerator in time signature fraction: Literal numerator.
     ///   - denominator: Denominator in time signature fraction. Expressed as a power of 2. (ie: 2 = 2^2 = 4, 3 = 2^3 = 8, etc.)
     public static func timeSignature(
-        delta: MIDIFile.TrackChunk.DeltaTime = .none,
+        delta: DeltaTime = .none,
         numerator: UInt8,
         denominator: UInt8
     ) -> Self {

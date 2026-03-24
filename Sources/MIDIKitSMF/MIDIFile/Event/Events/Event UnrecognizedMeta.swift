@@ -129,7 +129,7 @@ extension MIDIFile.TrackChunk.Event {
     /// > SysEx events and meta-events cancel any running status which was in effect. Running status
     /// > does not apply to and may not be used for these messages.
     public static func unrecognizedMeta(
-        delta: MIDIFile.TrackChunk.DeltaTime = .none,
+        delta: DeltaTime = .none,
         metaType: UInt8,
         data: [UInt8]
     ) -> Self {

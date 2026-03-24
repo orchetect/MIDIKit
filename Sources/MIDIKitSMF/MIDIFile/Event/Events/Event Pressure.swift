@@ -58,7 +58,7 @@ extension MIDIFile.TrackChunk.Event {
     /// - Logic Pro: "Aftertouch"
     /// - Cubase: "Aftertouch"
     public static func pressure(
-        delta: MIDIFile.TrackChunk.DeltaTime = .none,
+        delta: DeltaTime = .none,
         amount: MIDIEvent.Pressure.Amount,
         channel: UInt4 = 0
     ) -> Self {

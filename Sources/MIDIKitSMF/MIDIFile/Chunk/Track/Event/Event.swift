@@ -7,6 +7,13 @@
 extension MIDIFile.TrackChunk {
     /// Track event with a delta time offset.
     public struct Event {
+        // MARK: - Typealiases
+        
+        /// Delta time advancement within a MIDI file track.
+        public typealias DeltaTime = Timebase.DeltaTime
+        
+        // MARK: - Properties
+        
         /// The delta time offset of the event.
         public var delta: DeltaTime
         

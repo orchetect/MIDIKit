@@ -53,13 +53,15 @@ extension SMPTEMIDIFileTimebase: CustomStringConvertible {
 
 extension SMPTEMIDIFileTimebase: CustomDebugStringConvertible {
     public var debugDescription: String {
-        "Timebase(" + description + ")"
+        "SMPTEMIDIFileTimebase(" + description + ")"
     }
 }
 
 // MARK: - Static Constructors
 
 extension MIDIFileTimebase where Self == SMPTEMIDIFileTimebase {
+    public typealias DeltaTime = SMPTEMIDIFileTrackDeltaTime
+    
     public static func `default`() -> SMPTEMIDIFileTimebase {
         SMPTEMIDIFileTimebase(frameRate: .fps30, ticksPerFrame: 40)
     }

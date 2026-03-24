@@ -76,7 +76,7 @@ extension MIDIFile.TrackChunk.Event {
     /// - Logic Pro: "Polyphonic Aftertouch"
     /// - Cubase: "Poly Pressure"
     public static func notePressure(
-        delta: MIDIFile.TrackChunk.DeltaTime = .none,
+        delta: DeltaTime = .none,
         note: MIDINote,
         amount: MIDIEvent.NotePressure.Amount,
         channel: UInt4 = 0
@@ -96,7 +96,7 @@ extension MIDIFile.TrackChunk.Event {
     /// - Logic Pro: "Polyphonic Aftertouch"
     /// - Cubase: "Poly Pressure"
     public static func notePressure(
-        delta: MIDIFile.TrackChunk.DeltaTime = .none,
+        delta: DeltaTime = .none,
         note: UInt7,
         amount: MIDIEvent.NotePressure.Amount,
         channel: UInt4 = 0

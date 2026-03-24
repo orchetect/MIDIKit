@@ -23,11 +23,11 @@ extension MIDIFile.TrackChunk {
         var bodyData = D()
         
         for event in events {
-            bodyData.append(deltaTime: event.delta.ticks)
+            bodyData.append(deltaTime: event.delta.ticks(using: timebase))
             bodyData.append(contentsOf: event.event.unwrapped.midi1SMFRawBytes(as: D.self))
         }
         
-        bodyData.append(deltaTime: deltaTimeBeforeEndOfTrack.ticks)
+        bodyData.append(deltaTime: deltaTimeBeforeEndOfTrack.ticks(using: timebase))
         bodyData += Self.trackEndByes
         
         // assemble full chunk data with header and length

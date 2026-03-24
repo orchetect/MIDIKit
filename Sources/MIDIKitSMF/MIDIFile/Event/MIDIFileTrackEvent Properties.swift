@@ -38,7 +38,7 @@ extension MIDIFileTrackEvent {
     }
     
     /// Returns the event as a track event with delta time.
-    public func wrapped<Timebase: MIDIFileTimebase>(delta: MIDIFile<Timebase>.TrackChunk.DeltaTime) -> MIDIFile<Timebase>.TrackChunk.Event {
+    public func wrapped<Timebase: MIDIFileTimebase>(delta: MIDIFile<Timebase>.DeltaTime) -> MIDIFile<Timebase>.TrackChunk.Event {
         .init(delta: delta, event: self)
     }
     
