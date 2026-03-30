@@ -46,7 +46,7 @@ import Testing
         guard case let .nrpn(event) = parsedTrackA.events[0].event else { Issue.record(); return }
         let delta = parsedTrackA.events[0].delta
         
-        #expect(delta.ticks == 0)
+        #expect(delta.ticks(using: timebase) == 0)
         #expect(
             event.parameter ==
                 .raw(parameter: .init(msb: 0x00, lsb: 0x01), dataEntryMSB: 0x02, dataEntryLSB: 0x03)
@@ -87,7 +87,7 @@ import Testing
         guard case let .nrpn(event) = parsedTrackA.events[0].event else { Issue.record(); return }
         let delta = parsedTrackA.events[0].delta
         
-        #expect(delta.ticks == 0)
+        #expect(delta.ticks(using: timebase) == 0)
         #expect(
             event.parameter ==
                 .raw(parameter: .init(msb: 0x00, lsb: 0x01), dataEntryMSB: 0x02, dataEntryLSB: 0x03)
@@ -150,7 +150,7 @@ import Testing
         guard case let .nrpn(event) = parsedTrackA.events[0].event else { Issue.record(); return }
         let delta = parsedTrackA.events[0].delta
         
-        #expect(delta.ticks == 0)
+        #expect(delta.ticks(using: timebase) == 0)
         #expect(
             event.parameter ==
                 .raw(parameter: .init(msb: 0x05, lsb: 0x10), dataEntryMSB: 0x08, dataEntryLSB: nil)
@@ -189,7 +189,7 @@ import Testing
         guard case let .nrpn(event) = parsedTrackA.events[0].event else { Issue.record(); return }
         let delta = parsedTrackA.events[0].delta
         
-        #expect(delta.ticks == 0)
+        #expect(delta.ticks(using: timebase) == 0)
         #expect(
             event.parameter ==
                 .raw(parameter: .init(msb: 0x05, lsb: 0x10), dataEntryMSB: 0x08, dataEntryLSB: nil)

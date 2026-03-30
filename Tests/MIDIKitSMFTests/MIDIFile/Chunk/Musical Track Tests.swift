@@ -144,7 +144,8 @@ import Testing
     @Test
     func eventsAtQuarterNotePositions_eventsAtStart() async throws {
         let ppq: UInt16 = 480
-        var midiFile = MusicalMIDIFile(timebase: .musical(ticksPerQuarterNote: UInt16(ppq)))
+        let timebase: MusicalMIDIFile.Timebase = .musical(ticksPerQuarterNote: ppq)
+        var midiFile = MusicalMIDIFile(timebase: timebase)
         
         midiFile.chunks = [
             .track([
@@ -185,7 +186,7 @@ import Testing
         
         // eventsAtQuarterNotePositions
         do {
-            let events = trackOne.eventsAtQuarterNotePositions(atPPQ: ppq)
+            let events = trackOne.eventsAtQuarterNotePositions(using: timebase)
             
             #expect(events.count == 11)
             

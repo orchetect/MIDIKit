@@ -18,149 +18,177 @@ import Testing
     @Test
     func musicalStaticConstructors_240ppq() async throws {
         typealias Delta = MusicalMIDIFile.TrackChunk.DeltaTime
+        let timebase: Delta.Timebase = .musical(ticksPerQuarterNote: 240)
         
         // triplet == false (default)
-        #expect(Delta.noteWhole(ppq: 240).ticks == 960)
-        #expect(Delta.noteHalf(ppq: 240).ticks == 480)
-        #expect(Delta.noteQuarter(ppq: 240).ticks == 240)
-        #expect(Delta.note8th(ppq: 240).ticks == 120)
-        #expect(Delta.note16th(ppq: 240).ticks == 60)
-        #expect(Delta.note32nd(ppq: 240).ticks == 30)
-        #expect(Delta.note64th(ppq: 240).ticks == 15)
-        #expect(Delta.note128th(ppq: 240).ticks == 8) // note: 7.5 aliased (rounded)
-        #expect(Delta.note256th(ppq: 240).ticks == 4) // note: 3.75 aliased (rounded)
+        #expect(Delta.noteWhole.ticks(using: timebase) == 960)
+        #expect(Delta.noteHalf.ticks(using: timebase) == 480)
+        #expect(Delta.noteQuarter.ticks(using: timebase) == 240)
+        #expect(Delta.note8th.ticks(using: timebase) == 120)
+        #expect(Delta.note16th.ticks(using: timebase) == 60)
+        #expect(Delta.note32nd.ticks(using: timebase) == 30)
+        #expect(Delta.note64th.ticks(using: timebase) == 15)
+        #expect(Delta.note128th.ticks(using: timebase) == 8) // note: 7.5 aliased (rounded)
+        #expect(Delta.note256th.ticks(using: timebase) == 4) // note: 3.75 aliased (rounded)
         
         // triplet == true
-        #expect(Delta.note8th(triplet: true, ppq: 240).ticks == 80)
-        #expect(Delta.note16th(triplet: true, ppq: 240).ticks == 40)
-        #expect(Delta.note32nd(triplet: true, ppq: 240).ticks == 20)
-        #expect(Delta.note64th(triplet: true, ppq: 240).ticks == 10)
-        #expect(Delta.note128th(triplet: true, ppq: 240).ticks == 5)
-        #expect(Delta.note256th(triplet: true, ppq: 240).ticks == 3) // note: 2.5 aliased (rounded)
+        #expect(Delta.note8th(triplet: true).ticks(using: timebase) == 80)
+        #expect(Delta.note16th(triplet: true).ticks(using: timebase) == 40)
+        #expect(Delta.note32nd(triplet: true).ticks(using: timebase) == 20)
+        #expect(Delta.note64th(triplet: true).ticks(using: timebase) == 10)
+        #expect(Delta.note128th(triplet: true).ticks(using: timebase) == 5)
+        #expect(Delta.note256th(triplet: true).ticks(using: timebase) == 3) // note: 2.5 aliased (rounded)
     }
     
     @Test
     func musicalStaticConstructors_480ppq() async throws {
         typealias Delta = MusicalMIDIFile.TrackChunk.DeltaTime
+        let timebase: Delta.Timebase = .musical(ticksPerQuarterNote: 480)
         
         // triplet == false (default)
-        #expect(Delta.noteWhole(ppq: 480).ticks == 1920)
-        #expect(Delta.noteHalf(ppq: 480).ticks == 960)
-        #expect(Delta.noteQuarter(ppq: 480).ticks == 480)
-        #expect(Delta.note8th(ppq: 480).ticks == 240)
-        #expect(Delta.note16th(ppq: 480).ticks == 120)
-        #expect(Delta.note32nd(ppq: 480).ticks == 60)
-        #expect(Delta.note64th(ppq: 480).ticks == 30)
-        #expect(Delta.note128th(ppq: 480).ticks == 15)
-        #expect(Delta.note256th(ppq: 480).ticks == 8) // note: 7.5 aliased (rounded)
+        #expect(Delta.noteWhole.ticks(using: timebase) == 1920)
+        #expect(Delta.noteHalf.ticks(using: timebase) == 960)
+        #expect(Delta.noteQuarter.ticks(using: timebase) == 480)
+        #expect(Delta.note8th.ticks(using: timebase) == 240)
+        #expect(Delta.note16th.ticks(using: timebase) == 120)
+        #expect(Delta.note32nd.ticks(using: timebase) == 60)
+        #expect(Delta.note64th.ticks(using: timebase) == 30)
+        #expect(Delta.note128th.ticks(using: timebase) == 15)
+        #expect(Delta.note256th.ticks(using: timebase) == 8) // note: 7.5 aliased (rounded)
         
         // triplet == true
-        #expect(Delta.note8th(triplet: true, ppq: 480).ticks == 160)
-        #expect(Delta.note16th(triplet: true, ppq: 480).ticks == 80)
-        #expect(Delta.note32nd(triplet: true, ppq: 480).ticks == 40)
-        #expect(Delta.note64th(triplet: true, ppq: 480).ticks == 20)
-        #expect(Delta.note128th(triplet: true, ppq: 480).ticks == 10)
-        #expect(Delta.note256th(triplet: true, ppq: 480).ticks == 5)
+        #expect(Delta.note8th(triplet: true).ticks(using: timebase) == 160)
+        #expect(Delta.note16th(triplet: true).ticks(using: timebase) == 80)
+        #expect(Delta.note32nd(triplet: true).ticks(using: timebase) == 40)
+        #expect(Delta.note64th(triplet: true).ticks(using: timebase) == 20)
+        #expect(Delta.note128th(triplet: true).ticks(using: timebase) == 10)
+        #expect(Delta.note256th(triplet: true).ticks(using: timebase) == 5)
     }
     
     @Test
     func musicalStaticConstructors_960ppq() async throws {
         typealias Delta = MusicalMIDIFile.TrackChunk.DeltaTime
+        let timebase: Delta.Timebase = .musical(ticksPerQuarterNote: 960)
         
         // triplet == false (default)
-        #expect(Delta.noteWhole(ppq: 960).ticks == 3840)
-        #expect(Delta.noteHalf(ppq: 960).ticks == 1920)
-        #expect(Delta.noteQuarter(ppq: 960).ticks == 960)
-        #expect(Delta.note8th(ppq: 960).ticks == 480)
-        #expect(Delta.note16th(ppq: 960).ticks == 240)
-        #expect(Delta.note32nd(ppq: 960).ticks == 120)
-        #expect(Delta.note64th(ppq: 960).ticks == 60)
-        #expect(Delta.note128th(ppq: 960).ticks == 30)
-        #expect(Delta.note256th(ppq: 960).ticks == 15)
+        #expect(Delta.noteWhole.ticks(using: timebase) == 3840)
+        #expect(Delta.noteHalf.ticks(using: timebase) == 1920)
+        #expect(Delta.noteQuarter.ticks(using: timebase) == 960)
+        #expect(Delta.note8th.ticks(using: timebase) == 480)
+        #expect(Delta.note16th.ticks(using: timebase) == 240)
+        #expect(Delta.note32nd.ticks(using: timebase) == 120)
+        #expect(Delta.note64th.ticks(using: timebase) == 60)
+        #expect(Delta.note128th.ticks(using: timebase) == 30)
+        #expect(Delta.note256th.ticks(using: timebase) == 15)
         
         // triplet == true
-        #expect(Delta.note8th(triplet: true, ppq: 960).ticks == 320)
-        #expect(Delta.note16th(triplet: true, ppq: 960).ticks == 160)
-        #expect(Delta.note32nd(triplet: true, ppq: 960).ticks == 80)
-        #expect(Delta.note64th(triplet: true, ppq: 960).ticks == 40)
-        #expect(Delta.note128th(triplet: true, ppq: 960).ticks == 20)
-        #expect(Delta.note256th(triplet: true, ppq: 960).ticks == 10)
+        #expect(Delta.note8th(triplet: true).ticks(using: timebase) == 320)
+        #expect(Delta.note16th(triplet: true).ticks(using: timebase) == 160)
+        #expect(Delta.note32nd(triplet: true).ticks(using: timebase) == 80)
+        #expect(Delta.note64th(triplet: true).ticks(using: timebase) == 40)
+        #expect(Delta.note128th(triplet: true).ticks(using: timebase) == 20)
+        #expect(Delta.note256th(triplet: true).ticks(using: timebase) == 10)
     }
     
     @Test
     func musicalStaticConstructors_beats() async throws {
         typealias Delta = MusicalMIDIFile.TrackChunk.DeltaTime
+        let timebase: Delta.Timebase = .musical(ticksPerQuarterNote: 480)
         
-        #expect(Delta.beats(-1.0, ppq: 480).ticks == 0)
-        #expect(Delta.beats(0.0, ppq: 480).ticks == 0)
-        #expect(Delta.beats(0.25, ppq: 480).ticks == 120)
-        #expect(Delta.beats(0.5, ppq: 480).ticks == 240)
-        #expect(Delta.beats(1.0, ppq: 480).ticks == 480)
-        #expect(Delta.beats(4.0, ppq: 480).ticks == 1920)
+        #expect(Delta.beats(-1.0).ticks(using: timebase) == 0)
+        #expect(Delta.beats(0.0).ticks(using: timebase) == 0)
+        #expect(Delta.beats(0.25).ticks(using: timebase) == 120)
+        #expect(Delta.beats(0.5).ticks(using: timebase) == 240)
+        #expect(Delta.beats(1.0).ticks(using: timebase) == 480)
+        #expect(Delta.beats(4.0).ticks(using: timebase) == 1920)
     }
     
     @Test
     func musicalStaticConstructors_edgeCases() async throws {
         typealias Delta = MusicalMIDIFile.TrackChunk.DeltaTime
+        let timebase: Delta.Timebase = .default()
         
-        #expect(Delta.ticks(UInt32.min).ticks == UInt32.min)
-        #expect(Delta.ticks(UInt32.max).ticks == UInt32.max)
+        #expect(Delta.ticks(UInt32.min).ticks(using: timebase) == UInt32.min)
+        #expect(Delta.ticks(UInt32.max).ticks(using: timebase) == UInt32.max)
         
-        #expect(Delta.noteWhole(ppq: 0).ticks == 0)
-        #expect(Delta.noteWhole(ppq: 1).ticks == 4)
-        #expect(Delta.noteWhole(ppq: UInt16.max).ticks == 4 * UInt32(UInt16.max))
+        #expect(Delta.noteWhole.ticks(using: .musical(ticksPerQuarterNote: 0)) == 0)
+        #expect(Delta.noteWhole.ticks(using: .musical(ticksPerQuarterNote: 1)) == 4)
+        #expect(Delta.noteWhole.ticks(using: .musical(ticksPerQuarterNote: UInt16.max)) == 4 * UInt32(UInt16.max))
         
-        #expect(Delta.note256th(ppq: 0).ticks == 0)
-        #expect(Delta.note256th(ppq: UInt16.max).ticks == 1024) // 1023.984375 rounded
+        #expect(Delta.note256th.ticks(using: .musical(ticksPerQuarterNote: 0)) == 0)
+        #expect(Delta.note256th.ticks(using: .musical(ticksPerQuarterNote: UInt16.max)) == 1024) // 1023.984375 rounded
     }
 }
 
 @Suite struct SMPTE_DeltaTime_Tests {
     /// Test the SMPTE timebase-specific static constructors on `DeltaTime`.
     @Test
-    func smpteStaticConstructors_fromSMPTEOffset() async throws {
+    func smpteStaticConstructors_fromSMPTEOffset_25fps_20tpf() async throws {
         typealias Delta = SMPTEMIDIFile.TrackChunk.DeltaTime
+        let timebase: Delta.Timebase = .smpte(frameRate: .fps25, ticksPerFrame: 20)
         
-        // MIDIFileTrackEvent.SMPTEOffset
-        
-        #expect(Delta.offset(MIDIFileTrackEvent.SMPTEOffset(hr: 00, min: 00, sec: 00, fr: 00, rate: .fps25), ticksPerFrame: 20).ticks == 0)
-        #expect(Delta.offset(MIDIFileTrackEvent.SMPTEOffset(hr: 00, min: 01, sec: 20, fr: 10, rate: .fps25), ticksPerFrame: 20).ticks == 40_200)
-        #expect(Delta.offset(MIDIFileTrackEvent.SMPTEOffset(hr: 01, min: 01, sec: 20, fr: 10, rate: .fps25), ticksPerFrame: 20).ticks == 1_840_200)
-        
-        #expect(Delta.offset(MIDIFileTrackEvent.SMPTEOffset(hr: 00, min: 00, sec: 00, fr: 00, rate: .fps25), ticksPerFrame: 40).ticks == 0)
-        #expect(Delta.offset(MIDIFileTrackEvent.SMPTEOffset(hr: 00, min: 01, sec: 20, fr: 10, rate: .fps25), ticksPerFrame: 40).ticks == 80_400)
-        #expect(Delta.offset(MIDIFileTrackEvent.SMPTEOffset(hr: 01, min: 01, sec: 20, fr: 10, rate: .fps25), ticksPerFrame: 40).ticks == 3_680_400)
+        #expect(Delta.offset(MIDIFileTrackEvent.SMPTEOffset(hr: 00, min: 00, sec: 00, fr: 00, rate: .fps25)).ticks(using: timebase) == 0)
+        #expect(Delta.offset(MIDIFileTrackEvent.SMPTEOffset(hr: 00, min: 01, sec: 20, fr: 10, rate: .fps25)).ticks(using: timebase) == 40_200)
+        #expect(Delta.offset(MIDIFileTrackEvent.SMPTEOffset(hr: 01, min: 01, sec: 20, fr: 10, rate: .fps25)).ticks(using: timebase) == 1_840_200)
     }
     
     @Test
-    func smpteStaticConstructors_offset() async throws {
+    func smpteStaticConstructors_fromSMPTEOffset_25fps_40tpf() async throws {
         typealias Delta = SMPTEMIDIFile.TrackChunk.DeltaTime
+        let timebase: Delta.Timebase = .smpte(frameRate: .fps25, ticksPerFrame: 40)
         
-        // offset(hr:min:sec:fr:subFr:rate:ticksPerFrame:)
-        
-        #expect(Delta.offset(hr: 00, min: 00, sec: 00, fr: 00, rate: .fps25, ticksPerFrame: 20).ticks == 0)
-        #expect(Delta.offset(hr: 00, min: 01, sec: 20, fr: 10, rate: .fps25, ticksPerFrame: 20).ticks == 40_200)
-        #expect(Delta.offset(hr: 01, min: 01, sec: 20, fr: 10, rate: .fps25, ticksPerFrame: 20).ticks == 1_840_200)
-        
-        #expect(Delta.offset(hr: 00, min: 00, sec: 00, fr: 00, rate: .fps25, ticksPerFrame: 40).ticks == 0)
-        #expect(Delta.offset(hr: 00, min: 01, sec: 20, fr: 10, rate: .fps25, ticksPerFrame: 40).ticks == 80_400)
-        #expect(Delta.offset(hr: 01, min: 01, sec: 20, fr: 10, rate: .fps25, ticksPerFrame: 40).ticks == 3_680_400)
+        #expect(Delta.offset(MIDIFileTrackEvent.SMPTEOffset(hr: 00, min: 00, sec: 00, fr: 00, rate: .fps25)).ticks(using: timebase) == 0)
+        #expect(Delta.offset(MIDIFileTrackEvent.SMPTEOffset(hr: 00, min: 01, sec: 20, fr: 10, rate: .fps25)).ticks(using: timebase) == 80_400)
+        #expect(Delta.offset(MIDIFileTrackEvent.SMPTEOffset(hr: 01, min: 01, sec: 20, fr: 10, rate: .fps25)).ticks(using: timebase) == 3_680_400)
     }
     
     @Test
-    func smpteStaticConstructors_edgeCases() async throws {
+    func smpteStaticConstructors_offset_25fps_20tpf() async throws {
         typealias Delta = SMPTEMIDIFile.TrackChunk.DeltaTime
+        let timebase: Delta.Timebase = .smpte(frameRate: .fps25, ticksPerFrame: 20)
         
-        #expect(Delta.offset(hr: 00, min: 00, sec: 00, fr: 00, rate: .fps25, ticksPerFrame: 0).ticks == 0)
-        #expect(Delta.offset(hr: 00, min: 01, sec: 20, fr: 10, rate: .fps25, ticksPerFrame: 0).ticks == 0)
-        #expect(Delta.offset(hr: 01, min: 01, sec: 20, fr: 10, rate: .fps25, ticksPerFrame: 0).ticks == 0)
+        #expect(Delta.offset(hr: 00, min: 00, sec: 00, fr: 00, rate: .fps25).ticks(using: timebase) == 0)
+        #expect(Delta.offset(hr: 00, min: 01, sec: 20, fr: 10, rate: .fps25).ticks(using: timebase) == 40_200)
+        #expect(Delta.offset(hr: 01, min: 01, sec: 20, fr: 10, rate: .fps25).ticks(using: timebase) == 1_840_200)
+    }
+    
+    @Test
+    func smpteStaticConstructors_offset_25fps_40tpf() async throws {
+        typealias Delta = SMPTEMIDIFile.TrackChunk.DeltaTime
+        let timebase: Delta.Timebase = .smpte(frameRate: .fps25, ticksPerFrame: 40)
         
-        #expect(Delta.offset(hr: 00, min: 00, sec: 00, fr: 00, rate: .fps25, ticksPerFrame: 1).ticks == 0)
-        #expect(Delta.offset(hr: 00, min: 01, sec: 20, fr: 10, rate: .fps25, ticksPerFrame: 1).ticks == 2010)
-        #expect(Delta.offset(hr: 01, min: 01, sec: 20, fr: 10, rate: .fps25, ticksPerFrame: 1).ticks == 92_010)
+        #expect(Delta.offset(hr: 00, min: 00, sec: 00, fr: 00, rate: .fps25).ticks(using: timebase) == 0)
+        #expect(Delta.offset(hr: 00, min: 01, sec: 20, fr: 10, rate: .fps25).ticks(using: timebase) == 80_400)
+        #expect(Delta.offset(hr: 01, min: 01, sec: 20, fr: 10, rate: .fps25).ticks(using: timebase) == 3_680_400)
+    }
+    
+    @Test
+    func smpteStaticConstructors_edgeCases_25fps_0tpf() async throws {
+        typealias Delta = SMPTEMIDIFile.TrackChunk.DeltaTime
+        let timebase: Delta.Timebase = .smpte(frameRate: .fps25, ticksPerFrame: 0)
         
-        #expect(Delta.offset(hr: 00, min: 00, sec: 00, fr: 00, rate: .fps25, ticksPerFrame: UInt8.max).ticks == 0)
-        #expect(Delta.offset(hr: 00, min: 01, sec: 20, fr: 10, rate: .fps25, ticksPerFrame: UInt8.max).ticks == 512_550)
-        #expect(Delta.offset(hr: 01, min: 01, sec: 20, fr: 10, rate: .fps25, ticksPerFrame: UInt8.max).ticks == 23_462_550)
+        #expect(Delta.offset(hr: 00, min: 00, sec: 00, fr: 00, rate: .fps25).ticks(using: timebase) == 0)
+        #expect(Delta.offset(hr: 00, min: 01, sec: 20, fr: 10, rate: .fps25).ticks(using: timebase) == 0)
+        #expect(Delta.offset(hr: 01, min: 01, sec: 20, fr: 10, rate: .fps25).ticks(using: timebase) == 0)
+    }
+    
+    @Test
+    func smpteStaticConstructors_edgeCases_25fps_1tpf() async throws {
+        typealias Delta = SMPTEMIDIFile.TrackChunk.DeltaTime
+        let timebase: Delta.Timebase = .smpte(frameRate: .fps25, ticksPerFrame: 1)
+        
+        #expect(Delta.offset(hr: 00, min: 00, sec: 00, fr: 00, rate: .fps25).ticks(using: timebase) == 0)
+        #expect(Delta.offset(hr: 00, min: 01, sec: 20, fr: 10, rate: .fps25).ticks(using: timebase) == 2010)
+        #expect(Delta.offset(hr: 01, min: 01, sec: 20, fr: 10, rate: .fps25).ticks(using: timebase) == 92_010)
+    }
+    
+    @Test
+    func smpteStaticConstructors_edgeCases_25fps_255tpf() async throws {
+        typealias Delta = SMPTEMIDIFile.TrackChunk.DeltaTime
+        let timebase: Delta.Timebase = .smpte(frameRate: .fps25, ticksPerFrame: UInt8.max)
+        
+        #expect(Delta.offset(hr: 00, min: 00, sec: 00, fr: 00, rate: .fps25).ticks(using: timebase) == 0)
+        #expect(Delta.offset(hr: 00, min: 01, sec: 20, fr: 10, rate: .fps25).ticks(using: timebase) == 512_550)
+        #expect(Delta.offset(hr: 01, min: 01, sec: 20, fr: 10, rate: .fps25).ticks(using: timebase) == 23_462_550)
     }
 }

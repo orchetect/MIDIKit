@@ -79,54 +79,63 @@ import Testing
     @Test
     func deltaTime_25fps_40tpf() async throws {
         #expect(
-            Delta.offset(hr: 00, min: 00, sec: 00, fr: 00, subFr: 00, rate: .fps25, ticksPerFrame: 40)
-                .ticks == 0
+            Delta.offset(hr: 00, min: 00, sec: 00, fr: 00, subFr: 00, rate: .fps25)
+                .ticks(using: .smpte(frameRate: .fps25, ticksPerFrame: 40))
+                == 0
         )
         
         #expect(
-            Delta.offset(hr: 00, min: 00, sec: 01, fr: 00, subFr: 00, rate: .fps25, ticksPerFrame: 40)
-                .ticks == 1000
+            Delta.offset(hr: 00, min: 00, sec: 01, fr: 00, subFr: 00, rate: .fps25)
+                .ticks(using: .smpte(frameRate: .fps25, ticksPerFrame: 40))
+                == 1000
         )
         
         #expect(
-            Delta.offset(hr: 00, min: 00, sec: 02, fr: 00, subFr: 00, rate: .fps25, ticksPerFrame: 40)
-                .ticks == 2000
+            Delta.offset(hr: 00, min: 00, sec: 02, fr: 00, subFr: 00, rate: .fps25)
+                .ticks(using: .smpte(frameRate: .fps25, ticksPerFrame: 40))
+                == 2000
         )
     }
     
     @Test
     func deltaTime_25fps_20tpf() async throws {
         #expect(
-            Delta.offset(hr: 00, min: 00, sec: 00, fr: 00, subFr: 00, rate: .fps25, ticksPerFrame: 20)
-                .ticks == 0
+            Delta.offset(hr: 00, min: 00, sec: 00, fr: 00, subFr: 00, rate: .fps25)
+                .ticks(using: .smpte(frameRate: .fps25, ticksPerFrame: 20))
+                == 0
         )
         
         #expect(
-            Delta.offset(hr: 00, min: 00, sec: 01, fr: 00, subFr: 00, rate: .fps25, ticksPerFrame: 20)
-                .ticks == 500
+            Delta.offset(hr: 00, min: 00, sec: 01, fr: 00, subFr: 00, rate: .fps25)
+                .ticks(using: .smpte(frameRate: .fps25, ticksPerFrame: 20))
+                == 500
         )
         
         #expect(
-            Delta.offset(hr: 00, min: 00, sec: 02, fr: 00, subFr: 00, rate: .fps25, ticksPerFrame: 20)
-                .ticks == 1000
+            Delta.offset(hr: 00, min: 00, sec: 02, fr: 00, subFr: 00, rate: .fps25)
+                .ticks(using: .smpte(frameRate: .fps25, ticksPerFrame: 20))
+                == 1000
         )
     }
     
     @Test
     func deltaTime_30fps_100tpf() async throws {
         #expect(
-            Delta.offset(hr: 00, min: 00, sec: 00, fr: 00, subFr: 00, rate: .fps30, ticksPerFrame: 100)
-                .ticks == 0
+            Delta.offset(hr: 00, min: 00, sec: 00, fr: 00, subFr: 00, rate: .fps30)
+                .ticks(using: .smpte(frameRate: .fps25, ticksPerFrame: 100))
+                == 0
         )
         
         #expect(
-            Delta.offset(hr: 00, min: 00, sec: 01, fr: 00, subFr: 00, rate: .fps30, ticksPerFrame: 100)
-                .ticks == 3000
+            Delta.offset(hr: 00, min: 00, sec: 01, fr: 00, subFr: 00, rate: .fps30)
+                .ticks(using: .smpte(frameRate: .fps25, ticksPerFrame: 100))
+                == 3000
         )
         
         #expect(
-            Delta.offset(hr: 00, min: 00, sec: 02, fr: 00, subFr: 00, rate: .fps30, ticksPerFrame: 100)
-                .ticks == 6000
+            Delta.offset(hr: 00, min: 00, sec: 02, fr: 00, subFr: 00, rate: .fps30)
+                .ticks(using: .smpte(frameRate: .fps25, ticksPerFrame: 100))
+                == 6000
         )
     }
 }

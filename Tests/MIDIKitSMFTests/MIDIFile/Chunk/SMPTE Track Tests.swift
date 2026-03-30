@@ -17,7 +17,8 @@ import Testing
     @Test
     func eventsAtTimecodeLocations() async throws {
         let tpf: UInt8 = 40
-        var midiFile = SMPTEMIDIFile(timebase: .smpte(frameRate: .fps25, ticksPerFrame: tpf))
+        let timebase: SMPTEMIDIFile.Timebase = .smpte(frameRate: .fps25, ticksPerFrame: tpf)
+        var midiFile = SMPTEMIDIFile(timebase: timebase)
         
         midiFile.chunks = [
             .track([
@@ -49,7 +50,7 @@ import Testing
         
         // note that by default, this method checks for a SMPTE Offset event at time==0 (start of the track)
         // and uses it as the track's origin (offset) with which to offset all track event timecodes
-        let e = trackOne.eventsAtTimecodeLocations(frameRate: .fps25, ticksPerFrame: tpf)
+        let e = trackOne.eventsAtTimecodeLocations(using: timebase)
         
         #expect(e.count == 9)
         

@@ -110,7 +110,8 @@ import Testing
     @Test
     func elapsedTicks() async throws {
         let ppq = 480
-        var midiFile = MIDIFile(timebase: .musical(ticksPerQuarterNote: UInt16(ppq)))
+        let timebase: MusicalMIDIFileTimebase = .musical(ticksPerQuarterNote: UInt16(ppq))
+        var midiFile = MIDIFile(timebase: timebase)
         
         midiFile.chunks = [
             .track([
@@ -149,7 +150,7 @@ import Testing
         
         let trackOne = try #require(midiFile.tracks.first)
         
-        let deltaTimes = trackOne.events.map(\.delta.ticks)
+        let deltaTimes = trackOne.events.map { $0.delta.ticks(using: timebase) }
         
         let deltaSum = Int(deltaTimes.reduce(into: 0, +=))
         
