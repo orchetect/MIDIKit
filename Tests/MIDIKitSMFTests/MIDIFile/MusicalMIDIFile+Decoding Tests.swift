@@ -396,7 +396,73 @@ import Testing
     
     /// This test ensures the `ignoreBytesPastEOF` decoding option successfully ignores unexpected trailing bytes.
     @Test
-    func decodeSpuriousBytesPastEOF() async throws {
+    func decodeSpuriousBytesPastEOF_allowLossyRecovery() async throws {
+        let midiFile = try await MusicalMIDIFile(data: kMIDIFile.customChunk)
+        let baseRawData: [UInt8] = try await midiFile.rawData(as: [UInt8].self)
+        
+        let garbageChunk: MusicalMIDIFile.AnyChunk = .undefined(identifier: "\u{43}\u{12}\u{01}\u{78}", data: Data())!
+        var salvagedMIDIFile = try await MusicalMIDIFile(data: kMIDIFile.customChunk)
+        salvagedMIDIFile.chunks.append(garbageChunk)
+        
+        // test with various trailing byte sequences - CR/LF, whitespace/newlines, etc.
+        
+        // ignoring spurious trailing bytes
+        do {
+            let options = MIDIFileDecodeOptions(ignoreBytesPastEOF: true, chunkDecodeOptions: .init(errorStrategy: .allowLossyRecovery))
+            
+            let rawDataCR = baseRawData + [0x0D]
+            #expect(try await MusicalMIDIFile(data: rawDataCR, options: options) == midiFile)
+            
+            let rawDataLF = baseRawData + [0x0A]
+            #expect(try await MusicalMIDIFile(data: rawDataLF, options: options) == midiFile)
+            
+            let rawDataCRLF = baseRawData + [0x0D, 0x0A]
+            #expect(try await MusicalMIDIFile(data: rawDataCRLF, options: options) == midiFile)
+            
+            let rawDataCRLF_CRLF = baseRawData + [0x0D, 0x0A]
+            #expect(try await MusicalMIDIFile(data: rawDataCRLF_CRLF, options: options) == midiFile)
+            
+            let rawDataSpace = baseRawData + [0x20] // space char
+            #expect(try await MusicalMIDIFile(data: rawDataSpace, options: options) == midiFile)
+            
+            let rawData4Bytes = baseRawData + [0x43, 0x12, 0x01, 0x78]
+            #expect(try await MusicalMIDIFile(data: rawData4Bytes, options: options) == midiFile)
+            
+            let rawData8Bytes = baseRawData + [0x43, 0x12, 0x01, 0x78, 0x00, 0x09, 0x10, 0x58]
+            #expect(try await MusicalMIDIFile(data: rawData8Bytes, options: options) == salvagedMIDIFile)
+        }
+        
+        // NOT ignoring spurious trailing bytes
+        // (throwing error if spurious trailing bytes are encountered)
+        do {
+            let options = MIDIFileDecodeOptions(ignoreBytesPastEOF: false, chunkDecodeOptions: .init(errorStrategy: .allowLossyRecovery))
+            
+            let rawDataCR = baseRawData + [0x0D]
+            await #expect(throws: (any Error).self) { try await MusicalMIDIFile(data: rawDataCR, options: options) }
+            
+            let rawDataLF = baseRawData + [0x0A]
+            await #expect(throws: (any Error).self) { try await MusicalMIDIFile(data: rawDataLF, options: options) }
+            
+            let rawDataCRLF = baseRawData + [0x0D, 0x0A]
+            await #expect(throws: (any Error).self) { try await MusicalMIDIFile(data: rawDataCRLF, options: options) }
+            
+            let rawDataCRLF_CRLF = baseRawData + [0x0D, 0x0A]
+            await #expect(throws: (any Error).self) { try await MusicalMIDIFile(data: rawDataCRLF_CRLF, options: options) }
+            
+            let rawDataSpace = baseRawData + [0x20] // space char
+            await #expect(throws: (any Error).self) { try await MusicalMIDIFile(data: rawDataSpace, options: options) }
+            
+            let rawData4Bytes = baseRawData + [0x43, 0x12, 0x01, 0x78]
+            await #expect(throws: (any Error).self) { try await MusicalMIDIFile(data: rawData4Bytes, options: options) }
+            
+            let rawData8Bytes = baseRawData + [0x43, 0x12, 0x01, 0x78, 0x00, 0x09, 0x10, 0x58]
+            #expect(try await MusicalMIDIFile(data: rawData8Bytes, options: options) == salvagedMIDIFile)
+        }
+    }
+    
+    /// This test ensures the `ignoreBytesPastEOF` decoding option successfully ignores unexpected trailing bytes.
+    @Test
+    func decodeSpuriousBytesPastEOF_throwOnError() async throws {
         let midiFile = try await MusicalMIDIFile(data: kMIDIFile.customChunk)
         let baseRawData: [UInt8] = try await midiFile.rawData(as: [UInt8].self)
         
@@ -404,7 +470,7 @@ import Testing
         
         // ignoring spurious trailing bytes
         do {
-            let options = MIDIFileDecodeOptions(ignoreBytesPastEOF: true/*, chunkDecodeOptions: .init(errorStrategy: .throwOnError)*/)
+            let options = MIDIFileDecodeOptions(ignoreBytesPastEOF: true, chunkDecodeOptions: .init(errorStrategy: .throwOnError))
             
             let rawDataCR = baseRawData + [0x0D]
             #expect(try await MusicalMIDIFile(data: rawDataCR, options: options) == midiFile)
@@ -431,7 +497,7 @@ import Testing
         // NOT ignoring spurious trailing bytes
         // (throwing error if spurious trailing bytes are encountered)
         do {
-            let options = MIDIFileDecodeOptions(ignoreBytesPastEOF: false/*, chunkDecodeOptions: .init(errorStrategy: .throwOnError)*/)
+            let options = MIDIFileDecodeOptions(ignoreBytesPastEOF: false, chunkDecodeOptions: .init(errorStrategy: .throwOnError))
             
             let rawDataCR = baseRawData + [0x0D]
             await #expect(throws: (any Error).self) { try await MusicalMIDIFile(data: rawDataCR, options: options) }
