@@ -20,7 +20,7 @@ public struct MIDIFileTrackDecodeOptions {
     public init(
         bundleRPNAndNRPNEvents: Bool = true,
         maxEventCount: Int? = nil,
-        errorStrategy: ErrorStrategy = .throwOnError
+        errorStrategy: ErrorStrategy = .allowLossyRecovery
     ) {
         self.bundleRPNAndNRPNEvents = bundleRPNAndNRPNEvents
         self.maxEventCount = maxEventCount
