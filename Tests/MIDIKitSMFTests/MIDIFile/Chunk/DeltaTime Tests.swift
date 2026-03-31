@@ -148,6 +148,8 @@ import Testing
         let timebase: Delta.Timebase = .smpte(frameRate: .fps25, ticksPerFrame: 20)
         
         #expect(Delta.frames(0).ticks(using: timebase) == 0)
+        #expect(Delta.frames(0.5).ticks(using: timebase) == 10)
+        #expect(Delta.frames(1).ticks(using: timebase) == 20)
         #expect(Delta.frames(25).ticks(using: timebase) == 500)
         #expect(Delta.frames(50).ticks(using: timebase) == 1000)
     }
@@ -158,6 +160,8 @@ import Testing
         let timebase: Delta.Timebase = .smpte(frameRate: .fps25, ticksPerFrame: 40)
         
         #expect(Delta.frames(0).ticks(using: timebase) == 0)
+        #expect(Delta.frames(0.5).ticks(using: timebase) == 20)
+        #expect(Delta.frames(1).ticks(using: timebase) == 40)
         #expect(Delta.frames(25).ticks(using: timebase) == 1000)
         #expect(Delta.frames(50).ticks(using: timebase) == 2000)
     }
