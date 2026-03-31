@@ -1,11 +1,11 @@
 //
-//  MIDIFileTrackDecodeOptions.swift
+//  MIDIFileChunkDecodeOptions.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 /// MIDI file track decoding options.
-public struct MIDIFileTrackDecodeOptions {
+public struct MIDIFileChunkDecodeOptions {
     /// Bundle RPN/NRPN CC message sequences into `rpn`/`nrpn` event types.
     /// If `false`, the message sequences will be parsed as individual CC messages.
     public var bundleRPNAndNRPNEvents: Bool
@@ -28,8 +28,8 @@ public struct MIDIFileTrackDecodeOptions {
     }
 }
 
-extension MIDIFileTrackDecodeOptions: Equatable { }
+extension MIDIFileChunkDecodeOptions: Equatable { }
 
-extension MIDIFileTrackDecodeOptions: Hashable { }
+extension MIDIFileChunkDecodeOptions: Hashable { }
 
-extension MIDIFileTrackDecodeOptions: Sendable { }
+extension MIDIFileChunkDecodeOptions: Sendable { }

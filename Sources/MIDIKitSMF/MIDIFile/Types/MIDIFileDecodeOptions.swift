@@ -25,16 +25,16 @@ public struct MIDIFileDecodeOptions {
     public var ignoreBytesPastEOF: Bool
     
     /// MIDI file track decoding options.
-    public var trackDecodeOptions: MIDIFileTrackDecodeOptions
+    public var chunkDecodeOptions: MIDIFileChunkDecodeOptions
     
     public init(
         allowMultiTrackFormat0: Bool = true,
         ignoreBytesPastEOF: Bool = true,
-        trackDecodeOptions: MIDIFileTrackDecodeOptions = .init()
+        chunkDecodeOptions: MIDIFileChunkDecodeOptions = .init()
     ) {
         self.allowMultiTrackFormat0 = allowMultiTrackFormat0
         self.ignoreBytesPastEOF = ignoreBytesPastEOF
-        self.trackDecodeOptions = trackDecodeOptions
+        self.chunkDecodeOptions = chunkDecodeOptions
     }
 }
 

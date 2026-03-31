@@ -56,7 +56,7 @@ extension MIDIFile.Parser {
                     chunkDescriptor: chunkDescriptor,
                     chunkIndex: index,
                     timebase: fileDescriptor.header.timebase,
-                    options: options.trackDecodeOptions,
+                    options: options.chunkDecodeOptions,
                     in: chunkData
                 )
             }
@@ -98,7 +98,7 @@ extension MIDIFile.Parser {
                                 chunkDescriptor: chunkDescriptor,
                                 chunkIndex: index,
                                 timebase: fileDescriptor.header.timebase,
-                                options: options.trackDecodeOptions,
+                                options: options.chunkDecodeOptions,
                                 in: chunkData
                             )
                         }
@@ -156,7 +156,7 @@ extension MIDIFile.Parser {
                                         chunkDescriptor: chunkDescriptor,
                                         chunkIndex: index,
                                         timebase: fileDescriptor.header.timebase,
-                                        options: options.trackDecodeOptions,
+                                        options: options.chunkDecodeOptions,
                                         in: chunkData
                                     )
                                 }
@@ -261,7 +261,7 @@ extension MIDIFile.Parser {
                         )
                     } catch {
                         // not enough bytes - EOF reached
-                        switch options.trackDecodeOptions.errorStrategy {
+                        switch options.chunkDecodeOptions.errorStrategy {
                         case .allowLossyRecovery:
                             // fix chunk length to end at the last byte available
                             chunkLength = UInt32(exactly: parser.remainingByteCount.clamped(to: 0...)) ?? 0
@@ -315,7 +315,7 @@ extension MIDIFile.Parser {
         chunkDescriptor: ChunkDescriptor,
         chunkIndex: Int,
         timebase: Timebase,
-        options: MIDIFileTrackDecodeOptions,
+        options: MIDIFileChunkDecodeOptions,
         in chunkData: some DataProtocol
     ) throws(MIDIFileDecodeError) -> MIDIFile.AnyChunk? {
         do throws(MIDIFileDecodeError) {

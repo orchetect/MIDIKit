@@ -207,13 +207,13 @@ import Testing
         
         // throwOnError
         await #expect(throws: MIDIFileDecodeError.self) {
-            let options = MIDIFileDecodeOptions(trackDecodeOptions: .init(errorStrategy: .throwOnError))
+            let options = MIDIFileDecodeOptions(chunkDecodeOptions: .init(errorStrategy: .throwOnError))
             let _ = try await MusicalMIDIFile(data: rawData, options: options)
         }
         
         // discardTracksWithErrors
         do {
-            let options = MIDIFileDecodeOptions(trackDecodeOptions: .init(errorStrategy: .discardTracksWithErrors))
+            let options = MIDIFileDecodeOptions(chunkDecodeOptions: .init(errorStrategy: .discardTracksWithErrors))
             let midiFile = try await MusicalMIDIFile(data: rawData, options: options)
             
             #expect(midiFile.format == .singleTrack)
@@ -226,7 +226,7 @@ import Testing
         
         // allowLossyRecovery
         do {
-            let options = MIDIFileDecodeOptions(trackDecodeOptions: .init(errorStrategy: .allowLossyRecovery))
+            let options = MIDIFileDecodeOptions(chunkDecodeOptions: .init(errorStrategy: .allowLossyRecovery))
             let midiFile = try await MusicalMIDIFile(data: rawData, options: options)
             
             #expect(midiFile.format == .singleTrack)
@@ -280,13 +280,13 @@ import Testing
         
         // throwOnError
         await #expect(throws: MIDIFileDecodeError.self) {
-            let options = MIDIFileDecodeOptions(trackDecodeOptions: .init(errorStrategy: .throwOnError))
+            let options = MIDIFileDecodeOptions(chunkDecodeOptions: .init(errorStrategy: .throwOnError))
             let _ = try await MusicalMIDIFile(data: rawData, options: options)
         }
         
         // discardTracksWithErrors
         do {
-            let options = MIDIFileDecodeOptions(trackDecodeOptions: .init(errorStrategy: .discardTracksWithErrors))
+            let options = MIDIFileDecodeOptions(chunkDecodeOptions: .init(errorStrategy: .discardTracksWithErrors))
             let midiFile = try await MusicalMIDIFile(data: rawData, options: options)
             
             #expect(midiFile.format == .singleTrack)
@@ -298,7 +298,7 @@ import Testing
         
         // allowLossyRecovery
         do {
-            let options = MIDIFileDecodeOptions(trackDecodeOptions: .init(errorStrategy: .allowLossyRecovery))
+            let options = MIDIFileDecodeOptions(chunkDecodeOptions: .init(errorStrategy: .allowLossyRecovery))
             let midiFile = try await MusicalMIDIFile(data: rawData, options: options)
             
             #expect(midiFile.format == .singleTrack)
@@ -312,7 +312,7 @@ import Testing
     
     @Test
     func decodeOptions_maxTrackEventCount() /* NOT ASYNC! */ throws {
-        let options = MIDIFileDecodeOptions(trackDecodeOptions: .init(maxEventCount: 1))
+        let options = MIDIFileDecodeOptions(chunkDecodeOptions: .init(maxEventCount: 1))
         // Note: It's ok if this throws a deprecation warning. We need to test this specific method.
         let midiFile = try /* NOT AWAIT! */ MusicalMIDIFile(data: kMIDIFile.dp8Markers, options: options)
         try #require(midiFile.chunks.count == 3)
@@ -324,7 +324,7 @@ import Testing
     
     @Test
     func decodeOptions_maxTrackEventCount_async() async throws {
-        let options = MIDIFileDecodeOptions(trackDecodeOptions: .init(maxEventCount: 1))
+        let options = MIDIFileDecodeOptions(chunkDecodeOptions: .init(maxEventCount: 1))
         let midiFile = try await MusicalMIDIFile(data: kMIDIFile.dp8Markers, options: options)
         try #require(midiFile.chunks.count == 3)
         try #require(midiFile.tracks.count == 3)
@@ -370,7 +370,7 @@ import Testing
         
         // decode without bundleRPNAndNRPNEvents
         do {
-            let options = MIDIFileDecodeOptions(trackDecodeOptions: .init(bundleRPNAndNRPNEvents: false))
+            let options = MIDIFileDecodeOptions(chunkDecodeOptions: .init(bundleRPNAndNRPNEvents: false))
             let decodedMIDIFile = try await MusicalMIDIFile(data: rawData, options: options)
             #expect(decodedMIDIFile.tracks.count == 1)
             let decodedTrack = decodedMIDIFile.tracks[0]
@@ -385,7 +385,7 @@ import Testing
         
         // decode with bundleRPNAndNRPNEvents
         do {
-            let options = MIDIFileDecodeOptions(trackDecodeOptions: .init(bundleRPNAndNRPNEvents: true))
+            let options = MIDIFileDecodeOptions(chunkDecodeOptions: .init(bundleRPNAndNRPNEvents: true))
             let decodedMIDIFile = try await MusicalMIDIFile(data: rawData, options: options)
             #expect(decodedMIDIFile.tracks.count == 1)
             let decodedTrack = decodedMIDIFile.tracks[0]
@@ -404,7 +404,7 @@ import Testing
         
         // ignoring spurious trailing bytes
         do {
-            let options = MIDIFileDecodeOptions(ignoreBytesPastEOF: true)
+            let options = MIDIFileDecodeOptions(ignoreBytesPastEOF: true/*, chunkDecodeOptions: .init(errorStrategy: .throwOnError)*/)
             
             let rawDataCR = baseRawData + [0x0D]
             #expect(try await MusicalMIDIFile(data: rawDataCR, options: options) == midiFile)
@@ -431,7 +431,7 @@ import Testing
         // NOT ignoring spurious trailing bytes
         // (throwing error if spurious trailing bytes are encountered)
         do {
-            let options = MIDIFileDecodeOptions(ignoreBytesPastEOF: false)
+            let options = MIDIFileDecodeOptions(ignoreBytesPastEOF: false/*, chunkDecodeOptions: .init(errorStrategy: .throwOnError)*/)
             
             let rawDataCR = baseRawData + [0x0D]
             await #expect(throws: (any Error).self) { try await MusicalMIDIFile(data: rawDataCR, options: options) }

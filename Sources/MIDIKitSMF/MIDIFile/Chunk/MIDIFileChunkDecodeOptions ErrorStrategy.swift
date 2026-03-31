@@ -1,10 +1,10 @@
 //
-//  MIDIFileTrackDecodeOptions ErrorStrategy.swift
+//  MIDIFileChunkDecodeOptions ErrorStrategy.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
-extension MIDIFileTrackDecodeOptions {
+extension MIDIFileChunkDecodeOptions {
     public enum ErrorStrategy {
         /// An error is thrown upon the first decoding error encountered.
         ///
@@ -13,7 +13,7 @@ extension MIDIFileTrackDecodeOptions {
         
         /// Tracks that encounter errors while decoding are silently discarded.
         ///
-        /// This helps salvage tracks that are fully intact instead of failing to parse the file entirely.
+        /// This helps salvage chunks that are fully intact instead of failing to parse the file entirely.
         /// As a result, this option results in data loss in the event there is data corruption in the source file.
         case discardTracksWithErrors
         
@@ -28,14 +28,14 @@ extension MIDIFileTrackDecodeOptions {
         /// Any events that may occur in the track after the point in which the error occurs are discarded, as there is no way to repair
         /// the remainder of the track's data.
         ///
-        /// This helps salvage tracks that are only partially intact instead of failing to parse the file entirely.
+        /// This helps salvage chunks that are only partially intact instead of failing to parse the file entirely.
         /// As a result, this option results in data loss in the event there is data corruption in the source file.
         case allowLossyRecovery
     }
 }
 
-extension MIDIFileTrackDecodeOptions.ErrorStrategy: Equatable { }
+extension MIDIFileChunkDecodeOptions.ErrorStrategy: Equatable { }
 
-extension MIDIFileTrackDecodeOptions.ErrorStrategy: Hashable { }
+extension MIDIFileChunkDecodeOptions.ErrorStrategy: Hashable { }
 
-extension MIDIFileTrackDecodeOptions.ErrorStrategy: Sendable { }
+extension MIDIFileChunkDecodeOptions.ErrorStrategy: Sendable { }

@@ -14,7 +14,7 @@ extension MIDIFile.TrackChunk {
     public init?<D: DataProtocol>(
         midi1SMFRawBytesStream stream: D,
         timebase: Timebase,
-        options: MIDIFileTrackDecodeOptions
+        options: MIDIFileChunkDecodeOptions
     ) throws(MIDIFileDecodeError) {
         guard stream.count >= 8 else {
             throw .malformed(
@@ -74,7 +74,7 @@ extension MIDIFile.TrackChunk {
     init?<D: DataProtocol>(
         midi1SMFRawBytes rawData: D,
         timebase: Timebase,
-        options: MIDIFileTrackDecodeOptions
+        options: MIDIFileChunkDecodeOptions
     ) throws(MIDIFileDecodeError) {
         // sanitize inputs
         let maxEventCount = options.maxEventCount?.clamped(to: 0...)
