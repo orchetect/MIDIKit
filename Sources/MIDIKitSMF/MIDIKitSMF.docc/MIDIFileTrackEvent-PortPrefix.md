@@ -5,10 +5,10 @@ MIDI Port Prefix event.
 @Comment {
     // ------------------------------------
     // NOTE: When revising these documentation blocks, they are duplicated in:
-    //   - MIDIFileEvent enum case (`case keySignature(delta:event:)`, etc.)
-    //   - MIDIFileEvent static constructors (`static func keySignature(...)`, etc.)
-    //   - MIDIFileEvent concrete payload structs (`KeySignature`, etc.)
-    //   - DocC documentation for each MIDIFileEvent type
+    //   - MIDIFileTrackEvent enum case (`case keySignature(delta:event:)`, etc.)
+    //   - MIDIFileTrackEvent static constructors (`static func keySignature(...)`, etc.)
+    //   - MIDIFileTrackEvent concrete payload structs (`KeySignature`, etc.)
+    //   - DocC documentation for each MIDIFileTrackEvent type
     // ------------------------------------
 }
 
@@ -20,9 +20,9 @@ The data byte is the port number, where 0 would be the first MIDI buss in the sy
 
 ### Constructors
 
-- ``MIDIFileEvent/portPrefix(delta:port:)``
+- ``MIDIFileTrackEvent/portPrefix(port:)``
 
 ### Switch Case Unwrapping
 
-- ``MIDIFileEvent/portPrefix(delta:event:)``
-- ``MIDIFileEvent/PortPrefix``
+- ``MIDIFileTrackEvent/portPrefix(_:)``
+- ``MIDIFileTrackEvent/PortPrefix``

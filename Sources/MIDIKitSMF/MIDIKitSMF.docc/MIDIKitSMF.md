@@ -25,12 +25,18 @@ Refer to MIDIKit's own package documentation for information on using MIDI I/O a
 ### Working with MIDI Files
 
 - ``MIDIFile``
-- ``MIDIFileEvent``
-- ``MIDIFileEvent/DeltaTime``
+- ``MIDIFileTrackEvent``
+- ``MIDIFile/AnyChunk``
+- ``MIDIFile/TrackChunk``
+- ``MIDIFile/TrackChunk/DeltaTime``
+- ``MIDIFile/UndefinedChunk``
 
 ### Protocols
 
-- ``MIDIFile/Chunk``
+- ``MIDIFileChunk``
+- ``MIDIFileChunkIdentifier``
+- ``MIDIFileTimebase``
+- ``MIDIFileTrackDeltaTime``
 
 ### Related Types
 

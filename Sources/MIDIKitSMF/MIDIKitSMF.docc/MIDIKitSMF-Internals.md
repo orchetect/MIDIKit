@@ -4,10 +4,10 @@
 
 ### MIDI File Internals
 
-- ``MIDIFileEvent/EventType``
-- ``MIDIFileEvent/Payload``
+- ``MIDIFileTrackEventType``
+- ``MIDIFileTrackEventPayload``
 
 ### Timecode Related
 
 - ``SwiftTimecodeCore/Timecode/scaledToMIDIFileSMPTEFrameRate``
-- ``SwiftTimecodeCore/TimecodeFrameRate/midiFileSMPTEOffsetRate``
+- ``SwiftTimecodeCore/TimecodeFrameRate/midiFileSMPTEFrameRate``

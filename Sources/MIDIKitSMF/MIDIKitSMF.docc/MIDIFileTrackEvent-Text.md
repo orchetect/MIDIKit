@@ -5,10 +5,10 @@ Text event.
 @Comment {
     // ------------------------------------
     // NOTE: When revising these documentation blocks, they are duplicated in:
-    //   - MIDIFileEvent enum case (`case keySignature(delta:event:)`, etc.)
-    //   - MIDIFileEvent static constructors (`static func keySignature(...)`, etc.)
-    //   - MIDIFileEvent concrete payload structs (`KeySignature`, etc.)
-    //   - DocC documentation for each MIDIFileEvent type
+    //   - MIDIFileTrackEvent enum case (`case keySignature(delta:event:)`, etc.)
+    //   - MIDIFileTrackEvent static constructors (`static func keySignature(...)`, etc.)
+    //   - MIDIFileTrackEvent concrete payload structs (`KeySignature`, etc.)
+    //   - DocC documentation for each MIDIFileTrackEvent type
     // ------------------------------------
 }
 
@@ -20,9 +20,9 @@ Text is restricted to ASCII format only. If extended characters or encodings are
 
 ### Constructors
 
-- ``MIDIFileEvent/text(delta:type:string:)``
+- ``MIDIFileTrackEvent/text(type:string:)``
 
 ### Switch Case Unwrapping
 
-- ``MIDIFileEvent/text(delta:event:)``
-- ``MIDIFileEvent/Text``
+- ``MIDIFileTrackEvent/text(_:)``
+- ``MIDIFileTrackEvent/Text``

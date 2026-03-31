@@ -5,10 +5,10 @@ Sequence Number event.
 @Comment {
     // ------------------------------------
     // NOTE: When revising these documentation blocks, they are duplicated in:
-    //   - MIDIFileEvent enum case (`case keySignature(delta:event:)`, etc.)
-    //   - MIDIFileEvent static constructors (`static func keySignature(...)`, etc.)
-    //   - MIDIFileEvent concrete payload structs (`KeySignature`, etc.)
-    //   - DocC documentation for each MIDIFileEvent type
+    //   - MIDIFileTrackEvent enum case (`case keySignature(delta:event:)`, etc.)
+    //   - MIDIFileTrackEvent static constructors (`static func keySignature(...)`, etc.)
+    //   - MIDIFileTrackEvent concrete payload structs (`KeySignature`, etc.)
+    //   - DocC documentation for each MIDIFileTrackEvent type
     // ------------------------------------
 }
 
@@ -20,9 +20,9 @@ Sequence Number event.
 
 ### Constructors
 
-- ``MIDIFileEvent/sequenceNumber(delta:sequence:)``
+- ``MIDIFileTrackEvent/sequenceNumber(sequence:)``
 
 ### Switch Case Unwrapping
 
-- ``MIDIFileEvent/sequenceNumber(delta:event:)``
-- ``MIDIFileEvent/SequenceNumber``
+- ``MIDIFileTrackEvent/sequenceNumber(_:)``
+- ``MIDIFileTrackEvent/SequenceNumber``

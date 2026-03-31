@@ -5,10 +5,10 @@ Specify the SMPTE time at which the track is to start.
 @Comment {
     // ------------------------------------
     // NOTE: When revising these documentation blocks, they are duplicated in:
-    //   - MIDIFileEvent enum case (`case keySignature(delta:event:)`, etc.)
-    //   - MIDIFileEvent static constructors (`static func keySignature(...)`, etc.)
-    //   - MIDIFileEvent concrete payload structs (`KeySignature`, etc.)
-    //   - DocC documentation for each MIDIFileEvent type
+    //   - MIDIFileTrackEvent enum case (`case keySignature(delta:event:)`, etc.)
+    //   - MIDIFileTrackEvent static constructors (`static func keySignature(...)`, etc.)
+    //   - MIDIFileTrackEvent concrete payload structs (`KeySignature`, etc.)
+    //   - DocC documentation for each MIDIFileTrackEvent type
     // ------------------------------------
 }
 
@@ -28,10 +28,10 @@ For documentation on the `Timecode` type, see swift-timecode documentation.
 
 ### Constructors
 
-- ``MIDIFileEvent/smpteOffset(delta:hr:min:sec:fr:subFr:rate:)``
-- ``MIDIFileEvent/smpteOffset(delta:scaling:)``
+- ``MIDIFileTrackEvent/smpteOffset(hr:min:sec:fr:subFr:rate:)``
+- ``MIDIFileTrackEvent/smpteOffset(scaling:)``
 
 ### Switch Case Unwrapping
 
-- ``MIDIFileEvent/smpteOffset(delta:event:)``
-- ``MIDIFileEvent/SMPTEOffset``
+- ``MIDIFileTrackEvent/smpteOffset(_:)``
+- ``MIDIFileTrackEvent/SMPTEOffset``

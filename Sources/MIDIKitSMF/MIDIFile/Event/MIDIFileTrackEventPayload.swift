@@ -7,7 +7,7 @@
 import Foundation
 import MIDIKitCore
 
-/// Protocol describing a MIDI event payload for use in ``MIDIFileEvent`` cases.
+/// Protocol describing a MIDI event payload for use in ``MIDIFileTrackEvent`` cases.
 public protocol MIDIFileTrackEventPayload: Equatable, Hashable, Sendable {
     /// MIDI File event type.
     static var smfEventType: MIDIFileTrackEventType { get }

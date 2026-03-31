@@ -5,10 +5,10 @@ Unrecognized Meta Event
 @Comment {
     // ------------------------------------
     // NOTE: When revising these documentation blocks, they are duplicated in:
-    //   - MIDIFileEvent enum case (`case keySignature(delta:event:)`, etc.)
-    //   - MIDIFileEvent static constructors (`static func keySignature(...)`, etc.)
-    //   - MIDIFileEvent concrete payload structs (`KeySignature`, etc.)
-    //   - DocC documentation for each MIDIFileEvent type
+    //   - MIDIFileTrackEvent enum case (`case keySignature(delta:event:)`, etc.)
+    //   - MIDIFileTrackEvent static constructors (`static func keySignature(...)`, etc.)
+    //   - MIDIFileTrackEvent concrete payload structs (`KeySignature`, etc.)
+    //   - DocC documentation for each MIDIFileTrackEvent type
     // ------------------------------------
 }
 
@@ -24,9 +24,9 @@ Unrecognized Meta Event
 
 ### Constructors
 
-- ``MIDIFileEvent/unrecognizedMeta(delta:metaType:data:)``
+- ``MIDIFileTrackEvent/unrecognizedMeta(metaType:data:)``
 
 ### Switch Case Unwrapping
 
-- ``MIDIFileEvent/unrecognizedMeta(delta:event:)``
-- ``MIDIFileEvent/UnrecognizedMeta``
+- ``MIDIFileTrackEvent/unrecognizedMeta(_:)``
+- ``MIDIFileTrackEvent/UnrecognizedMeta``

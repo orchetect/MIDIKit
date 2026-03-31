@@ -12,10 +12,10 @@ internal import SwiftDataParsing
 
 // ------------------------------------
 // NOTE: When revising these documentation blocks, they are duplicated in:
-//   - MIDIFileEvent enum case (`case keySignature(delta:event:)`, etc.)
-//   - MIDIFileEvent static constructors (`static func keySignature(...)`, etc.)
-//   - MIDIFileEvent concrete payload structs (`KeySignature`, etc.)
-//   - DocC documentation for each MIDIFileEvent type
+//   - MIDIFileTrackEvent enum case (`case keySignature(delta:event:)`, etc.)
+//   - MIDIFileTrackEvent static constructors (`static func keySignature(...)`, etc.)
+//   - MIDIFileTrackEvent concrete payload structs (`KeySignature`, etc.)
+//   - DocC documentation for each MIDIFileTrackEvent type
 // ------------------------------------
 
 extension MIDIFileTrackEvent {
@@ -79,7 +79,6 @@ extension MIDIFileTrackEvent {
     /// If there are no Time Signature events in a MIDI file, 4/4 is assumed.
     ///
     /// - Parameters:
-    ///   - delta: Delta time since the last event.
     ///   - numerator: Numerator in time signature fraction: Literal numerator.
     ///   - denominator: Denominator in time signature fraction. Expressed as a power of 2. (ie: 2 = 2^2 = 4, 3 = 2^3 = 8, etc.)
     public static func timeSignature(

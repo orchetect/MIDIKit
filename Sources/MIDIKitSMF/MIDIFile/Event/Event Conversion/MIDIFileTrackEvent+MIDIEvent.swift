@@ -7,7 +7,7 @@
 import MIDIKitCore
 
 extension MIDIFileTrackEvent {
-    /// Convert the MIDIKitSMF event case (``MIDIFileTrackEvent``) to a MIDIKit I/O event case (``MIDIEvent``).
+    /// Convert the MIDIKitSMF event case (``MIDIFileTrackEvent``) to a MIDIKit I/O event case (``MIDIKitCore/MIDIEvent``).
     ///
     /// Not all MIDI File events translate to MIDI I/O events, in which case `nil` will be returned.
     public func midiEvent() -> MIDIEvent? {

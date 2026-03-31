@@ -5,10 +5,10 @@ Channel Voice Message: Program Change
 @Comment {
     // ------------------------------------
     // NOTE: When revising these documentation blocks, they are duplicated in:
-    //   - MIDIFileEvent enum case (`case keySignature(delta:event:)`, etc.)
-    //   - MIDIFileEvent static constructors (`static func keySignature(...)`, etc.)
-    //   - MIDIFileEvent concrete payload structs (`KeySignature`, etc.)
-    //   - DocC documentation for each MIDIFileEvent type
+    //   - MIDIFileTrackEvent enum case (`case keySignature(delta:event:)`, etc.)
+    //   - MIDIFileTrackEvent static constructors (`static func keySignature(...)`, etc.)
+    //   - MIDIFileTrackEvent concrete payload structs (`KeySignature`, etc.)
+    //   - DocC documentation for each MIDIFileTrackEvent type
     // ------------------------------------
 }
 
@@ -18,9 +18,9 @@ Channel Voice Message: Program Change
 
 ### Constructors
 
-- ``MIDIFileEvent/programChange(delta:program:channel:)``
+- ``MIDIFileTrackEvent/programChange(program:channel:)``
 
 ### Switch Case Unwrapping
 
-- ``MIDIFileEvent/programChange(delta:event:)``
-- ``MIDIFileEvent/ProgramChange``
+- ``MIDIFileTrackEvent/programChange(_:)``
+- ``MIDIFileTrackEvent/ProgramChange``

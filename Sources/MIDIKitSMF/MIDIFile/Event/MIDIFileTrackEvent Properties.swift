@@ -8,7 +8,7 @@ import Foundation
 import MIDIKitCore
 
 extension MIDIFileTrackEvent {
-    /// Returns the ``EventType`` case describing the type of the MIDI File event.
+    /// Returns the ``MIDIFileTrackEventType`` case describing the type of the MIDI File event.
     @inline(__always)
     public var eventType: MIDIFileTrackEventType {
         switch self {

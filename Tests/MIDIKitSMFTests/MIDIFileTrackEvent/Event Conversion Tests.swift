@@ -19,7 +19,7 @@ import Testing
             midi1ZeroVelocityAsNoteOff: true
         )
         
-        // convert MIDIEvent case to MIDIFileEvent case, preserving payloads
+        // convert MIDIEvent case to MIDIFileTrackEvent case, preserving payloads
         let smfEvent = event.midiFileTrackEvent()
         
         // extract MIDIEvent payload
@@ -27,7 +27,7 @@ import Testing
             Issue.record(); return
         }
         
-        // extract MIDIFileEvent payload
+        // extract MIDIFileTrackEvent payload
         guard case let .noteOn(unwrappedSMFEvent) = smfEvent else {
             Issue.record(); return
         }
@@ -46,7 +46,7 @@ import Testing
             group: 2
         )
         
-        // convert MIDIEvent case to MIDIFileEvent case, preserving payloads
+        // convert MIDIEvent case to MIDIFileTrackEvent case, preserving payloads
         let smfEvent = event.midiFileTrackEvent()
         
         // extract MIDIEvent payload
@@ -54,7 +54,7 @@ import Testing
             Issue.record(); return
         }
         
-        // extract MIDIFileEvent payload
+        // extract MIDIFileTrackEvent payload
         guard case let .noteOff(unwrappedSMFEvent) = smfEvent else {
             Issue.record(); return
         }
@@ -73,7 +73,7 @@ import Testing
             group: 2
         )
         
-        // convert MIDIEvent case to MIDIFileEvent case, preserving payloads
+        // convert MIDIEvent case to MIDIFileTrackEvent case, preserving payloads
         let smfEvent = event.midiFileTrackEvent()
         
         // no equivalent SMF event exists
@@ -90,7 +90,7 @@ import Testing
             group: 2
         )
         
-        // convert MIDIEvent case to MIDIFileEvent case, preserving payloads
+        // convert MIDIEvent case to MIDIFileTrackEvent case, preserving payloads
         let smfEvent = event.midiFileTrackEvent()
         
         // no equivalent SMF event exists
@@ -107,7 +107,7 @@ import Testing
             group: 2
         )
         
-        // convert MIDIEvent case to MIDIFileEvent case, preserving payloads
+        // convert MIDIEvent case to MIDIFileTrackEvent case, preserving payloads
         let smfEvent = event.midiFileTrackEvent()
         
         // extract MIDIEvent payload
@@ -115,7 +115,7 @@ import Testing
             Issue.record(); return
         }
         
-        // extract MIDIFileEvent payload
+        // extract MIDIFileTrackEvent payload
         guard case let .notePressure(unwrappedSMFEvent) = smfEvent else {
             Issue.record(); return
         }
@@ -133,7 +133,7 @@ import Testing
             group: 2
         )
         
-        // convert MIDIEvent case to MIDIFileEvent case, preserving payloads
+        // convert MIDIEvent case to MIDIFileTrackEvent case, preserving payloads
         let smfEvent = event.midiFileTrackEvent()
         
         // no equivalent SMF event exists
@@ -150,7 +150,7 @@ import Testing
             group: 2
         )
         
-        // convert MIDIEvent case to MIDIFileEvent case, preserving payloads
+        // convert MIDIEvent case to MIDIFileTrackEvent case, preserving payloads
         let smfEvent = event.midiFileTrackEvent()
         
         // extract MIDIEvent payload
@@ -158,7 +158,7 @@ import Testing
             Issue.record(); return
         }
         
-        // extract MIDIFileEvent payload
+        // extract MIDIFileTrackEvent payload
         guard case let .cc(unwrappedSMFEvent) = smfEvent else {
             Issue.record(); return
         }
@@ -176,7 +176,7 @@ import Testing
             group: 2
         )
         
-        // convert MIDIEvent case to MIDIFileEvent case, preserving payloads
+        // convert MIDIEvent case to MIDIFileTrackEvent case, preserving payloads
         let smfEvent = event.midiFileTrackEvent()
         
         // extract MIDIEvent payload
@@ -184,7 +184,7 @@ import Testing
             Issue.record(); return
         }
         
-        // extract MIDIFileEvent payload
+        // extract MIDIFileTrackEvent payload
         guard case let .programChange(unwrappedSMFEvent) = smfEvent else {
             Issue.record(); return
         }
@@ -200,7 +200,7 @@ import Testing
             channel: 0
         )
         
-        // convert MIDIEvent case to MIDIFileEvent case, preserving payloads
+        // convert MIDIEvent case to MIDIFileTrackEvent case, preserving payloads
         let smfEvent = event.midiFileTrackEvent()
         
         // extract MIDIEvent payload
@@ -208,7 +208,7 @@ import Testing
             Issue.record(); return
         }
         
-        // extract MIDIFileEvent payload
+        // extract MIDIFileTrackEvent payload
         guard case let .rpn(unwrappedSMFEvent) = smfEvent else {
             Issue.record(); return
         }
@@ -224,7 +224,7 @@ import Testing
             channel: 0
         )
         
-        // convert MIDIEvent case to MIDIFileEvent case, preserving payloads
+        // convert MIDIEvent case to MIDIFileTrackEvent case, preserving payloads
         let smfEvent = event.midiFileTrackEvent()
         
         // extract MIDIEvent payload
@@ -232,7 +232,7 @@ import Testing
             Issue.record(); return
         }
         
-        // extract MIDIFileEvent payload
+        // extract MIDIFileTrackEvent payload
         guard case let .nrpn(unwrappedSMFEvent) = smfEvent else {
             Issue.record(); return
         }
@@ -249,7 +249,7 @@ import Testing
             group: 2
         )
         
-        // convert MIDIEvent case to MIDIFileEvent case, preserving payloads
+        // convert MIDIEvent case to MIDIFileTrackEvent case, preserving payloads
         let smfEvent = event.midiFileTrackEvent()
         
         // extract MIDIEvent payload
@@ -257,7 +257,7 @@ import Testing
             Issue.record(); return
         }
         
-        // extract MIDIFileEvent payload
+        // extract MIDIFileTrackEvent payload
         guard case let .pitchBend(unwrappedSMFEvent) = smfEvent else {
             Issue.record(); return
         }
@@ -274,7 +274,7 @@ import Testing
             group: 2
         )
         
-        // convert MIDIEvent case to MIDIFileEvent case, preserving payloads
+        // convert MIDIEvent case to MIDIFileTrackEvent case, preserving payloads
         let smfEvent = event.midiFileTrackEvent()
         
         // extract MIDIEvent payload
@@ -282,7 +282,7 @@ import Testing
             Issue.record(); return
         }
         
-        // extract MIDIFileEvent payload
+        // extract MIDIFileTrackEvent payload
         guard case let .pressure(unwrappedSMFEvent) = smfEvent else {
             Issue.record(); return
         }
@@ -299,7 +299,7 @@ import Testing
             group: 2
         )
         
-        // convert MIDIEvent case to MIDIFileEvent case, preserving payloads
+        // convert MIDIEvent case to MIDIFileTrackEvent case, preserving payloads
         let smfEvent = event.midiFileTrackEvent()
         
         // extract MIDIEvent payload
@@ -307,7 +307,7 @@ import Testing
             Issue.record(); return
         }
         
-        // extract MIDIFileEvent payload
+        // extract MIDIFileTrackEvent payload
         guard case let .sysEx7(unwrappedSMFEvent) = smfEvent else {
             Issue.record(); return
         }
@@ -327,7 +327,7 @@ import Testing
             group: 2
         )
         
-        // convert MIDIEvent case to MIDIFileEvent case, preserving payloads
+        // convert MIDIEvent case to MIDIFileTrackEvent case, preserving payloads
         let smfEvent = event.midiFileTrackEvent()
         
         // extract MIDIEvent payload
@@ -335,7 +335,7 @@ import Testing
             Issue.record(); return
         }
         
-        // extract MIDIFileEvent payload
+        // extract MIDIFileTrackEvent payload
         guard case let .universalSysEx7(unwrappedSMFEvent) = smfEvent else {
             Issue.record(); return
         }
@@ -351,7 +351,7 @@ import Testing
             group: 2
         )
         
-        // convert MIDIEvent case to MIDIFileEvent case, preserving payloads
+        // convert MIDIEvent case to MIDIFileTrackEvent case, preserving payloads
         let smfEvent = event.midiFileTrackEvent()
         
         // not an event that can be stored in a MIDI file, only applicable to live MIDI I/O
@@ -365,7 +365,7 @@ import Testing
             group: 2
         )
         
-        // convert MIDIEvent case to MIDIFileEvent case, preserving payloads
+        // convert MIDIEvent case to MIDIFileTrackEvent case, preserving payloads
         let smfEvent = event.midiFileTrackEvent()
         
         // not an event that can be stored in a MIDI file, only applicable to live MIDI I/O
@@ -379,7 +379,7 @@ import Testing
             group: 2
         )
         
-        // convert MIDIEvent case to MIDIFileEvent case, preserving payloads
+        // convert MIDIEvent case to MIDIFileTrackEvent case, preserving payloads
         let smfEvent = event.midiFileTrackEvent()
         
         // not an event that can be stored in a MIDI file, only applicable to live MIDI I/O
@@ -390,7 +390,7 @@ import Testing
     func midi_Event_TuneRequest_midiFileTrackEvent() async {
         let event: MIDIEvent = .tuneRequest(group: 2)
         
-        // convert MIDIEvent case to MIDIFileEvent case, preserving payloads
+        // convert MIDIEvent case to MIDIFileTrackEvent case, preserving payloads
         let smfEvent = event.midiFileTrackEvent()
         
         // not an event that can be stored in a MIDI file, only applicable to live MIDI I/O
@@ -401,7 +401,7 @@ import Testing
     func midi_Event_TimingClock_midiFileTrackEvent() async {
         let event: MIDIEvent = .timingClock(group: 2)
         
-        // convert MIDIEvent case to MIDIFileEvent case, preserving payloads
+        // convert MIDIEvent case to MIDIFileTrackEvent case, preserving payloads
         let smfEvent = event.midiFileTrackEvent()
         
         // not an event that can be stored in a MIDI file, only applicable to live MIDI I/O
@@ -412,7 +412,7 @@ import Testing
     func midi_Event_Start_midiFileTrackEvent() async {
         let event: MIDIEvent = .start(group: 2)
         
-        // convert MIDIEvent case to MIDIFileEvent case, preserving payloads
+        // convert MIDIEvent case to MIDIFileTrackEvent case, preserving payloads
         let smfEvent = event.midiFileTrackEvent()
         
         // not an event that can be stored in a MIDI file, only applicable to live MIDI I/O
@@ -423,7 +423,7 @@ import Testing
     func midi_Event_Continue_midiFileTrackEvent() async {
         let event: MIDIEvent = .continue(group: 2)
         
-        // convert MIDIEvent case to MIDIFileEvent case, preserving payloads
+        // convert MIDIEvent case to MIDIFileTrackEvent case, preserving payloads
         let smfEvent = event.midiFileTrackEvent()
         
         // not an event that can be stored in a MIDI file, only applicable to live MIDI I/O
@@ -434,7 +434,7 @@ import Testing
     func midi_Event_Stop_midiFileTrackEvent() async {
         let event: MIDIEvent = .stop(group: 2)
         
-        // convert MIDIEvent case to MIDIFileEvent case, preserving payloads
+        // convert MIDIEvent case to MIDIFileTrackEvent case, preserving payloads
         let smfEvent = event.midiFileTrackEvent()
         
         // not an event that can be stored in a MIDI file, only applicable to live MIDI I/O
@@ -445,7 +445,7 @@ import Testing
     func midi_Event_ActiveSensing_midiFileTrackEvent() async {
         let event: MIDIEvent = .activeSensing(group: 2)
         
-        // convert MIDIEvent case to MIDIFileEvent case, preserving payloads
+        // convert MIDIEvent case to MIDIFileTrackEvent case, preserving payloads
         let smfEvent = event.midiFileTrackEvent()
         
         // not an event that can be stored in a MIDI file, only applicable to live MIDI I/O
@@ -456,7 +456,7 @@ import Testing
     func midi_Event_SystemReset_midiFileTrackEvent() async {
         let event: MIDIEvent = .systemReset(group: 2)
         
-        // convert MIDIEvent case to MIDIFileEvent case, preserving payloads
+        // convert MIDIEvent case to MIDIFileTrackEvent case, preserving payloads
         let smfEvent = event.midiFileTrackEvent()
         
         // not an event that can be stored in a MIDI file, only applicable to live MIDI I/O
@@ -475,10 +475,10 @@ import Testing
             channel: 1
         )
 
-        // convert MIDIFileEvent case to MIDIEvent case, preserving payloads
+        // convert MIDIFileTrackEvent case to MIDIEvent case, preserving payloads
         let event = smfEvent.midiEvent()
 
-        // extract MIDIFileEvent payload
+        // extract MIDIFileTrackEvent payload
         guard case let .cc(unwrappedSMFEvent) = smfEvent else {
             Issue.record(); return
         }
@@ -500,10 +500,10 @@ import Testing
             channel: 1
         )
 
-        // convert MIDIFileEvent case to MIDIEvent case, preserving payloads
+        // convert MIDIFileTrackEvent case to MIDIEvent case, preserving payloads
         let event = smfEvent.midiEvent()
 
-        // extract MIDIFileEvent payload
+        // extract MIDIFileTrackEvent payload
         guard case let .noteOff(unwrappedSMFEvent) = smfEvent else {
             Issue.record(); return
         }
@@ -525,10 +525,10 @@ import Testing
             channel: 1
         )
 
-        // convert MIDIFileEvent case to MIDIEvent case, preserving payloads
+        // convert MIDIFileTrackEvent case to MIDIEvent case, preserving payloads
         let event = smfEvent.midiEvent()
 
-        // extract MIDIFileEvent payload
+        // extract MIDIFileTrackEvent payload
         guard case let .noteOn(unwrappedSMFEvent) = smfEvent else {
             Issue.record(); return
         }
@@ -550,10 +550,10 @@ import Testing
             channel: 1
         )
 
-        // convert MIDIFileEvent case to MIDIEvent case, preserving payloads
+        // convert MIDIFileTrackEvent case to MIDIEvent case, preserving payloads
         let event = smfEvent.midiEvent()
 
-        // extract MIDIFileEvent payload
+        // extract MIDIFileTrackEvent payload
         guard case let .notePressure(unwrappedSMFEvent) = smfEvent else {
             Issue.record(); return
         }
@@ -574,10 +574,10 @@ import Testing
             channel: 1
         )
 
-        // convert MIDIFileEvent case to MIDIEvent case, preserving payloads
+        // convert MIDIFileTrackEvent case to MIDIEvent case, preserving payloads
         let event = smfEvent.midiEvent()
 
-        // extract MIDIFileEvent payload
+        // extract MIDIFileTrackEvent payload
         guard case let .pitchBend(unwrappedSMFEvent) = smfEvent else {
             Issue.record(); return
         }
@@ -598,10 +598,10 @@ import Testing
             channel: 1
         )
 
-        // convert MIDIFileEvent case to MIDIEvent case, preserving payloads
+        // convert MIDIFileTrackEvent case to MIDIEvent case, preserving payloads
         let event = smfEvent.midiEvent()
 
-        // extract MIDIFileEvent payload
+        // extract MIDIFileTrackEvent payload
         guard case let .pressure(unwrappedSMFEvent) = smfEvent else {
             Issue.record(); return
         }
@@ -622,10 +622,10 @@ import Testing
             channel: 1
         )
 
-        // convert MIDIFileEvent case to MIDIEvent case, preserving payloads
+        // convert MIDIFileTrackEvent case to MIDIEvent case, preserving payloads
         let event = smfEvent.midiEvent()
 
-        // extract MIDIFileEvent payload
+        // extract MIDIFileTrackEvent payload
         guard case let .programChange(unwrappedSMFEvent) = smfEvent else {
             Issue.record(); return
         }
@@ -647,10 +647,10 @@ import Testing
             channel: 0
         )
 
-        // convert MIDIFileEvent case to MIDIEvent case, preserving payloads
+        // convert MIDIFileTrackEvent case to MIDIEvent case, preserving payloads
         let event = smfEvent.midiEvent()
 
-        // extract MIDIFileEvent payload
+        // extract MIDIFileTrackEvent payload
         guard case let .rpn(unwrappedSMFEvent) = smfEvent else {
             Issue.record(); return
         }
@@ -676,10 +676,10 @@ import Testing
             channel: 0
         )
 
-        // convert MIDIFileEvent case to MIDIEvent case, preserving payloads
+        // convert MIDIFileTrackEvent case to MIDIEvent case, preserving payloads
         let event = smfEvent.midiEvent()
 
-        // extract MIDIFileEvent payload
+        // extract MIDIFileTrackEvent payload
         guard case let .nrpn(unwrappedSMFEvent) = smfEvent else {
             Issue.record(); return
         }
@@ -700,10 +700,10 @@ import Testing
             data: [0x12, 0x34]
         )
 
-        // convert MIDIFileEvent case to MIDIEvent case, preserving payloads
+        // convert MIDIFileTrackEvent case to MIDIEvent case, preserving payloads
         let event = smfEvent.midiEvent()
 
-        // extract MIDIFileEvent payload
+        // extract MIDIFileTrackEvent payload
         guard case let .sysEx7(unwrappedSMFEvent) = smfEvent else {
             Issue.record(); return
         }
@@ -727,10 +727,10 @@ import Testing
             data: [0x12, 0x34]
         )
 
-        // convert MIDIFileEvent case to MIDIEvent case, preserving payloads
+        // convert MIDIFileTrackEvent case to MIDIEvent case, preserving payloads
         let event = smfEvent.midiEvent()
 
-        // extract MIDIFileEvent payload
+        // extract MIDIFileTrackEvent payload
         guard case let .universalSysEx7(unwrappedSMFEvent) = smfEvent else {
             Issue.record(); return
         }
@@ -750,7 +750,7 @@ import Testing
             channel: 4
         )
 
-        // convert MIDIFileEvent case to MIDIEvent case, preserving payloads
+        // convert MIDIFileTrackEvent case to MIDIEvent case, preserving payloads
         let event = smfEvent.midiEvent()
 
         // event has no MIDIEvent I/O event equivalent; applicable only to MIDI files
@@ -764,7 +764,7 @@ import Testing
             isMajor: true
         ))
 
-        // convert MIDIFileEvent case to MIDIEvent case, preserving payloads
+        // convert MIDIFileTrackEvent case to MIDIEvent case, preserving payloads
         let event = smfEvent.midiEvent()
 
         // event has no MIDIEvent I/O event equivalent; applicable only to MIDI files
@@ -777,7 +777,7 @@ import Testing
             port: 4
         )
 
-        // convert MIDIFileEvent case to MIDIEvent case, preserving payloads
+        // convert MIDIFileTrackEvent case to MIDIEvent case, preserving payloads
         let event = smfEvent.midiEvent()
 
         // event has no MIDIEvent I/O event equivalent; applicable only to MIDI files
@@ -790,7 +790,7 @@ import Testing
             sequence: 4
         )
 
-        // convert MIDIFileEvent case to MIDIEvent case, preserving payloads
+        // convert MIDIFileTrackEvent case to MIDIEvent case, preserving payloads
         let event = smfEvent.midiEvent()
 
         // event has no MIDIEvent I/O event equivalent; applicable only to MIDI files
@@ -803,7 +803,7 @@ import Testing
             data: [0x12, 0x34]
         )
 
-        // convert MIDIFileEvent case to MIDIEvent case, preserving payloads
+        // convert MIDIFileTrackEvent case to MIDIEvent case, preserving payloads
         let event = smfEvent.midiEvent()
 
         // event has no MIDIEvent I/O event equivalent; applicable only to MIDI files
@@ -821,7 +821,7 @@ import Testing
             rate: .fps29_97d
         )
 
-        // convert MIDIFileEvent case to MIDIEvent case, preserving payloads
+        // convert MIDIFileTrackEvent case to MIDIEvent case, preserving payloads
         let event = smfEvent.midiEvent()
 
         // event has no MIDIEvent I/O event equivalent; applicable only to MIDI files
@@ -834,7 +834,7 @@ import Testing
             bpm: 140.0
         )
 
-        // convert MIDIFileEvent case to MIDIEvent case, preserving payloads
+        // convert MIDIFileTrackEvent case to MIDIEvent case, preserving payloads
         let event = smfEvent.midiEvent()
 
         // event has no MIDIEvent I/O event equivalent; applicable only to MIDI files
@@ -848,7 +848,7 @@ import Testing
             string: "Piano"
         )
 
-        // convert MIDIFileEvent case to MIDIEvent case, preserving payloads
+        // convert MIDIFileTrackEvent case to MIDIEvent case, preserving payloads
         let event = smfEvent.midiEvent()
 
         // event has no MIDIEvent I/O event equivalent; applicable only to MIDI files
@@ -862,7 +862,7 @@ import Testing
             denominator: 2
         )
 
-        // convert MIDIFileEvent case to MIDIEvent case, preserving payloads
+        // convert MIDIFileTrackEvent case to MIDIEvent case, preserving payloads
         let event = smfEvent.midiEvent()
 
         // event has no MIDIEvent I/O event equivalent; applicable only to MIDI files
@@ -876,7 +876,7 @@ import Testing
             data: [0x12, 0x34]
         )
 
-        // convert MIDIFileEvent case to MIDIEvent case, preserving payloads
+        // convert MIDIFileTrackEvent case to MIDIEvent case, preserving payloads
         let event = smfEvent.midiEvent()
 
         // event has no MIDIEvent I/O event equivalent; applicable only to MIDI files
@@ -889,7 +889,7 @@ import Testing
             patchSet: .DLS
         )
 
-        // convert MIDIFileEvent case to MIDIEvent case, preserving payloads
+        // convert MIDIFileTrackEvent case to MIDIEvent case, preserving payloads
         let event = smfEvent.midiEvent()
 
         // event has no MIDIEvent I/O event equivalent; applicable only to MIDI files

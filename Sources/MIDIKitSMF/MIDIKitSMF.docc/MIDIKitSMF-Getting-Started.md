@@ -18,6 +18,27 @@ import MIDIKitSMF
 
 ## Read a MIDI File
 
+### A Note On Timebase
+
+As a baseline, the Standard MIDI File 1.0 spec defines two timebases for MIDI files: musical, and SMPTE (timecode).
+
+Nearly all MIDI files use musical timebase. SMPTE timebase is extremely rare and almost never used. However, since both are defined in the specification, both are supported by MIDIKit.
+
+If you are unsure which timebase a MIDI file uses, the type-erased `AnyMIDIFile` is provided which will decode a file into its specialized `MIDIFile` type.
+
+```swift
+let anyMIDIFile = try AnyMIDIFile(url: url)
+
+switch midiFile.wrapped {
+case let .musical(midiFile):
+    // midiFile will be strongly-typed as `MIDIFile<MusicalMIDIFileTimebase>`, a.k.a. `MusicalMIDIFile`
+case let .smpte(midiFile):
+    // midiFile will be strongly-typed as `MIDIFile<SMPTEMIDIFileTimebase>`, a.k.a. `SMPTEMIDIFile`
+}
+```
+
+If you are reasonably sure most MIDI files you will be reading will be in musical timebase, you can use the `MusicalMIDIFile` specialized type directly and dispense with using `AnyMIDIFile`.
+
 Tracks and events can be accessed once the file is successfully read.
 
 ### From Disk
@@ -25,12 +46,12 @@ Tracks and events can be accessed once the file is successfully read.
 ```swift
 // using a file URL
 let url = URL() // replace with url to a MIDI file on disk
-let midiFile = try MIDIFile(url: url)
+let midiFile = try MusicalMIDIFile(url: url)
 print(midiFile.description) // prints human-readable debug output of the file
 
 // using a file path
 let path = "/Users/user/Desktop/midifile.mid"
-let midiFile = try MIDIFile(path: path)
+let midiFile = try MusicalMIDIFile(path: path)
 print(midiFile.description) // prints human-readable debug output of the file
 ```
 
@@ -38,7 +59,7 @@ print(midiFile.description) // prints human-readable debug output of the file
 
 ```swift
 let data = Data( ... ) // raw MIDI file contents
-let midiFile = try MIDIFile(data: data)
+let midiFile = try MusicalMIDIFile(data: data)
 ```
 
 ## Write a MIDI File to Disk

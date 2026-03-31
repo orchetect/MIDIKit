@@ -5,10 +5,10 @@ MIDI Channel Prefix event.
 @Comment {
     // ------------------------------------
     // NOTE: When revising these documentation blocks, they are duplicated in:
-    //   - MIDIFileEvent enum case (`case keySignature(delta:event:)`, etc.)
-    //   - MIDIFileEvent static constructors (`static func keySignature(...)`, etc.)
-    //   - MIDIFileEvent concrete payload structs (`KeySignature`, etc.)
-    //   - DocC documentation for each MIDIFileEvent type
+    //   - MIDIFileTrackEvent enum case (`case keySignature(delta:event:)`, etc.)
+    //   - MIDIFileTrackEvent static constructors (`static func keySignature(...)`, etc.)
+    //   - MIDIFileTrackEvent concrete payload structs (`KeySignature`, etc.)
+    //   - DocC documentation for each MIDIFileTrackEvent type
     // ------------------------------------
 }
 
@@ -20,9 +20,9 @@ MIDI Channel Prefix event.
 
 ### Constructors
 
-- ``MIDIFileEvent/channelPrefix(delta:channel:)``
+- ``MIDIFileTrackEvent/channelPrefix(channel:)``
 
 ### Switch Case Unwrapping
 
-- ``MIDIFileEvent/channelPrefix(delta:event:)``
-- ``MIDIFileEvent/ChannelPrefix``
+- ``MIDIFileTrackEvent/channelPrefix(_:)``
+- ``MIDIFileTrackEvent/ChannelPrefix``
