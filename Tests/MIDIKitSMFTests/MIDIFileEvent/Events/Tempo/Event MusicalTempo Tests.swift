@@ -1,5 +1,5 @@
 //
-//  Event Tempo Tests.swift
+//  Event MusicalTempo Tests.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
@@ -7,7 +7,7 @@
 @testable import MIDIKitSMF
 import Testing
 
-@Suite struct Event_Tempo_Tests {
+@Suite struct Event_MusicalTempo_Tests {
     // swiftformat:options --wrapcollections preserve
     // swiftformat:disable spaceInsideParens spaceInsideBrackets spacearoundoperators
     
@@ -18,14 +18,14 @@ import Testing
             0x07, 0xA1, 0x20  // 24-bit tempo encoding
         ]
         
-        let event = try MIDIFileTrackEvent.Tempo(midi1SMFRawBytes: bytes)
+        let event = try MIDIFileTrackEvent.MusicalTempo(midi1SMFRawBytes: bytes)
         
         #expect(event.bpm == 120.0)
     }
     
     @Test
     func midi1SMFRawBytes_A() async {
-        let event = MIDIFileTrackEvent.Tempo(bpm: 120.0)
+        let event = MIDIFileTrackEvent.MusicalTempo(bpm: 120.0)
         
         let bytes = event.midi1SMFRawBytes(as: [UInt8].self)
         
@@ -42,14 +42,14 @@ import Testing
             0x0F, 0x42, 0x40  // 24-bit tempo encoding
         ]
         
-        let event = try MIDIFileTrackEvent.Tempo(midi1SMFRawBytes: bytes)
+        let event = try MIDIFileTrackEvent.MusicalTempo(midi1SMFRawBytes: bytes)
         
         #expect(event.bpm == 60.0)
     }
     
     @Test
     func midi1SMFRawBytes_B() async {
-        let event = MIDIFileTrackEvent.Tempo(bpm: 60.0)
+        let event = MIDIFileTrackEvent.MusicalTempo(bpm: 60.0)
         
         let bytes = event.midi1SMFRawBytes(as: [UInt8].self)
         
