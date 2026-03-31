@@ -123,7 +123,7 @@ public enum MIDIFileTrackEvent {
     /// Tempo event.
     /// For a format 1 MIDI file, Tempo events should only occur within the first `MTrk` chunk.
     /// If there are no tempo events in a MIDI file, 120 bpm is assumed.
-    case tempo(Tempo)
+    case tempo(AnyTempo)
     
     /// Text event.
     /// Includes copyright, marker, cue point, track/sequence name, instrument name, generic text,

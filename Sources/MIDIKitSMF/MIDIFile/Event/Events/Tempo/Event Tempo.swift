@@ -29,88 +29,33 @@ extension MIDIFileTrackEvent {
     /// >
     /// > Another way of putting "microseconds per quarter-note" is "24ths of a microsecond per MIDI clock".
     /// > Representing tempos as time per beat instead of beat per time allows absolutely exact long-term
-    /// > synchronization with a time-based sync protocol such as SMPTE time code or MIDI time code.
-    public struct Tempo /* <Timebase: MIDIFileTimebase> */ {
-        // TODO: may need to specialize Tempo to a MIDIFileTimebase, as Musical and SMPTE tempo events are handled differently
+    /// > synchronization with a time-based sync protocol such as SMPTE timecode or MIDI timecode.
+    public protocol Tempo: Equatable, Hashable, Sendable where Self: MIDIFileTrackEventPayload {
+        /// MIDI file timebase associated with the tempo.
+        /// Tempo events have different interpretations depending on the timebase, so `Tempo` must be specialized.
+        associatedtype Timebase: MIDIFileTimebase
         
-        // TODO: refactor as computed property, with `nanosecondsPerQuarter: UInt32` as the stored property
-        /// Tempo.
-        /// Defaults to 120 bpm. Minimum possible is 3.58 bpm and maximum is 60,000,000 bpm.
-        public var bpm: Double = 120.0 {
-            didSet {
-                if oldValue != bpm { bpm_Validate() }
-            }
-        }
+        /// "Microseconds per quarter-note"; the raw encoding value of the tempo event.
+        ///
+        /// > Standard MIDI File 1.0 Spec:
+        /// >
+        /// > This value is encoded as microseconds per MIDI quarter-note.
+        /// >
+        /// > Another way of putting "microseconds per quarter-note" is "24ths of a microsecond per MIDI clock".
+        /// > Representing tempos as time per beat instead of beat per time allows absolutely exact long-term
+        /// > synchronization with a time-based sync protocol such as SMPTE timecode or MIDI timecode.
+        var microsecondsPerQuarter: UInt32 { get set }
         
-        private mutating func bpm_Validate() {
-            bpm = bpm.clamped(to: 3.58 ... 60_000_000.0)
-        }
-        
-        public init(bpm: Double) {
-            self.bpm = bpm
-        }
-    }
-}
-
-extension MIDIFileTrackEvent.Tempo: Equatable { }
-
-extension MIDIFileTrackEvent.Tempo: Hashable { }
-
-extension MIDIFileTrackEvent.Tempo: Sendable { }
-
-// MARK: - Static Constructors
-
-extension MIDIFileTrackEvent /* where Self == Tempo<MusicalMIDIFileTimebase> */ {
-    /// Tempo event.
-    /// For a format 1 MIDI file, Tempo events should only occur within the first `MTrk` chunk.
-    /// If there are no tempo events in a MIDI file, 120 bpm is assumed.
-    public static func tempo(
-        bpm: Double
-    ) -> Self {
-        .tempo(
-            .init(bpm: bpm)
-        )
-    }
-}
-
-extension MIDIFile.TrackChunk.Event /* where Self == Tempo<MusicalMIDIFileTimebase> */ {
-    /// Tempo event.
-    /// For a format 1 MIDI file, Tempo events should only occur within the first `MTrk` chunk.
-    /// If there are no tempo events in a MIDI file, 120 bpm is assumed.
-    public static func tempo(
-        delta: DeltaTime = .none,
-        bpm: Double
-    ) -> Self {
-        let event: MIDIFileTrackEvent = .tempo(
-            bpm: bpm
-        )
-        return Self(delta: delta, event: event)
-    }
-}
-
-// MARK: - Properties
-
-extension MIDIFileTrackEvent.Tempo /* where Timebase == MusicalMIDIFileTimebase */ {
-    /// (Computed property)
-    /// Returns current ``bpm`` property as it will be read from the MIDI file after encoding.
-    /// This is the effective tempo that DAWs will read when importing the MIDI file.
-    public var bpmEncoded: Double {
-        Self.microsecondsToBPM(ms: Self.bpmToMicroseconds(bpm: bpm))
-    }
-    
-    /// (Computed property, not stored.)
-    ///
-    /// - Get: Calculates microseconds-per-quarter note based on ``bpm`` property.
-    ///
-    /// - Set: Sets ``bpm`` property to the calculated tempo from the passed
-    ///   microseconds-per-quarter note value.
-    public var microseconds: UInt32 {
-        get {
-            Self.bpmToMicroseconds(bpm: bpm)
-        }
-        set {
-            bpm = Self.microsecondsToBPM(ms: newValue)
-        }
+        /// "Microseconds per quarter-note"; the raw encoding value of the tempo event.
+        ///
+        /// > Standard MIDI File 1.0 Spec:
+        /// >
+        /// > This value is encoded as microseconds per MIDI quarter-note.
+        /// >
+        /// > Another way of putting "microseconds per quarter-note" is "24ths of a microsecond per MIDI clock".
+        /// > Representing tempos as time per beat instead of beat per time allows absolutely exact long-term
+        /// > synchronization with a time-based sync protocol such as SMPTE timecode or MIDI timecode.
+        init(microsecondsPerQuarter: UInt32)
     }
 }
 
@@ -121,14 +66,12 @@ extension MIDIFileTrackEvent.Tempo {
     public static var prefixBytes: [UInt8] { [0xFF, 0x51, 0x03] }
 }
 
-// MARK: - Encoding
+// MARK: - MIDIFileTrackEventPayload Default Implementation
 
-extension MIDIFileTrackEvent.Tempo: MIDIFileTrackEventPayload {
+extension MIDIFileTrackEvent.Tempo /* : MIDIFileTrackEventPayload */ {
     public static var smfEventType: MIDIFileTrackEventType { .tempo }
     
-    public var wrapped: MIDIFileTrackEvent {
-        .tempo(self)
-    }
+    // `var wrapped` needs to be implemented by the concrete type.
     
     public static func decode(
         midi1SMFRawBytesStream stream: some DataProtocol,
@@ -174,7 +117,7 @@ extension MIDIFileTrackEvent.Tempo: MIDIFileTrackEventPayload {
             return .unrecoverableError(error: error)
         }
         
-        let newEvent = Self(bpm: Self.microsecondsToBPM(ms: microseconds))
+        let newEvent = Self(microsecondsPerQuarter: microseconds)
         
         return .event(
             payload: newEvent,
@@ -190,31 +133,20 @@ extension MIDIFileTrackEvent.Tempo: MIDIFileTrackEventPayload {
         
         data += Self.prefixBytes
         
-        var tempoUInt32 = microseconds
+        var tempoUInt32 = microsecondsPerQuarter
         data += Array(NSData(bytes: &tempoUInt32, length: 3) as Data)
             .reversed()
         
         return data
     }
     
+    // default implementation; each concrete type should override this
     public var smfDescription: String {
-        "\(bpm.rounded(decimalPlaces: 3))bpm"
+        "\(microsecondsPerQuarter) ms/qtr"
     }
     
+    // default implementation; each concrete type should override this
     public var smfDebugDescription: String {
-        "Tempo(\(bpm)bpm)"
-    }
-}
-
-// MARK: - Utility methods
-
-extension MIDIFileTrackEvent.Tempo {
-    private static func bpmToMicroseconds(bpm fromTempo: Double) -> UInt32 {
-        let tempoCalc: Double = (60 / fromTempo) * 1_000_000
-        return UInt32(tempoCalc)
-    }
-
-    private static func microsecondsToBPM(ms fromMicroseconds: UInt32) -> Double {
-        (60 * 1_000_000) / Double(fromMicroseconds)
+        "Tempo(\(smfDescription))"
     }
 }

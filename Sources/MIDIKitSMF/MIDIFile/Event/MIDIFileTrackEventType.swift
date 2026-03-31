@@ -64,7 +64,7 @@ extension MIDIFileTrackEventType {
         case .sequencerSpecific:  MIDIFileTrackEvent.SequencerSpecific.self
         case .smpteOffset:        MIDIFileTrackEvent.SMPTEOffset.self
         case .sysEx7:             MIDIFileTrackEvent.SysEx7.self
-        case .tempo:              MIDIFileTrackEvent.Tempo.self
+        case .tempo:              MIDIFileTrackEvent.AnyTempo.self
         case .text:               MIDIFileTrackEvent.Text.self
         case .timeSignature:      MIDIFileTrackEvent.TimeSignature.self
         case .universalSysEx7:    MIDIFileTrackEvent.UniversalSysEx7.self
@@ -164,7 +164,7 @@ extension MIDIFileTrackEventType {
         case let d where d.starts(with: MIDIFileTrackEvent.SequenceNumber.prefixBytes): return .sequenceNumber
         case let d where d.starts(with: MIDIFileTrackEvent.ChannelPrefix.prefixBytes): return .channelPrefix
         case let d where d.starts(with: MIDIFileTrackEvent.PortPrefix.prefixBytes): return .portPrefix
-        case let d where d.starts(with: MIDIFileTrackEvent.Tempo.prefixBytes): return .tempo
+        case let d where d.starts(with: MIDIFileTrackEvent.AnyTempo.prefixBytes): return .tempo
         case let d where d.starts(with: MIDIFileTrackEvent.SMPTEOffset.prefixBytes): return .smpteOffset
         case let d where d.starts(with: MIDIFileTrackEvent.TimeSignature.prefixBytes): return .timeSignature
         case let d where d.starts(with: MIDIFileTrackEvent.KeySignature.prefixBytes): return .keySignature
