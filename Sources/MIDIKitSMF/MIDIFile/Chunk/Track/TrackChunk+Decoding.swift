@@ -141,7 +141,7 @@ extension MIDIFile.TrackChunk {
                     
                     // parse out next event
                     
-                    var foundEvent: (newEvent: any MIDIFileTrackEventPayload, bufferLength: Int, statusByte: UInt8)?
+                    var foundEvent: (newEvent: (any MIDIFileTrackEventPayload)?, bufferLength: Int, statusByte: UInt8)?
                     
                     let effectiveRunningStatus: UInt8? = isStatusBytePresent ? nil : runningStatusByte
                     if let eventType = MIDIFileTrackEventType(
@@ -149,12 +149,27 @@ extension MIDIFile.TrackChunk {
                         runningStatus: effectiveRunningStatus,
                         detectParameterNumberSequence: false // parse out discrete events; RPN/NRPN events are bundled later
                     ) {
-                        let result = try eventType.concreteType.initFrom(
+                        let result = eventType.concreteType.decodeTypeErased(
                             midi1SMFRawBytesStream: readBuffer,
                             runningStatus: effectiveRunningStatus
                         )
+                        
                         let statusByte = effectiveRunningStatus ?? readBuffer[0]
-                        foundEvent = (newEvent: result.newEvent, bufferLength: result.bufferLength, statusByte: statusByte)
+                        
+                        switch result {
+                        case let .event(payload: payload, byteLength: byteLength):
+                            foundEvent = (newEvent: payload, bufferLength: byteLength, statusByte: statusByte)
+                        case let .recoverableError(payload: payload, byteLength: byteLength, error: error):
+                            switch options.errorStrategy {
+                            case .decodePartialTracksWithErrors:
+                                foundEvent = (newEvent: payload, bufferLength: byteLength, statusByte: statusByte)
+                            case .discardTracksWithErrors, .throwOnError:
+                                throw error
+                            }
+                            
+                        case let .unrecoverableError(error: error):
+                            throw error
+                        }
                     }
                     
                     guard let foundEvent else {
@@ -182,8 +197,12 @@ extension MIDIFile.TrackChunk {
                     // inject delta time into event
                     let newEventDelta: DeltaTime = .ticks(UInt32(eventDeltaTime.value))
                     
-                    // add new event to new track
-                    newEvents.append(Event(delta: newEventDelta, event: foundEvent.newEvent.wrapped))
+                    // add new event to new track. if newEvent is nil, it means we are skipping over a malformed event.
+                    if let newEvent = foundEvent.newEvent {
+                        newEvents.append(Event(delta: newEventDelta, event: newEvent.wrapped))
+                    }
+                    
+                    // advance parser read offset
                     try parser.toMIDIFileDecodeError(try parser.seek(by: foundEvent.bufferLength))
                     
                     // store event in running status

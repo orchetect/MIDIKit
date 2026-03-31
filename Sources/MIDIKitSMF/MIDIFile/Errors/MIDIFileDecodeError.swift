@@ -30,6 +30,12 @@ public enum MIDIFileDecodeError: LocalizedError {
     }
 }
 
+extension MIDIFileDecodeError: Equatable { }
+
+extension MIDIFileDecodeError: Hashable { }
+
+extension MIDIFileDecodeError: Sendable { }
+
 // MARK: - Helpers
 
 internal import SwiftDataParsing

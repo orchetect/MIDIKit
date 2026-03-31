@@ -88,90 +88,89 @@ extension MIDIEvent.PitchBend: MIDIFileTrackEventPayload {
         .pitchBend(self)
     }
     
-    public init(
-        midi1SMFRawBytes rawBytes: some DataProtocol,
-        runningStatus: UInt8?
-    ) throws(MIDIFileDecodeError) {
-        let rawBytesCountWithRunningStatus = rawBytes.count + (runningStatus != nil ? 1 : 0)
-        guard rawBytesCountWithRunningStatus == Self.midi1SMFFixedRawBytesLength else {
-            throw .malformed(
-                "Invalid number of bytes. Expected \(Self.midi1SMFFixedRawBytesLength) but got \(rawBytes.count)"
-            )
-        }
-        
-        let (
-            readStatus, readChannel, readByte1, readByte2
-        ) = try rawBytes.withDataParser { parser throws(MIDIFileDecodeError) -> (UInt8, UInt8, UInt8, UInt8) in
-            do {
-                let byte0 = try runningStatus ?? parser.readByte()
-                let byte1 = try parser.readByte()
-                let byte2 = try parser.readByte()
-                
-                return (
-                    readStatus: (byte0 & 0xF0) >> 4,
-                    readChannel: byte0 & 0x0F,
-                    readByte1: byte1,
-                    readByte2: byte2
-                )
-            } catch {
-                throw .malformed("Not enough bytes.")
-            }
-        }
-        
-        guard readStatus == 0xE else {
-            throw .malformed(
-                "Invalid status nibble: \(readStatus.hexString(padTo: 1, prefix: true))."
-            )
-        }
-        
-        guard let lsb = readByte1.toUInt7Exactly else {
-            throw .malformed(
-                "Pitch Bend LSB is out of bounds: \(readByte1.hexString(padTo: 2, prefix: true))"
-            )
-        }
-        
-        guard let msb = readByte2.toUInt7Exactly else {
-            throw .malformed(
-                "Pitch Bend MSB is out of bounds: \(readByte2.hexString(padTo: 2, prefix: true))"
-            )
-        }
-        
-        let value = UInt7Pair(msb: msb, lsb: lsb).uInt14Value
-        
-        guard let channel = readChannel.toUInt4Exactly else {
-            throw .malformed(
-                "Value(s) out of bounds."
-            )
-        }
-        
-        let newEvent: MIDIEvent = .pitchBend(
-            value: .midi1(value),
-            channel: channel
-        )
-        
-        guard case let .pitchBend(unwrapped) = newEvent else {
-            throw .malformed(
-                "Could not unwrap enum case."
-            )
-        }
-        
-        self = unwrapped
-    }
-    
-    public static func initFrom(
+    public static func decode(
         midi1SMFRawBytesStream stream: some DataProtocol,
         runningStatus: UInt8?
-    ) throws(MIDIFileDecodeError) -> StreamDecodeResult {
-        let requiredByteCount = midi1SMFFixedRawBytesLength
-        let requiredStreamByteCount = requiredByteCount - (runningStatus != nil ? 1 : 0)
-        let rawBytes = stream.prefix(requiredStreamByteCount)
+    ) -> MIDIFileTrackEventDecodeResult<Self> {
+        // Step 1: Check required byte count
+        let requiredStreamByteCount: Int
+        do throws(MIDIFileDecodeError) {
+            requiredStreamByteCount = try requiredStreamByteLength(
+                availableByteCount: stream.count,
+                isRunningStatusPresent: runningStatus != nil
+            )
+        } catch {
+            return .unrecoverableError(error: error)
+        }
         
-        let newInstance = try Self(midi1SMFRawBytes: rawBytes, runningStatus: runningStatus)
+        // Step 2: Parse out required bytes
+        let readStatus, readChannel, readByte1, readByte2: UInt8
+        do throws(MIDIFileDecodeError) {
+            (readStatus, readChannel, readByte1, readByte2) =
+            try stream.withDataParser { parser throws(MIDIFileDecodeError) -> (UInt8, UInt8, UInt8, UInt8) in
+                do {
+                    let byte0 = try runningStatus ?? parser.readByte()
+                    let byte1 = try parser.readByte()
+                    let byte2 = try parser.readByte()
+                    
+                    return (
+                        readStatus: (byte0 & 0xF0) >> 4,
+                        readChannel: byte0 & 0x0F,
+                        readByte1: byte1,
+                        readByte2: byte2
+                    )
+                } catch {
+                    throw .malformed("Pitch Bend does not have enough bytes.")
+                }
+            }
+        } catch {
+            return .unrecoverableError(error: error)
+        }
         
-        return (
-            newEvent: newInstance,
-            bufferLength: rawBytes.count
-        )
+        // Step 3: Validate and transform values
+        do throws(MIDIFileDecodeError) {
+            guard readStatus == 0xE else {
+                throw .malformed(
+                    "Pitch Bend has invalid status nibble: \(readStatus.hexString(padTo: 1, prefix: true))."
+                )
+            }
+            
+            guard let lsb = readByte1.toUInt7Exactly else {
+                throw .malformed(
+                    "Pitch Bend LSB is out of bounds: \(readByte1.hexString(padTo: 2, prefix: true))"
+                )
+            }
+            
+            guard let msb = readByte2.toUInt7Exactly else {
+                throw .malformed(
+                    "Pitch Bend MSB is out of bounds: \(readByte2.hexString(padTo: 2, prefix: true))"
+                )
+            }
+            
+            let value = UInt7Pair(msb: msb, lsb: lsb).uInt14Value
+            
+            guard let channel = readChannel.toUInt4Exactly else {
+                throw .malformed(
+                    "Pitch Bend value(s) are out of bounds."
+                )
+            }
+            
+            let newEvent = Self(
+                value: .midi1(value),
+                channel: channel
+            )
+            
+            return .event(
+                payload: newEvent,
+                byteLength: requiredStreamByteCount
+            )
+        } catch {
+            return .recoverableError(
+                payload: nil,
+                byteLength: requiredStreamByteCount,
+                error: error
+            )
+        }
     }
     
     public func midi1SMFRawBytes<D: MutableDataProtocol>(as dataType: D.Type) -> D {
@@ -179,8 +178,6 @@ extension MIDIEvent.PitchBend: MIDIFileTrackEventPayload {
         
         D(midi1RawBytes())
     }
-    
-    static var midi1SMFFixedRawBytesLength: Int { 3 }
     
     public var smfDescription: String {
         let chanString = channel.uInt8Value.hexString(padTo: 1, prefix: true)

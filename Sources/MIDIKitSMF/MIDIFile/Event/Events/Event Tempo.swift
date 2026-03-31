@@ -22,7 +22,18 @@ extension MIDIFileTrackEvent {
     /// Tempo event.
     /// For a format 1 MIDI file, Tempo events should only occur within the first `MTrk` chunk.
     /// If there are no tempo events in a MIDI file, 120 bpm is assumed.
-    public struct Tempo {
+    ///
+    /// > Standard MIDI File 1.0 Spec:
+    /// >
+    /// > This value is encoded as microseconds per MIDI quarter-note.
+    /// >
+    /// > Another way of putting "microseconds per quarter-note" is "24ths of a microsecond per MIDI clock".
+    /// > Representing tempos as time per beat instead of beat per time allows absolutely exact long-term
+    /// > synchronization with a time-based sync protocol such as SMPTE time code or MIDI time code.
+    public struct Tempo /* <Timebase: MIDIFileTimebase> */ {
+        // TODO: may need to specialize Tempo to a MIDIFileTimebase, as Musical and SMPTE tempo events are handled differently
+        
+        // TODO: refactor as computed property, with `nanosecondsPerQuarter: UInt32` as the stored property
         /// Tempo.
         /// Defaults to 120 bpm. Minimum possible is 3.58 bpm and maximum is 60,000,000 bpm.
         public var bpm: Double = 120.0 {
@@ -49,7 +60,7 @@ extension MIDIFileTrackEvent.Tempo: Sendable { }
 
 // MARK: - Static Constructors
 
-extension MIDIFileTrackEvent {
+extension MIDIFileTrackEvent /* where Self == Tempo<MusicalMIDIFileTimebase> */ {
     /// Tempo event.
     /// For a format 1 MIDI file, Tempo events should only occur within the first `MTrk` chunk.
     /// If there are no tempo events in a MIDI file, 120 bpm is assumed.
@@ -62,7 +73,7 @@ extension MIDIFileTrackEvent {
     }
 }
 
-extension MIDIFile.TrackChunk.Event {
+extension MIDIFile.TrackChunk.Event /* where Self == Tempo<MusicalMIDIFileTimebase> */ {
     /// Tempo event.
     /// For a format 1 MIDI file, Tempo events should only occur within the first `MTrk` chunk.
     /// If there are no tempo events in a MIDI file, 120 bpm is assumed.
@@ -79,7 +90,7 @@ extension MIDIFile.TrackChunk.Event {
 
 // MARK: - Properties
 
-extension MIDIFileTrackEvent.Tempo {
+extension MIDIFileTrackEvent.Tempo /* where Timebase == MusicalMIDIFileTimebase */ {
     /// (Computed property)
     /// Returns current ``bpm`` property as it will be read from the MIDI file after encoding.
     /// This is the effective tempo that DAWs will read when importing the MIDI file.
@@ -92,7 +103,7 @@ extension MIDIFileTrackEvent.Tempo {
     /// - Get: Calculates microseconds-per-quarter note based on ``bpm`` property.
     ///
     /// - Set: Sets ``bpm`` property to the calculated tempo from the passed
-    /// microseconds-per-quarter note value.
+    ///   microseconds-per-quarter note value.
     public var microseconds: UInt32 {
         get {
             Self.bpmToMicroseconds(bpm: bpm)
@@ -119,56 +130,55 @@ extension MIDIFileTrackEvent.Tempo: MIDIFileTrackEventPayload {
         .tempo(self)
     }
     
-    public init(
-        midi1SMFRawBytes rawBytes: some DataProtocol,
-        runningStatus: UInt8?
-    ) throws(MIDIFileDecodeError) {
-        if let runningStatus {
-            let rsString = runningStatus.hexString(prefix: true)
-            throw .malformed("Running status byte \(rsString) was passed to event parser that does not use running status.")
-        }
-        
-        guard rawBytes.count == Self.midi1SMFFixedRawBytesLength else {
-            throw .malformed(
-                "Invalid number of bytes. Expected \(Self.midi1SMFFixedRawBytesLength) but got \(rawBytes.count)"
-            )
-        }
-        
-        try rawBytes.withDataParser { parser throws(MIDIFileDecodeError) in
-            // 3-byte preamble
-            guard let headerBytes = try? parser.read(bytes: Self.prefixBytes.count),
-                  headerBytes.elementsEqual(Self.prefixBytes)
-            else {
-                throw .malformed("Event does not start with expected bytes.")
-            }
-            
-            do {
-                let byte3 = try UInt32(parser.readByte())
-                let byte4 = try UInt32(parser.readByte())
-                let byte5 = try UInt32(parser.readByte())
-                
-                let readUInt32 = (byte3 << 16)
-                    + (byte4 << 8)
-                    + byte5
-                
-                microseconds = readUInt32
-            } catch {
-                throw .malformed("Not enough bytes.")
-            }
-        }
-    }
-    
-    public static func initFrom(
+    public static func decode(
         midi1SMFRawBytesStream stream: some DataProtocol,
         runningStatus: UInt8?
-    ) throws(MIDIFileDecodeError) -> StreamDecodeResult {
-        let rawBytes = stream.prefix(midi1SMFFixedRawBytesLength)
+    ) -> MIDIFileTrackEventDecodeResult<Self> {
+        // Step 1: Check required byte count
+        let requiredStreamByteCount: Int
+        do throws(MIDIFileDecodeError) {
+            requiredStreamByteCount = try requiredStreamByteLength(
+                availableByteCount: stream.count,
+                isRunningStatusPresent: runningStatus != nil
+            )
+        } catch {
+            return .unrecoverableError(error: error)
+        }
         
-        let newInstance = try Self(midi1SMFRawBytes: rawBytes, runningStatus: runningStatus)
+        // Step 2: Parse out required bytes
+        let microseconds: UInt32
+        do throws(MIDIFileDecodeError) {
+            microseconds = try stream.withDataParser { parser throws(MIDIFileDecodeError) in
+                // 3-byte preamble
+                guard let headerBytes = try? parser.read(bytes: Self.prefixBytes.count),
+                      headerBytes.elementsEqual(Self.prefixBytes)
+                else {
+                    throw .malformed("Tempo does not start with expected bytes.")
+                }
+                
+                do {
+                    let byte3 = try UInt32(parser.readByte())
+                    let byte4 = try UInt32(parser.readByte())
+                    let byte5 = try UInt32(parser.readByte())
+                    
+                    let readUInt32 = (byte3 << 16)
+                        + (byte4 << 8)
+                        + byte5
+                    
+                    return readUInt32
+                } catch {
+                    throw .malformed("Tempo does not have enough bytes.")
+                }
+            }
+        } catch {
+            return .unrecoverableError(error: error)
+        }
         
-        return (
-            newEvent: newInstance,
-            bufferLength: rawBytes.count
+        let newEvent = Self(bpm: Self.microsecondsToBPM(ms: microseconds))
+        
+        return .event(
+            payload: newEvent,
+            byteLength: requiredStreamByteCount
         )
     }
     
@@ -186,8 +196,6 @@ extension MIDIFileTrackEvent.Tempo: MIDIFileTrackEventPayload {
         
         return data
     }
-    
-    static var midi1SMFFixedRawBytesLength: Int { 6 }
     
     public var smfDescription: String {
         "\(bpm.rounded(decimalPlaces: 3))bpm"

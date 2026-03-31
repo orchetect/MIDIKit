@@ -66,20 +66,12 @@ extension MIDIEvent.RPN: MIDIFileTrackEventPayload {
         .rpn(self)
     }
     
-    public init(
-        midi1SMFRawBytes rawBytes: some DataProtocol,
-        runningStatus: UInt8?
-    ) throws(MIDIFileDecodeError) {
-        let newEvent = try Self.initFrom(midi1SMFRawBytesStream: rawBytes, runningStatus: runningStatus)
-        self = newEvent.newEvent
-    }
-    
-    public static func initFrom(
+    public static func decode(
         midi1SMFRawBytesStream stream: some DataProtocol,
         runningStatus: UInt8?
-    ) throws(MIDIFileDecodeError) -> StreamDecodeResult {
+    ) -> MIDIFileTrackEventDecodeResult<Self> {
         // stream parsing is not supported since it involves multiple MIDI file events with delta times
-        throw .notImplemented
+        return .unrecoverableError(error: .notImplemented)
     }
     
     public func midi1SMFRawBytes<D: MutableDataProtocol>(as dataType: D.Type) -> D {

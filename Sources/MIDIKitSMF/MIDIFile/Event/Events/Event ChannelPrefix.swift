@@ -107,57 +107,66 @@ extension MIDIFileTrackEvent.ChannelPrefix: MIDIFileTrackEventPayload {
         .channelPrefix(self)
     }
     
-    public init(
-        midi1SMFRawBytes rawBytes: some DataProtocol,
-        runningStatus: UInt8?
-    ) throws(MIDIFileDecodeError) {
-        if let runningStatus {
-            let rsString = runningStatus.hexString(prefix: true)
-            throw .malformed("Running status byte \(rsString) was passed to event parser that does not use running status.")
-        }
-        
-        guard rawBytes.count == Self.midi1SMFFixedRawBytesLength else {
-            throw .malformed(
-                "Invalid number of bytes. Expected \(Self.midi1SMFFixedRawBytesLength) but got \(rawBytes.count)"
-            )
-        }
-        
-        try rawBytes.withDataParser { parser throws(MIDIFileDecodeError) in
-            // 3-byte preamble
-            guard let headerBytes = try? parser.read(bytes: Self.prefixBytes.count),
-                  headerBytes.elementsEqual(Self.prefixBytes)
-            else {
-                throw .malformed("Event does not start with expected bytes.")
-            }
-            
-            let readChannel: UInt8 = try parser.toMIDIFileDecodeError(
-                malformedReason: "Missing channel byte.",
-                try parser.readByte()
-            )
-            
-            guard (0x0 ... 0xF).contains(readChannel) else {
-                throw .malformed("Channel number is out of bounds: \(readChannel)")
-            }
-            
-            guard let channel = readChannel.toUInt4Exactly else {
-                throw .malformed("Value(s) out of bounds.")
-            }
-            
-            self.channel = channel
-        }
-    }
-    
-    public static func initFrom(
+    public static func decode(
         midi1SMFRawBytesStream stream: some DataProtocol,
         runningStatus: UInt8?
-    ) throws(MIDIFileDecodeError) -> StreamDecodeResult {
-        let rawBytes = stream.prefix(midi1SMFFixedRawBytesLength)
+    ) -> MIDIFileTrackEventDecodeResult<Self> {
+        // Step 1: Check required byte count
+        let requiredStreamByteCount: Int
+        do throws(MIDIFileDecodeError) {
+            requiredStreamByteCount = try requiredStreamByteLength(
+                availableByteCount: stream.count,
+                isRunningStatusPresent: runningStatus != nil
+            )
+        } catch {
+            return .unrecoverableError(error: error)
+        }
         
-        let newInstance = try Self(midi1SMFRawBytes: rawBytes, runningStatus: runningStatus)
+        // Step 2: Parse out required bytes
+        let readChannel: UInt8
+        do throws(MIDIFileDecodeError) {
+            readChannel = try stream.withDataParser { parser throws(MIDIFileDecodeError) in
+                // 3-byte preamble
+                guard let headerBytes = try? parser.read(bytes: Self.prefixBytes.count),
+                      headerBytes.elementsEqual(Self.prefixBytes)
+                else {
+                    throw .malformed("Channel Prefix event does not start with expected bytes.")
+                }
+                
+                let readChannel: UInt8 = try parser.toMIDIFileDecodeError(
+                    malformedReason: "Channel Prefix is missing channel byte.",
+                    try parser.readByte()
+                )
+                
+                return readChannel
+            }
+        } catch {
+            return .unrecoverableError(error: error)
+        }
         
-        return (
-            newEvent: newInstance,
-            bufferLength: rawBytes.count
+        // Step 3: Validate and transform values
+        let channel: UInt4
+        do throws(MIDIFileDecodeError) {
+            guard (0x0 ... 0xF).contains(readChannel),
+                  let channelUInt4 = readChannel.toUInt4Exactly
+            else {
+                throw .malformed("Channel Prefix channel number is out of bounds: \(readChannel)")
+            }
+            
+            channel = channelUInt4
+        } catch {
+            return .recoverableError(
+                payload: nil,
+                byteLength: requiredStreamByteCount,
+                error: error
+            )
+        }
+        
+        let newEvent = Self(channel: channel)
+        
+        return .event(
+            payload: newEvent,
+            byteLength: requiredStreamByteCount
         )
     }
     
@@ -167,8 +176,6 @@ extension MIDIFileTrackEvent.ChannelPrefix: MIDIFileTrackEventPayload {
         
         D(Self.prefixBytes + [channel.uInt8Value])
     }
-    
-    static var midi1SMFFixedRawBytesLength: Int { 4 }
     
     public var smfDescription: String {
         let chanString = channel.uInt8Value.hexString(padTo: 1, prefix: true)

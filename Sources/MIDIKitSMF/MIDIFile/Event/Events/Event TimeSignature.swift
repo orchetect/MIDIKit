@@ -134,51 +134,62 @@ extension MIDIFileTrackEvent.TimeSignature: MIDIFileTrackEventPayload {
         .timeSignature(self)
     }
     
-    public init(
-        midi1SMFRawBytes rawBytes: some DataProtocol,
-        runningStatus: UInt8?
-    ) throws(MIDIFileDecodeError) {
-        if let runningStatus {
-            let rsString = runningStatus.hexString(prefix: true)
-            throw .malformed("Running status byte \(rsString) was passed to event parser that does not use running status.")
-        }
-        
-        guard rawBytes.count == Self.midi1SMFFixedRawBytesLength else {
-            throw .malformed(
-                "Invalid number of bytes. Expected \(Self.midi1SMFFixedRawBytesLength) but got \(rawBytes.count)"
-            )
-        }
-        
-        try rawBytes.withDataParser { parser throws(MIDIFileDecodeError) in
-            // 3-byte preamble
-            guard let headerBytes = try? parser.read(bytes: Self.prefixBytes.count),
-                  headerBytes.elementsEqual(Self.prefixBytes)
-            else {
-                throw .malformed("Event does not start with expected bytes.")
-            }
-            
-            do {
-                numerator = try parser.readByte()
-                denominator = try parser.readByte()
-                midiClocksBetweenMetronomeClicks = try parser.readByte()
-                numberOf32ndNotesInAQuarterNote = try parser.readByte()
-            } catch {
-                throw .malformed("Not enough bytes.")
-            }
-        }
-    }
-    
-    public static func initFrom(
+    public static func decode(
         midi1SMFRawBytesStream stream: some DataProtocol,
         runningStatus: UInt8?
-    ) throws(MIDIFileDecodeError) -> StreamDecodeResult {
-        let rawBytes = stream.prefix(midi1SMFFixedRawBytesLength)
+    ) -> MIDIFileTrackEventDecodeResult<Self> {
+        // Step 1: Check required byte count
+        let requiredStreamByteCount: Int
+        do throws(MIDIFileDecodeError) {
+            requiredStreamByteCount = try requiredStreamByteLength(
+                availableByteCount: stream.count,
+                isRunningStatusPresent: runningStatus != nil
+            )
+        } catch {
+            return .unrecoverableError(error: error)
+        }
         
-        let newInstance = try Self(midi1SMFRawBytes: rawBytes, runningStatus: runningStatus)
+        // Step 2: Parse out required bytes
+        let num, den, clocks, thirtySeconds: UInt8
+        do throws(MIDIFileDecodeError) {
+            (num, den, clocks, thirtySeconds) = try stream.withDataParser { parser throws(MIDIFileDecodeError) in
+                // 3-byte preamble
+                guard let headerBytes = try? parser.read(bytes: Self.prefixBytes.count),
+                      headerBytes.elementsEqual(Self.prefixBytes)
+                else {
+                    throw .malformed("Time Signature does not start with expected bytes.")
+                }
+                
+                do {
+                    let numerator = try parser.readByte()
+                    let denominator = try parser.readByte()
+                    let midiClocksBetweenMetronomeClicks = try parser.readByte()
+                    let numberOf32ndNotesInAQuarterNote = try parser.readByte()
+                    
+                    return (
+                        numerator,
+                        denominator,
+                        midiClocksBetweenMetronomeClicks,
+                        numberOf32ndNotesInAQuarterNote
+                    )
+                } catch {
+                    throw .malformed("Time Signature does not have enough bytes.")
+                }
+            }
+        } catch {
+            return .unrecoverableError(error: error)
+        }
         
-        return (
-            newEvent: newInstance,
-            bufferLength: rawBytes.count
+        let newEvent = Self(
+            numerator: num,
+            denominator: den,
+            midiClocksBetweenMetronomeClicks: clocks,
+            numberOf32ndNotesInAQuarterNote: thirtySeconds
+        )
+        
+        return .event(
+            payload: newEvent,
+            byteLength: requiredStreamByteCount
         )
     }
     
@@ -201,8 +212,6 @@ extension MIDIFileTrackEvent.TimeSignature: MIDIFileTrackEventPayload {
         
         return data
     }
-    
-    static var midi1SMFFixedRawBytesLength: Int { 7 }
     
     public var smfDescription: String {
         let denom = pow(2 as Decimal, Int(denominator))

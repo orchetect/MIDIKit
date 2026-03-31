@@ -190,4 +190,63 @@ extension MIDIFileTrackEventType {
         
         return nil
     }
+    
+    /// Returns the byte count requirements for early validation of event decoding.
+    /// Every event has a minimum byte count, but some are fixed length and some are variable-length.
+    @inline(__always)
+    public var midi1ByteLength: (minimum: Int, isFixed: Bool) {
+        switch self {
+        case .cc:                 (minimum: 3, isFixed: true)
+        case .channelPrefix:      (minimum: 4, isFixed: true)
+        case .keySignature:       (minimum: 5, isFixed: true)
+        case .noteOff:            (minimum: 3, isFixed: true)
+        case .noteOn:             (minimum: 3, isFixed: true)
+        case .notePressure:       (minimum: 3, isFixed: true)
+        case .pitchBend:          (minimum: 3, isFixed: true)
+        case .portPrefix:         (minimum: 4, isFixed: true)
+        case .pressure:           (minimum: 2, isFixed: true)
+        case .programChange:      (minimum: 2, isFixed: true)
+        case .rpn:                (minimum: 6, isFixed: false)
+        case .nrpn:               (minimum: 6, isFixed: false)
+        case .sequenceNumber:     (minimum: 5, isFixed: true)
+        case .sequencerSpecific:  (minimum: 3, isFixed: false)
+        case .smpteOffset:        (minimum: 8, isFixed: true)
+        case .sysEx7:             (minimum: 3, isFixed: false)
+        case .tempo:              (minimum: 6, isFixed: true)
+        case .text:               (minimum: 3, isFixed: false)
+        case .timeSignature:      (minimum: 7, isFixed: true)
+        case .universalSysEx7:    (minimum: 3, isFixed: false)
+        case .unrecognizedMeta:   (minimum: 3, isFixed: false)
+        case .xmfPatchTypePrefix: (minimum: 4, isFixed: true)
+        }
+    }
+    
+    /// Returns `true` if the event supports running status when encoded in a MIDI file track.
+    @inline(__always)
+    public var isMIDI1RunningStatusSupported: Bool {
+        switch self {
+        case .cc:                 true
+        case .channelPrefix:      false
+        case .keySignature:       false
+        case .noteOff:            true
+        case .noteOn:             true
+        case .notePressure:       true
+        case .pitchBend:          true
+        case .portPrefix:         false
+        case .pressure:           true
+        case .programChange:      true
+        case .rpn:                false // TODO: technically true, but requires refactors
+        case .nrpn:               false // TODO: technically true, but requires refactors
+        case .sequenceNumber:     false
+        case .sequencerSpecific:  false
+        case .smpteOffset:        false
+        case .sysEx7:             false
+        case .tempo:              false
+        case .text:               false
+        case .timeSignature:      false
+        case .universalSysEx7:    false
+        case .unrecognizedMeta:   false
+        case .xmfPatchTypePrefix: false
+        }
+    }
 }

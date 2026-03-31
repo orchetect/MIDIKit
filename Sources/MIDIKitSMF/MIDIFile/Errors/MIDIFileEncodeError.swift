@@ -18,3 +18,9 @@ public enum MIDIFileEncodeError: LocalizedError {
         }
     }
 }
+
+extension MIDIFileEncodeError: Equatable { }
+
+extension MIDIFileEncodeError: Hashable { }
+
+extension MIDIFileEncodeError: Sendable { }

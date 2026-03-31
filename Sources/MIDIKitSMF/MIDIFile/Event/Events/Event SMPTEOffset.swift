@@ -322,101 +322,119 @@ extension MIDIFileTrackEvent.SMPTEOffset: MIDIFileTrackEventPayload {
         .smpteOffset(self)
     }
     
-    public init(
-        midi1SMFRawBytes rawBytes: some DataProtocol,
+    public static func decode(
+        midi1SMFRawBytesStream stream: some DataProtocol,
         runningStatus: UInt8?
-    ) throws(MIDIFileDecodeError) {
-        if let runningStatus {
-            let rsString = runningStatus.hexString(prefix: true)
-            throw .malformed("Running status byte \(rsString) was passed to event parser that does not use running status.")
-        }
-        
-        guard rawBytes.count == Self.midi1SMFFixedRawBytesLength else {
-            throw .malformed(
-                "Invalid number of bytes. Expected \(Self.midi1SMFFixedRawBytesLength) but got \(rawBytes.count)"
+    ) -> MIDIFileTrackEventDecodeResult<Self> {
+        // Step 1: Check required byte count
+        let requiredStreamByteCount: Int
+        do throws(MIDIFileDecodeError) {
+            requiredStreamByteCount = try requiredStreamByteLength(
+                availableByteCount: stream.count,
+                isRunningStatusPresent: runningStatus != nil
             )
+        } catch {
+            return .unrecoverableError(error: error)
         }
         
-        let (
-            readFrameRateBits, readHours, readMinutes, readSeconds, readFrames, readSubframes
-        ) = try rawBytes.withDataParser { parser throws(MIDIFileDecodeError) -> (
-            UInt8, UInt8, UInt8, UInt8, UInt8, UInt8
-        ) in
-            // 3-byte preamble
-            guard let headerBytes = try? parser.read(bytes: Self.prefixBytes.count),
-                  headerBytes.elementsEqual(Self.prefixBytes)
+        // Step 2: Parse out required bytes
+        let readFrameRateBits, readHours, readMinutes, readSeconds, readFrames, readSubframes: UInt8
+        do throws(MIDIFileDecodeError) {
+            (readFrameRateBits, readHours, readMinutes, readSeconds, readFrames, readSubframes) =
+            try stream.withDataParser { parser throws(MIDIFileDecodeError) -> (UInt8, UInt8, UInt8, UInt8, UInt8, UInt8) in
+                // 3-byte preamble
+                guard let headerBytes = try? parser.read(bytes: Self.prefixBytes.count),
+                      headerBytes.elementsEqual(Self.prefixBytes)
+                else {
+                    throw .malformed("SMPTE Offset does not start with expected bytes.")
+                }
+                
+                do {
+                    let readHoursByte = try parser.readByte()
+                    let readFrameRateBits = (readHoursByte & 0b1100000) >> 5
+                    let readHours = readHoursByte & 0b0011111
+                    
+                    let readMinutes = try parser.readByte()
+                    let readSeconds = try parser.readByte()
+                    let readFrames = try parser.readByte()
+                    let readSubframes = try parser.readByte()
+                    
+                    return (
+                        readFrameRateBits: readFrameRateBits,
+                        readHours: readHours,
+                        readMinutes: readMinutes,
+                        readSeconds: readSeconds,
+                        readFrames: readFrames,
+                        readSubframes: readSubframes
+                    )
+                } catch {
+                    throw .malformed(error.localizedDescription)
+                }
+            }
+        } catch {
+            return .unrecoverableError(error: error)
+        }
+        
+        // Step 3: Validate and transform values
+        do throws(MIDIFileDecodeError) {
+            guard let readFrameRate = MIDIFileFrameRate(midi1SMFRawTrackOffsetByte: readFrameRateBits)
             else {
-                throw .malformed("Event does not start with expected bytes.")
+                // this should never happen, but trap error any way
+                throw .malformed(
+                    "Could not form SMPTE Offset frame rate from Hours byte."
+                )
             }
             
-            do {
-                let readHoursByte = try parser.readByte()
-                let readFrameRateBits = (readHoursByte & 0b1100000) >> 5
-                let readHours = readHoursByte & 0b0011111
-                
-                let readMinutes = try parser.readByte()
-                let readSeconds = try parser.readByte()
-                let readFrames = try parser.readByte()
-                let readSubframes = try parser.readByte()
-                
-                return (
-                    readFrameRateBits: readFrameRateBits,
-                    readHours: readHours,
-                    readMinutes: readMinutes,
-                    readSeconds: readSeconds,
-                    readFrames: readFrames,
-                    readSubframes: readSubframes
+            guard (0 ... 23).contains(readHours) else {
+                throw .malformed(
+                    "SMPTE Offset hours is out of bounds: \(readHours)"
                 )
-            } catch {
-                throw .malformed(error.localizedDescription)
             }
-        }
-        
-        guard let readFrameRate = MIDIFileFrameRate(midi1SMFRawTrackOffsetByte: readFrameRateBits)
-        else {
-            // this should never happen, but trap error any way
-            throw .malformed(
-                "Could not form frame rate from Hours byte."
+            
+            guard (0 ... 59).contains(readMinutes) else {
+                throw .malformed(
+                    "SMPTE Offset minutes is out of bounds: \(readMinutes)"
+                )
+            }
+            
+            guard (0 ... 59).contains(readSeconds) else {
+                throw .malformed(
+                    "SMPTE Offset seconds value is out of bounds: \(readSeconds)"
+                )
+            }
+            
+            guard (0 ... 30).contains(readFrames) else {
+                throw .malformed(
+                    "SMPTE Offset frames value is out of bounds: \(readFrames)"
+                )
+            }
+            
+            guard (0 ... 99).contains(readSubframes) else {
+                throw .malformed(
+                    "SMPTE Offset subframes value is out of bounds: \(readSubframes)"
+                )
+            }
+            
+            let newEvent = Self(
+                hr: readHours,
+                min: readMinutes,
+                sec: readSeconds,
+                fr: readFrames,
+                subFr: readSubframes,
+                rate: readFrameRate
+            )
+            
+            return .event(
+                payload: newEvent,
+                byteLength: requiredStreamByteCount
+            )
+        } catch {
+            return .recoverableError(
+                payload: nil,
+                byteLength: requiredStreamByteCount,
+                error: error
             )
         }
-        
-        guard (0 ... 23).contains(readHours) else {
-            throw .malformed(
-                "Hours is out of bounds: \(readHours)"
-            )
-        }
-        
-        guard (0 ... 59).contains(readMinutes) else {
-            throw .malformed(
-                "Minutes is out of bounds: \(readMinutes)"
-            )
-        }
-        
-        guard (0 ... 59).contains(readSeconds) else {
-            throw .malformed(
-                "Seconds value is out of bounds: \(readSeconds)"
-            )
-        }
-        
-        guard (0 ... 30).contains(readFrames) else {
-            throw .malformed(
-                "Frames value is out of bounds: \(readFrames)"
-            )
-        }
-        
-        guard (0 ... 99).contains(readSubframes) else {
-            throw .malformed(
-                "Subframes value is out of bounds: \(readSubframes)"
-            )
-        }
-        
-        frameRate = readFrameRate
-        
-        hours = readHours
-        minutes = readMinutes
-        seconds = readSeconds
-        frames = readFrames
-        subframes = readSubframes
     }
     
     public func midi1SMFRawBytes<D: MutableDataProtocol>(as dataType: D.Type) -> D {
@@ -447,22 +465,6 @@ extension MIDIFileTrackEvent.SMPTEOffset: MIDIFileTrackEventPayload {
         data += [subframes] // subframes
         
         return data
-    }
-    
-    static var midi1SMFFixedRawBytesLength: Int { 8 }
-    
-    public static func initFrom(
-        midi1SMFRawBytesStream stream: some DataProtocol,
-        runningStatus: UInt8?
-    ) throws(MIDIFileDecodeError) -> StreamDecodeResult {
-        let requiredData = stream.prefix(midi1SMFFixedRawBytesLength)
-        
-        let newInstance = try Self(midi1SMFRawBytes: requiredData, runningStatus: runningStatus)
-        
-        return (
-            newEvent: newInstance,
-            bufferLength: midi1SMFFixedRawBytesLength
-        )
     }
     
     public var smfDescription: String {

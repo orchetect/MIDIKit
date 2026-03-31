@@ -138,66 +138,77 @@ extension MIDIFileTrackEvent.XMFPatchTypePrefix: MIDIFileTrackEventPayload {
         .xmfPatchTypePrefix(self)
     }
     
-    public init(
-        midi1SMFRawBytes rawBytes: some DataProtocol,
+    public static func decode(
+        midi1SMFRawBytesStream stream: some DataProtocol,
         runningStatus: UInt8?
-    ) throws(MIDIFileDecodeError) {
-        if let runningStatus {
-            let rsString = runningStatus.hexString(prefix: true)
-            throw .malformed("Running status byte \(rsString) was passed to event parser that does not use running status.")
+    ) -> MIDIFileTrackEventDecodeResult<Self> {
+        // Step 1: Check required byte count
+        let requiredStreamByteCount: Int
+        do throws(MIDIFileDecodeError) {
+            requiredStreamByteCount = try requiredStreamByteLength(
+                availableByteCount: stream.count,
+                isRunningStatusPresent: runningStatus != nil
+            )
+        } catch {
+            return .unrecoverableError(error: error)
         }
         
-        guard rawBytes.count == Self.midi1SMFFixedRawBytesLength else {
-            throw .malformed(
-                "Invalid number of bytes. Expected \(Self.midi1SMFFixedRawBytesLength) but got \(rawBytes.count)"
-            )
-        }
-        
-        try rawBytes.withDataParser { parser throws(MIDIFileDecodeError) in
-            // 2-byte preamble
-            guard let headerBytes = try? parser.read(bytes: Self.prefixBytes.count),
-                  headerBytes.elementsEqual(Self.prefixBytes)
-            else {
-                throw .malformed("Event does not start with expected bytes.")
-            }
-            
-            let readLength = try parser.toMIDIFileDecodeError(
-                malformedReason: "Param length byte is missing.",
-                try parser.readByte()
-            )
-            guard readLength == 1 else {
-                throw .malformed(
-                    "Param length should always be 1."
+        // Step 2: Parse out required bytes
+        let readParam: UInt8
+        do throws(MIDIFileDecodeError) {
+            readParam = try stream.withDataParser { parser throws(MIDIFileDecodeError) in
+                // 2-byte preamble
+                guard let headerBytes = try? parser.read(bytes: Self.prefixBytes.count),
+                      headerBytes.elementsEqual(Self.prefixBytes)
+                else {
+                    throw .malformed("Event does not start with expected bytes.")
+                }
+                
+                let readLength = try parser.toMIDIFileDecodeError(
+                    malformedReason: "Param length byte is missing.",
+                    try parser.readByte()
                 )
+                
+                guard readLength == 1 else {
+                    throw .malformed(
+                        "Param length should always be 1."
+                    )
+                }
+                
+                let readParam = try parser.toMIDIFileDecodeError(
+                    malformedReason: "Param value byte is missing.",
+                    try parser.readByte()
+                )
+                
+                return readParam
             }
-            
-            let readParam = try parser.toMIDIFileDecodeError(
-                malformedReason: "Param value byte is missing.",
-                try parser.readByte()
-            )
-            
+        } catch {
+            return .unrecoverableError(error: error)
+        }
+        
+        // Step 3: Validate and transform values
+        do throws(MIDIFileDecodeError) {
             guard let selectParam = PatchSet(rawValue: readParam) else {
                 throw .malformed(
                     "Encountered unexpected param value: \(readParam). Param should be 0, 1 or 2."
                 )
             }
             
-            patchSet = selectParam
+            let newEvent = Self(
+                patchSet: selectParam
+            )
+            
+            return .event(
+                payload: newEvent,
+                byteLength: requiredStreamByteCount
+            )
+        } catch {
+            return .recoverableError(
+                payload: nil,
+                byteLength: requiredStreamByteCount,
+                error: error
+            )
         }
-    }
-    
-    public static func initFrom(
-        midi1SMFRawBytesStream stream: some DataProtocol,
-        runningStatus: UInt8?
-    ) throws(MIDIFileDecodeError) -> StreamDecodeResult {
-        let rawBytes = stream.prefix(midi1SMFFixedRawBytesLength)
-        
-        let newInstance = try Self(midi1SMFRawBytes: rawBytes, runningStatus: runningStatus)
-        
-        return (
-            newEvent: newInstance,
-            bufferLength: rawBytes.count
-        )
     }
     
     public func midi1SMFRawBytes<D: MutableDataProtocol>(as dataType: D.Type) -> D {
