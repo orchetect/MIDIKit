@@ -66,7 +66,7 @@ extension MIDIFile.AnyChunk: CustomDebugStringConvertible {
 
 extension MIDIFile.AnyChunk {
     /// Unwraps the enum case and returns the chunk contained within, typed as ``MIDIFileChunk`` protocol.
-    public var unwrapped: any MIDIFileChunk {
+    public var wrapped: any MIDIFileChunk {
         switch self {
         case let .track(track): track
         case let .undefined(chunk): chunk
