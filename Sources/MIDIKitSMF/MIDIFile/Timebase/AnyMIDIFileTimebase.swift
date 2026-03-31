@@ -83,7 +83,9 @@ extension AnyMIDIFileTimebase {
 
 // MARK: - Timebase
 
-extension AnyMIDIFileTimebase {
+extension AnyMIDIFileTimebase: MIDIFileTimebase {
+    public typealias DeltaTime = AnyMIDIFileTrackDeltaTime
+    
     // MARK: - Decoding
     
     /// Initialize from raw data.
