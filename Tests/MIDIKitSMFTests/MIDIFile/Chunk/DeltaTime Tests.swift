@@ -143,6 +143,26 @@ import Testing
     }
     
     @Test
+    func smpteStaticConstructors_frames_25fps_20tpf() async throws {
+        typealias Delta = SMPTEMIDIFile.TrackChunk.DeltaTime
+        let timebase: Delta.Timebase = .smpte(frameRate: .fps25, ticksPerFrame: 20)
+        
+        #expect(Delta.frames(0).ticks(using: timebase) == 0)
+        #expect(Delta.frames(25).ticks(using: timebase) == 500)
+        #expect(Delta.frames(50).ticks(using: timebase) == 1000)
+    }
+    
+    @Test
+    func smpteStaticConstructors_frames_25fps_40tpf() async throws {
+        typealias Delta = SMPTEMIDIFile.TrackChunk.DeltaTime
+        let timebase: Delta.Timebase = .smpte(frameRate: .fps25, ticksPerFrame: 40)
+        
+        #expect(Delta.frames(0).ticks(using: timebase) == 0)
+        #expect(Delta.frames(25).ticks(using: timebase) == 1000)
+        #expect(Delta.frames(50).ticks(using: timebase) == 2000)
+    }
+    
+    @Test
     func smpteStaticConstructors_offset_25fps_20tpf() async throws {
         typealias Delta = SMPTEMIDIFile.TrackChunk.DeltaTime
         let timebase: Delta.Timebase = .smpte(frameRate: .fps25, ticksPerFrame: 20)
@@ -163,7 +183,7 @@ import Testing
     }
     
     @Test
-    func smpteStaticConstructors_edgeCases_25fps_0tpf() async throws {
+    func smpteStaticConstructors_offset_edgeCases_25fps_0tpf() async throws {
         typealias Delta = SMPTEMIDIFile.TrackChunk.DeltaTime
         let timebase: Delta.Timebase = .smpte(frameRate: .fps25, ticksPerFrame: 0)
         
@@ -173,7 +193,7 @@ import Testing
     }
     
     @Test
-    func smpteStaticConstructors_edgeCases_25fps_1tpf() async throws {
+    func smpteStaticConstructors_offset_edgeCases_25fps_1tpf() async throws {
         typealias Delta = SMPTEMIDIFile.TrackChunk.DeltaTime
         let timebase: Delta.Timebase = .smpte(frameRate: .fps25, ticksPerFrame: 1)
         
@@ -183,7 +203,7 @@ import Testing
     }
     
     @Test
-    func smpteStaticConstructors_edgeCases_25fps_255tpf() async throws {
+    func smpteStaticConstructors_offset_edgeCases_25fps_255tpf() async throws {
         typealias Delta = SMPTEMIDIFile.TrackChunk.DeltaTime
         let timebase: Delta.Timebase = .smpte(frameRate: .fps25, ticksPerFrame: UInt8.max)
         
