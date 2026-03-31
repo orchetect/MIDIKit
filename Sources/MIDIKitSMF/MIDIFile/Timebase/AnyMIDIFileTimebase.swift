@@ -48,7 +48,7 @@ extension AnyMIDIFileTimebase: CustomDebugStringConvertible {
 
 extension AnyMIDIFileTimebase {
     /// Unwraps the enum case and returns the timebase contained within, typed as `any` ``MIDIFileTimebase``.
-    public var unwrapped: any MIDIFileTimebase {
+    public var wrapped: any MIDIFileTimebase {
         switch self {
         case let .musical(timebase): timebase
         case let .smpte(timebase): timebase
@@ -113,11 +113,11 @@ extension AnyMIDIFileTimebase {
     // MARK: - Encoding
     
     public func rawData() -> Data {
-        unwrapped.rawData()
+        wrapped.rawData()
     }
 
     public func rawData<D: MutableDataProtocol>(as dataType: D.Type) -> D {
-        unwrapped.rawData(as: dataType)
+        wrapped.rawData(as: dataType)
     }
     
     // MARK: - AnyMIDIFileTimebase
