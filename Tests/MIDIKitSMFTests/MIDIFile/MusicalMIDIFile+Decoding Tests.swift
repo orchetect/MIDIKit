@@ -49,7 +49,7 @@ import Testing
             init() { }
         }
         let receiver = Receiver()
-        let midiFile = try await MusicalMIDIFile(data: kMIDIFile.dp8Markers) { fileHeader, chunkCount, chunkIndex, result in
+        let midiFile = try await MusicalMIDIFile(data: kMIDIFile.dp8Markers) { fileHeader, chunkIndex, chunkCount, result in
             // check header info
             #expect(fileHeader.format == .multipleTracksSynchronous)
             #expect(fileHeader.timebase == .musical(ticksPerQuarterNote: 480))

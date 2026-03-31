@@ -67,12 +67,14 @@ import Testing
     
     @Test
     func midiEventSysEx7_midi1SMFRawBytes_SysEx_EmptyData() async throws {
-        let sysEx = try MIDIEvent.sysEx7(midi1SMFRawBytes: [
+        let (sysEx, byteLength) = try MIDIEvent.sysEx7(midi1SMFRawBytes: [
             0xF0,  // start byte
             0x02,  // length: 2 bytes to follow
             0x7D,  // manufacturer ID
             0xF7   // termination byte
         ])
+        
+        #expect(byteLength == 4)
         
         guard case let .sysEx7(event) = sysEx else {
             Issue.record(); return
@@ -84,7 +86,7 @@ import Testing
     
     @Test
     func midiEventSysEx7_midi1SMFRawBytes_SysEx_WithData() async throws {
-        let sysEx = try MIDIEvent.sysEx7(midi1SMFRawBytes: [
+        let (sysEx, byteLength) = try MIDIEvent.sysEx7(midi1SMFRawBytes: [
             0xF0,  // start byte
             0x04,  // length: 4 bytes to follow
             0x7D,  // manufacturer ID
@@ -92,6 +94,8 @@ import Testing
             0x34,  // data byte 2
             0xF7   // termination byte
         ])
+        
+        #expect(byteLength == 6)
         
         guard case let .sysEx7(event) = sysEx else {
             Issue.record(); return
@@ -103,7 +107,7 @@ import Testing
     
     @Test
     func midiEventSysEx7_midi1SMFRawBytes_UniversalSysEx_EmptyData() async throws {
-        let sysEx = try MIDIEvent.sysEx7(midi1SMFRawBytes: [
+        let (sysEx, byteLength) = try MIDIEvent.sysEx7(midi1SMFRawBytes: [
             0xF0,  // start byte
             0x05,  // length: 5 bytes to follow
             0x7F,  // realtime universal sysex
@@ -112,6 +116,8 @@ import Testing
             0x03,  // subID 2
             0xF7   // termination byte
         ])
+        
+        #expect(byteLength == 7)
         
         guard case let .universalSysEx7(event) = sysEx else {
             Issue.record(); return
@@ -126,7 +132,7 @@ import Testing
     
     @Test
     func midiEventSysEx7_midi1SMFRawBytes_UniversalSysEx_WithData() async throws {
-        let sysEx = try MIDIEvent.sysEx7(midi1SMFRawBytes: [
+        let (sysEx, byteLength) = try MIDIEvent.sysEx7(midi1SMFRawBytes: [
             0xF0,  // start byte
             0x07,  // length: 7 bytes to follow
             0x7E,  // non-realtime universal sysex
@@ -137,6 +143,8 @@ import Testing
             0x34,  // data byte 2
             0xF7   // termination byte
         ])
+        
+        #expect(byteLength == 9)
         
         guard case let .universalSysEx7(event) = sysEx else {
             Issue.record(); return
