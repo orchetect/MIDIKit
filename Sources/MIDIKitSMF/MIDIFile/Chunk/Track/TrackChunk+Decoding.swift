@@ -161,7 +161,7 @@ extension MIDIFile.TrackChunk {
                             foundEvent = (newEvent: payload, bufferLength: byteLength, statusByte: statusByte)
                         case let .recoverableError(payload: payload, byteLength: byteLength, error: error):
                             switch options.errorStrategy {
-                            case .decodePartialTracksWithErrors:
+                            case .allowLossyRecovery:
                                 foundEvent = (newEvent: payload, bufferLength: byteLength, statusByte: statusByte)
                             case .discardTracksWithErrors, .throwOnError:
                                 throw error
@@ -221,7 +221,7 @@ extension MIDIFile.TrackChunk {
                     throw error
                 case .discardTracksWithErrors:
                     return nil
-                case .decodePartialTracksWithErrors:
+                case .allowLossyRecovery:
                     // cease decoding the track, but continue to allow any events that have been decoded so far to be returned without throwing an error
                     break
                 }

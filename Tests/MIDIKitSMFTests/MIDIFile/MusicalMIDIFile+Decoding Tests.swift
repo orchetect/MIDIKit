@@ -224,9 +224,9 @@ import Testing
             #expect(midiFile.tracks[1] == track3)
         }
         
-        // decodePartialTracksWithErrors
+        // allowLossyRecovery
         do {
-            let options = MIDIFileDecodeOptions(trackDecodeOptions: .init(errorStrategy: .decodePartialTracksWithErrors))
+            let options = MIDIFileDecodeOptions(trackDecodeOptions: .init(errorStrategy: .allowLossyRecovery))
             let midiFile = try await MusicalMIDIFile(data: rawData, options: options)
             
             #expect(midiFile.format == .singleTrack)
@@ -296,9 +296,9 @@ import Testing
             #expect(midiFile.tracks[0] == track1)
         }
         
-        // decodePartialTracksWithErrors
+        // allowLossyRecovery
         do {
-            let options = MIDIFileDecodeOptions(trackDecodeOptions: .init(errorStrategy: .decodePartialTracksWithErrors))
+            let options = MIDIFileDecodeOptions(trackDecodeOptions: .init(errorStrategy: .allowLossyRecovery))
             let midiFile = try await MusicalMIDIFile(data: rawData, options: options)
             
             #expect(midiFile.format == .singleTrack)

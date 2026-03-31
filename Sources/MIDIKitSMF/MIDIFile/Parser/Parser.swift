@@ -262,7 +262,7 @@ extension MIDIFile.Parser {
                     } catch {
                         // not enough bytes - EOF reached
                         switch options.trackDecodeOptions.errorStrategy {
-                        case .decodePartialTracksWithErrors:
+                        case .allowLossyRecovery:
                             // fix chunk length to end at the last byte available
                             chunkLength = UInt32(exactly: parser.remainingByteCount.clamped(to: 0...)) ?? 0
                             isParsing = false
