@@ -9,7 +9,7 @@ import SwiftTimecodeCore
 /// Delta time values appropriate for SMPTE timecode timebase MIDI file track events.
 public enum SMPTEMIDIFileTrackDeltaTime {
     /// Construct delta time duration from frame count.
-    case frames(_ frames: UInt32)
+    case frames(_ frames: Double)
     
     /// Construct delta time duration from SMPTE timecode.
     case offset(_ smpteOffset: MIDIFileTrackEvent.SMPTEOffset)
@@ -45,7 +45,7 @@ extension SMPTEMIDIFileTrackDeltaTime: MIDIFileTrackDeltaTime {
     public func ticks(using timebase: Timebase) -> UInt32 {
         switch self {
         case let .frames(frames):
-            let ticks = Double(frames) * Double(timebase.ticksPerFrame)
+            let ticks = frames * Double(timebase.ticksPerFrame)
             return UInt32(ticks)
             
         case let .offset(smpteOffset):
@@ -81,6 +81,12 @@ extension SMPTEMIDIFileTrackDeltaTime {
             rate: rate
         )
         return .offset(smpteOffset)
+    }
+    
+    /// Construct delta time duration from frame count.
+    @_disfavoredOverload
+    public static func frames(_ frames: some FixedWidthInteger) -> Self {
+        .frames(Double(frames))
     }
 }
 
