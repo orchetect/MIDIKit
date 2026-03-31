@@ -147,7 +147,7 @@ extension MIDIFile.TrackChunk {
                     if let eventType = MIDIFileTrackEventType(
                         atStartOf: readBuffer,
                         runningStatus: effectiveRunningStatus,
-                        detectParameterNumberSequence: false
+                        detectParameterNumberSequence: false // parse out discrete events; RPN/NRPN events are bundled later
                     ) {
                         let result = try eventType.concreteType.initFrom(
                             midi1SMFRawBytesStream: readBuffer,
