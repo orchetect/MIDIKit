@@ -60,24 +60,30 @@ extension MIDIFile {
         
         header = parser.fileDescriptor.header
         
-        var parsedChunks: [Int: AnyChunk] = [:]
-        for await (chunkIndex, result) in parser.chunksAsyncSequence(
-            options: options,
-            predicate: predicate
-        ) {
-            // call closure asynchronously
-            Task {
-                parsedChunk(
-                    parser.fileDescriptor.header,
-                    parser.fileDescriptor.chunkDescriptors.count,
-                    chunkIndex,
-                    result
-                )
+        let parsedChunks: [Int: AnyChunk] = await withTaskGroup { group in
+            var parsedChunks: [Int: AnyChunk] = [:]
+            for await (chunkIndex, result) in parser.chunksAsyncSequence(
+                options: options,
+                predicate: predicate
+            ) {
+                // call closure asynchronously
+                group.addTask {
+                    parsedChunk(
+                        parser.fileDescriptor.header,
+                        chunkIndex,
+                        parser.fileDescriptor.chunkDescriptors.count,
+                        result
+                    )
+                }
+                
+                // grab chunk for local storage
+                if let chunk = try? result.get() { parsedChunks[chunkIndex] = chunk }
             }
             
-            // grab chunk for local storage
-            if let chunk = try? result.get() { parsedChunks[chunkIndex] = chunk }
+            await group.waitForAll()
+            return parsedChunks
         }
+        
         chunks = Array(parsedChunks.sorted(by: { $0.key < $1.key }).map(\.value))
     }
 }
