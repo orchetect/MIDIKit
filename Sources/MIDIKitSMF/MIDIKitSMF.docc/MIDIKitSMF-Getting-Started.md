@@ -155,10 +155,10 @@ case let .noteOff(delta, payload):
 }
 ```
 
-Read all events on a track at their beat position (elapsed quarter-notes as a floating-point value):
+Read all events on a track at their beat positions (elapsed quarter-notes as a floating-point value):
 
 ```swift
-for (beat, event) in midiFile.tracks[0].eventsAtQuarterNotePositions(using: midiFile.timebase) {
+for (beat, event) in midiFile.tracks[0].eventsAtBeatPositions(using: midiFile.timebase) {
     switch event {
     case let .noteOff(payload):
         print(beat, payload.note.number.uInt8Value, payload.velocity.midi1Value, payload.channel.uInt8Value)

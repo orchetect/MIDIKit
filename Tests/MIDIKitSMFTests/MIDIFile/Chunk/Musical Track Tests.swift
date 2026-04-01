@@ -140,9 +140,9 @@ import Testing
         #expect(parsedTrackB == track)
     }
     
-    /// This tests both `eventsAtQuarterNotePositions()` and `eventsAtStart()` using the same source data.
+    /// This tests both `eventsAtBeatPositions()` and `eventsAtStart()` using the same source data.
     @Test
-    func eventsAtQuarterNotePositions_eventsAtStart() async throws {
+    func eventsAtBeatPositions_eventsAtStart() async throws {
         let ppq: UInt16 = 480
         let timebase: MusicalMIDIFile.Timebase = .musical(ticksPerQuarterNote: ppq)
         var midiFile = MusicalMIDIFile(timebase: timebase)
@@ -184,9 +184,9 @@ import Testing
         
         let trackOne = try #require(midiFile.tracks.first)
         
-        // eventsAtQuarterNotePositions
+        // eventsAtBeatPositions
         do {
-            let events = trackOne.eventsAtQuarterNotePositions(using: timebase)
+            let events = trackOne.eventsAtBeatPositions(using: timebase)
             
             #expect(events.count == 11)
             

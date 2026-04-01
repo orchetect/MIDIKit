@@ -11,7 +11,7 @@ extension MIDIFile.TrackChunk where Timebase == MusicalMIDIFileTimebase {
     /// Ensure the timebase `ppq` (ticks per quarter note) value is the same value specified in the MIDI file header.
     ///
     /// This is computed each time this method is called, so avoid repeated calls to this method where possible.
-    public func eventsAtQuarterNotePositions(using timebase: Timebase) -> [(beat: Double, event: MIDIFileTrackEvent)] {
+    public func eventsAtBeatPositions(using timebase: Timebase) -> [(beat: Double, event: MIDIFileTrackEvent)] {
         var position = 0.0
         return events.map {
             position += $0.delta.quarterNoteBeats(using: timebase)
