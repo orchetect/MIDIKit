@@ -10,12 +10,12 @@ import MIDIKitCore
 // MARK: - Internal Parsing Entry-point Methods
 
 extension MIDIFile {
-    /// Decode sequentially, without concurrency.
+    /// Decode chunks sequentially, without concurrency.
     mutating func decode(
         data: some DataProtocol & Sendable,
-        options: DecodeOptions,
+        options: MIDIFileDecodeOptions,
         predicate: DecodePredicate?
-    ) throws(MIDIFile.DecodeError) {
+    ) throws(MIDIFileDecodeError) {
         let parser = try Parser(data: data, options: options)
         
         header = parser.fileDescriptor.header
@@ -27,13 +27,13 @@ extension MIDIFile {
         chunks = parsedChunks
     }
     
-    /// Decode tracks concurrently for improved performance.
+    /// Decode chunks concurrently for improved performance.
     @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
     mutating func decode(
         data: some DataProtocol & Sendable,
-        options: DecodeOptions,
+        options: MIDIFileDecodeOptions,
         predicate: DecodePredicate?
-    ) async throws(MIDIFile.DecodeError) {
+    ) async throws(MIDIFileDecodeError) {
         let parser = try Parser(data: data, options: options)
         
         header = parser.fileDescriptor.header
@@ -52,32 +52,38 @@ extension MIDIFile {
     @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
     mutating func decode(
         data: some DataProtocol & Sendable,
-        options: DecodeOptions,
+        options: MIDIFileDecodeOptions,
         predicate: DecodePredicate?,
         parsedChunk: @escaping ChunkDecodeBlock
-    ) async throws(MIDIFile.DecodeError) {
+    ) async throws(MIDIFileDecodeError) {
         let parser = try Parser(data: data, options: options)
         
         header = parser.fileDescriptor.header
         
-        var parsedChunks: [Int: Chunk] = [:]
-        for await (chunkIndex, result) in parser.chunksAsyncSequence(
-            options: options,
-            predicate: predicate
-        ) {
-            // call closure asynchronously
-            Task {
-                parsedChunk(
-                    parser.fileDescriptor.header,
-                    parser.fileDescriptor.chunkDescriptors.count,
-                    chunkIndex,
-                    result
-                )
+        let parsedChunks: [Int: AnyChunk] = await withTaskGroup(of: Void.self, returning: [Int: AnyChunk].self) { group in
+            var parsedChunks: [Int: AnyChunk] = [:]
+            for await (chunkIndex, result) in parser.chunksAsyncSequence(
+                options: options,
+                predicate: predicate
+            ) {
+                // call closure asynchronously
+                group.addTask {
+                    parsedChunk(
+                        parser.fileDescriptor.header,
+                        chunkIndex,
+                        parser.fileDescriptor.chunkDescriptors.count,
+                        result
+                    )
+                }
+                
+                // grab chunk for local storage
+                if let chunk = try? result.get() { parsedChunks[chunkIndex] = chunk }
             }
             
-            // grab chunk for local storage
-            if let chunk = try? result.get() { parsedChunks[chunkIndex] = chunk }
+            await group.waitForAll()
+            return parsedChunks
         }
+        
         chunks = Array(parsedChunks.sorted(by: { $0.key < $1.key }).map(\.value))
     }
 }

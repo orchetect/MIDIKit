@@ -12,27 +12,27 @@ import MIDIKitCore
 extension MIDIFile {
     /// Returns encoded raw MIDI file data.
     /// Throws an error if a problem occurs.
-    public func rawData() throws(EncodeError) -> Data {
+    public func rawData() throws(MIDIFileEncodeError) -> Data {
         try encode(as: Data.self)
     }
     
     /// Returns encoded raw MIDI file data.
     /// Throws an error if a problem occurs.
-    public func rawData<D: MutableDataProtocol>(as dataType: D.Type) throws(EncodeError) -> D {
+    public func rawData<D: MutableDataProtocol>(as dataType: D.Type) throws(MIDIFileEncodeError) -> D {
         try encode(as: D.self)
     }
     
     /// Returns encoded raw MIDI file data, encoding chunks concurrently for improved performance.
     /// Throws an error if a problem occurs.
     @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
-    public func rawData() async throws(EncodeError) -> Data {
+    public func rawData() async throws(MIDIFileEncodeError) -> Data {
         try await encode(as: Data.self)
     }
     
     /// Returns encoded raw MIDI file data, encoding chunks concurrently for improved performance.
     /// Throws an error if a problem occurs.
     @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
-    public func rawData<D: MutableDataProtocol & Sendable>(as dataType: D.Type) async throws(EncodeError) -> D {
+    public func rawData<D: MutableDataProtocol & Sendable>(as dataType: D.Type) async throws(MIDIFileEncodeError) -> D {
         try await encode(as: D.self)
     }
 }
@@ -42,7 +42,7 @@ extension MIDIFile {
 extension MIDIFile {
     /// Returns raw MIDI file data.
     /// Throws an error if a problem occurs.
-    func encode<D: MutableDataProtocol>(as dataType: D.Type) throws(EncodeError) -> D {
+    func encode<D: MutableDataProtocol>(as dataType: D.Type) throws(MIDIFileEncodeError) -> D {
         // basic validation checks
 
         guard chunks.count <= UInt16.max else {
@@ -65,8 +65,8 @@ extension MIDIFile {
             case let .track(track):
                 try data += (track.midi1SMFRawBytes(as: D.self, using: timebase))
 
-            case let .other(unrecognizedChunk):
-                try data += (unrecognizedChunk.midi1SMFRawBytes(as: D.self))
+            case let .undefined(chunk):
+                try data += (chunk.midi1SMFRawBytes(as: D.self))
             }
         }
 
@@ -76,7 +76,7 @@ extension MIDIFile {
     /// Returns raw MIDI file data, encoding chunks concurrently for improved performance.
     /// Throws an error if a problem occurs.
     @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
-    func encode<D: MutableDataProtocol & Sendable>(as dataType: D.Type) async throws(EncodeError) -> D {
+    func encode<D: MutableDataProtocol & Sendable>(as dataType: D.Type) async throws(MIDIFileEncodeError) -> D {
         // basic validation checks
         
         guard chunks.count <= UInt16.max else {
@@ -94,20 +94,20 @@ extension MIDIFile {
         
         // ____ Chunks ____
         
-        typealias TaskResult = Result<(index: Int, data: D), EncodeError>
-        typealias GroupResult = Result<[Int: D], EncodeError>
+        typealias TaskResult = Result<(index: Int, data: D), MIDIFileEncodeError>
+        typealias GroupResult = Result<[Int: D], MIDIFileEncodeError>
         let encodedChunksResult: GroupResult = await withTaskGroup(of: TaskResult.self, returning: GroupResult.self) { group in
             var encodedChunks: [Int: D] = [:]
             
             for (index, chunk) in chunks.enumerated() {
                 group.addTask {
-                    do throws(EncodeError) {
+                    do throws(MIDIFileEncodeError) {
                         let encodedChunkData: D = switch chunk {
                         case let .track(track):
                             try track.midi1SMFRawBytes(as: D.self, using: timebase)
                             
-                        case let .other(unrecognizedChunk):
-                            try unrecognizedChunk.midi1SMFRawBytes(as: D.self)
+                        case let .undefined(chunk):
+                            try chunk.midi1SMFRawBytes(as: D.self)
                         }
                         return .success((index: index, data: encodedChunkData))
                     } catch {
@@ -116,7 +116,7 @@ extension MIDIFile {
                 }
             }
             
-            do throws(EncodeError) {
+            do throws(MIDIFileEncodeError) {
                 for await chunkResult in group {
                     let (index, data) = try chunkResult.get()
                     encodedChunks[index] = data

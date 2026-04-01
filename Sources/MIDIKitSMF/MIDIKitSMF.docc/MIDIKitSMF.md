@@ -22,15 +22,44 @@ Refer to MIDIKit's own package documentation for information on using MIDI I/O a
 
 - <doc:MIDIKitSMF-Getting-Started>
 
-### Working with MIDI Files
+### MIDI File
 
 - ``MIDIFile``
-- ``MIDIFileEvent``
-- ``MIDIFileEvent/DeltaTime``
+- ``MusicalMIDIFile``
+- ``SMPTEMIDIFile``
 
-### Protocols
+### MIDI File Decoding
 
-- ``MIDIFileChunk``
+- ``MIDIFileDecodeOptions``
+- ``MIDIFileChunkDecodeOptions``
+- ``MIDIFileDecodeError``
+
+### MIDI File Encoding
+
+- ``MIDIFileEncodeError``
+
+### MIDI File Format
+
+- ``MIDIFileFormat``
+
+### MIDI File Timebase
+
+- ``MusicalMIDIFileTimebase``
+- ``SMPTEMIDIFileTimebase``
+
+### MIDI File Chunks
+
+- ``MIDIFile/AnyChunk``
+- ``MIDIFile/TrackChunk``
+- ``MIDIFile/UndefinedChunk``
+
+### MIDI File Track Chunk
+
+- ``MIDIFileTrackEvent``
+- ``MIDIFileTrackEventType``
+- ``MIDIFile/TrackChunk/DeltaTime``
+- ``MusicalMIDIFileTrackDeltaTime``
+- ``SMPTEMIDIFileTrackDeltaTime``
 
 ### Related Types
 

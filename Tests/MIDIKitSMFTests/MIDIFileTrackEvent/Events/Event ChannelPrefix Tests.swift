@@ -1,0 +1,31 @@
+//
+//  Event ChannelPrefix Tests.swift
+//  MIDIKit • https://github.com/orchetect/MIDIKit
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
+//
+
+@testable import MIDIKitSMF
+import Testing
+
+@Suite struct Event_ChannelPrefix_Tests {
+    // swiftformat:options --wrapcollections preserve
+    // swiftformat:disable spaceInsideParens spaceInsideBrackets spacearoundoperators
+    
+    @Test
+    func init_midi1SMFRawBytes() async throws {
+        let bytes: [UInt8] = [0xFF, 0x20, 0x01, 0x02]
+        
+        let event = try MIDIFileTrackEvent.ChannelPrefix(midi1SMFRawBytes: bytes)
+        
+        #expect(event.channel == 2)
+    }
+    
+    @Test
+    func midi1SMFRawBytes() async {
+        let event = MIDIFileTrackEvent.ChannelPrefix(channel: 2)
+        
+        let bytes = event.midi1SMFRawBytes(as: [UInt8].self)
+        
+        #expect(bytes == [0xFF, 0x20, 0x01, 0x02])
+    }
+}

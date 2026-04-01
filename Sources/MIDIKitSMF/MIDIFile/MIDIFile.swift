@@ -7,40 +7,69 @@
 import Foundation
 import MIDIKitCore
 
-/// Standard MIDI Files (SMF) object. Read or write MIDI file contents.
-public struct MIDIFile {
+/// Standard MIDI Files (SMF) data structure.
+public struct MIDIFile<Timebase: MIDIFileTimebase> {
+    // MARK: - Typealiases
+    
+    /// The timebase of the MIDI file.
+    public typealias Timebase = Timebase
+    
+    /// Delta time advancement within a MIDI file track.
+    public typealias DeltaTime = Timebase.DeltaTime
+    
     // MARK: - Properties
     
-    var header: Chunk.Header = .init()
+    /// MIDI file header chunk.
+    public var header: HeaderChunk = HeaderChunk()
     
-    /// MIDI File Format to use when writing MIDI file.
-    public var format: Format {
+    /// MIDI file format.
+    public var format: MIDIFileFormat {
         get { header.format }
         set { header.format = newValue }
     }
     
-    /// Specify whether the MIDI file stores time values in bars & beats (musical) or timecode
+    /// MIDI file timebase parameters (for duration calculations).
     public var timebase: Timebase {
         get { header.timebase }
         set { header.timebase = newValue }
     }
     
-    /// Storage for tracks in the MIDI file.
+    /// Chunks contained in the MIDI file.
+    /// This includes tracks and non-track chunks if present.
+    /// (If only tracks access is desired, accessing the ``tracks`` property to read and write track data is more convenient.)
     ///
-    /// The ``Chunk/Header`` chunk is managed automatically and is not instanced as a
-    /// ``MIDIFile/chunks`` member.
-    public var chunks: [Chunk] = []
-    
-    /// Returns copies of the tracks contained in the MIDI file.
-    /// (Computed convenience to filter ``chunks`` and return ``Chunk/Track`` instances.)
-    /// To add new tracks or modify existing tracks, mutate the ``chunks`` collection.
-    public var tracks: [Chunk.Track] {
-        chunks.compactMap {
-            guard case let .track(track) = $0 else { return nil }
-            return track
+    /// The ``HeaderChunk`` chunk is managed automatically and is not included in this collection.
+    /// Its properties can be accessed directly on the ``MIDIFile`` instance.
+    public var chunks: [AnyChunk] {
+        _read { yield _chunks }
+        _modify {
+            yield &_chunks
+            _tracks = Array(_chunks.tracks())
+        }
+        set {
+            _chunks = newValue
+            _tracks = Array(newValue.tracks())
         }
     }
-    
+    private var _chunks: [AnyChunk] = []
+        
+    /// Access the track chunks contained in ``chunks``.
+    /// Indexes are rebased to zero when accessing this collection.
+    /// 
+    /// Updating this collection automatically updates the corresponding track chunks in ``chunks``.
+    public var tracks: [TrackChunk] {
+        _read { yield _tracks }
+        _modify {
+            yield &_tracks
+            _chunks.updateTracks(with: _tracks)
+        }
+        set {
+            _tracks = newValue
+            _chunks.updateTracks(with: newValue)
+        }
+    }
+    private var _tracks: [TrackChunk] = []
+        
     // Identifiable protocol conformance implementation
     public let id: UUID = .init()
     
@@ -48,9 +77,9 @@ public struct MIDIFile {
     
     /// Initialize from header parameters and chunks.
     public init(
-        format: Format = .multipleTracksSynchronous,
+        format: MIDIFileFormat = .multipleTracksSynchronous,
         timebase: Timebase = .default(),
-        chunks: [Chunk] = []
+        chunks: [AnyChunk] = []
     ) {
         self.format = format
         self.timebase = timebase
@@ -60,9 +89,9 @@ public struct MIDIFile {
     /// Initialize from header parameters and chunks.
     @_disfavoredOverload
     public init(
-        format: Format = .multipleTracksSynchronous,
+        format: MIDIFileFormat = .multipleTracksSynchronous,
         timebase: Timebase = .default(),
-        chunks: some Sequence<Chunk> = []
+        chunks: some Sequence<AnyChunk>
     ) {
         self.format = format
         self.timebase = timebase
@@ -71,9 +100,9 @@ public struct MIDIFile {
     
     /// Initialize from header parameters and track chunks.
     public init(
-        format: Format = .multipleTracksSynchronous,
+        format: MIDIFileFormat = .multipleTracksSynchronous,
         timebase: Timebase = .default(),
-        tracks: [Chunk.Track]
+        tracks: [TrackChunk]
     ) {
         self.format = format
         self.timebase = timebase
@@ -83,9 +112,9 @@ public struct MIDIFile {
     /// Initialize from header parameters and track chunks.
     @_disfavoredOverload
     public init(
-        format: Format = .multipleTracksSynchronous,
+        format: MIDIFileFormat = .multipleTracksSynchronous,
         timebase: Timebase = .default(),
-        tracks: some Sequence<Chunk.Track>
+        tracks: some Sequence<TrackChunk>
     ) {
         self.format = format
         self.timebase = timebase

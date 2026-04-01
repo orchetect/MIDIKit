@@ -16,42 +16,106 @@ Add MIDIKitSMF to your project, and import it.
 import MIDIKitSMF
 ```
 
+## A Note On Timebase
+
+As a baseline, the Standard MIDI File 1.0 spec defines two timebases for MIDI files: musical, and SMPTE (timecode).
+
+> Note:
+>
+> Nearly all software manufacturers exclusively implement musical timebase. SMPTE timebase is extremely rare and almost never used. However, since both are defined in the specification, both are supported by MIDIKit.
+>
+> It is reasonable that you may opt to use the `MusicalMIDIFile` (`MIDIFile<MusicalMIDIFileTimebase>`) type exclusively.
+
+If you are unsure which timebase a MIDI file uses, the type-erased `AnyMIDIFile` is provided which will decode a file into its specialized `MIDIFile` type.
+
+```swift
+let anyMIDIFile = try AnyMIDIFile(url: url)
+
+switch midiFile.wrapped {
+case let .musical(midiFile):
+    // midiFile is `MIDIFile<MusicalMIDIFileTimebase>`, typealiased as `MusicalMIDIFile`
+case let .smpte(midiFile):
+    // midiFile is `MIDIFile<SMPTEMIDIFileTimebase>`, typealiased as `SMPTEMIDIFile`
+}
+```
+
+See ``AnyMIDIFile``, ``MusicalMIDIFile`` and ``SMPTEMIDIFile``.
+
 ## Read a MIDI File
 
 Tracks and events can be accessed once the file is successfully read.
 
 ### From Disk
 
-```swift
-// using a file URL
-let url = URL() // replace with url to a MIDI file on disk
-let midiFile = try MIDIFile(url: url)
-print(midiFile.description) // prints human-readable debug output of the file
+Using a file URL:
 
-// using a file path
-let path = "/Users/user/Desktop/midifile.mid"
-let midiFile = try MIDIFile(path: path)
+```swift
+let url = URL(fileURLWithPath: "/Users/user/Desktop/test.mid")
+let midiFile = try MusicalMIDIFile(url: url)
+print(midiFile.description) // prints human-readable debug output of the file
+```
+Using a file path:
+
+```swift
+let path = "/Users/user/Desktop/test.mid"
+let midiFile = try MusicalMIDIFile(path: path)
 print(midiFile.description) // prints human-readable debug output of the file
 ```
 
 ### From Raw Data
 
+Using raw MIDI file contents:
+
 ```swift
-let data = Data( ... ) // raw MIDI file contents
-let midiFile = try MIDIFile(data: data)
+let data = Data( ... )
+let midiFile = try MusicalMIDIFile(data: data)
 ```
+
+### Async vs non-Async Decoding
+
+MIDI file decoding initializers are offered in two flavors: async and non-async.
+
+> Note:
+> 
+> Where possible, it is highly recommended to use the `async` variant, as it implements multi-threaded file decoding which can be *significantly* faster than the non-async method.
+
+```swift
+let midiFile = try await MusicalMIDIFile(data: data)
+```
+
+### Decoding Options
+
+Decoding options may be supplied to the initializer.
+
+The default options allow for the widest compatibility and error recoverability, but you may customize the options as desired.
+
+```swift
+let options = MIDIFileDecodeOptions(
+    allowMultiTrackFormat0: true,
+    ignoreBytesPastEOF: true,
+    chunkDecodeOptions: MIDIFileChunkDecodeOptions(
+        bundleRPNAndNRPNEvents: true,
+        maxEventCount: nil,
+        errorStrategy: .allowLossyRecovery
+    )
+)
+
+let midiFile = try MusicalMIDIFile(url: url, options: options)
+```
+
+See ``MIDIFileDecodeOptions`` and ``MIDIFileChunkDecodeOptions``.
 
 ## Write a MIDI File to Disk
 
 This is one way to write the file to disk:
 
 ```swift
-let url = URL() // replace with destination url on disk for MIDI file
+let url = URL(fileURLWithPath: "/Users/user/Desktop/test.mid")
 let data = try midiFile.rawData()
 try data.write(to: url)
 ```
 
-## Accessing Metadata, Tracks, and Events on Tracks
+## Accessing Metadata
 
 MIDI file contents can be read and written by accessing these properties.
 
@@ -61,29 +125,89 @@ midiFile.format // type 0, 1, or 2 MIDI file
 midiFile.timebase // musical or timecode-based
 ```
 
-Accessing chunks, including tracks:
+## Accessing Tracks and Events
+
+Read and write tracks using the `tracks` property:
 
 ```swift
-// all chunks, which includes tracks:
-midiFile.chunks // [MIDIFile.Chunk]
-
-// track 1 events
-for chunk in midiFile.chunks {
-    switch chunk {
-    case let .track(track): // `track` is MIDIFile.Chunk.Track
-        // chunk is a track
-    case let .other(chunk): // `chunk` is MIDIFile.Chunk.UnrecognizedChunk
-        // chunk is a non-track chunk
+for track in midiFile.tracks {
+    for event in track.events {
+        print(event)
     }
 }
 ```
 
-For convenience, a read-only `tracks` property can be accessed to return only the tracks as a typed array:
+Read first event from first track:
 
 ```swift
-midiFile.tracks // [MIDIFile.Chunk.Track]
+let deltaEvent = midiFile.tracks[0].events[0]
 
-for track in midiFile.tracks {
-    // ...
+let delta = deltaEvent.delta // delta time
+let event = deltaEvent.event // event payload
+
+switch event {
+case let .noteOn(delta, payload):
+    print(payload.note.number.uInt8Value, payload.velocity.midi1Value, payload.channel.uInt8Value)
+case let .noteOff(delta, payload):
+    print(payload.note.number.uInt8Value, payload.velocity.midi1Value, payload.channel.uInt8Value)
+    
+// ... handle additional cases as needed ...
+}
+```
+
+Read all events on a track at their beat position (elapsed quarter-notes as a floating-point value):
+
+```swift
+for (beat, event) in midiFile.tracks[0].eventsAtQuarterNotePositions(using: midiFile.timebase) {
+    switch event {
+    case let .noteOff(payload):
+        print(beat, payload.note.number.uInt8Value, payload.velocity.midi1Value, payload.channel.uInt8Value)
+    case let .noteOn(payload):
+        print(beat, payload.note.number.uInt8Value, payload.velocity.midi1Value, payload.channel.uInt8Value)
+        
+    // ... handle additional cases as needed ...
+    }
+}    
+```
+
+Add an event to first track:
+
+```swift
+let event: MIDIFileTrackEvent = .noteOn(note: 60, velocity: .midi1(127), channel: 0)
+midiFile.tracks[0].events.append(.init(delta: .note8th, event: event))
+```
+
+Add a new track:
+
+```swift
+let newTrack = MusicalMIDIFile.TrackChunk()
+midiFile.tracks.append(newTrack)
+```
+
+Replace a track:
+
+```swift
+let newTrack = MusicalMIDIFile.TrackChunk()
+midiFile.tracks[0] = newTrack
+```
+
+Remove a track:
+
+```swift
+midiFile.tracks.remove(at: 0)
+```
+
+## Accessing All Chunks
+
+Alternatively, all chunks (including non-track chunks) can be accessed through the `chunks` property:
+
+```swift
+for chunk in midiFile.chunks {
+    switch chunk {
+    case let .track(track): // `track` is `MusicalMIDIFile.TrackChunk`
+        // chunk is a track
+    case let .undefined(chunk): // `chunk` is `MusicalMIDIFile.UndefinedChunk`
+        // chunk is a non-track chunk
+    }
 }
 ```

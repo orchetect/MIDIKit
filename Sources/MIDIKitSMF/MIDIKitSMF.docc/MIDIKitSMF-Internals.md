@@ -2,12 +2,36 @@
 
 ## Topics
 
-### MIDI File Internals
+### Chunk Identifiers
 
-- ``MIDIFileEventType``
-- ``MIDIFileEventPayload``
+- ``AnyMIDIFileChunkIdentifier``
+- ``HeaderMIDIFileChunkIdentifier``
+- ``TrackMIDIFileChunkIdentifier``
+- ``UndefinedMIDIFileChunkIdentifier``
+
+### Type-Erasure
+
+- ``AnyMIDIFile``
+- ``AnyMIDIFileHeaderChunk``
+- ``AnyMIDIFileTimebase``
+- ``AnyMIDIFileTrackDeltaTime``
+- ``AnyMIDIFileTrackEventDecodeResult``
+- ``MIDIFileTrackEvent/AnyTempo``
+
+### MIDI File Decoding
+
+- ``MIDIFileTrackEventDecodeResult``
+
+### Protocols
+
+- ``MIDIFileChunk``
+- ``MIDIFileChunkIdentifier``
+- ``MIDIFileTimebase``
+- ``MIDIFileTrackDeltaTime``
+- ``MIDIFileTrackEventPayload``
 
 ### Timecode Related
 
+- ``MIDIFileFrameRate``
 - ``SwiftTimecodeCore/Timecode/scaledToMIDIFileSMPTEFrameRate``
-- ``SwiftTimecodeCore/TimecodeFrameRate/midiFileSMPTEOffsetRate``
+- ``SwiftTimecodeCore/TimecodeFrameRate/midiFileSMPTEFrameRate``

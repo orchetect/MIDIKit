@@ -200,10 +200,18 @@ import Testing
             )
         }
         
+        var isMacOS13OrHigher: Bool {
+            if #available(macOS 13, iOS 16, *) { true } else { false }
+        }
+        
+        var isMacOS11OrHigher: Bool {
+            if #available(macOS 11, iOS 14, *) { true } else { false }
+        }
+        
         // continue test unless current platform can't support persistent thru connections
-        if #available(macOS 13, iOS 16, *) {
+        if isMacOS13OrHigher {
             try addThru()
-        } else if #available(macOS 11, iOS 14, *) {
+        } else if isMacOS11OrHigher {
             withKnownIssue("Can't test persistent thru connections on macOS 11 & 12 and iOS 14 & 15.") {
                 try addThru() // will throw
             }
