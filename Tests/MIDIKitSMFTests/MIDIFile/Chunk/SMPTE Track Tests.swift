@@ -63,5 +63,9 @@ import Testing
         #expect(try e[6].timecode == Timecode(.components(h: 01, m: 00, s: 02, f: 04, sf: 00), at: .fps25)) // cc
         #expect(try e[7].timecode == Timecode(.components(h: 01, m: 00, s: 03, f: 00, sf: 00), at: .fps25)) // cc
         #expect(try e[8].timecode == Timecode(.components(h: 02, m: 00, s: 03, f: 00, sf: 00), at: .fps25)) // cc
+        
+        // just test a couple events to ensure they are as expected
+        #expect(e[0].event == .text(type: .trackOrSequenceName, string: "Seq-1"))
+        #expect(e[8].event == .cc(controller: 11, value: .midi1(26)))
     }
 }

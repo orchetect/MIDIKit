@@ -201,6 +201,10 @@ import Testing
             #expect(events[8].beat == 5.0) // cc
             #expect(events[9].beat == 5.5) // cc
             #expect(events[10].beat == 5.625) // cc
+            
+            // just test a couple events to ensure they are as expected
+            #expect(events[0].event == .text(type: .trackOrSequenceName, string: "Seq-1"))
+            #expect(events[10].event == .cc(controller: 11, value: .midi1(26)))
         }
         
         // eventsAtStart
