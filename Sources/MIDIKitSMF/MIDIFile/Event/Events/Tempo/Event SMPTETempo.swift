@@ -32,72 +32,42 @@ extension MIDIFileTrackEvent {
 
 // MARK: - Init
 
-extension MIDIFileTrackEvent.SMPTETempo { // TODO: add specialized init(s)
-//    /// Tempo event for MIDI file tracks using SMPTE timecode timebase.
-//    /// For a format 1 MIDI file, tempo events should only occur within the first `MTrk` chunk.
-//    public init(bpm: Double = 120.0) {
-//        self.bpm = bpm
-//    }
+extension MIDIFileTrackEvent.SMPTETempo {
+    // TODO: add specialized init(s)
 }
 
 // MARK: - MIDIFileTrackEventPayload Overrides
 
-extension MIDIFileTrackEvent.SMPTETempo: MIDIFileTrackEventPayload { // TODO: add specialized descriptions
+extension MIDIFileTrackEvent.SMPTETempo: MIDIFileTrackEventPayload {
     public var asMIDIFileTrackEvent: MIDIFileTrackEvent {
         .tempo(.smpte(self))
     }
     
+    // TODO: add specialized descriptions
+    
 //    public var smfDescription: String {
-//        "\(bpm.rounded(decimalPlaces: 3))bpm"
+//
 //    }
 //    
 //    public var smfDebugDescription: String {
-//        "Tempo(\(bpm)bpm)"
+//
 //    }
 }
 
 // MARK: - Static Constructors
 
-extension MIDIFileTrackEvent { // TODO: add specialized constructor(s)
-//    /// Tempo event for MIDI file tracks using SMPTE timecode timebase.
-//    /// For a format 1 MIDI file, tempo events should only occur within the first `MTrk` chunk.
-//    public static func tempo(
-//        bpm: Double
-//    ) -> Self {
-//        .tempo(
-//            AnyTempo(SMPTETempo(bpm: bpm))
-//        )
-//    }
+extension MIDIFileTrackEvent {
+    // TODO: add specialized constructor(s)
 }
 
-extension MIDIFile.TrackChunk.Event where Timebase == SMPTEMIDIFileTimebase { // TODO: add specialized constructor(s)
-//    /// Tempo event for MIDI file tracks using SMPTE timecode timebase.
-//    /// For a format 1 MIDI file, tempo events should only occur within the first `MTrk` chunk.
-//    public static func tempo(
-//        delta: DeltaTime = .none,
-//        bpm: Double
-//    ) -> Self {
-//        let event: MIDIFileTrackEvent = .tempo(
-//            bpm: bpm
-//        )
-//        return Self(delta: delta, event: event)
-//    }
+extension MIDIFile.TrackChunk.Event where Timebase == SMPTEMIDIFileTimebase {
+    // TODO: add specialized constructor(s)
 }
 
 // MARK: - Properties
 
-extension MIDIFileTrackEvent.MusicalTempo { // TODO: add specialized property(ies)
-//    /// Musical tempo.
-//    /// Defaults to 120 bpm. Minimum possible is 3.58 bpm and maximum is 60,000,000 bpm.
-//    public var bpm: Double {
-//        get {
-//            Self.microsecondsToBPM(ms: microsecondsPerQuarter)
-//        }
-//        set {
-//            let validated = validate(bpm: newValue)
-//            microsecondsPerQuarter = Self.bpmToMicroseconds(bpm: validated)
-//        }
-//    }
+extension MIDIFileTrackEvent.MusicalTempo {
+    // TODO: add specialized properties
 }
 
 // MARK: - Utilities
