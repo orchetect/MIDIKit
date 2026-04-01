@@ -23,7 +23,7 @@ extension MIDIFile.TrackChunk where Timebase == SMPTEMIDIFileTimebase {
     public func eventsAtTimecodeLocations(
         using timebase: Timebase,
         origin originOverride: Timecode? = nil
-    ) -> [(timecode: Timecode, event: Event)] {
+    ) -> [(timecode: Timecode, event: MIDIFileTrackEvent)] {
         // determine origin timecode for the track
         // if a SMPTE offset event appears at time==0 in the track, use it
         // but could be overridden by a `originTimecode: Timecode` parameter to this method to force an origin offset
@@ -42,7 +42,7 @@ extension MIDIFile.TrackChunk where Timebase == SMPTEMIDIFileTimebase {
             let interval = $0.delta
                 .timecodeInterval(using: timebase)
             position = position.offsetting(by: interval)
-            return (timecode: position, event: $0)
+            return (timecode: position, event: $0.event)
         }
     }
 }
