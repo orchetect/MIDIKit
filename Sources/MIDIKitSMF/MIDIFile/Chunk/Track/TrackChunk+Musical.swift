@@ -18,4 +18,21 @@ extension MIDIFile.TrackChunk where Timebase == MusicalMIDIFileTimebase {
             return (beat: position, event: $0.event)
         }
     }
+    
+    /// Returns the first tempo event found in the track's events.
+    ///
+    /// > Note:
+    /// >
+    /// > If no tempo event is found, the Standard MIDI File 1.0 spec specifies that 120 bpm is the default that should be used.
+    public var initialTempo: MIDIFileTrackEvent.MusicalTempo? {
+        for event in events {
+            if case let .tempo(anyTempo) = event.event,
+               case let .musical(tempo) = anyTempo
+            {
+                return tempo
+            }
+        }
+        
+        return nil
+    }
 }
