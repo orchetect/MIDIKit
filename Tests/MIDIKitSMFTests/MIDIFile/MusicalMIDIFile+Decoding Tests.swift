@@ -159,7 +159,7 @@ import Testing
     }
     
     @Test
-    func decodeOptions_trackDecodeOptions_errorStrategy_malformedEvent() async throws {
+    func chunkDecodeOptions_errorStrategy_malformedEvent_invalidStatusByte() async throws {
         let track1 = MusicalMIDIFile.TrackChunk(events: [
             .noteOn(delta: .none, note: 0x3C, velocity: .midi1(0x40), channel: 0),
             .cc(delta: .ticks(240), controller: 0x0B, value: .midi1(0x14), channel: 1)
@@ -167,6 +167,7 @@ import Testing
         
         let partialTrack2 = MusicalMIDIFile.TrackChunk(events: [
             .noteOn(delta: .none, note: 0x3C, velocity: .midi1(0x40), channel: 0)
+            // a malformed status byte here means that track decoding can't continue, so all remaining events are lost
         ])
         
         let track3 = MusicalMIDIFile.TrackChunk(events: [
@@ -189,11 +190,13 @@ import Testing
                                 0xFF, 0x2F, 0x00,       // chunk end
                                 
                                 0x4D, 0x54, 0x72, 0x6B, // MTrk
-                                0x00, 0x00, 0x00, 0x0D, // length: 13 bytes to follow
+                                0x00, 0x00, 0x00, 0x11, // length: 17 bytes to follow
                                 0x00,                   // delta time
                                 0x90, 0x3C, 0x40,       // note on event
                                 0x81, 0x70,             // delta time
                                 0xF0, 0x0B, 0x14,       // cc event -- ❌ but with an invalid status byte 0xF0
+                                0x0F,                   // delta time
+                                0xB1, 0x0C, 0x15,       // cc event
                                 0x00,                   // delta time prior to chunk end
                                 0xFF, 0x2F, 0x00,       // chunk end
                                 
@@ -240,7 +243,92 @@ import Testing
     }
     
     @Test
-    func decodeOptions_trackDecodeOptions_errorStrategy_truncatedTrack() async throws {
+    func chunkDecodeOptions_errorStrategy_malformedEvent_invalidDataByte() async throws {
+        let track1 = MusicalMIDIFile.TrackChunk(events: [
+            .noteOn(delta: .none, note: 0x3C, velocity: .midi1(0x40), channel: 0),
+            .cc(delta: .ticks(240), controller: 0x0B, value: .midi1(0x14), channel: 1)
+        ])
+        
+        let partialTrack2 = MusicalMIDIFile.TrackChunk(events: [
+            .noteOn(delta: .none, note: 0x3C, velocity: .midi1(0x40), channel: 0),
+            // < malformed CC event skipped over here >
+            .cc(delta: .ticks(15), controller: 0x0C, value: .midi1(0x15), channel: 1)
+        ])
+        
+        let track3 = MusicalMIDIFile.TrackChunk(events: [
+            .noteOn(delta: .none, note: 0x3D, velocity: .midi1(0x41), channel: 2),
+        ])
+        
+        let rawData: [UInt8] = [0x4D, 0x54, 0x68, 0x64, // MThd header
+                                0x00, 0x00, 0x00, 0x06, // length
+                                0x00, 0x00, // format
+                                0x00, 0x03, // track count
+                                0x02, 0xD0, // timebase
+                                
+                                0x4D, 0x54, 0x72, 0x6B, // MTrk
+                                0x00, 0x00, 0x00, 0x0D, // length: 13 bytes to follow
+                                0x00,                   // delta time
+                                0x90, 0x3C, 0x40,       // note on event
+                                0x81, 0x70,             // delta time
+                                0xB1, 0x0B, 0x14,       // cc event
+                                0x00,                   // delta time prior to chunk end
+                                0xFF, 0x2F, 0x00,       // chunk end
+                                
+                                0x4D, 0x54, 0x72, 0x6B, // MTrk
+                                0x00, 0x00, 0x00, 0x11, // length: 17 bytes to follow
+                                0x00,                   // delta time
+                                0x90, 0x3C, 0x40,       // note on event
+                                0x81, 0x70,             // delta time
+                                0xB0, 0x82, 0x14,       // cc event -- ❌ but with an invalid controller number byte 0x82
+                                0x0F,                   // delta time
+                                0xB1, 0x0C, 0x15,       // cc event
+                                0x00,                   // delta time prior to chunk end
+                                0xFF, 0x2F, 0x00,       // chunk end
+                                
+                                0x4D, 0x54, 0x72, 0x6B, // MTrk
+                                0x00, 0x00, 0x00, 0x08, // length: 8 bytes to follow
+                                0x00,                   // delta time
+                                0x92, 0x3D, 0x41,       // note on event
+                                0x00,                   // delta time prior to chunk end
+                                0xFF, 0x2F, 0x00        // chunk end
+        ]
+        
+        // throwOnError
+        await #expect(throws: MIDIFileDecodeError.self) {
+            let options = MIDIFileDecodeOptions(chunkDecodeOptions: .init(errorStrategy: .throwOnError))
+            let _ = try await MusicalMIDIFile(data: rawData, options: options)
+        }
+        
+        // discardTracksWithErrors
+        do {
+            let options = MIDIFileDecodeOptions(chunkDecodeOptions: .init(errorStrategy: .discardTracksWithErrors))
+            let midiFile = try await MusicalMIDIFile(data: rawData, options: options)
+            
+            #expect(midiFile.format == .singleTrack)
+            #expect(midiFile.timebase == .musical(ticksPerQuarterNote: 720))
+            #expect(midiFile.chunks.count == 2)
+            #expect(midiFile.tracks.count == 2)
+            #expect(midiFile.tracks[0] == track1)
+            #expect(midiFile.tracks[1] == track3)
+        }
+        
+        // allowLossyRecovery
+        do {
+            let options = MIDIFileDecodeOptions(chunkDecodeOptions: .init(errorStrategy: .allowLossyRecovery))
+            let midiFile = try await MusicalMIDIFile(data: rawData, options: options)
+            
+            #expect(midiFile.format == .singleTrack)
+            #expect(midiFile.timebase == .musical(ticksPerQuarterNote: 720))
+            #expect(midiFile.chunks.count == 3)
+            #expect(midiFile.tracks.count == 3)
+            #expect(midiFile.tracks[0] == track1)
+            #expect(midiFile.tracks[1] == partialTrack2)
+            #expect(midiFile.tracks[2] == track3)
+        }
+    }
+    
+    @Test
+    func chunkDecodeOptions_errorStrategy_truncatedTrack() async throws {
         let track1 = MusicalMIDIFile.TrackChunk(events: [
             .noteOn(delta: .none, note: 0x3C, velocity: .midi1(0x40), channel: 0),
             .cc(delta: .ticks(240), controller: 0x0B, value: .midi1(0x14), channel: 1)

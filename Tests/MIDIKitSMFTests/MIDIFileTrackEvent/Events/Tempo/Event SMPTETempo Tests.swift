@@ -8,8 +8,5 @@
 import Testing
 
 @Suite struct Event_SMPTETempo_Tests {
-    // swiftformat:options --wrapcollections preserve
-    // swiftformat:disable spaceInsideParens spaceInsideBrackets spacearoundoperators
-    
-    #warning("TODO: add tests")
+    // TODO: add tests
 }
