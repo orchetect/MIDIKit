@@ -12,7 +12,7 @@ For more information on <doc://MIDIKitSMF/MIDIKitCore/MIDIEvent>, refer to its d
 
 ## Topics
 
-### MIDI Track Leading
+### Track Head
 
 - <doc:MIDIFileTrackEvent-PortPrefix>
 - <doc:MIDIFileTrackEvent-ChannelPrefix>
@@ -34,6 +34,8 @@ For more information on <doc://MIDIKitSMF/MIDIKitCore/MIDIEvent>, refer to its d
 - <doc:MIDIFileTrackEvent-PitchBend>
 - <doc:MIDIFileTrackEvent-Pressure>
 - <doc:MIDIFileTrackEvent-ProgramChange>
+- <doc:MIDIFileTrackEvent-RPN>
+- <doc:MIDIFileTrackEvent-NRPN>
 
 ### System Exclusive
 
@@ -53,6 +55,11 @@ For more information on <doc://MIDIKitSMF/MIDIKitCore/MIDIEvent>, refer to its d
 
 - <doc:MIDIFileTrackEvent-UnrecognizedMeta>
 
-### Translation between MIDIEvent
+### Wrapping Types
+
+- ``MIDIFileTrackEvent/wrapped(delta:)``
+- ``MIDIFileTrackEvent/unwrapped``
+
+### Translation to MIDIEvent
 
 - ``midiEvent()``

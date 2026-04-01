@@ -1,6 +1,6 @@
-# Tempo
+# RPN (Registered Parameter Number)
 
-Tempo event.
+Channel Voice Message: Registered Parameter Number, also referred to as Registered Controller in MIDI 2.0.
 
 @Comment {
     // ------------------------------------
@@ -12,26 +12,13 @@ Tempo event.
     // ------------------------------------
 }
 
-For a format 1 MIDI file, Tempo events should only occur within the first `MTrk` chunk.
-
-If there are no tempo events in a MIDI file, 120 bpm is assumed.
-
 ## Topics
 
 ### Constructors
 
-- ``MIDIFileTrackEvent/tempo(bpm:)``
+- ``MIDIFileTrackEvent/rpn(parameter:change:channel:)``
 
 ### Switch Case Unwrapping
 
-- ``MIDIFileTrackEvent/tempo(_:)``
-- ``MIDIFileTrackEvent/AnyTempo``
-
-### Specialized Concrete Types
-
-- ``MIDIFileTrackEvent/MusicalTempo``
-- ``MIDIFileTrackEvent/SMPTETempo``
-
-### Protocol
-
-- ``MIDIFileTrackEvent/Tempo``
+- ``MIDIFileTrackEvent/rpn(_:)``
+- ``MIDIFileTrackEvent/RPN``
