@@ -253,7 +253,7 @@ import Testing
         ))
         #expect(parsedTrackA.events.count == 2)
         #expect(parsedTrackA.events[0].delta == .none)
-        #expect(parsedTrackA.events[0].event == ccEvent.wrapped)
+        #expect(parsedTrackA.events[0].event == ccEvent.asMIDIFileTrackEvent)
         #expect(parsedTrackA.events[1].delta == .ticks(rpnTotalTicks))
         #expect(parsedTrackA.events[1].event.midiEvent() == .rpn(rpnEvent))
         
@@ -264,7 +264,7 @@ import Testing
         ))
         #expect(parsedTrackB.events.count == 2)
         #expect(parsedTrackB.events[0].delta == .none)
-        #expect(parsedTrackB.events[0].event == ccEvent.wrapped)
+        #expect(parsedTrackB.events[0].event == ccEvent.asMIDIFileTrackEvent)
         #expect(parsedTrackB.events[1].delta == .ticks(rpnTotalTicks))
         #expect(parsedTrackB.events[1].event.midiEvent() == .rpn(rpnEvent))
     }

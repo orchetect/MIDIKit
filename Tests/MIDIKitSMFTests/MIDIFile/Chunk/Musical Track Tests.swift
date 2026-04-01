@@ -273,7 +273,7 @@ import Testing
         )
         #expect(textString.count == textCharCount)
         let textEventPayload: MIDIFileTrackEvent.Text = .init(text: textString)
-        let textEvent: MusicalMIDIFile.TrackChunk.Event = .init(delta: .none, event: textEventPayload.wrapped)
+        let textEvent: MusicalMIDIFile.TrackChunk.Event = .init(delta: .none, event: textEventPayload.asMIDIFileTrackEvent)
         
         // sequencer-specific event
         let seqSpecificByteCount = Int.random(in: 10000 ... 20000)
@@ -281,7 +281,7 @@ import Testing
             .map { _ in UInt8.random(in: UInt8.min ... UInt8.max) }
         #expect(seqSpecificData.count == seqSpecificByteCount)
         let seqSpecificEventPayload: MIDIFileTrackEvent.SequencerSpecific = .init(data: seqSpecificData)
-        let seqSpecificEvent: MusicalMIDIFile.TrackChunk.Event = .init(delta: .none, event: seqSpecificEventPayload.wrapped)
+        let seqSpecificEvent: MusicalMIDIFile.TrackChunk.Event = .init(delta: .none, event: seqSpecificEventPayload.asMIDIFileTrackEvent)
         
         // author MIDI file
         let events: [MusicalMIDIFile.TrackChunk.Event] = [textEvent, seqSpecificEvent]

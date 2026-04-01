@@ -13,7 +13,7 @@ public protocol MIDIFileTrackEventPayload: Equatable, Hashable, Sendable {
     static var smfEventType: MIDIFileTrackEventType { get }
     
     /// Returns the MIDI file event payload wrapped in its corresponding ``MIDIFileTrackEvent`` enum case.
-    var wrapped: MIDIFileTrackEvent { get }
+    var asMIDIFileTrackEvent: MIDIFileTrackEvent { get }
     
     /// Initialize by decoding raw event bytes.
     /// Throws an error if data is malformed or cannot otherwise be used to construct the event.

@@ -103,7 +103,7 @@ extension MIDIFileTrackEvent.ChannelPrefix {
 extension MIDIFileTrackEvent.ChannelPrefix: MIDIFileTrackEventPayload {
     public static var smfEventType: MIDIFileTrackEventType { .channelPrefix }
     
-    public var wrapped: MIDIFileTrackEvent {
+    public var asMIDIFileTrackEvent: MIDIFileTrackEvent {
         .channelPrefix(self)
     }
     

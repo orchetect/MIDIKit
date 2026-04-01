@@ -134,7 +134,7 @@ extension MIDIFileTrackEvent.XMFPatchTypePrefix {
 extension MIDIFileTrackEvent.XMFPatchTypePrefix: MIDIFileTrackEventPayload {
     public static var smfEventType: MIDIFileTrackEventType { .xmfPatchTypePrefix }
     
-    public var wrapped: MIDIFileTrackEvent {
+    public var asMIDIFileTrackEvent: MIDIFileTrackEvent {
         .xmfPatchTypePrefix(self)
     }
     

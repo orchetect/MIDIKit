@@ -318,7 +318,7 @@ extension MIDIFileTrackEvent.SMPTEOffset {
 extension MIDIFileTrackEvent.SMPTEOffset: MIDIFileTrackEventPayload {
     public static var smfEventType: MIDIFileTrackEventType { .smpteOffset }
     
-    public var wrapped: MIDIFileTrackEvent {
+    public var asMIDIFileTrackEvent: MIDIFileTrackEvent {
         .smpteOffset(self)
     }
     

@@ -154,7 +154,7 @@ extension MIDIFileTrackEvent.KeySignature {
 extension MIDIFileTrackEvent.KeySignature: MIDIFileTrackEventPayload {
     public static var smfEventType: MIDIFileTrackEventType { .keySignature }
     
-    public var wrapped: MIDIFileTrackEvent {
+    public var asMIDIFileTrackEvent: MIDIFileTrackEvent {
         .keySignature(self)
     }
     

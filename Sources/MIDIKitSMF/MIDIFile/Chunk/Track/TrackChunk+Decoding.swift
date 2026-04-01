@@ -199,7 +199,7 @@ extension MIDIFile.TrackChunk {
                     
                     // add new event to new track. if newEvent is nil, it means we are skipping over a malformed event.
                     if let newEvent = foundEvent.newEvent {
-                        newEvents.append(Event(delta: newEventDelta, event: newEvent.wrapped))
+                        newEvents.append(Event(delta: newEventDelta, event: newEvent.asMIDIFileTrackEvent))
                     }
                     
                     // advance parser read offset

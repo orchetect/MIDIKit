@@ -85,7 +85,7 @@ extension MIDIFileTrackEvent.PortPrefix {
 extension MIDIFileTrackEvent.PortPrefix: MIDIFileTrackEventPayload {
     public static var smfEventType: MIDIFileTrackEventType { .portPrefix }
     
-    public var wrapped: MIDIFileTrackEvent {
+    public var asMIDIFileTrackEvent: MIDIFileTrackEvent {
         .portPrefix(self)
     }
     

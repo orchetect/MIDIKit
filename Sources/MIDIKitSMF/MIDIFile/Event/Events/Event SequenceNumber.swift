@@ -102,7 +102,7 @@ extension MIDIFileTrackEvent.SequenceNumber {
 extension MIDIFileTrackEvent.SequenceNumber: MIDIFileTrackEventPayload {
     public static var smfEventType: MIDIFileTrackEventType { .sequenceNumber }
     
-    public var wrapped: MIDIFileTrackEvent {
+    public var asMIDIFileTrackEvent: MIDIFileTrackEvent {
         .sequenceNumber(self)
     }
     

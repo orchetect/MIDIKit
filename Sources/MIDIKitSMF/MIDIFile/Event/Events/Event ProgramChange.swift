@@ -73,7 +73,7 @@ extension MIDIFile.TrackChunk.Event {
 extension MIDIEvent.ProgramChange: MIDIFileTrackEventPayload {
     public static var smfEventType: MIDIFileTrackEventType { .programChange }
     
-    public var wrapped: MIDIFileTrackEvent {
+    public var asMIDIFileTrackEvent: MIDIFileTrackEvent {
         .programChange(self)
     }
     

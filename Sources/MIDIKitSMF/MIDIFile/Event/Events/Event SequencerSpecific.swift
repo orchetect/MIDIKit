@@ -80,7 +80,7 @@ extension MIDIFileTrackEvent.SequencerSpecific {
 extension MIDIFileTrackEvent.SequencerSpecific: MIDIFileTrackEventPayload {
     public static var smfEventType: MIDIFileTrackEventType { .sequencerSpecific }
     
-    public var wrapped: MIDIFileTrackEvent {
+    public var asMIDIFileTrackEvent: MIDIFileTrackEvent {
         .sequencerSpecific(self)
     }
     

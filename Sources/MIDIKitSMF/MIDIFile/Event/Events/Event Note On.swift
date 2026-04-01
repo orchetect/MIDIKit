@@ -90,7 +90,7 @@ extension MIDIFile.TrackChunk.Event {
 extension MIDIEvent.NoteOn: MIDIFileTrackEventPayload {
     public static var smfEventType: MIDIFileTrackEventType { .noteOn }
     
-    public var wrapped: MIDIFileTrackEvent {
+    public var asMIDIFileTrackEvent: MIDIFileTrackEvent {
         .noteOn(self)
     }
     

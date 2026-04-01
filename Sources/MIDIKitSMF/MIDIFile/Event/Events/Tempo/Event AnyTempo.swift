@@ -92,7 +92,19 @@ extension MIDIFileTrackEvent.AnyTempo: MIDIFileTrackEvent.Tempo {
 // MARK: - MIDIFileTrackEventPayload
 
 extension MIDIFileTrackEvent.AnyTempo: MIDIFileTrackEventPayload {
-    public var wrapped: MIDIFileTrackEvent {
+    public var asMIDIFileTrackEvent: MIDIFileTrackEvent {
         .tempo(self)
+    }
+}
+
+// MARK: - Properties
+
+extension MIDIFileTrackEvent.AnyTempo {
+    /// Unwraps the enum case and returns the chunk contained within, typed as ``MIDIFileTrackEvent.Tempo`` protocol.
+    public var wrapped: any MIDIFileTrackEvent.Tempo {
+        switch self {
+        case let .musical(tempo): tempo
+        case let .smpte(tempo): tempo
+        }
     }
 }

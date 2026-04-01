@@ -75,7 +75,7 @@ extension MIDIFile.TrackChunk.Event {
 extension MIDIEvent.Pressure: MIDIFileTrackEventPayload {
     public static var smfEventType: MIDIFileTrackEventType { .pressure }
     
-    public var wrapped: MIDIFileTrackEvent {
+    public var asMIDIFileTrackEvent: MIDIFileTrackEvent {
         .pressure(self)
     }
     

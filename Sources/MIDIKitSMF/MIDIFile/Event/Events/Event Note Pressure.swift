@@ -115,7 +115,7 @@ extension MIDIFile.TrackChunk.Event {
 extension MIDIEvent.NotePressure: MIDIFileTrackEventPayload {
     public static var smfEventType: MIDIFileTrackEventType { .notePressure }
     
-    public var wrapped: MIDIFileTrackEvent {
+    public var asMIDIFileTrackEvent: MIDIFileTrackEvent {
         .notePressure(self)
     }
     

@@ -43,7 +43,7 @@ extension MIDIFileTrackEvent.SMPTETempo { // TODO: add specialized init(s)
 // MARK: - MIDIFileTrackEventPayload Overrides
 
 extension MIDIFileTrackEvent.SMPTETempo: MIDIFileTrackEventPayload { // TODO: add specialized descriptions
-    public var wrapped: MIDIFileTrackEvent {
+    public var asMIDIFileTrackEvent: MIDIFileTrackEvent {
         .tempo(.smpte(self))
     }
     
