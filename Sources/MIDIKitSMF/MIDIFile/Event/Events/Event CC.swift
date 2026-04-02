@@ -90,7 +90,7 @@ extension MIDIFile.TrackChunk.Event {
 extension MIDIEvent.CC: MIDIFileTrackEventPayload {
     public static let smfEventType: MIDIFileTrackEventType = .cc
     
-    public var asMIDIFileTrackEvent: MIDIFileTrackEvent {
+    public func asMIDIFileTrackEvent() -> MIDIFileTrackEvent {
         .cc(self)
     }
     

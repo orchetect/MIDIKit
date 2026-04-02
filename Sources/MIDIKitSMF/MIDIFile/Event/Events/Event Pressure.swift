@@ -75,7 +75,7 @@ extension MIDIFile.TrackChunk.Event {
 extension MIDIEvent.Pressure: MIDIFileTrackEventPayload {
     public static var smfEventType: MIDIFileTrackEventType { .pressure }
     
-    public var asMIDIFileTrackEvent: MIDIFileTrackEvent {
+    public func asMIDIFileTrackEvent() -> MIDIFileTrackEvent {
         .pressure(self)
     }
     

@@ -39,7 +39,7 @@ extension MIDIFileTrackEvent.SMPTETempo {
 // MARK: - MIDIFileTrackEventPayload Overrides
 
 extension MIDIFileTrackEvent.SMPTETempo: MIDIFileTrackEventPayload {
-    public var asMIDIFileTrackEvent: MIDIFileTrackEvent {
+    public func asMIDIFileTrackEvent() -> MIDIFileTrackEvent {
         .tempo(.smpte(self))
     }
     

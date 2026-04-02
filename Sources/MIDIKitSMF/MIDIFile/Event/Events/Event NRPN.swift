@@ -62,7 +62,7 @@ extension MIDIFile.TrackChunk.Event {
 extension MIDIEvent.NRPN: MIDIFileTrackEventPayload {
     public static var smfEventType: MIDIFileTrackEventType { .nrpn }
     
-    public var asMIDIFileTrackEvent: MIDIFileTrackEvent {
+    public func asMIDIFileTrackEvent() -> MIDIFileTrackEvent {
         .nrpn(self)
     }
     

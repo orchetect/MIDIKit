@@ -154,7 +154,7 @@ extension MIDIFile.TrackChunk.Event {
 extension MIDIFileTrackEvent.Text: MIDIFileTrackEventPayload {
     public static var smfEventType: MIDIFileTrackEventType { .text }
     
-    public var asMIDIFileTrackEvent: MIDIFileTrackEvent {
+    public func asMIDIFileTrackEvent() -> MIDIFileTrackEvent {
         .text(self)
     }
     

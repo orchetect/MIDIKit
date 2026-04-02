@@ -129,7 +129,7 @@ extension MIDIFileTrackEvent.TimeSignature {
 extension MIDIFileTrackEvent.TimeSignature: MIDIFileTrackEventPayload {
     public static var smfEventType: MIDIFileTrackEventType { .timeSignature }
     
-    public var asMIDIFileTrackEvent: MIDIFileTrackEvent {
+    public func asMIDIFileTrackEvent() -> MIDIFileTrackEvent {
         .timeSignature(self)
     }
     

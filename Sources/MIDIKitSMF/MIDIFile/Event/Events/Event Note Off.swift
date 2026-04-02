@@ -90,7 +90,7 @@ extension MIDIFile.TrackChunk.Event {
 extension MIDIEvent.NoteOff: MIDIFileTrackEventPayload {
     public static var smfEventType: MIDIFileTrackEventType { .noteOff }
     
-    public var asMIDIFileTrackEvent: MIDIFileTrackEvent {
+    public func asMIDIFileTrackEvent() -> MIDIFileTrackEvent {
         .noteOff(self)
     }
     

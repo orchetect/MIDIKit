@@ -84,7 +84,7 @@ extension MIDIFile.TrackChunk.Event {
 extension MIDIEvent.PitchBend: MIDIFileTrackEventPayload {
     public static var smfEventType: MIDIFileTrackEventType { .pitchBend }
     
-    public var asMIDIFileTrackEvent: MIDIFileTrackEvent {
+    public func asMIDIFileTrackEvent() -> MIDIFileTrackEvent {
         .pitchBend(self)
     }
     

@@ -28,7 +28,7 @@ extension MIDIFile.TrackChunk {
         @_disfavoredOverload
         public init(delta: DeltaTime, event: any MIDIFileTrackEventPayload) {
             self.delta = delta
-            self.event = event.asMIDIFileTrackEvent
+            self.event = event.asMIDIFileTrackEvent()
         }
     }
 }

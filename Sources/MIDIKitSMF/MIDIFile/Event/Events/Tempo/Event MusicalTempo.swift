@@ -45,7 +45,7 @@ extension MIDIFileTrackEvent.MusicalTempo {
 // MARK: - MIDIFileTrackEventPayload Overrides
 
 extension MIDIFileTrackEvent.MusicalTempo: MIDIFileTrackEventPayload {
-    public var asMIDIFileTrackEvent: MIDIFileTrackEvent {
+    public func asMIDIFileTrackEvent() -> MIDIFileTrackEvent {
         .tempo(.musical(self))
     }
     

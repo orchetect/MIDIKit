@@ -146,7 +146,7 @@ extension MIDIFile.TrackChunk.Event {
 extension MIDIFileTrackEvent.UnrecognizedMeta: MIDIFileTrackEventPayload {
     public static var smfEventType: MIDIFileTrackEventType { .unrecognizedMeta }
     
-    public var asMIDIFileTrackEvent: MIDIFileTrackEvent {
+    public func asMIDIFileTrackEvent() -> MIDIFileTrackEvent {
         .unrecognizedMeta(self)
     }
     

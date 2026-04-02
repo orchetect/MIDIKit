@@ -90,7 +90,7 @@ extension MIDIFile.TrackChunk.Event {
 extension MIDIEvent.SysEx7: MIDIFileTrackEventPayload {
     public static var smfEventType: MIDIFileTrackEventType { .sysEx7 }
     
-    public var asMIDIFileTrackEvent: MIDIFileTrackEvent {
+    public func asMIDIFileTrackEvent() -> MIDIFileTrackEvent {
         .sysEx7(self)
     }
     
@@ -283,7 +283,7 @@ extension MIDIFile.TrackChunk.Event {
 extension MIDIEvent.UniversalSysEx7: MIDIFileTrackEventPayload {
     public static var smfEventType: MIDIFileTrackEventType { .universalSysEx7 }
     
-    public var asMIDIFileTrackEvent: MIDIFileTrackEvent {
+    public func asMIDIFileTrackEvent() -> MIDIFileTrackEvent {
         .universalSysEx7(self)
     }
     

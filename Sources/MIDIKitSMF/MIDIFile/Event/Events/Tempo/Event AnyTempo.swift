@@ -92,7 +92,7 @@ extension MIDIFileTrackEvent.AnyTempo: MIDIFileTrackEvent.Tempo {
 // MARK: - MIDIFileTrackEventPayload
 
 extension MIDIFileTrackEvent.AnyTempo: MIDIFileTrackEventPayload {
-    public var asMIDIFileTrackEvent: MIDIFileTrackEvent {
+    public func asMIDIFileTrackEvent() -> MIDIFileTrackEvent {
         .tempo(self)
     }
 }
