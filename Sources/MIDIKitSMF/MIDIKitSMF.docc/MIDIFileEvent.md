@@ -55,10 +55,9 @@ For more information on <doc://MIDIKitSMF/MIDIKitCore/MIDIEvent>, refer to its d
 
 - <doc:MIDIFileEvent-UnrecognizedMeta>
 
-### Wrapping Types
+### Unwrapping Payload
 
-- ``MIDIFileEvent/wrapped(delta:)``
-- ``MIDIFileEvent/unwrapped``
+- ``MIDIFileEvent/wrapped``
 
 ### Translation to MIDIEvent
 

@@ -37,13 +37,8 @@ extension MIDIFileEvent {
         }
     }
     
-    /// Returns the event as a track event with delta time.
-    public func wrapped<Timebase: MIDIFileTimebase>(delta: MIDI1File<Timebase>.DeltaTime) -> MIDI1File<Timebase>.TrackChunk.Event {
-        .init(delta: delta, event: self)
-    }
-    
-    /// Returns the wrapped event typed as `any` ``MIDIFileEventPayload``.
-    public var unwrapped: any MIDIFileEventPayload {
+    /// Returns the unwrapped enum payload as `any` ``MIDIFileEventPayload``.
+    public var wrapped: any MIDIFileEventPayload {
         switch self {
         case let .cc(payload):                 payload
         case let .channelPrefix(payload):      payload

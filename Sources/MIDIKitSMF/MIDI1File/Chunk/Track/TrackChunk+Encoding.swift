@@ -26,7 +26,7 @@ extension MIDI1File.TrackChunk {
             bodyData.append(deltaTime: event.delta.ticks(using: timebase))
             
             // TODO: support running status
-            bodyData.append(contentsOf: event.event.unwrapped.midi1SMFRawBytes(as: D.self))
+            bodyData.append(contentsOf: event.event.wrapped.midi1SMFRawBytes(as: D.self))
         }
         
         bodyData.append(deltaTime: deltaTimeBeforeEndOfTrack.ticks(using: timebase))

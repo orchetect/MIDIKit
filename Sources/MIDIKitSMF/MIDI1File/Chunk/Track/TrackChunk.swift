@@ -109,7 +109,7 @@ extension MIDI1File.TrackChunk {
                 let deltaString = deltaDesc(event.delta)
                     .padding(toLength: deltaPadLength, withPad: " ", startingAt: 0)
                 
-                outputString += "    \(deltaString) \(eventDesc(event.event.unwrapped))"
+                outputString += "    \(deltaString) \(eventDesc(event.event.wrapped))"
                     .newLined
             }
             

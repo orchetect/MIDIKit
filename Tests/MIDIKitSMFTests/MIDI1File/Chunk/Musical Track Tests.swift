@@ -298,10 +298,10 @@ import Testing
         
         // extract events
         let decodedTextEventPayload: MIDIFileEvent.Text = try #require(
-            decodedTrack.events[0].event.unwrapped as? MIDIFileEvent.Text
+            decodedTrack.events[0].event.wrapped as? MIDIFileEvent.Text
         )
         let decodedSeqSpecificEventPayload: MIDIFileEvent.SequencerSpecific = try #require(
-            decodedTrack.events[1].event.unwrapped as? MIDIFileEvent.SequencerSpecific
+            decodedTrack.events[1].event.wrapped as? MIDIFileEvent.SequencerSpecific
         )
         
         // compare events
