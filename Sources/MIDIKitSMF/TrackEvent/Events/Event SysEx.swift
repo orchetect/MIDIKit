@@ -12,19 +12,19 @@ internal import SwiftDataParsing
 
 // ------------------------------------
 // NOTE: When revising these documentation blocks, they are duplicated in:
-//   - MIDIFileTrackEvent enum case (`case keySignature(_:)`, etc.)
-//   - MIDIFileTrackEvent concrete payload structs (`KeySignature`, etc.)
-//   - DocC documentation for each MIDIFileTrackEvent type
+//   - MIDIFileEvent enum case (`case keySignature(_:)`, etc.)
+//   - MIDIFileEvent concrete payload structs (`KeySignature`, etc.)
+//   - DocC documentation for each MIDIFileEvent type
 // ------------------------------------
 
-extension MIDIFileTrackEvent {
+extension MIDIFileEvent {
     /// System Exclusive: Manufacturer-specific (7-bit)
     public typealias SysEx7 = MIDIEvent.SysEx7
 }
 
 // MARK: - SysEx7 Static Constructors
 
-extension MIDIFileTrackEvent {
+extension MIDIFileEvent {
     /// System Exclusive: Manufacturer-specific (7-bit)
     ///
     /// - Throws: `MIDIEvent.ParseError` if any data bytes overflow 7 bits.
@@ -62,7 +62,7 @@ extension MIDI1File.TrackChunk.Event {
         manufacturer: MIDIEvent.SysExManufacturer,
         data: [UInt8]
     ) throws(MIDIEvent.ParseError) -> Self {
-        let event: MIDIFileTrackEvent = try .sysEx7(
+        let event: MIDIFileEvent = try .sysEx7(
             manufacturer: manufacturer,
             data: data
         )
@@ -76,7 +76,7 @@ extension MIDI1File.TrackChunk.Event {
         manufacturer: MIDIEvent.SysExManufacturer,
         data: [UInt7]
     ) -> Self {
-        let event: MIDIFileTrackEvent = .sysEx7(
+        let event: MIDIFileEvent = .sysEx7(
             manufacturer: manufacturer,
             data: data
         )
@@ -86,17 +86,17 @@ extension MIDI1File.TrackChunk.Event {
 
 // MARK: - SysEx7 Encoding
 
-extension MIDIEvent.SysEx7: MIDIFileTrackEventPayload {
-    public static var smfEventType: MIDIFileTrackEventType { .sysEx7 }
+extension MIDIEvent.SysEx7: MIDIFileEventPayload {
+    public static var smfEventType: MIDIFileEventType { .sysEx7 }
     
-    public func asMIDIFileTrackEvent() -> MIDIFileTrackEvent {
+    public func asMIDIFileEvent() -> MIDIFileEvent {
         .sysEx7(self)
     }
     
     public static func decode(
         midi1SMFRawBytesStream stream: some DataProtocol,
         runningStatus: UInt8?
-    ) -> MIDIFileTrackEventDecodeResult<Self> {
+    ) -> MIDIFileEventDecodeResult<Self> {
         do throws(MIDIFileDecodeError) {
             _ = try requiredStreamByteLength(
                 availableByteCount: stream.count,
@@ -155,12 +155,12 @@ extension MIDIEvent.SysEx7: MIDIFileTrackEventPayload {
 
 // ------------------------------------
 // NOTE: When revising these documentation blocks, they are duplicated in:
-//   - MIDIFileTrackEvent enum case (`case keySignature(_:)`, etc.)
-//   - MIDIFileTrackEvent concrete payload structs (`KeySignature`, etc.)
-//   - DocC documentation for each MIDIFileTrackEvent type
+//   - MIDIFileEvent enum case (`case keySignature(_:)`, etc.)
+//   - MIDIFileEvent concrete payload structs (`KeySignature`, etc.)
+//   - DocC documentation for each MIDIFileEvent type
 // ------------------------------------
 
-extension MIDIFileTrackEvent {
+extension MIDIFileEvent {
     /// Universal System Exclusive (7-bit)
     ///
     /// Some standard Universal System Exclusive messages have been defined by the MIDI Spec. See
@@ -172,7 +172,7 @@ extension MIDIFileTrackEvent {
 
 // MARK: - UniversalSysEx7 Static Constructors
 
-extension MIDIFileTrackEvent {
+extension MIDIFileEvent {
     /// Universal System Exclusive (7-bit)
     ///
     /// Some standard Universal System Exclusive messages have been defined by the MIDI Spec. See
@@ -240,7 +240,7 @@ extension MIDI1File.TrackChunk.Event {
         subID2: UInt7,
         data: [UInt8]
     ) throws(MIDIEvent.ParseError) -> Self {
-        let event: MIDIFileTrackEvent = try .universalSysEx7(
+        let event: MIDIFileEvent = try .universalSysEx7(
             universalType: universalType,
             deviceID: deviceID,
             subID1: subID1,
@@ -265,7 +265,7 @@ extension MIDI1File.TrackChunk.Event {
         subID2: UInt7,
         data: [UInt7]
     ) -> Self {
-        let event: MIDIFileTrackEvent = .universalSysEx7(
+        let event: MIDIFileEvent = .universalSysEx7(
             universalType: universalType,
             deviceID: deviceID,
             subID1: subID1,
@@ -278,17 +278,17 @@ extension MIDI1File.TrackChunk.Event {
 
 // MARK: - UniversalSysEx7 Encoding
 
-extension MIDIEvent.UniversalSysEx7: MIDIFileTrackEventPayload {
-    public static var smfEventType: MIDIFileTrackEventType { .universalSysEx7 }
+extension MIDIEvent.UniversalSysEx7: MIDIFileEventPayload {
+    public static var smfEventType: MIDIFileEventType { .universalSysEx7 }
     
-    public func asMIDIFileTrackEvent() -> MIDIFileTrackEvent {
+    public func asMIDIFileEvent() -> MIDIFileEvent {
         .universalSysEx7(self)
     }
     
     public static func decode(
         midi1SMFRawBytesStream stream: some DataProtocol,
         runningStatus: UInt8?
-    ) -> MIDIFileTrackEventDecodeResult<Self> {
+    ) -> MIDIFileEventDecodeResult<Self> {
         do throws(MIDIFileDecodeError) {
             _ = try requiredStreamByteLength(
                 availableByteCount: stream.count,

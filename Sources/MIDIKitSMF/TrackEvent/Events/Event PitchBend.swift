@@ -12,19 +12,19 @@ internal import SwiftDataParsing
 
 // ------------------------------------
 // NOTE: When revising these documentation blocks, they are duplicated in:
-//   - MIDIFileTrackEvent enum case (`case keySignature(_:)`, etc.)
-//   - MIDIFileTrackEvent concrete payload structs (`KeySignature`, etc.)
-//   - DocC documentation for each MIDIFileTrackEvent type
+//   - MIDIFileEvent enum case (`case keySignature(_:)`, etc.)
+//   - MIDIFileEvent concrete payload structs (`KeySignature`, etc.)
+//   - DocC documentation for each MIDIFileEvent type
 // ------------------------------------
 
-extension MIDIFileTrackEvent {
+extension MIDIFileEvent {
     /// Channel Voice Message: Pitch Bend
     public typealias PitchBend = MIDIEvent.PitchBend
 }
 
 // MARK: - Static Constructors
 
-extension MIDIFileTrackEvent {
+extension MIDIFileEvent {
     /// Channel Voice Message: Pitch Bend
     public static func pitchBend(
         lsb: UInt8,
@@ -56,7 +56,7 @@ extension MIDI1File.TrackChunk.Event {
         msb: UInt8,
         channel: UInt4 = 0
     ) -> Self {
-        let event: MIDIFileTrackEvent = .pitchBend(
+        let event: MIDIFileEvent = .pitchBend(
             lsb: lsb,
             msb: msb,
             channel: channel
@@ -70,7 +70,7 @@ extension MIDI1File.TrackChunk.Event {
         value: MIDIEvent.PitchBend.Value,
         channel: UInt4 = 0
     ) -> Self {
-        let event: MIDIFileTrackEvent = .pitchBend(
+        let event: MIDIFileEvent = .pitchBend(
             value: value,
             channel: channel
         )
@@ -80,17 +80,17 @@ extension MIDI1File.TrackChunk.Event {
 
 // MARK: - Encoding
 
-extension MIDIEvent.PitchBend: MIDIFileTrackEventPayload {
-    public static var smfEventType: MIDIFileTrackEventType { .pitchBend }
+extension MIDIEvent.PitchBend: MIDIFileEventPayload {
+    public static var smfEventType: MIDIFileEventType { .pitchBend }
     
-    public func asMIDIFileTrackEvent() -> MIDIFileTrackEvent {
+    public func asMIDIFileEvent() -> MIDIFileEvent {
         .pitchBend(self)
     }
     
     public static func decode(
         midi1SMFRawBytesStream stream: some DataProtocol,
         runningStatus: UInt8?
-    ) -> MIDIFileTrackEventDecodeResult<Self> {
+    ) -> MIDIFileEventDecodeResult<Self> {
         // Step 1: Check required byte count
         let requiredStreamByteCount: Int
         do throws(MIDIFileDecodeError) {

@@ -12,19 +12,19 @@ internal import SwiftDataParsing
 
 // ------------------------------------
 // NOTE: When revising these documentation blocks, they are duplicated in:
-//   - MIDIFileTrackEvent enum case (`case keySignature(_:)`, etc.)
-//   - MIDIFileTrackEvent concrete payload structs (`KeySignature`, etc.)
-//   - DocC documentation for each MIDIFileTrackEvent type
+//   - MIDIFileEvent enum case (`case keySignature(_:)`, etc.)
+//   - MIDIFileEvent concrete payload structs (`KeySignature`, etc.)
+//   - DocC documentation for each MIDIFileEvent type
 // ------------------------------------
 
-extension MIDIFileTrackEvent {
+extension MIDIFileEvent {
     /// Channel Voice Message: Control Change (CC)
     public typealias CC = MIDIEvent.CC
 }
 
 // MARK: - Static Constructors
 
-extension MIDIFileTrackEvent {
+extension MIDIFileEvent {
     /// Channel Voice Message: Control Change (CC)
     public static func cc(
         controller: MIDIEvent.CC.Controller,
@@ -60,7 +60,7 @@ extension MIDI1File.TrackChunk.Event {
         value: MIDIEvent.CC.Value,
         channel: UInt4 = 0
     ) -> Self {
-        let event: MIDIFileTrackEvent = .cc(
+        let event: MIDIFileEvent = .cc(
             controller: controller,
             value: value,
             channel: channel
@@ -75,7 +75,7 @@ extension MIDI1File.TrackChunk.Event {
         value: MIDIEvent.CC.Value,
         channel: UInt4 = 0
     ) -> Self {
-        let event: MIDIFileTrackEvent = .cc(
+        let event: MIDIFileEvent = .cc(
             controller: controller,
             value: value,
             channel: channel
@@ -86,17 +86,17 @@ extension MIDI1File.TrackChunk.Event {
 
 // MARK: - Encoding
 
-extension MIDIEvent.CC: MIDIFileTrackEventPayload {
-    public static let smfEventType: MIDIFileTrackEventType = .cc
+extension MIDIEvent.CC: MIDIFileEventPayload {
+    public static let smfEventType: MIDIFileEventType = .cc
     
-    public func asMIDIFileTrackEvent() -> MIDIFileTrackEvent {
+    public func asMIDIFileEvent() -> MIDIFileEvent {
         .cc(self)
     }
     
     public static func decode(
         midi1SMFRawBytesStream stream: some DataProtocol,
         runningStatus: UInt8?
-    ) -> MIDIFileTrackEventDecodeResult<Self> {
+    ) -> MIDIFileEventDecodeResult<Self> {
         // Step 1: Check required byte count
         let requiredStreamByteCount: Int
         do throws(MIDIFileDecodeError) {

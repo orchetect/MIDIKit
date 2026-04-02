@@ -13,12 +13,12 @@ internal import SwiftDataParsing
 
 // ------------------------------------
 // // NOTE: When revising these documentation blocks, they are duplicated in:
-//   - MIDIFileTrackEvent enum case (`case keySignature(_:)`, etc.)
-//   - MIDIFileTrackEvent concrete payload structs (`KeySignature`, etc.)
-//   - DocC documentation for each MIDIFileTrackEvent type
+//   - MIDIFileEvent enum case (`case keySignature(_:)`, etc.)
+//   - MIDIFileEvent concrete payload structs (`KeySignature`, etc.)
+//   - DocC documentation for each MIDIFileEvent type
 // ------------------------------------
 
-extension MIDIFileTrackEvent {
+extension MIDIFileEvent {
     /// Key Signature event.
     ///
     /// For a format 1 MIDI file, Key Signature Meta events should only occur within the first
@@ -68,17 +68,17 @@ extension MIDIFileTrackEvent {
     }
 }
 
-extension MIDIFileTrackEvent.KeySignature: Equatable { }
+extension MIDIFileEvent.KeySignature: Equatable { }
 
-extension MIDIFileTrackEvent.KeySignature: Hashable { }
+extension MIDIFileEvent.KeySignature: Hashable { }
 
-extension MIDIFileTrackEvent.KeySignature: CaseIterable { }
+extension MIDIFileEvent.KeySignature: CaseIterable { }
 
-extension MIDIFileTrackEvent.KeySignature: Sendable { }
+extension MIDIFileEvent.KeySignature: Sendable { }
 
 // MARK: - Init
 
-extension MIDIFileTrackEvent.KeySignature {
+extension MIDIFileEvent.KeySignature {
     /// Initialize from raw encoded values.
     public init?(
         flatsOrSharps: Int8,
@@ -95,7 +95,7 @@ extension MIDIFileTrackEvent.KeySignature {
 
 // MARK: - Static Constructors
 
-extension MIDIFileTrackEvent {
+extension MIDIFileEvent {
     /// Key Signature event.
     ///
     /// For a format 1 MIDI file, Key Signature Meta events should only occur within the first
@@ -120,7 +120,7 @@ extension MIDI1File.TrackChunk.Event {
     /// If there are no key signature events in a MIDI file, C major is assumed.
     public static func keySignature(
         delta: DeltaTime = .none,
-        key event: MIDIFileTrackEvent.KeySignature
+        key event: MIDIFileEvent.KeySignature
     ) -> Self {
         Self(delta: delta, event: .keySignature(event))
     }
@@ -136,31 +136,31 @@ extension MIDI1File.TrackChunk.Event {
         flatsOrSharps: Int8,
         isMajor: Bool
     ) -> Self? {
-        guard let event: MIDIFileTrackEvent = .keySignature(flatsOrSharps: flatsOrSharps, isMajor: isMajor) else { return nil }
+        guard let event: MIDIFileEvent = .keySignature(flatsOrSharps: flatsOrSharps, isMajor: isMajor) else { return nil }
         return Self(delta: delta, event: event)
     }
 }
 
 // MARK: - Static
 
-extension MIDIFileTrackEvent.KeySignature {
+extension MIDIFileEvent.KeySignature {
     /// The prefix bytes that define the start of the event.
     public static var prefixBytes: [UInt8] { [0xFF, 0x59, 0x02] }
 }
 
 // MARK: - Encoding
 
-extension MIDIFileTrackEvent.KeySignature: MIDIFileTrackEventPayload {
-    public static var smfEventType: MIDIFileTrackEventType { .keySignature }
+extension MIDIFileEvent.KeySignature: MIDIFileEventPayload {
+    public static var smfEventType: MIDIFileEventType { .keySignature }
     
-    public func asMIDIFileTrackEvent() -> MIDIFileTrackEvent {
+    public func asMIDIFileEvent() -> MIDIFileEvent {
         .keySignature(self)
     }
     
     public static func decode(
         midi1SMFRawBytesStream stream: some DataProtocol,
         runningStatus: UInt8?
-    ) -> MIDIFileTrackEventDecodeResult<Self> {
+    ) -> MIDIFileEventDecodeResult<Self> {
         // Step 1: Check required byte count
         let requiredStreamByteCount: Int
         do throws(MIDIFileDecodeError) {
@@ -264,7 +264,7 @@ extension MIDIFileTrackEvent.KeySignature: MIDIFileTrackEventPayload {
     }
 }
 
-extension MIDIFileTrackEvent.KeySignature {
+extension MIDIFileEvent.KeySignature {
     /// Returns the raw encoded value of the number of flats or sharps.
     /// `0` indicates no sharps or flats (C major or A minor).
     /// A positive integer represents the number of sharps (1 through 7), while a negative integer

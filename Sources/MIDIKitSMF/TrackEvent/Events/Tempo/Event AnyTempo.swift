@@ -12,12 +12,12 @@ internal import SwiftDataParsing
 
 // ------------------------------------
 // NOTE: When revising these documentation blocks, they are duplicated in:
-//   - MIDIFileTrackEvent enum case (`case keySignature(_:)`, etc.)
-//   - MIDIFileTrackEvent concrete payload structs (`KeySignature`, etc.)
-//   - DocC documentation for each MIDIFileTrackEvent type
+//   - MIDIFileEvent enum case (`case keySignature(_:)`, etc.)
+//   - MIDIFileEvent concrete payload structs (`KeySignature`, etc.)
+//   - DocC documentation for each MIDIFileEvent type
 // ------------------------------------
 
-extension MIDIFileTrackEvent {
+extension MIDIFileEvent {
     /// Type-erased box for a tempo event specialized to a concrete MIDI file timebase.
     /// For a format 1 MIDI file, Tempo events should only occur within the first `MTrk` chunk.
     /// If there are no tempo events in a MIDI file, 120 bpm is assumed.
@@ -35,20 +35,20 @@ extension MIDIFileTrackEvent {
     }
 }
 
-extension MIDIFileTrackEvent.AnyTempo: Equatable { }
+extension MIDIFileEvent.AnyTempo: Equatable { }
 
-extension MIDIFileTrackEvent.AnyTempo: Hashable { }
+extension MIDIFileEvent.AnyTempo: Hashable { }
 
-extension MIDIFileTrackEvent.AnyTempo: Sendable { }
+extension MIDIFileEvent.AnyTempo: Sendable { }
 
 // MARK: - Init
 
-extension MIDIFileTrackEvent.AnyTempo {
-    public init(_ tempo: MIDIFileTrackEvent.MusicalTempo) {
+extension MIDIFileEvent.AnyTempo {
+    public init(_ tempo: MIDIFileEvent.MusicalTempo) {
         self = .musical(tempo)
     }
     
-    public init(_ tempo: MIDIFileTrackEvent.SMPTETempo) {
+    public init(_ tempo: MIDIFileEvent.SMPTETempo) {
         self = .smpte(tempo)
     }
 }
@@ -59,7 +59,7 @@ extension MIDIFileTrackEvent.AnyTempo {
 
 // MARK: - Tempo
 
-extension MIDIFileTrackEvent.AnyTempo: MIDIFileTrackEvent.Tempo {
+extension MIDIFileEvent.AnyTempo: MIDIFileEvent.Tempo {
     public typealias Timebase = AnyMIDIFileTimebase
     
     public var microsecondsPerQuarter: UInt32 {
@@ -88,19 +88,19 @@ extension MIDIFileTrackEvent.AnyTempo: MIDIFileTrackEvent.Tempo {
     }
 }
 
-// MARK: - MIDIFileTrackEventPayload
+// MARK: - MIDIFileEventPayload
 
-extension MIDIFileTrackEvent.AnyTempo: MIDIFileTrackEventPayload {
-    public func asMIDIFileTrackEvent() -> MIDIFileTrackEvent {
+extension MIDIFileEvent.AnyTempo: MIDIFileEventPayload {
+    public func asMIDIFileEvent() -> MIDIFileEvent {
         .tempo(self)
     }
 }
 
 // MARK: - Properties
 
-extension MIDIFileTrackEvent.AnyTempo {
-    /// Unwraps the enum case and returns the chunk contained within, typed as ``MIDIFileTrackEvent.Tempo`` protocol.
-    public var wrapped: any MIDIFileTrackEvent.Tempo {
+extension MIDIFileEvent.AnyTempo {
+    /// Unwraps the enum case and returns the chunk contained within, typed as ``MIDIFileEvent.Tempo`` protocol.
+    public var wrapped: any MIDIFileEvent.Tempo {
         switch self {
         case let .musical(tempo): tempo
         case let .smpte(tempo): tempo

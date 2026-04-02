@@ -12,19 +12,19 @@ internal import SwiftDataParsing
 
 // ------------------------------------
 // NOTE: When revising these documentation blocks, they are duplicated in:
-//   - MIDIFileTrackEvent enum case (`case keySignature(_:)`, etc.)
-//   - MIDIFileTrackEvent concrete payload structs (`KeySignature`, etc.)
-//   - DocC documentation for each MIDIFileTrackEvent type
+//   - MIDIFileEvent enum case (`case keySignature(_:)`, etc.)
+//   - MIDIFileEvent concrete payload structs (`KeySignature`, etc.)
+//   - DocC documentation for each MIDIFileEvent type
 // ------------------------------------
 
-extension MIDIFileTrackEvent {
+extension MIDIFileEvent {
     /// Channel Voice Message: Note On
     public typealias NoteOn = MIDIEvent.NoteOn
 }
 
 // MARK: - Static Constructors
 
-extension MIDIFileTrackEvent {
+extension MIDIFileEvent {
     /// Channel Voice Message: Note On
     public static func noteOn(
         note: MIDINote,
@@ -60,7 +60,7 @@ extension MIDI1File.TrackChunk.Event {
         velocity: MIDIEvent.NoteVelocity,
         channel: UInt4 = 0
     ) -> Self {
-        let event: MIDIFileTrackEvent = .noteOn(
+        let event: MIDIFileEvent = .noteOn(
             note: note,
             velocity: velocity,
             channel: channel
@@ -75,7 +75,7 @@ extension MIDI1File.TrackChunk.Event {
         velocity: MIDIEvent.NoteVelocity,
         channel: UInt4 = 0
     ) -> Self {
-        let event: MIDIFileTrackEvent = .noteOn(
+        let event: MIDIFileEvent = .noteOn(
             note: note,
             velocity: velocity,
             channel: channel
@@ -86,17 +86,17 @@ extension MIDI1File.TrackChunk.Event {
 
 // MARK: - Encoding
 
-extension MIDIEvent.NoteOn: MIDIFileTrackEventPayload {
-    public static var smfEventType: MIDIFileTrackEventType { .noteOn }
+extension MIDIEvent.NoteOn: MIDIFileEventPayload {
+    public static var smfEventType: MIDIFileEventType { .noteOn }
     
-    public func asMIDIFileTrackEvent() -> MIDIFileTrackEvent {
+    public func asMIDIFileEvent() -> MIDIFileEvent {
         .noteOn(self)
     }
     
     public static func decode(
         midi1SMFRawBytesStream stream: some DataProtocol,
         runningStatus: UInt8?
-    ) -> MIDIFileTrackEventDecodeResult<Self> {
+    ) -> MIDIFileEventDecodeResult<Self> {
         // Step 1: Check required byte count
         let requiredStreamByteCount: Int
         do throws(MIDIFileDecodeError) {

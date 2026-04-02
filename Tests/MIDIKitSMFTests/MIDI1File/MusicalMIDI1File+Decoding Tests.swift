@@ -399,7 +399,7 @@ import Testing
     }
     
     @Test
-    func decodeOptions_maxTrackEventCount() /* NOT ASYNC! */ throws {
+    func decodeOptions_maxEventCount() /* NOT ASYNC! */ throws {
         let options = MIDI1FileDecodeOptions(chunkDecodeOptions: .init(maxEventCount: 1))
         // Note: It's ok if this throws a deprecation warning. We need to test this specific method.
         let midiFile = try /* NOT AWAIT! */ MusicalMIDI1File(data: kMIDI1File.dp8Markers, options: options)
@@ -411,7 +411,7 @@ import Testing
     }
     
     @Test
-    func decodeOptions_maxTrackEventCount_async() async throws {
+    func decodeOptions_maxEventCount_async() async throws {
         let options = MIDI1FileDecodeOptions(chunkDecodeOptions: .init(maxEventCount: 1))
         let midiFile = try await MusicalMIDI1File(data: kMIDI1File.dp8Markers, options: options)
         try #require(midiFile.chunks.count == 3)

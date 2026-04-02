@@ -12,12 +12,12 @@ internal import SwiftDataParsing
 
 // ------------------------------------
 // NOTE: When revising these documentation blocks, they are duplicated in:
-//   - MIDIFileTrackEvent enum case (`case keySignature(_:)`, etc.)
-//   - MIDIFileTrackEvent concrete payload structs (`KeySignature`, etc.)
-//   - DocC documentation for each MIDIFileTrackEvent type
+//   - MIDIFileEvent enum case (`case keySignature(_:)`, etc.)
+//   - MIDIFileEvent concrete payload structs (`KeySignature`, etc.)
+//   - DocC documentation for each MIDIFileEvent type
 // ------------------------------------
 
-extension MIDIFileTrackEvent {
+extension MIDIFileEvent {
     /// Channel Voice Message: Program Change
     ///
     /// > Note: When decoding, bank information is not decoded as part of the Program Change event
@@ -28,7 +28,7 @@ extension MIDIFileTrackEvent {
 
 // MARK: - Static Constructors
 
-extension MIDIFileTrackEvent {
+extension MIDIFileEvent {
     /// Channel Voice Message: Program Change
     ///
     /// > Note: When decoding, bank information is not decoded as part of the Program Change event
@@ -59,7 +59,7 @@ extension MIDI1File.TrackChunk.Event {
         program: UInt7,
         channel: UInt4 = 0
     ) -> Self {
-        let event: MIDIFileTrackEvent = .programChange(
+        let event: MIDIFileEvent = .programChange(
             program: program,
             channel: channel
         )
@@ -69,17 +69,17 @@ extension MIDI1File.TrackChunk.Event {
 
 // MARK: - Encoding
 
-extension MIDIEvent.ProgramChange: MIDIFileTrackEventPayload {
-    public static var smfEventType: MIDIFileTrackEventType { .programChange }
+extension MIDIEvent.ProgramChange: MIDIFileEventPayload {
+    public static var smfEventType: MIDIFileEventType { .programChange }
     
-    public func asMIDIFileTrackEvent() -> MIDIFileTrackEvent {
+    public func asMIDIFileEvent() -> MIDIFileEvent {
         .programChange(self)
     }
     
     public static func decode(
         midi1SMFRawBytesStream stream: some DataProtocol,
         runningStatus: UInt8?
-    ) -> MIDIFileTrackEventDecodeResult<Self> {
+    ) -> MIDIFileEventDecodeResult<Self> {
         // Step 1: Check required byte count
         let requiredStreamByteCount: Int
         do throws(MIDIFileDecodeError) {

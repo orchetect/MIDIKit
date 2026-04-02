@@ -141,10 +141,10 @@ extension MIDI1File.TrackChunk {
                     
                     // parse out next event
                     
-                    var foundEvent: (newEvent: (any MIDIFileTrackEventPayload)?, bufferLength: Int, statusByte: UInt8)?
+                    var foundEvent: (newEvent: (any MIDIFileEventPayload)?, bufferLength: Int, statusByte: UInt8)?
                     
                     let effectiveRunningStatus: UInt8? = isStatusBytePresent ? nil : runningStatusByte
-                    if let eventType = MIDIFileTrackEventType(
+                    if let eventType = MIDIFileEventType(
                         atStartOf: readBuffer,
                         runningStatus: effectiveRunningStatus,
                         detectParameterNumberSequence: false // parse out discrete events; RPN/NRPN events are bundled later
@@ -199,7 +199,7 @@ extension MIDI1File.TrackChunk {
                     
                     // add new event to new track. if newEvent is nil, it means we are skipping over a malformed event.
                     if let newEvent = foundEvent.newEvent {
-                        newEvents.append(Event(delta: newEventDelta, event: newEvent.asMIDIFileTrackEvent()))
+                        newEvents.append(Event(delta: newEventDelta, event: newEvent.asMIDIFileEvent()))
                     }
                     
                     // advance parser read offset
@@ -315,8 +315,8 @@ extension MIDI1File.TrackChunk {
                 data: (msb: dataEntryMSB, lsb: dataEntryLSB?.value)
             )
             let midiEvent: MIDIEvent.RPN = .init(rc, channel: channel)
-            let midiTrackEvent: MIDIFileTrackEvent = .rpn(midiEvent)
-            replacementEvent = Event(delta: .ticks(totalDelta), event: midiTrackEvent)
+            let midiFileEvent: MIDIFileEvent = .rpn(midiEvent)
+            replacementEvent = Event(delta: .ticks(totalDelta), event: midiFileEvent)
         } else if extractedEvents[0].event.controller == .nrpnMSB,
                   extractedEvents[1].event.controller == .nrpnLSB,
                   extractedEvents[2].event.controller == .dataEntry
@@ -326,8 +326,8 @@ extension MIDI1File.TrackChunk {
                 data: (msb: dataEntryMSB, lsb: dataEntryLSB?.value)
             )
             let midiEvent: MIDIEvent.NRPN = .init(rc, channel: channel)
-            let midiTrackEvent: MIDIFileTrackEvent = .nrpn(midiEvent)
-            replacementEvent = Event(delta: .ticks(totalDelta), event: midiTrackEvent)
+            let midiFileEvent: MIDIFileEvent = .nrpn(midiEvent)
+            replacementEvent = Event(delta: .ticks(totalDelta), event: midiFileEvent)
         }
         
         if let replacementEvent {

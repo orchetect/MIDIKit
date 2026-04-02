@@ -10,12 +10,12 @@ internal import SwiftDataParsing
 
 // ------------------------------------
 // NOTE: When revising these documentation blocks, they are duplicated in:
-//   - MIDIFileTrackEvent enum case (`case keySignature(_:)`, etc.)
-//   - MIDIFileTrackEvent concrete payload structs (`KeySignature`, etc.)
-//   - DocC documentation for each MIDIFileTrackEvent type
+//   - MIDIFileEvent enum case (`case keySignature(_:)`, etc.)
+//   - MIDIFileEvent concrete payload structs (`KeySignature`, etc.)
+//   - DocC documentation for each MIDIFileEvent type
 // ------------------------------------
 
-extension MIDIFileTrackEvent {
+extension MIDIFileEvent {
     /// Tempo event for MIDI file tracks using musical timebase.
     /// For a format 1 MIDI file, tempo events should only occur within the first `MTrk` chunk.
     /// If there are no tempo events in a MIDI file, 120 bpm is assumed.
@@ -32,7 +32,7 @@ extension MIDIFileTrackEvent {
 
 // MARK: - Init
 
-extension MIDIFileTrackEvent.MusicalTempo {
+extension MIDIFileEvent.MusicalTempo {
     /// Tempo event for MIDI file tracks using musical timebase.
     /// Minimum possible is 3.58 bpm and maximum is 60,000,000 bpm.
     public init(bpm: Double = 120.0) {
@@ -41,10 +41,10 @@ extension MIDIFileTrackEvent.MusicalTempo {
     }
 }
 
-// MARK: - MIDIFileTrackEventPayload Overrides
+// MARK: - MIDIFileEventPayload Overrides
 
-extension MIDIFileTrackEvent.MusicalTempo: MIDIFileTrackEventPayload {
-    public func asMIDIFileTrackEvent() -> MIDIFileTrackEvent {
+extension MIDIFileEvent.MusicalTempo: MIDIFileEventPayload {
+    public func asMIDIFileEvent() -> MIDIFileEvent {
         .tempo(.musical(self))
     }
     
@@ -59,7 +59,7 @@ extension MIDIFileTrackEvent.MusicalTempo: MIDIFileTrackEventPayload {
 
 // MARK: - Static Constructors
 
-extension MIDIFileTrackEvent {
+extension MIDIFileEvent {
     /// Tempo event for MIDI file tracks using musical timebase.
     /// For a format 1 MIDI file, tempo events should only occur within the first `MTrk` chunk.
     /// Minimum possible is 3.58 bpm and maximum is 60,000,000 bpm.
@@ -80,7 +80,7 @@ extension MIDI1File.TrackChunk.Event where Timebase == MusicalMIDIFileTimebase {
         delta: DeltaTime = .none,
         bpm: Double
     ) -> Self {
-        let event: MIDIFileTrackEvent = .tempo(
+        let event: MIDIFileEvent = .tempo(
             bpm: bpm
         )
         return Self(delta: delta, event: event)
@@ -89,7 +89,7 @@ extension MIDI1File.TrackChunk.Event where Timebase == MusicalMIDIFileTimebase {
 
 // MARK: - Properties
 
-extension MIDIFileTrackEvent.MusicalTempo {
+extension MIDIFileEvent.MusicalTempo {
     /// Musical tempo in bmp (beats per minute).
     /// Minimum possible is 3.58 bpm and maximum is 60,000,000 bpm.
     public var bpm: Double {
@@ -105,7 +105,7 @@ extension MIDIFileTrackEvent.MusicalTempo {
 
 // MARK: - Utilities
 
-extension MIDIFileTrackEvent.MusicalTempo {
+extension MIDIFileEvent.MusicalTempo {
     private static func bpmToMicroseconds(bpm fromTempo: Double) -> UInt32 {
         let tempoCalc: Double = (60 / fromTempo) * 1_000_000
         return UInt32(tempoCalc)

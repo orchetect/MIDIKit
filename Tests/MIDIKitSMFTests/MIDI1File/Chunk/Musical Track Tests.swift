@@ -272,16 +272,16 @@ import Testing
                 .map { _ in "ABCDEFabcdef1234567890-_ ".randomElement()! }
         )
         #expect(textString.count == textCharCount)
-        let textEventPayload: MIDIFileTrackEvent.Text = .init(text: textString)
-        let textEvent: MusicalMIDI1File.TrackChunk.Event = .init(delta: .none, event: textEventPayload.asMIDIFileTrackEvent())
+        let textEventPayload: MIDIFileEvent.Text = .init(text: textString)
+        let textEvent: MusicalMIDI1File.TrackChunk.Event = .init(delta: .none, event: textEventPayload.asMIDIFileEvent())
         
         // sequencer-specific event
         let seqSpecificByteCount = Int.random(in: 10000 ... 20000)
         let seqSpecificData: [UInt8] = (0 ..< seqSpecificByteCount)
             .map { _ in UInt8.random(in: UInt8.min ... UInt8.max) }
         #expect(seqSpecificData.count == seqSpecificByteCount)
-        let seqSpecificEventPayload: MIDIFileTrackEvent.SequencerSpecific = .init(data: seqSpecificData)
-        let seqSpecificEvent: MusicalMIDI1File.TrackChunk.Event = .init(delta: .none, event: seqSpecificEventPayload.asMIDIFileTrackEvent())
+        let seqSpecificEventPayload: MIDIFileEvent.SequencerSpecific = .init(data: seqSpecificData)
+        let seqSpecificEvent: MusicalMIDI1File.TrackChunk.Event = .init(delta: .none, event: seqSpecificEventPayload.asMIDIFileEvent())
         
         // author MIDI file
         let events: [MusicalMIDI1File.TrackChunk.Event] = [textEvent, seqSpecificEvent]
@@ -297,11 +297,11 @@ import Testing
         try #require(decodedTrack.events.count == 2)
         
         // extract events
-        let decodedTextEventPayload: MIDIFileTrackEvent.Text = try #require(
-            decodedTrack.events[0].event.unwrapped as? MIDIFileTrackEvent.Text
+        let decodedTextEventPayload: MIDIFileEvent.Text = try #require(
+            decodedTrack.events[0].event.unwrapped as? MIDIFileEvent.Text
         )
-        let decodedSeqSpecificEventPayload: MIDIFileTrackEvent.SequencerSpecific = try #require(
-            decodedTrack.events[1].event.unwrapped as? MIDIFileTrackEvent.SequencerSpecific
+        let decodedSeqSpecificEventPayload: MIDIFileEvent.SequencerSpecific = try #require(
+            decodedTrack.events[1].event.unwrapped as? MIDIFileEvent.SequencerSpecific
         )
         
         // compare events

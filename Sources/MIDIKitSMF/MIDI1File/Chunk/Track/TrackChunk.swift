@@ -87,7 +87,7 @@ extension MIDI1File.TrackChunk {
         maxEventCount: Int?,
         deltaPadLength: Int,
         deltaDesc: (DeltaTime) -> String,
-        eventDesc: (any MIDIFileTrackEventPayload) -> String
+        eventDesc: (any MIDIFileEventPayload) -> String
     ) -> String {
         // sanitize inputs
         let maxEventCount = maxEventCount?.clamped(to: 0...)
@@ -141,7 +141,7 @@ extension MIDI1File.TrackChunk {
 
 extension MIDI1File.TrackChunk {
     /// Returns all ``events`` that have a delta time of zero from the start of the track.
-    public var eventsAtStart: [MIDIFileTrackEvent] {
+    public var eventsAtStart: [MIDIFileEvent] {
         events
             .prefix(while: { $0.delta == .none })
             .map(\.event)

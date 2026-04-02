@@ -12,12 +12,12 @@ internal import SwiftDataParsing
 
 // ------------------------------------
 // NOTE: When revising these documentation blocks, they are duplicated in:
-//   - MIDIFileTrackEvent enum case (`case keySignature(_:)`, etc.)
-//   - MIDIFileTrackEvent concrete payload structs (`KeySignature`, etc.)
-//   - DocC documentation for each MIDIFileTrackEvent type
+//   - MIDIFileEvent enum case (`case keySignature(_:)`, etc.)
+//   - MIDIFileEvent concrete payload structs (`KeySignature`, etc.)
+//   - DocC documentation for each MIDIFileEvent type
 // ------------------------------------
 
-extension MIDIFileTrackEvent {
+extension MIDIFileEvent {
     /// Channel Voice Message: Note Pressure (Polyphonic Aftertouch)
     ///
     /// Also known as:
@@ -29,7 +29,7 @@ extension MIDIFileTrackEvent {
 
 // MARK: - Static Constructors
 
-extension MIDIFileTrackEvent {
+extension MIDIFileEvent {
     /// Channel Voice Message: Note Pressure (Polyphonic Aftertouch)
     ///
     /// Also known as:
@@ -80,7 +80,7 @@ extension MIDI1File.TrackChunk.Event {
         amount: MIDIEvent.NotePressure.Amount,
         channel: UInt4 = 0
     ) -> Self {
-        let event: MIDIFileTrackEvent = .notePressure(
+        let event: MIDIFileEvent = .notePressure(
             note: note,
             amount: amount,
             channel: channel
@@ -100,7 +100,7 @@ extension MIDI1File.TrackChunk.Event {
         amount: MIDIEvent.NotePressure.Amount,
         channel: UInt4 = 0
     ) -> Self {
-        let event: MIDIFileTrackEvent = .notePressure(
+        let event: MIDIFileEvent = .notePressure(
             note: note,
             amount: amount,
             channel: channel
@@ -111,17 +111,17 @@ extension MIDI1File.TrackChunk.Event {
 
 // MARK: - Encoding
 
-extension MIDIEvent.NotePressure: MIDIFileTrackEventPayload {
-    public static var smfEventType: MIDIFileTrackEventType { .notePressure }
+extension MIDIEvent.NotePressure: MIDIFileEventPayload {
+    public static var smfEventType: MIDIFileEventType { .notePressure }
     
-    public func asMIDIFileTrackEvent() -> MIDIFileTrackEvent {
+    public func asMIDIFileEvent() -> MIDIFileEvent {
         .notePressure(self)
     }
     
     public static func decode(
         midi1SMFRawBytesStream stream: some DataProtocol,
         runningStatus: UInt8?
-    ) -> MIDIFileTrackEventDecodeResult<Self> {
+    ) -> MIDIFileEventDecodeResult<Self> {
         // Step 1: Check required byte count
         let requiredStreamByteCount: Int
         do throws(MIDIFileDecodeError) {

@@ -12,12 +12,12 @@ internal import SwiftDataParsing
 
 // ------------------------------------
 // NOTE: When revising these documentation blocks, they are duplicated in:
-//   - MIDIFileTrackEvent enum case (`case keySignature(_:)`, etc.)
-//   - MIDIFileTrackEvent concrete payload structs (`KeySignature`, etc.)
-//   - DocC documentation for each MIDIFileTrackEvent type
+//   - MIDIFileEvent enum case (`case keySignature(_:)`, etc.)
+//   - MIDIFileEvent concrete payload structs (`KeySignature`, etc.)
+//   - DocC documentation for each MIDIFileEvent type
 // ------------------------------------
 
-extension MIDIFileTrackEvent {
+extension MIDIFileEvent {
     /// Sequencer-specific data.
     /// Typically begins with a 1 or 3 byte manufacturer ID, similar to SysEx.
     public struct SequencerSpecific {
@@ -33,15 +33,15 @@ extension MIDIFileTrackEvent {
     }
 }
 
-extension MIDIFileTrackEvent.SequencerSpecific: Equatable { }
+extension MIDIFileEvent.SequencerSpecific: Equatable { }
 
-extension MIDIFileTrackEvent.SequencerSpecific: Hashable { }
+extension MIDIFileEvent.SequencerSpecific: Hashable { }
 
-extension MIDIFileTrackEvent.SequencerSpecific: Sendable { }
+extension MIDIFileEvent.SequencerSpecific: Sendable { }
 
 // MARK: - Static Constructors
 
-extension MIDIFileTrackEvent {
+extension MIDIFileEvent {
     /// Sequencer-specific data.
     /// Typically begins with a 1 or 3 byte manufacturer ID, similar to SysEx.
     public static func sequencerSpecific(
@@ -60,7 +60,7 @@ extension MIDI1File.TrackChunk.Event {
         delta: DeltaTime = .none,
         data: [UInt8]
     ) -> Self {
-        let event: MIDIFileTrackEvent = .sequencerSpecific(
+        let event: MIDIFileEvent = .sequencerSpecific(
             data: data
         )
         return Self(delta: delta, event: event)
@@ -69,24 +69,24 @@ extension MIDI1File.TrackChunk.Event {
 
 // MARK: - Static
 
-extension MIDIFileTrackEvent.SequencerSpecific {
+extension MIDIFileEvent.SequencerSpecific {
     /// The prefix bytes that define the start of the event.
     public static var prefixBytes: [UInt8] { [0xFF, 0x7F] }
 }
 
 // MARK: - Encoding
 
-extension MIDIFileTrackEvent.SequencerSpecific: MIDIFileTrackEventPayload {
-    public static var smfEventType: MIDIFileTrackEventType { .sequencerSpecific }
+extension MIDIFileEvent.SequencerSpecific: MIDIFileEventPayload {
+    public static var smfEventType: MIDIFileEventType { .sequencerSpecific }
     
-    public func asMIDIFileTrackEvent() -> MIDIFileTrackEvent {
+    public func asMIDIFileEvent() -> MIDIFileEvent {
         .sequencerSpecific(self)
     }
     
     public static func decode(
         midi1SMFRawBytesStream stream: some DataProtocol,
         runningStatus: UInt8?
-    ) -> MIDIFileTrackEventDecodeResult<Self> {
+    ) -> MIDIFileEventDecodeResult<Self> {
         // Step 1: Check required byte count
         do throws(MIDIFileDecodeError) {
             _ = try requiredStreamByteLength(

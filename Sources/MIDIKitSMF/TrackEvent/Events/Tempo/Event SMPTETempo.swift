@@ -10,12 +10,12 @@ internal import SwiftDataParsing
 
 // ------------------------------------
 // NOTE: When revising these documentation blocks, they are duplicated in:
-//   - MIDIFileTrackEvent enum case (`case keySignature(_:)`, etc.)
-//   - MIDIFileTrackEvent concrete payload structs (`KeySignature`, etc.)
-//   - DocC documentation for each MIDIFileTrackEvent type
+//   - MIDIFileEvent enum case (`case keySignature(_:)`, etc.)
+//   - MIDIFileEvent concrete payload structs (`KeySignature`, etc.)
+//   - DocC documentation for each MIDIFileEvent type
 // ------------------------------------
 
-extension MIDIFileTrackEvent {
+extension MIDIFileEvent {
     /// Tempo event for MIDI file tracks using SMPTE timecode timebase.
     /// For a format 1 MIDI file, tempo events should only occur within the first `MTrk` chunk.
     public struct SMPTETempo: Tempo {
@@ -31,14 +31,14 @@ extension MIDIFileTrackEvent {
 
 // MARK: - Init
 
-extension MIDIFileTrackEvent.SMPTETempo {
+extension MIDIFileEvent.SMPTETempo {
     // TODO: add specialized init(s)
 }
 
-// MARK: - MIDIFileTrackEventPayload Overrides
+// MARK: - MIDIFileEventPayload Overrides
 
-extension MIDIFileTrackEvent.SMPTETempo: MIDIFileTrackEventPayload {
-    public func asMIDIFileTrackEvent() -> MIDIFileTrackEvent {
+extension MIDIFileEvent.SMPTETempo: MIDIFileEventPayload {
+    public func asMIDIFileEvent() -> MIDIFileEvent {
         .tempo(.smpte(self))
     }
     
@@ -55,7 +55,7 @@ extension MIDIFileTrackEvent.SMPTETempo: MIDIFileTrackEventPayload {
 
 // MARK: - Static Constructors
 
-extension MIDIFileTrackEvent {
+extension MIDIFileEvent {
     // TODO: add specialized constructor(s)
 }
 
@@ -65,12 +65,12 @@ extension MIDI1File.TrackChunk.Event where Timebase == SMPTEMIDIFileTimebase {
 
 // MARK: - Properties
 
-extension MIDIFileTrackEvent.MusicalTempo {
+extension MIDIFileEvent.MusicalTempo {
     // TODO: add specialized properties
 }
 
 // MARK: - Utilities
 
-extension MIDIFileTrackEvent.MusicalTempo {
+extension MIDIFileEvent.MusicalTempo {
     // TODO: add conversion utilities
 }

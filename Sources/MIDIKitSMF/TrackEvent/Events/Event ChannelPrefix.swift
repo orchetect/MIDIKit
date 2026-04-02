@@ -12,12 +12,12 @@ internal import SwiftDataParsing
 
 // ------------------------------------
 // NOTE: When revising these documentation blocks, they are duplicated in:
-//   - MIDIFileTrackEvent enum case (`case keySignature(_:)`, etc.)
-//   - MIDIFileTrackEvent concrete payload structs (`KeySignature`, etc.)
-//   - DocC documentation for each MIDIFileTrackEvent type
+//   - MIDIFileEvent enum case (`case keySignature(_:)`, etc.)
+//   - MIDIFileEvent concrete payload structs (`KeySignature`, etc.)
+//   - DocC documentation for each MIDIFileEvent type
 // ------------------------------------
 
-extension MIDIFileTrackEvent {
+extension MIDIFileEvent {
     /// MIDI Channel Prefix event.
     ///
     /// > Standard MIDI File 1.0 Spec:
@@ -40,15 +40,15 @@ extension MIDIFileTrackEvent {
     }
 }
 
-extension MIDIFileTrackEvent.ChannelPrefix: Equatable { }
+extension MIDIFileEvent.ChannelPrefix: Equatable { }
 
-extension MIDIFileTrackEvent.ChannelPrefix: Hashable { }
+extension MIDIFileEvent.ChannelPrefix: Hashable { }
 
-extension MIDIFileTrackEvent.ChannelPrefix: Sendable { }
+extension MIDIFileEvent.ChannelPrefix: Sendable { }
 
 // MARK: - Static Constructors
 
-extension MIDIFileTrackEvent {
+extension MIDIFileEvent {
     /// MIDI Channel Prefix event.
     ///
     /// > Standard MIDI File 1.0 Spec:
@@ -83,7 +83,7 @@ extension MIDI1File.TrackChunk.Event {
         delta: DeltaTime = .none,
         channel: UInt4
     ) -> Self {
-        let event: MIDIFileTrackEvent = .channelPrefix(
+        let event: MIDIFileEvent = .channelPrefix(
             channel: channel
         )
         return Self(delta: delta, event: event)
@@ -92,24 +92,24 @@ extension MIDI1File.TrackChunk.Event {
 
 // MARK: - Static
 
-extension MIDIFileTrackEvent.ChannelPrefix {
+extension MIDIFileEvent.ChannelPrefix {
     /// The prefix bytes that define the start of the event.
     public static var prefixBytes: [UInt8] { [0xFF, 0x20, 0x01] }
 }
 
 // MARK: - Encoding
 
-extension MIDIFileTrackEvent.ChannelPrefix: MIDIFileTrackEventPayload {
-    public static var smfEventType: MIDIFileTrackEventType { .channelPrefix }
+extension MIDIFileEvent.ChannelPrefix: MIDIFileEventPayload {
+    public static var smfEventType: MIDIFileEventType { .channelPrefix }
     
-    public func asMIDIFileTrackEvent() -> MIDIFileTrackEvent {
+    public func asMIDIFileEvent() -> MIDIFileEvent {
         .channelPrefix(self)
     }
     
     public static func decode(
         midi1SMFRawBytesStream stream: some DataProtocol,
         runningStatus: UInt8?
-    ) -> MIDIFileTrackEventDecodeResult<Self> {
+    ) -> MIDIFileEventDecodeResult<Self> {
         // Step 1: Check required byte count
         let requiredStreamByteCount: Int
         do throws(MIDIFileDecodeError) {

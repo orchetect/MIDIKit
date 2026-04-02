@@ -18,17 +18,17 @@ extension MIDI1File.TrackChunk {
         public var delta: DeltaTime
         
         /// The track event.
-        public var event: MIDIFileTrackEvent
+        public var event: MIDIFileEvent
         
-        public init(delta: DeltaTime, event: MIDIFileTrackEvent) {
+        public init(delta: DeltaTime, event: MIDIFileEvent) {
             self.delta = delta
             self.event = event
         }
         
         @_disfavoredOverload
-        public init(delta: DeltaTime, event: any MIDIFileTrackEventPayload) {
+        public init(delta: DeltaTime, event: any MIDIFileEventPayload) {
             self.delta = delta
-            self.event = event.asMIDIFileTrackEvent()
+            self.event = event.asMIDIFileEvent()
         }
     }
 }

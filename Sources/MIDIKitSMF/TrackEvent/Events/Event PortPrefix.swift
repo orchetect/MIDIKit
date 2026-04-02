@@ -12,12 +12,12 @@ internal import SwiftDataParsing
 
 // ------------------------------------
 // NOTE: When revising these documentation blocks, they are duplicated in:
-//   - MIDIFileTrackEvent enum case (`case keySignature(_:)`, etc.)
-//   - MIDIFileTrackEvent concrete payload structs (`KeySignature`, etc.)
-//   - DocC documentation for each MIDIFileTrackEvent type
+//   - MIDIFileEvent enum case (`case keySignature(_:)`, etc.)
+//   - MIDIFileEvent concrete payload structs (`KeySignature`, etc.)
+//   - DocC documentation for each MIDIFileEvent type
 // ------------------------------------
 
-extension MIDIFileTrackEvent {
+extension MIDIFileEvent {
     /// MIDI Port Prefix event.
     ///
     /// Specifies out of which MIDI Port (ie, buss) the MIDI events in the MIDI track go.
@@ -34,15 +34,15 @@ extension MIDIFileTrackEvent {
     }
 }
 
-extension MIDIFileTrackEvent.PortPrefix: Equatable { }
+extension MIDIFileEvent.PortPrefix: Equatable { }
 
-extension MIDIFileTrackEvent.PortPrefix: Hashable { }
+extension MIDIFileEvent.PortPrefix: Hashable { }
 
-extension MIDIFileTrackEvent.PortPrefix: Sendable { }
+extension MIDIFileEvent.PortPrefix: Sendable { }
 
 // MARK: - Static Constructors
 
-extension MIDIFileTrackEvent {
+extension MIDIFileEvent {
     /// MIDI Port Prefix event.
     ///
     /// Specifies out of which MIDI Port (ie, buss) the MIDI events in the MIDI track go.
@@ -65,7 +65,7 @@ extension MIDI1File.TrackChunk.Event {
         delta: DeltaTime = .none,
         port: UInt7
     ) -> Self {
-        let event: MIDIFileTrackEvent = .portPrefix(
+        let event: MIDIFileEvent = .portPrefix(
             port: port
         )
         return Self(delta: delta, event: event)
@@ -74,24 +74,24 @@ extension MIDI1File.TrackChunk.Event {
 
 // MARK: - Static
 
-extension MIDIFileTrackEvent.PortPrefix {
+extension MIDIFileEvent.PortPrefix {
     /// The prefix bytes that define the start of the event.
     public static var prefixBytes: [UInt8] { [0xFF, 0x21, 0x01] }
 }
 
 // MARK: - Encoding
 
-extension MIDIFileTrackEvent.PortPrefix: MIDIFileTrackEventPayload {
-    public static var smfEventType: MIDIFileTrackEventType { .portPrefix }
+extension MIDIFileEvent.PortPrefix: MIDIFileEventPayload {
+    public static var smfEventType: MIDIFileEventType { .portPrefix }
     
-    public func asMIDIFileTrackEvent() -> MIDIFileTrackEvent {
+    public func asMIDIFileEvent() -> MIDIFileEvent {
         .portPrefix(self)
     }
     
     public static func decode(
         midi1SMFRawBytesStream stream: some DataProtocol,
         runningStatus: UInt8?
-    ) -> MIDIFileTrackEventDecodeResult<Self> {
+    ) -> MIDIFileEventDecodeResult<Self> {
         // Step 1: Check required byte count
         let requiredStreamByteCount: Int
         do throws(MIDIFileDecodeError) {

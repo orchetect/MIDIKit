@@ -39,10 +39,10 @@ extension AnyMIDI1File: CustomStringConvertible {
     }
     
     /// Generate a description of the track, optionally limiting the number of events from each track in the output.
-    public func description(maxTrackEventCount: Int?) -> String {
+    public func description(maxEventCount: Int?) -> String {
         switch self {
-        case let .musical(midiFile): midiFile.description(maxTrackEventCount: maxTrackEventCount)
-        case let .smpte(midiFile): midiFile.description(maxTrackEventCount: maxTrackEventCount)
+        case let .musical(midiFile): midiFile.description(maxEventCount: maxEventCount)
+        case let .smpte(midiFile): midiFile.description(maxEventCount: maxEventCount)
         }
     }
 }
@@ -56,10 +56,10 @@ extension AnyMIDI1File: CustomDebugStringConvertible {
     }
     
     /// Generate a debug description of the track, optionally limiting the number of events from each track in the output.
-    public func debugDescription(maxTrackEventCount: Int?) -> String {
+    public func debugDescription(maxEventCount: Int?) -> String {
         switch self {
-        case let .musical(midiFile): midiFile.debugDescription(maxTrackEventCount: maxTrackEventCount)
-        case let .smpte(midiFile): midiFile.debugDescription(maxTrackEventCount: maxTrackEventCount)
+        case let .musical(midiFile): midiFile.debugDescription(maxEventCount: maxEventCount)
+        case let .smpte(midiFile): midiFile.debugDescription(maxEventCount: maxEventCount)
         }
     }
 }

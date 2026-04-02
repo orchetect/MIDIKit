@@ -12,7 +12,7 @@ public enum SMPTEMIDIFileTrackDeltaTime {
     case frames(_ frames: Double)
     
     /// Construct delta time duration from SMPTE timecode.
-    case offset(_ smpteOffset: MIDIFileTrackEvent.SMPTEOffset)
+    case offset(_ smpteOffset: MIDIFileEvent.SMPTEOffset)
     
     case ticks(_ ticks: UInt32)
 }
@@ -72,7 +72,7 @@ extension SMPTEMIDIFileTrackDeltaTime {
         subFr: UInt8 = 0,
         rate: MIDI1FileFrameRate
     ) -> Self {
-        let smpteOffset = MIDIFileTrackEvent.SMPTEOffset(
+        let smpteOffset = MIDIFileEvent.SMPTEOffset(
             hr: hr,
             min: min,
             sec: sec,

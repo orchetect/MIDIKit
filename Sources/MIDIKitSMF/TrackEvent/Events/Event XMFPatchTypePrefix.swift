@@ -12,12 +12,12 @@ internal import SwiftDataParsing
 
 // ------------------------------------
 // NOTE: When revising these documentation blocks, they are duplicated in:
-//   - MIDIFileTrackEvent enum case (`case keySignature(_:)`, etc.)
-//   - MIDIFileTrackEvent concrete payload structs (`KeySignature`, etc.)
-//   - DocC documentation for each MIDIFileTrackEvent type
+//   - MIDIFileEvent enum case (`case keySignature(_:)`, etc.)
+//   - MIDIFileEvent concrete payload structs (`KeySignature`, etc.)
+//   - DocC documentation for each MIDIFileEvent type
 // ------------------------------------
 
-extension MIDIFileTrackEvent {
+extension MIDIFileEvent {
     /// XMF Patch Type Prefix event.
     ///
     /// > Standard MIDI File 1.0 Spec:
@@ -51,15 +51,15 @@ extension MIDIFileTrackEvent {
     }
 }
 
-extension MIDIFileTrackEvent.XMFPatchTypePrefix: Equatable { }
+extension MIDIFileEvent.XMFPatchTypePrefix: Equatable { }
 
-extension MIDIFileTrackEvent.XMFPatchTypePrefix: Hashable { }
+extension MIDIFileEvent.XMFPatchTypePrefix: Hashable { }
 
-extension MIDIFileTrackEvent.XMFPatchTypePrefix: Sendable { }
+extension MIDIFileEvent.XMFPatchTypePrefix: Sendable { }
 
 // MARK: - Static Constructors
 
-extension MIDIFileTrackEvent {
+extension MIDIFileEvent {
     /// XMF Patch Type Prefix event.
     ///
     /// > Standard MIDI File 1.0 Spec:
@@ -112,9 +112,9 @@ extension MIDI1File.TrackChunk.Event {
     /// > See [RP-032](https://www.midi.org/specifications/file-format-specifications/standard-midi-files/xmf-patch-type-prefix-meta-event).
     public static func xmfPatchTypePrefix(
         delta: DeltaTime = .none,
-        patchSet: MIDIFileTrackEvent.XMFPatchTypePrefix.PatchSet
+        patchSet: MIDIFileEvent.XMFPatchTypePrefix.PatchSet
     ) -> Self {
-        let event: MIDIFileTrackEvent = .xmfPatchTypePrefix(
+        let event: MIDIFileEvent = .xmfPatchTypePrefix(
             patchSet: patchSet
         )
         return Self(delta: delta, event: event)
@@ -123,24 +123,24 @@ extension MIDI1File.TrackChunk.Event {
 
 // MARK: - Static
 
-extension MIDIFileTrackEvent.XMFPatchTypePrefix {
+extension MIDIFileEvent.XMFPatchTypePrefix {
     /// The prefix bytes that define the start of the event.
     public static var prefixBytes: [UInt8] { [0xFF, 0x60] }
 }
 
 // MARK: - Encoding
 
-extension MIDIFileTrackEvent.XMFPatchTypePrefix: MIDIFileTrackEventPayload {
-    public static var smfEventType: MIDIFileTrackEventType { .xmfPatchTypePrefix }
+extension MIDIFileEvent.XMFPatchTypePrefix: MIDIFileEventPayload {
+    public static var smfEventType: MIDIFileEventType { .xmfPatchTypePrefix }
     
-    public func asMIDIFileTrackEvent() -> MIDIFileTrackEvent {
+    public func asMIDIFileEvent() -> MIDIFileEvent {
         .xmfPatchTypePrefix(self)
     }
     
     public static func decode(
         midi1SMFRawBytesStream stream: some DataProtocol,
         runningStatus: UInt8?
-    ) -> MIDIFileTrackEventDecodeResult<Self> {
+    ) -> MIDIFileEventDecodeResult<Self> {
         // Step 1: Check required byte count
         let requiredStreamByteCount: Int
         do throws(MIDIFileDecodeError) {
@@ -228,7 +228,7 @@ extension MIDIFileTrackEvent.XMFPatchTypePrefix: MIDIFileTrackEventPayload {
     }
 }
 
-extension MIDIFileTrackEvent.XMFPatchTypePrefix {
+extension MIDIFileEvent.XMFPatchTypePrefix {
     /// XMF Patch Set.
     public enum PatchSet: UInt8 {
         /// General MIDI 1.
@@ -268,13 +268,13 @@ extension MIDIFileTrackEvent.XMFPatchTypePrefix {
     }
 }
 
-extension MIDIFileTrackEvent.XMFPatchTypePrefix.PatchSet: Equatable { }
+extension MIDIFileEvent.XMFPatchTypePrefix.PatchSet: Equatable { }
 
-extension MIDIFileTrackEvent.XMFPatchTypePrefix.PatchSet: Hashable { }
+extension MIDIFileEvent.XMFPatchTypePrefix.PatchSet: Hashable { }
 
-extension MIDIFileTrackEvent.XMFPatchTypePrefix.PatchSet: CaseIterable { }
+extension MIDIFileEvent.XMFPatchTypePrefix.PatchSet: CaseIterable { }
 
-extension MIDIFileTrackEvent.XMFPatchTypePrefix.PatchSet: CustomStringConvertible {
+extension MIDIFileEvent.XMFPatchTypePrefix.PatchSet: CustomStringConvertible {
     public var description: String {
         switch self {
         case .generalMIDI1: "General MIDI 1"
@@ -284,4 +284,4 @@ extension MIDIFileTrackEvent.XMFPatchTypePrefix.PatchSet: CustomStringConvertibl
     }
 }
 
-extension MIDIFileTrackEvent.XMFPatchTypePrefix.PatchSet: Sendable { }
+extension MIDIFileEvent.XMFPatchTypePrefix.PatchSet: Sendable { }

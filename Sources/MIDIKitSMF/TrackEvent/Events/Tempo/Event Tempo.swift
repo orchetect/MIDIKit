@@ -12,12 +12,12 @@ internal import SwiftDataParsing
 
 // ------------------------------------
 // NOTE: When revising these documentation blocks, they are duplicated in:
-//   - MIDIFileTrackEvent enum case (`case keySignature(_:)`, etc.)
-//   - MIDIFileTrackEvent concrete payload structs (`KeySignature`, etc.)
-//   - DocC documentation for each MIDIFileTrackEvent type
+//   - MIDIFileEvent enum case (`case keySignature(_:)`, etc.)
+//   - MIDIFileEvent concrete payload structs (`KeySignature`, etc.)
+//   - DocC documentation for each MIDIFileEvent type
 // ------------------------------------
 
-extension MIDIFileTrackEvent {
+extension MIDIFileEvent {
     /// Tempo event.
     /// For a format 1 MIDI file, Tempo events should only occur within the first `MTrk` chunk.
     /// If there are no tempo events in a MIDI file, 120 bpm is assumed.
@@ -29,7 +29,7 @@ extension MIDIFileTrackEvent {
     /// > Another way of putting "microseconds per quarter-note" is "24ths of a microsecond per MIDI clock".
     /// > Representing tempos as time per beat instead of beat per time allows absolutely exact long-term
     /// > synchronization with a time-based sync protocol such as SMPTE timecode or MIDI timecode.
-    public protocol Tempo: Equatable, Hashable, Sendable where Self: MIDIFileTrackEventPayload {
+    public protocol Tempo: Equatable, Hashable, Sendable where Self: MIDIFileEventPayload {
         /// MIDI file timebase associated with the tempo.
         /// Tempo events have different interpretations depending on the timebase, so `Tempo` must be specialized.
         associatedtype Timebase: MIDIFileTimebase
@@ -60,22 +60,22 @@ extension MIDIFileTrackEvent {
 
 // MARK: - Static
 
-extension MIDIFileTrackEvent.Tempo {
+extension MIDIFileEvent.Tempo {
     /// The prefix bytes that define the start of the event.
     public static var prefixBytes: [UInt8] { [0xFF, 0x51, 0x03] }
 }
 
-// MARK: - MIDIFileTrackEventPayload Default Implementation
+// MARK: - MIDIFileEventPayload Default Implementation
 
-extension MIDIFileTrackEvent.Tempo /* : MIDIFileTrackEventPayload */ {
-    public static var smfEventType: MIDIFileTrackEventType { .tempo }
+extension MIDIFileEvent.Tempo /* : MIDIFileEventPayload */ {
+    public static var smfEventType: MIDIFileEventType { .tempo }
     
     // `var wrapped` needs to be implemented by the concrete type.
     
     public static func decode(
         midi1SMFRawBytesStream stream: some DataProtocol,
         runningStatus: UInt8?
-    ) -> MIDIFileTrackEventDecodeResult<Self> {
+    ) -> MIDIFileEventDecodeResult<Self> {
         // Step 1: Check required byte count
         let requiredStreamByteCount: Int
         do throws(MIDIFileDecodeError) {

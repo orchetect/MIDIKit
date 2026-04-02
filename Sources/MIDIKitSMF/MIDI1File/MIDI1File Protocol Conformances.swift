@@ -26,17 +26,17 @@ extension MIDI1File: Identifiable {
 
 extension MIDI1File: CustomStringConvertible {
     public var description: String {
-        description(maxTrackEventCount: 10) // by default, limit number of events
+        description(maxEventCount: 10) // by default, limit number of events
     }
     
     /// Generate a description of the track, optionally limiting the number of events from each track in the output.
-    public func description(maxTrackEventCount: Int?) -> String {
+    public func description(maxEventCount: Int?) -> String {
         descriptionBuilder(
             formatDesc: { $0.description },
             timebaseDesc: { $0.description },
             chunkDesc: {
                 switch $0 {
-                case let .track(track): track.description(maxEventCount: maxTrackEventCount)
+                case let .track(track): track.description(maxEventCount: maxEventCount)
                 case let .undefined(chunk): chunk.description
                 }
             }
@@ -46,17 +46,17 @@ extension MIDI1File: CustomStringConvertible {
 
 extension MIDI1File: CustomDebugStringConvertible {
     public var debugDescription: String {
-        debugDescription(maxTrackEventCount: 10) // by default, limit number of events
+        debugDescription(maxEventCount: 10) // by default, limit number of events
     }
     
     /// Generate a debug description of the track, optionally limiting the number of events from each track in the output.
-    public func debugDescription(maxTrackEventCount: Int?) -> String {
+    public func debugDescription(maxEventCount: Int?) -> String {
         descriptionBuilder(
             formatDesc: { $0.description },
             timebaseDesc: { $0.description },
             chunkDesc: {
                 switch $0 {
-                case let .track(track): track.debugDescription(maxEventCount: maxTrackEventCount)
+                case let .track(track): track.debugDescription(maxEventCount: maxEventCount)
                 case let .undefined(chunk): chunk.debugDescription
                 }
             }

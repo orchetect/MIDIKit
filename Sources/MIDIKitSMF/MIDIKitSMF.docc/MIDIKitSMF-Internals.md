@@ -15,12 +15,12 @@
 - ``AnyMIDI1FileHeaderChunk``
 - ``AnyMIDIFileTimebase``
 - ``AnyMIDIFileTrackDeltaTime``
-- ``AnyMIDIFileTrackEventDecodeResult``
-- ``MIDIFileTrackEvent/AnyTempo``
+- ``AnyMIDIFileEventDecodeResult``
+- ``MIDIFileEvent/AnyTempo``
 
 ### MIDI File Decoding
 
-- ``MIDIFileTrackEventDecodeResult``
+- ``MIDIFileEventDecodeResult``
 
 ### Protocols
 
@@ -28,7 +28,7 @@
 - ``MIDI1FileChunkIdentifier``
 - ``MIDIFileTimebase``
 - ``MIDIFileTrackDeltaTime``
-- ``MIDIFileTrackEventPayload``
+- ``MIDIFileEventPayload``
 
 ### Timecode Related
 

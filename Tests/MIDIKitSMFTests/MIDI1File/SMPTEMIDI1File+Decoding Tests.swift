@@ -73,7 +73,7 @@ import Testing
 }
 
 @Suite struct SMPTEMIDI1File_DeltaTime_Tests {
-    typealias Offset = MIDIFileTrackEvent.SMPTEOffset
+    typealias Offset = MIDIFileEvent.SMPTEOffset
     typealias Delta = SMPTEMIDI1File.TrackChunk.DeltaTime
     
     @Test

@@ -12,12 +12,12 @@ internal import SwiftDataParsing
 
 // ------------------------------------
 // NOTE: When revising these documentation blocks, they are duplicated in:
-//   - MIDIFileTrackEvent enum case (`case keySignature(_:)`, etc.)
-//   - MIDIFileTrackEvent concrete payload structs (`KeySignature`, etc.)
-//   - DocC documentation for each MIDIFileTrackEvent type
+//   - MIDIFileEvent enum case (`case keySignature(_:)`, etc.)
+//   - MIDIFileEvent concrete payload structs (`KeySignature`, etc.)
+//   - DocC documentation for each MIDIFileEvent type
 // ------------------------------------
 
-extension MIDIFileTrackEvent {
+extension MIDIFileEvent {
     /// Unrecognized Meta Event
     ///
     /// > Note: This is not designed to be instanced, but is instead a placeholder for unrecognized
@@ -60,15 +60,15 @@ extension MIDIFileTrackEvent {
     }
 }
 
-extension MIDIFileTrackEvent.UnrecognizedMeta: Equatable { }
+extension MIDIFileEvent.UnrecognizedMeta: Equatable { }
 
-extension MIDIFileTrackEvent.UnrecognizedMeta: Hashable { }
+extension MIDIFileEvent.UnrecognizedMeta: Hashable { }
 
-extension MIDIFileTrackEvent.UnrecognizedMeta: Sendable { }
+extension MIDIFileEvent.UnrecognizedMeta: Sendable { }
 
 // MARK: - Static Constructors
 
-extension MIDIFileTrackEvent {
+extension MIDIFileEvent {
     /// Unrecognized Meta Event
     ///
     /// > Note: This is not designed to be instanced, but is instead a placeholder for unrecognized
@@ -132,7 +132,7 @@ extension MIDI1File.TrackChunk.Event {
         metaType: UInt8,
         data: [UInt8]
     ) -> Self {
-        let event: MIDIFileTrackEvent = .unrecognizedMeta(
+        let event: MIDIFileEvent = .unrecognizedMeta(
             metaType: metaType,
             data: data
         )
@@ -142,17 +142,17 @@ extension MIDI1File.TrackChunk.Event {
 
 // MARK: - Encoding
 
-extension MIDIFileTrackEvent.UnrecognizedMeta: MIDIFileTrackEventPayload {
-    public static var smfEventType: MIDIFileTrackEventType { .unrecognizedMeta }
+extension MIDIFileEvent.UnrecognizedMeta: MIDIFileEventPayload {
+    public static var smfEventType: MIDIFileEventType { .unrecognizedMeta }
     
-    public func asMIDIFileTrackEvent() -> MIDIFileTrackEvent {
+    public func asMIDIFileEvent() -> MIDIFileEvent {
         .unrecognizedMeta(self)
     }
     
     public static func decode(
         midi1SMFRawBytesStream stream: some DataProtocol,
         runningStatus: UInt8?
-    ) -> MIDIFileTrackEventDecodeResult<Self> {
+    ) -> MIDIFileEventDecodeResult<Self> {
         // Step 1: Check required byte count
         do throws(MIDIFileDecodeError) {
             _ = try requiredStreamByteLength(

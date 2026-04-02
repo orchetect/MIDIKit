@@ -13,12 +13,12 @@ internal import SwiftDataParsing
 
 // ------------------------------------
 // NOTE: When revising these documentation blocks, they are duplicated in:
-//   - MIDIFileTrackEvent enum case (`case keySignature(_:)`, etc.)
-//   - MIDIFileTrackEvent concrete payload structs (`KeySignature`, etc.)
-//   - DocC documentation for each MIDIFileTrackEvent type
+//   - MIDIFileEvent enum case (`case keySignature(_:)`, etc.)
+//   - MIDIFileEvent concrete payload structs (`KeySignature`, etc.)
+//   - DocC documentation for each MIDIFileEvent type
 // ------------------------------------
 
-extension MIDIFileTrackEvent {
+extension MIDIFileEvent {
     /// Specify the SMPTE time at which the track is to start.
     /// This optional event, if present, should occur at the start of a track,
     /// at `time == 0`, and prior to any MIDI events.
@@ -131,15 +131,15 @@ extension MIDIFileTrackEvent {
     }
 }
 
-extension MIDIFileTrackEvent.SMPTEOffset: Equatable { }
+extension MIDIFileEvent.SMPTEOffset: Equatable { }
 
-extension MIDIFileTrackEvent.SMPTEOffset: Hashable { }
+extension MIDIFileEvent.SMPTEOffset: Hashable { }
 
-extension MIDIFileTrackEvent.SMPTEOffset: Sendable { }
+extension MIDIFileEvent.SMPTEOffset: Sendable { }
 
 // MARK: - Init
 
-extension MIDIFileTrackEvent.SMPTEOffset {
+extension MIDIFileEvent.SMPTEOffset {
     /// Specify the SMPTE time at which the track is to start.
     /// This optional event, if present, should occur at the start of a track,
     /// at `time == 0`, and prior to any MIDI events.
@@ -166,7 +166,7 @@ extension MIDIFileTrackEvent.SMPTEOffset {
 
 // MARK: - Static Constructors
 
-extension MIDIFileTrackEvent {
+extension MIDIFileEvent {
     /// Specify the SMPTE time at which the track is to start.
     /// This optional event, if present, should occur at the start of a track,
     /// at `time == 0`, and prior to any MIDI events.
@@ -250,7 +250,7 @@ extension MIDI1File.TrackChunk.Event {
         subFr: UInt8 = 0,
         rate: MIDI1FileFrameRate = .fps30
     ) -> Self {
-        let event: MIDIFileTrackEvent = .smpteOffset(
+        let event: MIDIFileEvent = .smpteOffset(
             hr: hr,
             min: min,
             sec: sec,
@@ -275,14 +275,14 @@ extension MIDI1File.TrackChunk.Event {
         delta: DeltaTime = .none,
         scaling timecode: Timecode
     ) -> Self? {
-        guard let event: MIDIFileTrackEvent = .smpteOffset(scaling: timecode) else { return nil }
+        guard let event: MIDIFileEvent = .smpteOffset(scaling: timecode) else { return nil }
         return Self(delta: delta, event: event)
     }
 }
 
 // MARK: - Properties
 
-extension MIDIFileTrackEvent.SMPTEOffset {
+extension MIDIFileEvent.SMPTEOffset {
     /// Returns the raw SMPTE offset timecode components.
     public var components: Timecode.Components {
         Timecode.Components(
@@ -307,24 +307,24 @@ extension MIDIFileTrackEvent.SMPTEOffset {
 
 // MARK: - Static
 
-extension MIDIFileTrackEvent.SMPTEOffset {
+extension MIDIFileEvent.SMPTEOffset {
     /// The prefix bytes that define the start of the event.
     public static var prefixBytes: [UInt8] { [0xFF, 0x54, 0x05] }
 }
 
 // MARK: - Encoding
 
-extension MIDIFileTrackEvent.SMPTEOffset: MIDIFileTrackEventPayload {
-    public static var smfEventType: MIDIFileTrackEventType { .smpteOffset }
+extension MIDIFileEvent.SMPTEOffset: MIDIFileEventPayload {
+    public static var smfEventType: MIDIFileEventType { .smpteOffset }
     
-    public func asMIDIFileTrackEvent() -> MIDIFileTrackEvent {
+    public func asMIDIFileEvent() -> MIDIFileEvent {
         .smpteOffset(self)
     }
     
     public static func decode(
         midi1SMFRawBytesStream stream: some DataProtocol,
         runningStatus: UInt8?
-    ) -> MIDIFileTrackEventDecodeResult<Self> {
+    ) -> MIDIFileEventDecodeResult<Self> {
         // Step 1: Check required byte count
         let requiredStreamByteCount: Int
         do throws(MIDIFileDecodeError) {

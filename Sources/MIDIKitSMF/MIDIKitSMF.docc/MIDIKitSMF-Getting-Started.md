@@ -173,7 +173,7 @@ for (beat, event) in midiFile.tracks[0].eventsAtBeatPositions(using: midiFile.ti
 Add an event to first track:
 
 ```swift
-let event: MIDIFileTrackEvent = .noteOn(note: 60, velocity: .midi1(127), channel: 0)
+let event: MIDIFileEvent = .noteOn(note: 60, velocity: .midi1(127), channel: 0)
 midiFile.tracks[0].events.append(.init(delta: .note8th, event: event))
 ```
 

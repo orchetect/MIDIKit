@@ -127,9 +127,9 @@ import Testing
         typealias Delta = SMPTEMIDI1File.TrackChunk.DeltaTime
         let timebase: Delta.Timebase = .smpte(frameRate: .fps25, ticksPerFrame: 20)
         
-        #expect(Delta.offset(MIDIFileTrackEvent.SMPTEOffset(hr: 00, min: 00, sec: 00, fr: 00, rate: .fps25)).ticks(using: timebase) == 0)
-        #expect(Delta.offset(MIDIFileTrackEvent.SMPTEOffset(hr: 00, min: 01, sec: 20, fr: 10, rate: .fps25)).ticks(using: timebase) == 40_200)
-        #expect(Delta.offset(MIDIFileTrackEvent.SMPTEOffset(hr: 01, min: 01, sec: 20, fr: 10, rate: .fps25)).ticks(using: timebase) == 1_840_200)
+        #expect(Delta.offset(MIDIFileEvent.SMPTEOffset(hr: 00, min: 00, sec: 00, fr: 00, rate: .fps25)).ticks(using: timebase) == 0)
+        #expect(Delta.offset(MIDIFileEvent.SMPTEOffset(hr: 00, min: 01, sec: 20, fr: 10, rate: .fps25)).ticks(using: timebase) == 40_200)
+        #expect(Delta.offset(MIDIFileEvent.SMPTEOffset(hr: 01, min: 01, sec: 20, fr: 10, rate: .fps25)).ticks(using: timebase) == 1_840_200)
     }
     
     @Test
@@ -137,9 +137,9 @@ import Testing
         typealias Delta = SMPTEMIDI1File.TrackChunk.DeltaTime
         let timebase: Delta.Timebase = .smpte(frameRate: .fps25, ticksPerFrame: 40)
         
-        #expect(Delta.offset(MIDIFileTrackEvent.SMPTEOffset(hr: 00, min: 00, sec: 00, fr: 00, rate: .fps25)).ticks(using: timebase) == 0)
-        #expect(Delta.offset(MIDIFileTrackEvent.SMPTEOffset(hr: 00, min: 01, sec: 20, fr: 10, rate: .fps25)).ticks(using: timebase) == 80_400)
-        #expect(Delta.offset(MIDIFileTrackEvent.SMPTEOffset(hr: 01, min: 01, sec: 20, fr: 10, rate: .fps25)).ticks(using: timebase) == 3_680_400)
+        #expect(Delta.offset(MIDIFileEvent.SMPTEOffset(hr: 00, min: 00, sec: 00, fr: 00, rate: .fps25)).ticks(using: timebase) == 0)
+        #expect(Delta.offset(MIDIFileEvent.SMPTEOffset(hr: 00, min: 01, sec: 20, fr: 10, rate: .fps25)).ticks(using: timebase) == 80_400)
+        #expect(Delta.offset(MIDIFileEvent.SMPTEOffset(hr: 01, min: 01, sec: 20, fr: 10, rate: .fps25)).ticks(using: timebase) == 3_680_400)
     }
     
     @Test

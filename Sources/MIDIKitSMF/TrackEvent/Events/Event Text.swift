@@ -12,12 +12,12 @@ internal import SwiftDataParsing
 
 // ------------------------------------
 // NOTE: When revising these documentation blocks, they are duplicated in:
-//   - MIDIFileTrackEvent enum case (`case keySignature(_:)`, etc.)
-//   - MIDIFileTrackEvent concrete payload structs (`KeySignature`, etc.)
-//   - DocC documentation for each MIDIFileTrackEvent type
+//   - MIDIFileEvent enum case (`case keySignature(_:)`, etc.)
+//   - MIDIFileEvent concrete payload structs (`KeySignature`, etc.)
+//   - DocC documentation for each MIDIFileEvent type
 // ------------------------------------
 
-extension MIDIFileTrackEvent {
+extension MIDIFileEvent {
     /// Text event.
     /// Includes copyright, marker, cue point, track/sequence name, instrument name, generic text,
     /// program name, device name, or lyric.
@@ -100,15 +100,15 @@ extension MIDIFileTrackEvent {
     }
 }
 
-extension MIDIFileTrackEvent.Text: Equatable { }
+extension MIDIFileEvent.Text: Equatable { }
 
-extension MIDIFileTrackEvent.Text: Hashable { }
+extension MIDIFileEvent.Text: Hashable { }
 
-extension MIDIFileTrackEvent.Text: Sendable { }
+extension MIDIFileEvent.Text: Sendable { }
 
 // MARK: - Static Constructors
 
-extension MIDIFileTrackEvent {
+extension MIDIFileEvent {
     /// Text event.
     /// Includes copyright, marker, cue point, track/sequence name, instrument name, generic text,
     /// program name, device name, or lyric.
@@ -137,10 +137,10 @@ extension MIDI1File.TrackChunk.Event {
     /// will be converted to ASCII lossily before encoding into the MIDI file.
     public static func text(
         delta: DeltaTime = .none,
-        type: MIDIFileTrackEvent.Text.EventType,
+        type: MIDIFileEvent.Text.EventType,
         string: String
     ) -> Self {
-        let event: MIDIFileTrackEvent = .text(
+        let event: MIDIFileEvent = .text(
             type: type,
             string: string
         )
@@ -150,17 +150,17 @@ extension MIDI1File.TrackChunk.Event {
 
 // MARK: - Encoding
 
-extension MIDIFileTrackEvent.Text: MIDIFileTrackEventPayload {
-    public static var smfEventType: MIDIFileTrackEventType { .text }
+extension MIDIFileEvent.Text: MIDIFileEventPayload {
+    public static var smfEventType: MIDIFileEventType { .text }
     
-    public func asMIDIFileTrackEvent() -> MIDIFileTrackEvent {
+    public func asMIDIFileEvent() -> MIDIFileEvent {
         .text(self)
     }
     
     public static func decode(
         midi1SMFRawBytesStream stream: some DataProtocol,
         runningStatus: UInt8?
-    ) -> MIDIFileTrackEventDecodeResult<Self> {
+    ) -> MIDIFileEventDecodeResult<Self> {
         // Step 1: Check required byte count
         do throws(MIDIFileDecodeError) {
             _ = try requiredStreamByteLength(
@@ -241,7 +241,7 @@ extension MIDIFileTrackEvent.Text: MIDIFileTrackEventPayload {
 
 // MARK: - EventType
 
-extension MIDIFileTrackEvent.Text {
+extension MIDIFileEvent.Text {
     /// Specialized text-based MIDI file track events.
     public enum EventType: String {
         // MARK: Track Events - First track
@@ -294,17 +294,17 @@ extension MIDIFileTrackEvent.Text {
     }
 }
 
-extension MIDIFileTrackEvent.Text.EventType: Equatable { }
+extension MIDIFileEvent.Text.EventType: Equatable { }
 
-extension MIDIFileTrackEvent.Text.EventType: Hashable { }
+extension MIDIFileEvent.Text.EventType: Hashable { }
 
-extension MIDIFileTrackEvent.Text.EventType: CaseIterable { }
+extension MIDIFileEvent.Text.EventType: CaseIterable { }
 
-extension MIDIFileTrackEvent.Text.EventType: Sendable { }
+extension MIDIFileEvent.Text.EventType: Sendable { }
 
 // MARK: - EventType init
 
-extension MIDIFileTrackEvent.Text.EventType {
+extension MIDIFileEvent.Text.EventType {
     public init?(midi1SMFRawBytes rawBytes: some DataProtocol) {
         guard let match = Self.allCases.first(where: {
             $0.prefixBytes.elementsEqual(rawBytes)
@@ -315,7 +315,7 @@ extension MIDIFileTrackEvent.Text.EventType {
 
 // MARK: - TextEventType Static
 
-extension MIDIFileTrackEvent.Text.EventType {
+extension MIDIFileEvent.Text.EventType {
     /// The prefix bytes that define the start of the event.
     public var prefixBytes: [UInt8] {
         switch self {

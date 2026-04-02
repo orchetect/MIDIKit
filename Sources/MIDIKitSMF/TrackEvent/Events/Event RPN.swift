@@ -11,12 +11,12 @@ import MIDIKitCore
 
 // ------------------------------------
 // NOTE: When revising these documentation blocks, they are duplicated in:
-//   - MIDIFileTrackEvent enum case (`case keySignature(_:)`, etc.)
-//   - MIDIFileTrackEvent concrete payload structs (`KeySignature`, etc.)
-//   - DocC documentation for each MIDIFileTrackEvent type
+//   - MIDIFileEvent enum case (`case keySignature(_:)`, etc.)
+//   - MIDIFileEvent concrete payload structs (`KeySignature`, etc.)
+//   - DocC documentation for each MIDIFileEvent type
 // ------------------------------------
 
-extension MIDIFileTrackEvent {
+extension MIDIFileEvent {
     /// Channel Voice Message: RPN (Registered Parameter Number),
     /// also referred to as Registered Controller in MIDI 2.0.
     public typealias RPN = MIDIEvent.RPN
@@ -24,7 +24,7 @@ extension MIDIFileTrackEvent {
 
 // MARK: - Static Constructors
 
-extension MIDIFileTrackEvent {
+extension MIDIFileEvent {
     /// Channel Voice Message: RPN (Registered Parameter Number),
     /// also referred to as Registered Controller in MIDI 2.0.
     public static func rpn(
@@ -47,7 +47,7 @@ extension MIDI1File.TrackChunk.Event {
         change: MIDI2ParameterNumberChange = .absolute,
         channel: UInt4 = 0
     ) -> Self {
-        let event: MIDIFileTrackEvent = .rpn(
+        let event: MIDIFileEvent = .rpn(
             parameter: parameter,
             change: change,
             channel: channel
@@ -58,17 +58,17 @@ extension MIDI1File.TrackChunk.Event {
 
 // MARK: - Encoding
 
-extension MIDIEvent.RPN: MIDIFileTrackEventPayload {
-    public static var smfEventType: MIDIFileTrackEventType { .rpn }
+extension MIDIEvent.RPN: MIDIFileEventPayload {
+    public static var smfEventType: MIDIFileEventType { .rpn }
     
-    public func asMIDIFileTrackEvent() -> MIDIFileTrackEvent {
+    public func asMIDIFileEvent() -> MIDIFileEvent {
         .rpn(self)
     }
     
     public static func decode(
         midi1SMFRawBytesStream stream: some DataProtocol,
         runningStatus: UInt8?
-    ) -> MIDIFileTrackEventDecodeResult<Self> {
+    ) -> MIDIFileEventDecodeResult<Self> {
         // stream parsing is not supported since it involves multiple MIDI file events with delta times
         return .unrecoverableError(error: .notImplemented)
     }

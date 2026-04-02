@@ -37,9 +37,9 @@ extension MIDI1File.AnyChunk: CustomStringConvertible {
     }
     
     /// Generate a description of the chunk, optionally limiting the number of track events in the output for track chunks.
-    public func description(maxTrackEventCount: Int?) -> String {
+    public func description(maxEventCount: Int?) -> String {
         switch self {
-        case let .track(track): track.description(maxEventCount: maxTrackEventCount)
+        case let .track(track): track.description(maxEventCount: maxEventCount)
         case let .undefined(chunk): chunk.description
         }
     }
@@ -54,9 +54,9 @@ extension MIDI1File.AnyChunk: CustomDebugStringConvertible {
     }
     
     /// Generate a debug description of the chunk, optionally limiting the number of track events in the output for track chunks.
-    public func debugDescription(maxTrackEventCount: Int?) -> String {
+    public func debugDescription(maxEventCount: Int?) -> String {
         switch self {
-        case let .track(track): track.debugDescription(maxEventCount: maxTrackEventCount)
+        case let .track(track): track.debugDescription(maxEventCount: maxEventCount)
         case let .undefined(chunk): chunk.debugDescription
         }
     }
