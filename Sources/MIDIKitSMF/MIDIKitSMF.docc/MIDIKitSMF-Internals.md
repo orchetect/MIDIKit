@@ -4,15 +4,15 @@
 
 ### Chunk Identifiers
 
-- ``AnyMIDIFileChunkIdentifier``
-- ``HeaderMIDIFileChunkIdentifier``
-- ``TrackMIDIFileChunkIdentifier``
-- ``UndefinedMIDIFileChunkIdentifier``
+- ``AnyMIDI1FileChunkIdentifier``
+- ``HeaderMIDI1FileChunkIdentifier``
+- ``TrackMIDI1FileChunkIdentifier``
+- ``UndefinedMIDI1FileChunkIdentifier``
 
 ### Type-Erasure
 
-- ``AnyMIDIFile``
-- ``AnyMIDIFileHeaderChunk``
+- ``AnyMIDI1File``
+- ``AnyMIDI1FileHeaderChunk``
 - ``AnyMIDIFileTimebase``
 - ``AnyMIDIFileTrackDeltaTime``
 - ``AnyMIDIFileTrackEventDecodeResult``
@@ -24,14 +24,14 @@
 
 ### Protocols
 
-- ``MIDIFileChunk``
-- ``MIDIFileChunkIdentifier``
+- ``MIDI1FileChunk``
+- ``MIDI1FileChunkIdentifier``
 - ``MIDIFileTimebase``
 - ``MIDIFileTrackDeltaTime``
 - ``MIDIFileTrackEventPayload``
 
 ### Timecode Related
 
-- ``MIDIFileFrameRate``
+- ``MIDI1FileFrameRate``
 - ``SwiftTimecodeCore/Timecode/scaledToMIDIFileSMPTEFrameRate``
 - ``SwiftTimecodeCore/TimecodeFrameRate/midiFileSMPTEFrameRate``

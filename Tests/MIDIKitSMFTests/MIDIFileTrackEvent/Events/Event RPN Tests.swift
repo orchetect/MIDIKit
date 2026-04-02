@@ -36,9 +36,9 @@ import Testing
         // (not implemented, so we need to test parsing using a track instead)
         // let event = try MIDIFileTrackEvent.RPN(midi1SMFRawBytes: bytes)
         
-        let timebase: MusicalMIDIFile.Timebase = .musical(ticksPerQuarterNote: 960)
+        let timebase: MusicalMIDI1File.Timebase = .musical(ticksPerQuarterNote: 960)
         
-        let parsedTrackA = try #require(try MusicalMIDIFile.TrackChunk(
+        let parsedTrackA = try #require(try MusicalMIDI1File.TrackChunk(
             midi1SMFRawBytesStream: bytes,
             timebase: timebase,
             options: .init(bundleRPNAndNRPNEvents: true)
@@ -74,9 +74,9 @@ import Testing
         // (not implemented, so we need to test parsing using a track instead)
         // let event = try MIDIFileTrackEvent.RPN(midi1SMFRawBytes: bytes)
         
-        let timebase: MusicalMIDIFile.Timebase = .musical(ticksPerQuarterNote: 960)
+        let timebase: MusicalMIDI1File.Timebase = .musical(ticksPerQuarterNote: 960)
         
-        let parsedTrackA = try #require(try MusicalMIDIFile.TrackChunk(
+        let parsedTrackA = try #require(try MusicalMIDI1File.TrackChunk(
             midi1SMFRawBytesStream: bytes,
             timebase: timebase,
             options: .init(bundleRPNAndNRPNEvents: true)
@@ -134,9 +134,9 @@ import Testing
         // (not implemented, so we need to test parsing using a track instead)
         // let event = try MIDIFileTrackEvent.RPN(midi1SMFRawBytes: bytes)
         
-        let timebase: MusicalMIDIFile.Timebase = .musical(ticksPerQuarterNote: 960)
+        let timebase: MusicalMIDI1File.Timebase = .musical(ticksPerQuarterNote: 960)
         
-        let parsedTrackA = try #require(try MusicalMIDIFile.TrackChunk(
+        let parsedTrackA = try #require(try MusicalMIDI1File.TrackChunk(
             midi1SMFRawBytesStream: bytes,
             timebase: timebase,
             options: .init(bundleRPNAndNRPNEvents: true)
@@ -173,9 +173,9 @@ import Testing
         // (not implemented, so we need to test parsing using a track instead)
         // let event = try MIDIFileTrackEvent.RPN(midi1SMFRawBytes: bytes)
         
-        let timebase: MusicalMIDIFile.Timebase = .musical(ticksPerQuarterNote: 960)
+        let timebase: MusicalMIDI1File.Timebase = .musical(ticksPerQuarterNote: 960)
         
-        let parsedTrackA = try #require(try MusicalMIDIFile.TrackChunk(
+        let parsedTrackA = try #require(try MusicalMIDI1File.TrackChunk(
             midi1SMFRawBytesStream: bytes,
             timebase: timebase,
             options: .init(bundleRPNAndNRPNEvents: true)
@@ -243,10 +243,10 @@ import Testing
         
         // parse raw bytes
         
-        let timebase: MusicalMIDIFile.Timebase = .musical(ticksPerQuarterNote: 960)
+        let timebase: MusicalMIDI1File.Timebase = .musical(ticksPerQuarterNote: 960)
         let rpnTotalTicks: UInt32 = 0x01 + 0x02 + 0x03 + 0x04
         
-        let parsedTrackA = try #require(try MusicalMIDIFile.TrackChunk(
+        let parsedTrackA = try #require(try MusicalMIDI1File.TrackChunk(
             midi1SMFRawBytesStream: bytes,
             timebase: timebase,
             options: .init(bundleRPNAndNRPNEvents: true)
@@ -257,7 +257,7 @@ import Testing
         #expect(parsedTrackA.events[1].delta == .ticks(rpnTotalTicks))
         #expect(parsedTrackA.events[1].event.midiEvent() == .rpn(rpnEvent))
         
-        let parsedTrackB = try #require(try MusicalMIDIFile.TrackChunk(
+        let parsedTrackB = try #require(try MusicalMIDI1File.TrackChunk(
             midi1SMFRawBytes: bytes[8...], // exclude header and length
             timebase: timebase,
             options: .init(bundleRPNAndNRPNEvents: true)

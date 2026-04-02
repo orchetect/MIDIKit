@@ -44,7 +44,7 @@ package func optionalZip<C1, E1, C2, E2>(
 
 #if compiler(<6.2)
 
-// TODO: This was used in MIDIKitSMF prior to MIDIKit 0.12.0 to avoid large memory usage in the MIDIFile decode procedure, but after the decoding refactor this is not being used and may not be needed
+// TODO: This was used in MIDIKitSMF prior to MIDIKit 0.12.0 to avoid large memory usage in the MIDI1File decode procedure, but after the decoding refactor this is not being used and may not be needed
 
 // /// Backwards-compatible implementation of standard lib method for Xcode 16.
 // @available(macOS 10.0, iOS 1.0, tvOS 1.0, watchOS 1.0, *)

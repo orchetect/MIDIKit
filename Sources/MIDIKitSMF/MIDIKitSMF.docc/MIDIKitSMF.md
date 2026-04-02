@@ -22,44 +22,48 @@ Refer to MIDIKit's own package documentation for information on using MIDI I/O a
 
 - <doc:MIDIKitSMF-Getting-Started>
 
-### MIDI File
-
-- ``MIDIFile``
-- ``MusicalMIDIFile``
-- ``SMPTEMIDIFile``
-
-### MIDI File Decoding
-
-- ``MIDIFileDecodeOptions``
-- ``MIDIFileChunkDecodeOptions``
-- ``MIDIFileDecodeError``
-
-### MIDI File Encoding
-
-- ``MIDIFileEncodeError``
-
-### MIDI File Format
-
-- ``MIDIFileFormat``
-
 ### MIDI File Timebase
 
 - ``MusicalMIDIFileTimebase``
 - ``SMPTEMIDIFileTimebase``
 
-### MIDI File Chunks
-
-- ``MIDIFile/AnyChunk``
-- ``MIDIFile/TrackChunk``
-- ``MIDIFile/UndefinedChunk``
-
-### MIDI File Track Chunk
+### MIDI File Events
 
 - ``MIDIFileTrackEvent``
-- ``MIDIFileTrackEventType``
-- ``MIDIFile/TrackChunk/DeltaTime``
-- ``MusicalMIDIFileTrackDeltaTime``
-- ``SMPTEMIDIFileTrackDeltaTime``
+
+### MIDI File (SMF1)
+
+- ``MIDI1File``
+- ``MusicalMIDI1File``
+- ``SMPTEMIDI1File``
+
+### MIDI File Format (SMF1)
+
+- ``MIDI1FileFormat``
+
+### MIDI File Decoding (SMF1)
+
+- ``MIDI1FileDecodeOptions``
+- ``MIDI1FileChunkDecodeOptions``
+
+### MIDI File Chunks (SMF1)
+
+- ``MIDI1File/AnyChunk``
+- ``MIDI1File/TrackChunk``
+- ``MIDI1File/UndefinedChunk``
+
+### MIDI File Track Chunk (SMF1)
+
+- ``MIDI1FileTrackEvent``
+- ``MIDI1FileTrackEventType``
+- ``MIDI1File/TrackChunk/DeltaTime``
+- ``MusicalMIDI1FileTrackDeltaTime``
+- ``SMPTEMIDI1FileTrackDeltaTime``
+
+### Errors
+
+- ``MIDIFileDecodeError``
+- ``MIDIFileEncodeError``
 
 ### Related Types
 
