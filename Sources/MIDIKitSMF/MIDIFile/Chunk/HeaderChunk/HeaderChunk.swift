@@ -127,7 +127,7 @@ extension MIDIFile.HeaderChunk: Sendable { }
 
 extension MIDIFile.HeaderChunk {
     /// Returns the header chunk as a type-erased ``AnyMIDIFileHeaderChunk`` instance.
-    public var asAnyMIDIFileHeaderChunk: AnyMIDIFileHeaderChunk {
+    public func asAnyMIDIFileHeaderChunk() -> AnyMIDIFileHeaderChunk {
         AnyMIDIFileHeaderChunk(
             format: format,
             timebase: timebase.asAnyMIDIFileTimebase,

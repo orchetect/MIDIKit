@@ -70,8 +70,8 @@ extension AnyMIDIFile {
     /// MIDI file header chunk.
     public var header: AnyMIDIFileHeaderChunk {
         switch self {
-        case let .musical(midiFile): midiFile.header.asAnyMIDIFileHeaderChunk
-        case let .smpte(midiFile): midiFile.header.asAnyMIDIFileHeaderChunk
+        case let .musical(midiFile): midiFile.header.asAnyMIDIFileHeaderChunk()
+        case let .smpte(midiFile): midiFile.header.asAnyMIDIFileHeaderChunk()
         }
     }
     
