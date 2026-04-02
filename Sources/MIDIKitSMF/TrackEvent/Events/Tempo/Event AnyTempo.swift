@@ -99,7 +99,7 @@ extension MIDIFileEvent.AnyTempo: MIDIFileEventPayload {
 // MARK: - Properties
 
 extension MIDIFileEvent.AnyTempo {
-    /// Unwraps the enum case and returns the chunk contained within, typed as ``MIDIFileEvent.Tempo`` protocol.
+    /// Unwraps the enum case and returns the chunk contained within, typed as ``MIDIFileEvent/Tempo`` protocol.
     public var wrapped: any MIDIFileEvent.Tempo {
         switch self {
         case let .musical(tempo): tempo
