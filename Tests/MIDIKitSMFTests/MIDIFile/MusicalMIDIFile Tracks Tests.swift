@@ -125,4 +125,119 @@ import Testing
         #expect(midiFile.chunks.count == 3)
         #expect(midiFile.chunks == [.undefined(chunkA), .undefined(chunkB), .track(trackB)])
     }
+    
+    @Test
+    func initialTempo_noTracks() async throws {
+        let midiFile = MusicalMIDIFile(
+            format: .multipleTracksSynchronous,
+            timebase: .musical(ticksPerQuarterNote: 480),
+            tracks: []
+        )
+        #expect(midiFile.initialTempo == nil)
+    }
+    
+    @Test
+    func initialTempo_oneTrack_emptyTrack() async throws {
+        let track = MusicalMIDIFile.TrackChunk(events: [])
+        let midiFile = MusicalMIDIFile(
+            format: .multipleTracksSynchronous,
+            timebase: .musical(ticksPerQuarterNote: 480),
+            tracks: [track]
+        )
+        #expect(midiFile.initialTempo == nil)
+    }
+    
+    @Test
+    func initialTempo_oneTrack_eventsWithoutTempo() async throws {
+        let events: [MusicalMIDIFile.TrackChunk.Event] = [
+            .keySignature(delta: .none, key: .bMajor),
+            .timeSignature(delta: .none, numerator: 2, denominator: 2),
+            .cc(delta: .note8th, controller: 1, value: .midi1(127), channel: 0)
+        ]
+        let track = MusicalMIDIFile.TrackChunk(events: events)
+        let midiFile = MusicalMIDIFile(
+            format: .multipleTracksSynchronous,
+            timebase: .musical(ticksPerQuarterNote: 480),
+            tracks: [track]
+        )
+        #expect(midiFile.initialTempo == nil)
+    }
+    
+    @Test
+    func initialTempo_oneTrack_eventsWithTempoAtStart() async throws {
+        let events: [MusicalMIDIFile.TrackChunk.Event] = [
+            .keySignature(delta: .none, key: .bMajor),
+            .timeSignature(delta: .none, numerator: 2, denominator: 2),
+            .tempo(delta: .none, bpm: 160.0),
+            .cc(delta: .note8th, controller: 1, value: .midi1(127), channel: 0)
+        ]
+        let track = MusicalMIDIFile.TrackChunk(events: events)
+        let midiFile = MusicalMIDIFile(
+            format: .multipleTracksSynchronous,
+            timebase: .musical(ticksPerQuarterNote: 480),
+            tracks: [track]
+        )
+        #expect(midiFile.initialTempo == .init(bpm: 160.0))
+    }
+    
+    @Test
+    func initialTempo_oneTrack_eventsWithTempoAfterStart() async throws {
+        let events: [MusicalMIDIFile.TrackChunk.Event] = [
+            .keySignature(delta: .none, key: .bMajor),
+            .timeSignature(delta: .none, numerator: 2, denominator: 2),
+            .cc(delta: .note8th, controller: 1, value: .midi1(127), channel: 0),
+            .tempo(delta: .none, bpm: 160.0)
+        ]
+        let track = MusicalMIDIFile.TrackChunk(events: events)
+        let midiFile = MusicalMIDIFile(
+            format: .multipleTracksSynchronous,
+            timebase: .musical(ticksPerQuarterNote: 480),
+            tracks: [track]
+        )
+        #expect(midiFile.initialTempo == .init(bpm: 160.0))
+    }
+    
+    @Test
+    func initialTempo_oneTrack_eventsWithMultipleTempoEvents() async throws {
+        let events: [MusicalMIDIFile.TrackChunk.Event] = [
+            .keySignature(delta: .none, key: .bMajor),
+            .timeSignature(delta: .none, numerator: 2, denominator: 2),
+            .tempo(delta: .none, bpm: 140.0),
+            .cc(delta: .note8th, controller: 1, value: .midi1(127), channel: 0),
+            .tempo(delta: .none, bpm: 160.0)
+        ]
+        let track = MusicalMIDIFile.TrackChunk(events: events)
+        let midiFile = MusicalMIDIFile(
+            format: .multipleTracksSynchronous,
+            timebase: .musical(ticksPerQuarterNote: 480),
+            tracks: [track]
+        )
+        #expect(midiFile.initialTempo == .init(bpm: 140.0))
+    }
+    
+    @Test
+    func initialTempo_multipleTracks_eventsWithMultipleTempoEvents() async throws {
+        let track0Events: [MusicalMIDIFile.TrackChunk.Event] = [
+            .keySignature(delta: .none, key: .bMajor),
+            .timeSignature(delta: .none, numerator: 2, denominator: 2),
+            .cc(delta: .note8th, controller: 1, value: .midi1(127), channel: 0),
+        ]
+        let track0 = MusicalMIDIFile.TrackChunk(events: track0Events)
+        
+        let track1Events: [MusicalMIDIFile.TrackChunk.Event] = [
+            .keySignature(delta: .none, key: .bMajor),
+            .timeSignature(delta: .none, numerator: 2, denominator: 2),
+            .tempo(delta: .none, bpm: 140.0),
+            .cc(delta: .note8th, controller: 1, value: .midi1(127), channel: 0),
+            .tempo(delta: .none, bpm: 160.0)
+        ]
+        let track1 = MusicalMIDIFile.TrackChunk(events: track1Events)
+        
+        let midiFile = MusicalMIDIFile(
+            format: .multipleTracksSynchronous,
+            timebase: .musical(ticksPerQuarterNote: 480),
+            tracks: [track0, track1]
+        )
+        #expect(midiFile.initialTempo == .init(bpm: 140.0))
+    }
 }
