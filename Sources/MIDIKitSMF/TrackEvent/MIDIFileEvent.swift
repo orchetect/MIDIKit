@@ -6,7 +6,7 @@
 
 import MIDIKitCore
 
-/// MIDI File track event.
+/// MIDI File track (SMF1) / clip (SMF2) event.
 public enum MIDIFileEvent {
     // ------------------------------------
     // NOTE: When revising these documentation blocks, they are duplicated in:
