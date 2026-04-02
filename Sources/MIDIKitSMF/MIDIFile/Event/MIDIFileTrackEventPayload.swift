@@ -110,7 +110,7 @@ extension MIDIFileTrackEventPayload {
         runningStatus: UInt8?
     ) -> AnyMIDIFileTrackEventDecodeResult {
         let result = decode(midi1SMFRawBytesStream: stream, runningStatus: runningStatus)
-        return result.asAnyMIDIFileTrackEventDecodeResult
+        return result.asAnyMIDIFileTrackEventDecodeResult()
     }
     
     /// Required input byte length for ``init(midi1SMFRawBytes:)`` method.

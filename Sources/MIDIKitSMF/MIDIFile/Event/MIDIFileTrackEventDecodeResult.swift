@@ -64,8 +64,8 @@ extension MIDIFileTrackEventDecodeResult {
         }
     }
     
-    /// Returns the instance typed as ``AnyMIDIFileTrackEventDecodeResult``.
-    public var asAnyMIDIFileTrackEventDecodeResult: AnyMIDIFileTrackEventDecodeResult {
+    /// Returns the decode result as a type-erased ``AnyMIDIFileTrackEventDecodeResult`` instance.
+    public func asAnyMIDIFileTrackEventDecodeResult() -> AnyMIDIFileTrackEventDecodeResult {
         switch self {
         case let .event(payload: payload, byteLength: byteLength):
             .event(payload: payload, byteLength: byteLength)
