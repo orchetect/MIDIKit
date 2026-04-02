@@ -86,8 +86,8 @@ extension AnyMIDIFile {
     /// MIDI file timebase (for duration calculations).
     public var timebase: AnyMIDIFileTimebase {
         switch self {
-        case let .musical(midiFile): midiFile.timebase.asAnyMIDIFileTimebase
-        case let .smpte(midiFile): midiFile.timebase.asAnyMIDIFileTimebase
+        case let .musical(midiFile): midiFile.timebase.asAnyMIDIFileTimebase()
+        case let .smpte(midiFile): midiFile.timebase.asAnyMIDIFileTimebase()
         }
     }
 }

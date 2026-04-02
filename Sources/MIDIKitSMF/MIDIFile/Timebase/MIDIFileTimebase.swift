@@ -24,7 +24,7 @@ where DeltaTime.Timebase == Self {
     func rawData<D: MutableDataProtocol>(as dataType: D.Type) -> D
     
     /// Returns the timebase as a type-erased ``AnyMIDIFileTimebase`` instance.
-    var asAnyMIDIFileTimebase: AnyMIDIFileTimebase { get }
+    func asAnyMIDIFileTimebase() -> AnyMIDIFileTimebase
     
     /// Initialize from raw data.
     init?(data: some DataProtocol)

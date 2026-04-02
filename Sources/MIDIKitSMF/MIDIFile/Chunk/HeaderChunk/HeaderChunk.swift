@@ -130,7 +130,7 @@ extension MIDIFile.HeaderChunk {
     public func asAnyMIDIFileHeaderChunk() -> AnyMIDIFileHeaderChunk {
         AnyMIDIFileHeaderChunk(
             format: format,
-            timebase: timebase.asAnyMIDIFileTimebase,
+            timebase: timebase.asAnyMIDIFileTimebase(),
             additionalBytes: additionalBytes
         )
     }

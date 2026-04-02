@@ -155,7 +155,7 @@ extension SMPTEMIDIFileTimebase: MIDIFileTimebase {
     
     // MARK: - AnyMIDIFileTimebase
     
-    public var asAnyMIDIFileTimebase: AnyMIDIFileTimebase {
+    public func asAnyMIDIFileTimebase() -> AnyMIDIFileTimebase {
         .smpte(self)
     }
 }

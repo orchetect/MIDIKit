@@ -236,7 +236,7 @@ extension MusicalMIDIFileTimebase: MIDIFileTimebase {
     
     // MARK: - AnyMIDIFileTimebase
     
-    public var asAnyMIDIFileTimebase: AnyMIDIFileTimebase {
+    public func asAnyMIDIFileTimebase() -> AnyMIDIFileTimebase {
         .musical(self)
     }
 }
