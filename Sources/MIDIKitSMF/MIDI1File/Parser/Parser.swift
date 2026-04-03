@@ -18,13 +18,6 @@ extension MIDI1File {
                 fileData: data,
                 options: options
             )
-            
-            // print("Chunk descriptors:")
-            // print(
-            //     fileDescriptor.chunkDescriptors
-            //         .map { "\($0.typeString) @ \($0.startOffset) (\($0.bodyByteLength) body bytes)" }
-            //         .joined(separator: "\n")
-            // )
         }
     }
 }
