@@ -211,12 +211,12 @@ extension MIDIFileEvent.UnrecognizedMeta: MIDIFileEventPayload {
     public func midi1SMFRawBytes<D: MutableDataProtocol>(as dataType: D.Type) -> D {
         // FF <type> <length> <bytes>
         // type == UInt8 meta type (unrecognized)
-        
-        [0xFF, metaType] +
+
+        [0xFF, metaType]
             // length of data
-            D.encodeSMF1VariableLengthValue(data.count) +
+            + D(midi1SMFVariableLengthValue: data.count)
             // data
-            data
+            + data
     }
     
     public var smfDescription: String {

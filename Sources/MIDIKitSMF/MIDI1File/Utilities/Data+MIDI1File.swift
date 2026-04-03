@@ -10,13 +10,16 @@ import MIDIKitCore
 extension MutableDataProtocol {
     /// Utility:
     /// Returns variable length value encoded byte array.
-    static func encodeSMF1VariableLengthValue(_ number: some BinaryInteger) -> Self {
+    init(midi1SMFVariableLengthValue number: some BinaryInteger) {
         var result = Self()
         var count = 0
         
         var parseNum = number
         
-        if parseNum < 1 { return Self([0x00]) }
+        guard parseNum > 0 else {
+            self = Self([0x00])
+            return
+        }
         
         while parseNum > 0 {
             if (result.count - 1) < count {
@@ -38,15 +41,17 @@ extension MutableDataProtocol {
             count += 1 // count up for next byte
         }
         
-        return result
+        self = result
     }
-    
+}
+
+extension MutableDataProtocol {
     mutating func append(deltaTime ticks: UInt32) {
         // Variable length delta timestamp representing the number of ticks that have elapsed
         // According to the Standard MIDI File 1.0 Spec, the entire delta-time should be at most 4
         // bytes long.
         
-        append(contentsOf: Self.encodeSMF1VariableLengthValue(ticks))
+        append(contentsOf: Self(midi1SMFVariableLengthValue: ticks))
     }
 }
 

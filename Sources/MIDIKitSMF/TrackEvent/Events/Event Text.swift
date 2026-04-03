@@ -225,7 +225,7 @@ extension MIDIFileEvent.Text: MIDIFileEventPayload {
         
         return textType.prefixBytes
             // length
-            + D.encodeSMF1VariableLengthValue(stringData.count)
+            + D(midi1SMFVariableLengthValue: stringData.count)
             // text
             + stringData
     }

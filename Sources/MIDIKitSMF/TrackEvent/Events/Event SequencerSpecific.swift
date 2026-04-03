@@ -146,7 +146,7 @@ extension MIDIFileEvent.SequencerSpecific: MIDIFileEventPayload {
         
         D(Self.prefixBytes)
             // length of data
-            + D.encodeSMF1VariableLengthValue(data.count)
+            + D(midi1SMFVariableLengthValue: data.count)
             // data
             + D(data)
     }

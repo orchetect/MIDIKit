@@ -10,22 +10,22 @@ import Testing
 
 @Suite struct Data_MIDI1File_Tests {
     @Test
-    func encodeSMF1VariableLengthValue() async {
-        #expect([UInt8].encodeSMF1VariableLengthValue(0) == [0x00])
-        #expect([UInt8].encodeSMF1VariableLengthValue(1) == [0x01])
-        #expect([UInt8].encodeSMF1VariableLengthValue(64) == [0x40])
+    func midi1SMFVariableLengthValue() async {
+        #expect([UInt8](midi1SMFVariableLengthValue: 0) == [0x00])
+        #expect([UInt8](midi1SMFVariableLengthValue: 1) == [0x01])
+        #expect([UInt8](midi1SMFVariableLengthValue: 64) == [0x40])
         
-        #expect([UInt8].encodeSMF1VariableLengthValue(127) == [0x7F])
-        #expect([UInt8].encodeSMF1VariableLengthValue(128) == [0x81, 0x00])
-        #expect([UInt8].encodeSMF1VariableLengthValue(129) == [0x81, 0x01])
+        #expect([UInt8](midi1SMFVariableLengthValue: 127) == [0x7F])
+        #expect([UInt8](midi1SMFVariableLengthValue: 128) == [0x81, 0x00])
+        #expect([UInt8](midi1SMFVariableLengthValue: 129) == [0x81, 0x01])
         
-        #expect([UInt8].encodeSMF1VariableLengthValue(255) == [0x81, 0x7F])
-        #expect([UInt8].encodeSMF1VariableLengthValue(256) == [0x82, 0x00])
-        #expect([UInt8].encodeSMF1VariableLengthValue(257) == [0x82, 0x01])
+        #expect([UInt8](midi1SMFVariableLengthValue: 255) == [0x81, 0x7F])
+        #expect([UInt8](midi1SMFVariableLengthValue: 256) == [0x82, 0x00])
+        #expect([UInt8](midi1SMFVariableLengthValue: 257) == [0x82, 0x01])
         
-        #expect([UInt8].encodeSMF1VariableLengthValue(16383) == [0xFF, 0x7F])
-        #expect([UInt8].encodeSMF1VariableLengthValue(16384) == [0x81, 0x80, 0x00])
-        #expect([UInt8].encodeSMF1VariableLengthValue(16385) == [0x81, 0x80, 0x01])
+        #expect([UInt8](midi1SMFVariableLengthValue: 16383) == [0xFF, 0x7F])
+        #expect([UInt8](midi1SMFVariableLengthValue: 16384) == [0x81, 0x80, 0x00])
+        #expect([UInt8](midi1SMFVariableLengthValue: 16385) == [0x81, 0x80, 0x01])
     }
     
     @Test
