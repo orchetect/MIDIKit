@@ -1,5 +1,5 @@
 //
-//  AnyMIDI1FileHeaderChunk+Decoding.swift
+//  HeaderChunk+Decoding+AnyMIDIFileTimebase.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
@@ -9,7 +9,7 @@ import MIDIKitCore
 internal import MIDIKitInternals
 internal import SwiftDataParsing
 
-extension AnyMIDI1FileHeaderChunk {
+extension MIDI1File.HeaderChunk where Timebase == AnyMIDIFileTimebase {
     /// The original Standard MIDI File spec defines the header as 14 bytes:
     /// - MThd (4 bytes)
     /// - header length (4 bytes)
@@ -24,7 +24,7 @@ extension AnyMIDI1FileHeaderChunk {
     static var midi1FileMinimumRawBytesLength: Int { 14 }
     
     /// Init from MIDI file data stream.
-    static func decode<D: DataProtocol>(
+    static func decodeAny<D: DataProtocol>(
         midi1FileRawBytesStream stream: D,
         allowMultiTrackFormat0: Bool
     ) throws(MIDIFileDecodeError) -> (header: Self, trackCount: Int, bufferLength: Int) {
@@ -69,13 +69,13 @@ extension AnyMIDI1FileHeaderChunk {
                 malformedReason: "Not enough bytes found when attempting to read MIDI file header.",
                 try parser.read(bytes: entireHeaderLength)
             )
-            let (header, trackCount) = try initFrom(midi1FileRawBytes: headerData, allowMultiTrackFormat0: allowMultiTrackFormat0)
+            let (header, trackCount) = try decode(midi1FileRawBytes: headerData, allowMultiTrackFormat0: allowMultiTrackFormat0)
             
             return (header: header, trackCount: trackCount, bufferLength: entireHeaderLength)
         }
     }
     
-    static func initFrom<D: DataProtocol>(
+    static func decodeAny<D: DataProtocol>(
         midi1FileRawBytes: D,
         allowMultiTrackFormat0: Bool
     ) throws(MIDIFileDecodeError) -> (header: Self, trackCount: Int) {

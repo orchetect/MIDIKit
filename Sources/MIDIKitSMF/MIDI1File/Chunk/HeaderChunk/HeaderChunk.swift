@@ -117,18 +117,18 @@ extension MIDI1File {
     }
 }
 
-// MARK: - Properties
-
 extension MIDI1File.HeaderChunk: Equatable { }
 
 extension MIDI1File.HeaderChunk: Hashable { }
 
 extension MIDI1File.HeaderChunk: Sendable { }
 
+// MARK: - Properties
+
 extension MIDI1File.HeaderChunk {
-    /// Returns the header chunk as a type-erased ``AnyMIDI1FileHeaderChunk`` instance.
-    public func asAnyMIDI1FileHeaderChunk() -> AnyMIDI1FileHeaderChunk {
-        AnyMIDI1FileHeaderChunk(
+    /// Returns the header chunk as a type-erased `MIDI1File<AnyMIDIFileTimebase>.HeaderChunk` instance.
+    public func asAnyMIDI1FileHeaderChunk() -> MIDI1File<AnyMIDIFileTimebase>.HeaderChunk {
+        MIDI1File<AnyMIDIFileTimebase>.HeaderChunk(
             format: format,
             timebase: timebase.asAnyMIDIFileTimebase(),
             additionalBytes: additionalBytes

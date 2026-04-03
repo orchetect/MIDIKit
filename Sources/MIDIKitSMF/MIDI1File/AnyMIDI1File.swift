@@ -68,7 +68,7 @@ extension AnyMIDI1File: CustomDebugStringConvertible {
 
 extension AnyMIDI1File {
     /// MIDI file header chunk.
-    public var header: AnyMIDI1FileHeaderChunk {
+    public var header: MIDI1File<AnyMIDIFileTimebase>.HeaderChunk {
         switch self {
         case let .musical(midiFile): midiFile.header.asAnyMIDI1FileHeaderChunk()
         case let .smpte(midiFile): midiFile.header.asAnyMIDI1FileHeaderChunk()
