@@ -209,13 +209,13 @@ extension AnyMIDIFileTimebase {
 extension MusicalMIDIFileTimebase: MIDIFileTimebase {
     // MARK: - Decoding
     
-    public init?(data: some DataProtocol) {
-        guard data.count == 2 else {
+    public init?(midi1FileRawBytes: some DataProtocol) {
+        guard midi1FileRawBytes.count == 2 else {
             return nil
         }
         
-        let byte1 = data[atOffset: 0]
-        let byte2 = data[atOffset: 1]
+        let byte1 = midi1FileRawBytes[atOffset: 0]
+        let byte2 = midi1FileRawBytes[atOffset: 1]
         
         let ticks = ((UInt16(byte1) & 0b01111111) << 8) + UInt16(byte2)
         self = .init(ticksPerQuarterNote: ticks)
@@ -223,11 +223,11 @@ extension MusicalMIDIFileTimebase: MIDIFileTimebase {
     
     // MARK: - Encoding
     
-    public func rawData() -> Data {
-        rawData(as: Data.self)
+    public func midi1FileRawBytes() -> Data {
+        midi1FileRawBytes(as: Data.self)
     }
     
-    public func rawData<D: MutableDataProtocol>(as dataType: D.Type) -> D {
+    public func midi1FileRawBytes<D: MutableDataProtocol>(as dataType: D.Type) -> D {
         let data = (ticksPerQuarterNote & 0b01111111_11111111)
             .toData(.bigEndian)
         

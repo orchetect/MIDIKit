@@ -122,13 +122,13 @@ extension AnyMIDIFileTimebase {
 extension SMPTEMIDIFileTimebase: MIDIFileTimebase {
     // MARK: - Decoding
     
-    public init?(data: some DataProtocol) {
-        guard data.count == 2 else {
+    public init?(midi1FileRawBytes: some DataProtocol) {
+        guard midi1FileRawBytes.count == 2 else {
             return nil
         }
         
-        let byte1 = data[atOffset: 0]
-        let byte2 = data[atOffset: 1]
+        let byte1 = midi1FileRawBytes[atOffset: 0]
+        let byte2 = midi1FileRawBytes[atOffset: 1]
         
         guard let fr = MIDI1FileFrameRate(midi1FileRawHeaderByte: byte1 & 0b01111111) else {
             return nil
@@ -140,11 +140,11 @@ extension SMPTEMIDIFileTimebase: MIDIFileTimebase {
     
     // MARK: - Encoding
     
-    public func rawData() -> Data {
-        rawData(as: Data.self)
+    public func midi1FileRawBytes() -> Data {
+        midi1FileRawBytes(as: Data.self)
     }
     
-    public func rawData<D: MutableDataProtocol>(as dataType: D.Type) -> D {
+    public func midi1FileRawBytes<D: MutableDataProtocol>(as dataType: D.Type) -> D {
         let data = [
             frameRate.midi1FileRawFileHeaderByte + 0b10000000,
             ticksPerFrame

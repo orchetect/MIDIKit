@@ -89,21 +89,21 @@ extension AnyMIDIFileTimebase: MIDIFileTimebase {
     // MARK: - Decoding
     
     /// Initialize from raw data.
-    public init?(data: some DataProtocol) {
-        guard data.count == 2 else {
+    public init?(midi1FileRawBytes: some DataProtocol) {
+        guard midi1FileRawBytes.count == 2 else {
             return nil
         }
         
-        let byte1 = data[atOffset: 0]
+        let byte1 = midi1FileRawBytes[atOffset: 0]
         
         switch (byte1 & 0b10000000) >> 7 {
         case 0b0: // musical
-            guard let timebase = MusicalMIDIFileTimebase(data: data) else { return nil }
+            guard let timebase = MusicalMIDIFileTimebase(midi1FileRawBytes: midi1FileRawBytes) else { return nil }
             self = .musical(timebase)
             return
             
         case 0b1: // timecode
-            guard let timebase = SMPTEMIDIFileTimebase(data: data) else { return nil }
+            guard let timebase = SMPTEMIDIFileTimebase(midi1FileRawBytes: midi1FileRawBytes) else { return nil }
             self = .smpte(timebase)
             return
             
@@ -114,12 +114,12 @@ extension AnyMIDIFileTimebase: MIDIFileTimebase {
     
     // MARK: - Encoding
     
-    public func rawData() -> Data {
-        wrapped.rawData()
+    public func midi1FileRawBytes() -> Data {
+        wrapped.midi1FileRawBytes()
     }
 
-    public func rawData<D: MutableDataProtocol>(as dataType: D.Type) -> D {
-        wrapped.rawData(as: dataType)
+    public func midi1FileRawBytes<D: MutableDataProtocol>(as dataType: D.Type) -> D {
+        wrapped.midi1FileRawBytes(as: dataType)
     }
     
     // MARK: - AnyMIDIFileTimebase

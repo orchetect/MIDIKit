@@ -16,17 +16,17 @@ import Testing
         
         let rawData: [UInt8] = [0x01, 0xE0]
         
-        #expect(timebase.rawData(as: [UInt8].self) == rawData)
+        #expect(timebase.midi1FileRawBytes(as: [UInt8].self) == rawData)
         
         do {
-            guard case let .musical(ppq) = AnyMIDIFileTimebase(data: rawData)
+            guard case let .musical(ppq) = AnyMIDIFileTimebase(midi1FileRawBytes: rawData)
             else { Issue.record(); return }
             
             #expect(ppq.ticksPerQuarterNote == 480)
         }
         
         do {
-            guard case let .musical(ppq) = AnyMIDIFileTimebase(data: rawData.toData())
+            guard case let .musical(ppq) = AnyMIDIFileTimebase(midi1FileRawBytes: rawData.toData())
             else { Issue.record(); return }
             
             #expect(ppq.ticksPerQuarterNote == 480)
@@ -39,10 +39,10 @@ import Testing
         
         let rawData: [UInt8] = [0b11100111, 0x50]
         
-        #expect(timebase.rawData(as: [UInt8].self) == rawData)
+        #expect(timebase.midi1FileRawBytes(as: [UInt8].self) == rawData)
         
         do {
-            guard case let .smpte(smpteTimebase) = AnyMIDIFileTimebase(data: rawData)
+            guard case let .smpte(smpteTimebase) = AnyMIDIFileTimebase(midi1FileRawBytes: rawData)
             else { Issue.record(); return }
             
             #expect(smpteTimebase.frameRate == .fps25)
@@ -50,7 +50,7 @@ import Testing
         }
         
         do {
-            guard case let .smpte(smpteTimebase) = AnyMIDIFileTimebase(data: rawData.toData())
+            guard case let .smpte(smpteTimebase) = AnyMIDIFileTimebase(midi1FileRawBytes: rawData.toData())
             else { Issue.record(); return }
             
             #expect(smpteTimebase.frameRate == .fps25)

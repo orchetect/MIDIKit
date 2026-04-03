@@ -18,16 +18,16 @@ where DeltaTime.Timebase == Self {
     associatedtype DeltaTime: MIDIFileTrackDeltaTime
     
     /// Returns the timebase encoded as raw data.
-    func rawData() -> Data
+    func midi1FileRawBytes() -> Data
     
     /// Returns the timebase encoded as raw data.
-    func rawData<D: MutableDataProtocol>(as dataType: D.Type) -> D
+    func midi1FileRawBytes<D: MutableDataProtocol>(as dataType: D.Type) -> D
     
     /// Returns the timebase as a type-erased ``AnyMIDIFileTimebase`` instance.
     func asAnyMIDIFileTimebase() -> AnyMIDIFileTimebase
     
     /// Initialize from raw data.
-    init?(data: some DataProtocol)
+    init?(midi1FileRawBytes: some DataProtocol)
     
     /// Returns a general-purpose default timebase configuration for the timebase.
     static func `default`() -> Self

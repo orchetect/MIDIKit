@@ -57,7 +57,7 @@ extension MIDI1File.HeaderChunk {
         // Bit 15 = 0 : metrical timebase
         // Bit 15 = 1 : timecode
         
-        data += timebase.rawData(as: D.self)
+        data += timebase.midi1FileRawBytes(as: D.self)
         
         // Additional bytes
         if let additionalBytes {

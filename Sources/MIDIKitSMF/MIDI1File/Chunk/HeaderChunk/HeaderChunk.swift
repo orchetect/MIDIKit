@@ -80,7 +80,7 @@ extension MIDI1File {
     /// > Note:
     /// >
     /// > The header model omits the chunk (track) count property. It is automatically synthesized
-    /// > based on the track count in the `MIDI1File.chunks` array when calling `MIDI1File.rawData()`.
+    /// > based on the track count in the `MIDI1File.chunks` array when calling `MIDI1File.midi1FileRawBytes()`.
     public struct HeaderChunk {
         /// MIDI file format.
         public var format: MIDI1FileFormat

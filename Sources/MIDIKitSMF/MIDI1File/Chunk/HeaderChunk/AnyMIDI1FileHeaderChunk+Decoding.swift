@@ -152,7 +152,7 @@ extension AnyMIDI1FileHeaderChunk {
                 )
             }
             
-            guard let timebase = AnyMIDIFileTimebase(data: timeDivision) else {
+            guard let timebase = AnyMIDIFileTimebase(midi1FileRawBytes: timeDivision) else {
                 throw .malformed(
                     "Could not decode timebase."
                 )
