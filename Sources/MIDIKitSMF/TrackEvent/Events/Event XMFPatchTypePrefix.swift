@@ -138,7 +138,7 @@ extension MIDIFileEvent.XMFPatchTypePrefix: MIDIFileEventPayload {
     }
     
     public static func decode(
-        midi1SMFRawBytesStream stream: some DataProtocol,
+        midi1FileRawBytesStream stream: some DataProtocol,
         runningStatus: UInt8?
     ) -> MIDIFileEventDecodeResult<Self> {
         // Step 1: Check required byte count
@@ -210,20 +210,20 @@ extension MIDIFileEvent.XMFPatchTypePrefix: MIDIFileEventPayload {
         }
     }
     
-    public func midi1SMFRawBytes<D: MutableDataProtocol>(as dataType: D.Type) -> D {
+    public func midi1FileRawBytes<D: MutableDataProtocol>(as dataType: D.Type) -> D {
         // FF 60 <len> <param>
         // len should always be 1, param is always one byte
         
         D(Self.prefixBytes + [0x01, patchSet.rawValue])
     }
     
-    static var midi1SMFFixedRawBytesLength: Int { 4 }
+    static var midi1FileFixedRawBytesLength: Int { 4 }
     
-    public var smfDescription: String {
+    public var midiFileDescription: String {
         "patchPrefix:\(patchSet)"
     }
     
-    public var smfDebugDescription: String {
+    public var midiFileDebugDescription: String {
         "XMFPatchTypePrefix(\(patchSet))"
     }
 }

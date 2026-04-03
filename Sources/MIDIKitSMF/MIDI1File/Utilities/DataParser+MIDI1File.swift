@@ -9,14 +9,14 @@ internal import SwiftDataParsing
 
 extension DataParserProtocol where DataRange: DataProtocol {
     /// Convenience to decode a variable-length value.
-    mutating func decodeSMF1VariableLengthValue() throws(MIDIFileDecodeError) -> Int {
+    mutating func midi1FileVariableLengthValue() throws(MIDIFileDecodeError) -> Int {
         let readAheadCount = remainingByteCount.clamped(to: 1 ... 4)
         
         let lengthBytes = try toMIDIFileDecodeError(
             malformedReason: "Could not extract variable-length value length.",
             try read(bytes: readAheadCount, advance: false)
         )
-        guard let valueAndLength = lengthBytes.midi1SMFVariableLengthValue()
+        guard let valueAndLength = lengthBytes.midi1FileVariableLengthValue()
         else {
             throw .malformed(
                 "Could not extract variable length."

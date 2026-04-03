@@ -23,7 +23,7 @@ public protocol MIDIFileEventPayload: Equatable, Hashable, Sendable {
     /// - Parameters:
     ///   - rawBytes: Raw event bytes.
     init(
-        midi1SMFRawBytes rawBytes: some DataProtocol
+        midi1FileRawBytes rawBytes: some DataProtocol
     ) throws(MIDIFileDecodeError)
     
     /// Decode raw event bytes.
@@ -33,43 +33,43 @@ public protocol MIDIFileEventPayload: Equatable, Hashable, Sendable {
     ///   - runningStatus: Running status, if present while parsing a Standard MIDI file track.
     ///     If `rawBytes` contains all bytes that comprise the message, pass `nil` for running status.
     static func decode(
-        midi1SMFRawBytesStream stream: some DataProtocol,
+        midi1FileRawBytesStream stream: some DataProtocol,
         runningStatus: UInt8?
     ) -> MIDIFileEventDecodeResult<Self>
     
     /// Returns the encoded raw data for the event.
-    func midi1SMFRawBytes() -> Data
+    func midi1FileRawBytes() -> Data
     
     /// Returns the encoded raw data for the event.
-    func midi1SMFRawBytes<D: MutableDataProtocol>(as dataType: D.Type) -> D
+    func midi1FileRawBytes<D: MutableDataProtocol>(as dataType: D.Type) -> D
     
     /// Description for the event in a MIDI file context.
-    var smfDescription: String { get }
+    var midiFileDescription: String { get }
     
     /// Debug description for the event in a MIDI file context.
-    var smfDebugDescription: String { get }
+    var midiFileDebugDescription: String { get }
 }
 
 extension MIDIFileEventPayload /* : CustomStringConvertible */ {
     @_disfavoredOverload
-    public var description: String { smfDescription }
+    public var description: String { midiFileDescription }
 }
 
 extension MIDIFileEventPayload /* : CustomDebugStringConvertible */ {
     @_disfavoredOverload
-    public var debugDescription: String { smfDebugDescription }
+    public var debugDescription: String { midiFileDebugDescription }
 }
 
 // MARK: - Default Implementation
 
 extension MIDIFileEventPayload {
     public init(
-        midi1SMFRawBytes rawBytes: some DataProtocol
+        midi1FileRawBytes rawBytes: some DataProtocol
     ) throws(MIDIFileDecodeError) {
         // test for fixed byte count if event is fixed length, otherwise checks minimum byte count
         _ = try Self.requiredByteLength(availableByteCount: rawBytes.count)
         
-        let decoded = Self.decode(midi1SMFRawBytesStream: rawBytes, runningStatus: nil)
+        let decoded = Self.decode(midi1FileRawBytesStream: rawBytes, runningStatus: nil)
         switch decoded {
         case let .event(payload: payload, byteLength: _):
             self = payload
@@ -80,8 +80,8 @@ extension MIDIFileEventPayload {
         }
     }
     
-    public func midi1SMFRawBytes() -> Data {
-        midi1SMFRawBytes(as: Data.self)
+    public func midi1FileRawBytes() -> Data {
+        midi1FileRawBytes(as: Data.self)
     }
 }
 
@@ -90,9 +90,9 @@ extension MIDIFileEventPayload {
 extension MIDIFileEventPayload {
     /// Decode raw event bytes.
     public static func decode(
-        midi1SMFRawBytesStream stream: some DataProtocol
+        midi1FileRawBytesStream stream: some DataProtocol
     ) -> MIDIFileEventDecodeResult<Self> {
-        decode(midi1SMFRawBytesStream: stream, runningStatus: nil)
+        decode(midi1FileRawBytesStream: stream, runningStatus: nil)
     }
 }
 
@@ -106,14 +106,14 @@ extension MIDIFileEventPayload {
     ///   - runningStatus: Running status, if present while parsing a Standard MIDI file track.
     ///     If `rawBytes` contains all bytes that comprise the message, pass `nil` for running status.
     static func decodeTypeErased(
-        midi1SMFRawBytesStream stream: some DataProtocol,
+        midi1FileRawBytesStream stream: some DataProtocol,
         runningStatus: UInt8?
     ) -> AnyMIDIFileEventDecodeResult {
-        let result = decode(midi1SMFRawBytesStream: stream, runningStatus: runningStatus)
+        let result = decode(midi1FileRawBytesStream: stream, runningStatus: runningStatus)
         return result.asAnyMIDIFileEventDecodeResult()
     }
     
-    /// Required input byte length for ``init(midi1SMFRawBytes:)`` method.
+    /// Required input byte length for ``init(midi1FileRawBytes:)`` method.
     static func requiredByteLength(
         availableByteCount: Int
     ) throws(MIDIFileDecodeError) -> (byteCount: Int, isFixed: Bool) {
@@ -136,7 +136,7 @@ extension MIDIFileEventPayload {
         return (byteCount: minFullByteCount, isFixed: isFixed)
     }
 
-    /// Required input byte length for ``decode(midi1SMFRawBytesStream:runningStatus:)`` method.
+    /// Required input byte length for ``decode(midi1FileRawBytesStream:runningStatus:)`` method.
     ///
     /// - Parameters:
     ///   - availableByteCount: Available number of remaining bytes in input data stream.

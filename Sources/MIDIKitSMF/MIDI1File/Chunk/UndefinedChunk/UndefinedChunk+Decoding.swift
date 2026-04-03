@@ -10,7 +10,7 @@ internal import SwiftDataParsing
 
 extension MIDI1File.UndefinedChunk {
     /// Init from MIDI file buffer.
-    public init<D: DataProtocol>(midi1SMFRawBytesStream stream: D) throws(MIDIFileDecodeError) {
+    public init<D: DataProtocol>(midi1FileRawBytesStream stream: D) throws(MIDIFileDecodeError) {
         guard stream.count >= 8 else {
             throw .malformed(
                 "There was a problem reading chunk header. Encountered end of file early."

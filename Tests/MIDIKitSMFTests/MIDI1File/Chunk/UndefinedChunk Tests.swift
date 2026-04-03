@@ -29,13 +29,13 @@ import Testing
         
         // generate raw bytes
         
-        let generatedBytes = try chunk.midi1SMFRawBytes(as: [UInt8].self)
+        let generatedBytes = try chunk.midi1FileRawBytes(as: [UInt8].self)
         
         #expect(generatedBytes == bytes)
         
         // parse raw bytes
         
-        let parsedChunk = try MusicalMIDI1File.UndefinedChunk(midi1SMFRawBytesStream: generatedBytes)
+        let parsedChunk = try MusicalMIDI1File.UndefinedChunk(midi1FileRawBytesStream: generatedBytes)
 
         #expect(parsedChunk == parsedChunk)
     }
@@ -60,13 +60,13 @@ import Testing
         
         // generate raw bytes
         
-        let generatedBytes = try chunk.midi1SMFRawBytes(as: [UInt8].self)
+        let generatedBytes = try chunk.midi1FileRawBytes(as: [UInt8].self)
         
         #expect(generatedBytes == bytes)
         
         // parse raw bytes
         
-        let parsedChunk = try MusicalMIDI1File.UndefinedChunk(midi1SMFRawBytesStream: generatedBytes)
+        let parsedChunk = try MusicalMIDI1File.UndefinedChunk(midi1FileRawBytesStream: generatedBytes)
 
         #expect(parsedChunk == parsedChunk)
     }

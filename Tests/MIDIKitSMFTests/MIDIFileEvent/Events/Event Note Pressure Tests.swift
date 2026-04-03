@@ -12,10 +12,10 @@ import Testing
     // swiftformat:disable spaceInsideParens spaceInsideBrackets spacearoundoperators
     
     @Test
-    func init_midi1SMFRawBytes_A() async throws {
+    func init_midi1FileRawBytes_A() async throws {
         let bytes: [UInt8] = [0xA0, 0x01, 0x40]
         
-        let event = try MIDIFileEvent.NotePressure(midi1SMFRawBytes: bytes)
+        let event = try MIDIFileEvent.NotePressure(midi1FileRawBytes: bytes)
         
         #expect(event.note.number == 1)
         #expect(event.amount == .midi1(0x40))
@@ -23,23 +23,23 @@ import Testing
     }
     
     @Test
-    func midi1SMFRawBytes_A() async {
+    func midi1FileRawBytes_A() async {
         let event = MIDIFileEvent.NotePressure(
             note: 1,
             amount: .midi1(0x40),
             channel: 0
         )
         
-        let bytes = event.midi1SMFRawBytes(as: [UInt8].self)
+        let bytes = event.midi1FileRawBytes(as: [UInt8].self)
         
         #expect(bytes == [0xA0, 0x01, 0x40])
     }
     
     @Test
-    func init_midi1SMFRawBytes_B() async throws {
+    func init_midi1FileRawBytes_B() async throws {
         let bytes: [UInt8] = [0xA1, 0x3C, 0x7F]
         
-        let event = try MIDIFileEvent.NotePressure(midi1SMFRawBytes: bytes)
+        let event = try MIDIFileEvent.NotePressure(midi1FileRawBytes: bytes)
         
         #expect(event.note.number == 60)
         #expect(event.amount == .midi1(0x7F))
@@ -47,14 +47,14 @@ import Testing
     }
     
     @Test
-    func midi1SMFRawBytes_B() async {
+    func midi1FileRawBytes_B() async {
         let event = MIDIFileEvent.NotePressure(
             note: 60,
             amount: .midi1(0x7F),
             channel: 1
         )
         
-        let bytes = event.midi1SMFRawBytes(as: [UInt8].self)
+        let bytes = event.midi1FileRawBytes(as: [UInt8].self)
         
         #expect(bytes == [0xA1, 0x3C, 0x7F])
     }

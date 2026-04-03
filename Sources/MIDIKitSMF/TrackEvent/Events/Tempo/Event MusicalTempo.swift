@@ -48,11 +48,11 @@ extension MIDIFileEvent.MusicalTempo: MIDIFileEventPayload {
         .tempo(.musical(self))
     }
     
-    public var smfDescription: String {
+    public var midiFileDescription: String {
         "\(bpm.rounded(decimalPlaces: 3))bpm"
     }
     
-    public var smfDebugDescription: String {
+    public var midiFileDebugDescription: String {
         "Tempo(\(bpm)bpm)"
     }
 }

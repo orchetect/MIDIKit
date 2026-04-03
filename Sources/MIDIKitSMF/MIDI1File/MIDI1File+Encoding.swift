@@ -56,17 +56,17 @@ extension MIDI1File {
         // ____ Header ____
 
         // header encodes track chunk count only, not including non-track chunks
-        data += try header.midi1SMFRawBytes(withTrackCount: tracks.count)
+        data += try header.midi1FileRawBytes(withTrackCount: tracks.count)
 
         // ____ Chunks ____
 
         for chunk in chunks {
             switch chunk {
             case let .track(track):
-                try data += (track.midi1SMFRawBytes(as: D.self, using: timebase))
+                try data += (track.midi1FileRawBytes(as: D.self, using: timebase))
 
             case let .undefined(chunk):
-                try data += (chunk.midi1SMFRawBytes(as: D.self))
+                try data += (chunk.midi1FileRawBytes(as: D.self))
             }
         }
 
@@ -90,7 +90,7 @@ extension MIDI1File {
         // ____ Header ____
         
         // header encodes track chunk count only, not including non-track chunks
-        data += try header.midi1SMFRawBytes(withTrackCount: tracks.count)
+        data += try header.midi1FileRawBytes(withTrackCount: tracks.count)
         
         // ____ Chunks ____
         
@@ -104,10 +104,10 @@ extension MIDI1File {
                     do throws(MIDIFileEncodeError) {
                         let encodedChunkData: D = switch chunk {
                         case let .track(track):
-                            try track.midi1SMFRawBytes(as: D.self, using: timebase)
+                            try track.midi1FileRawBytes(as: D.self, using: timebase)
                             
                         case let .undefined(chunk):
-                            try chunk.midi1SMFRawBytes(as: D.self)
+                            try chunk.midi1FileRawBytes(as: D.self)
                         }
                         return .success((index: index, data: encodedChunkData))
                     } catch {

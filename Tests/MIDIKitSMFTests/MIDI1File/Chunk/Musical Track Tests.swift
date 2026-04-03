@@ -32,21 +32,21 @@ import Testing
         // generate raw bytes
         
         let timebase: MusicalMIDI1File.Timebase = .musical(ticksPerQuarterNote: 960)
-        let generatedData: Data = try track.midi1SMFRawBytes(using: timebase)
+        let generatedData: Data = try track.midi1FileRawBytes(using: timebase)
         
         #expect(generatedData.toUInt8Bytes() == bytes)
         
         // parse raw bytes
         
         let parsedTrackA = try? MusicalMIDI1File.TrackChunk(
-            midi1SMFRawBytesStream: generatedData,
+            midi1FileRawBytesStream: generatedData,
             timebase: timebase,
             options: .init(bundleRPNAndNRPNEvents: true)
         )
         #expect(parsedTrackA == track)
         
         let parsedTrackB = try? MusicalMIDI1File.TrackChunk(
-            midi1SMFRawBytes: generatedData[8...], // exclude header and length
+            midi1FileRawBytes: generatedData[8...], // exclude header and length
             timebase: timebase,
             options: .init(bundleRPNAndNRPNEvents: true)
         )
@@ -78,21 +78,21 @@ import Testing
         // generate raw bytes
         
         let timebase: MusicalMIDI1File.Timebase = .musical(ticksPerQuarterNote: 960)
-        let generatedData: Data = try track.midi1SMFRawBytes(using: timebase)
+        let generatedData: Data = try track.midi1FileRawBytes(using: timebase)
         
         #expect(generatedData.toUInt8Bytes() == bytes)
         
         // parse raw bytes
         
         let parsedTrackA = try? MusicalMIDI1File.TrackChunk(
-            midi1SMFRawBytesStream: generatedData,
+            midi1FileRawBytesStream: generatedData,
             timebase: timebase,
             options: .init(bundleRPNAndNRPNEvents: true)
         )
         #expect(parsedTrackA == track)
         
         let parsedTrackB = try? MusicalMIDI1File.TrackChunk(
-            midi1SMFRawBytes: generatedData[8...], // exclude header and length
+            midi1FileRawBytes: generatedData[8...], // exclude header and length
             timebase: timebase,
             options: .init(bundleRPNAndNRPNEvents: true)
         )
@@ -119,21 +119,21 @@ import Testing
         // generate raw bytes
         
         let timebase: MusicalMIDI1File.Timebase = .musical(ticksPerQuarterNote: 960)
-        let generatedData: Data = try track.midi1SMFRawBytes(using: timebase)
+        let generatedData: Data = try track.midi1FileRawBytes(using: timebase)
         
         #expect(generatedData.toUInt8Bytes() == bytes)
         
         // parse raw bytes
         
         let parsedTrackA = try? MusicalMIDI1File.TrackChunk(
-            midi1SMFRawBytesStream: generatedData,
+            midi1FileRawBytesStream: generatedData,
             timebase: timebase,
             options: .init(bundleRPNAndNRPNEvents: true)
         )
         #expect(parsedTrackA == track)
         
         let parsedTrackB = try? MusicalMIDI1File.TrackChunk(
-            midi1SMFRawBytes: generatedData[8...], // exclude header and length
+            midi1FileRawBytes: generatedData[8...], // exclude header and length
             timebase: timebase,
             options: .init(bundleRPNAndNRPNEvents: true)
         )
@@ -234,7 +234,7 @@ import Testing
         // generate raw bytes
         
         let timebase: MusicalMIDI1File.Timebase = .musical(ticksPerQuarterNote: 960)
-        let generatedData: Data = try track.midi1SMFRawBytes(using: timebase)
+        let generatedData: Data = try track.midi1FileRawBytes(using: timebase)
         
         // create comparison track
         
@@ -243,14 +243,14 @@ import Testing
         // parse raw bytes and check event count
         
         let parsedTrackA = try? MusicalMIDI1File.TrackChunk(
-            midi1SMFRawBytesStream: generatedData,
+            midi1FileRawBytesStream: generatedData,
             timebase: timebase,
             options: .init(bundleRPNAndNRPNEvents: true, maxEventCount: 2)
         )
         #expect(parsedTrackA == limitedTrack)
         
         let parsedTrackB = try? MusicalMIDI1File.TrackChunk(
-            midi1SMFRawBytes: generatedData[8...], // exclude header and length
+            midi1FileRawBytes: generatedData[8...], // exclude header and length
             timebase: timebase,
             options: .init(bundleRPNAndNRPNEvents: true, maxEventCount: 2)
         )

@@ -12,11 +12,11 @@ internal import SwiftDataParsing
 extension MIDI1File.HeaderChunk {
     /// Init from MIDI file data stream.
     static func initFrom<D: DataProtocol>(
-        midi1SMFRawBytesStream stream: D,
+        midi1FileRawBytesStream stream: D,
         allowMultiTrackFormat0: Bool
     ) throws(MIDIFileDecodeError) -> (header: Self, trackCount: Int, bufferLength: Int) {
         let (anyHeader, trackCount, bufferLength) = try AnyMIDI1FileHeaderChunk.initFrom(
-            midi1SMFRawBytesStream: stream,
+            midi1FileRawBytesStream: stream,
             allowMultiTrackFormat0: allowMultiTrackFormat0
         )
         switch anyHeader.timebase {
@@ -34,11 +34,11 @@ extension MIDI1File.HeaderChunk {
     }
     
     static func initFrom<D: DataProtocol>(
-        midi1SMFRawBytes: D,
+        midi1FileRawBytes: D,
         allowMultiTrackFormat0: Bool
     ) throws(MIDIFileDecodeError) -> (header: Self, trackCount: Int) {
         let (anyHeader, trackCount) = try AnyMIDI1FileHeaderChunk.initFrom(
-            midi1SMFRawBytes: midi1SMFRawBytes,
+            midi1FileRawBytes: midi1FileRawBytes,
             allowMultiTrackFormat0: allowMultiTrackFormat0
         )
         switch anyHeader.timebase {

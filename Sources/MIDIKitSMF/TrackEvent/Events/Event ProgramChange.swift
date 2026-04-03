@@ -77,7 +77,7 @@ extension MIDIEvent.ProgramChange: MIDIFileEventPayload {
     }
     
     public static func decode(
-        midi1SMFRawBytesStream stream: some DataProtocol,
+        midi1FileRawBytesStream stream: some DataProtocol,
         runningStatus: UInt8?
     ) -> MIDIFileEventDecodeResult<Self> {
         // Step 1: Check required byte count
@@ -156,19 +156,19 @@ extension MIDIEvent.ProgramChange: MIDIFileEventPayload {
         }
     }
     
-    public func midi1SMFRawBytes<D: MutableDataProtocol>(as dataType: D.Type) -> D {
+    public func midi1FileRawBytes<D: MutableDataProtocol>(as dataType: D.Type) -> D {
         // Cn program
         
         D(midi1RawBytes())
     }
     
-    public var smfDescription: String {
+    public var midiFileDescription: String {
         let chanString = channel.uInt8Value.hexString(padTo: 1, prefix: true)
         
         return "prgm#\(program) chan:\(chanString)"
     }
     
-    public var smfDebugDescription: String {
-        "ProgChange(" + smfDescription + ")"
+    public var midiFileDebugDescription: String {
+        "ProgChange(" + midiFileDescription + ")"
     }
 }

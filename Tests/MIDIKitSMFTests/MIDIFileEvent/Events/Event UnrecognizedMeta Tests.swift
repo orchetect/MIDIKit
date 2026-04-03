@@ -12,26 +12,26 @@ import Testing
     // swiftformat:disable spaceInsideParens spaceInsideBrackets spacearoundoperators
     
     @Test
-    func init_midi1SMFRawBytes_EmptyData() async throws {
+    func init_midi1FileRawBytes_EmptyData() async throws {
         let bytes: [UInt8] = [
             0xFF, 0x30, // unknown/undefined meta type 0x30
             0x00        // length: 0 bytes to follow
         ]
         
-        let event = try MIDIFileEvent.UnrecognizedMeta(midi1SMFRawBytes: bytes)
+        let event = try MIDIFileEvent.UnrecognizedMeta(midi1FileRawBytes: bytes)
         
         #expect(event.metaType == 0x30)
         #expect(event.data == [])
     }
     
     @Test
-    func midi1SMFRawBytes_EmptyData() async {
+    func midi1FileRawBytes_EmptyData() async {
         let event = MIDIFileEvent.UnrecognizedMeta(
             metaType: 0x30,
             data: []
         )
         
-        let bytes = event.midi1SMFRawBytes(as: [UInt8].self)
+        let bytes = event.midi1FileRawBytes(as: [UInt8].self)
         
         #expect(bytes == [
             0xFF, 0x30, // unknown/undefined meta type 0x30
@@ -40,27 +40,27 @@ import Testing
     }
     
     @Test
-    func init_midi1SMFRawBytes_WithData() async throws {
+    func init_midi1FileRawBytes_WithData() async throws {
         let bytes: [UInt8] = [
             0xFF, 0x30, // unknown/undefined meta type 0x30
             0x01,       // length: 1 bytes to follow
             0x12        // data byte
         ]
         
-        let event = try MIDIFileEvent.UnrecognizedMeta(midi1SMFRawBytes: bytes)
+        let event = try MIDIFileEvent.UnrecognizedMeta(midi1FileRawBytes: bytes)
         
         #expect(event.metaType == 0x30)
         #expect(event.data == [0x12])
     }
     
     @Test
-    func midi1SMFRawBytes_WithData() async {
+    func midi1FileRawBytes_WithData() async {
         let event = MIDIFileEvent.UnrecognizedMeta(
             metaType: 0x30,
             data: [0x12]
         )
         
-        let bytes = event.midi1SMFRawBytes(as: [UInt8].self)
+        let bytes = event.midi1FileRawBytes(as: [UInt8].self)
         
         #expect(bytes == [
             0xFF, 0x30, // unknown/undefined meta type 0x30
@@ -70,7 +70,7 @@ import Testing
     }
     
     @Test
-    func Init_midi1SMFRawBytes_127Bytes() async throws {
+    func Init_midi1FileRawBytes_127Bytes() async throws {
         let data: [UInt8] = .init(repeating: 0x12, count: 127)
         
         let bytes: [UInt8] =
@@ -78,7 +78,7 @@ import Testing
              0x7F]       // length: 127 bytes to follow
             + data       // data
         
-        let event = try MIDIFileEvent.UnrecognizedMeta(midi1SMFRawBytes: bytes)
+        let event = try MIDIFileEvent.UnrecognizedMeta(midi1FileRawBytes: bytes)
         
         #expect(event.metaType == 0x30)
         #expect(event.data == data)
@@ -93,7 +93,7 @@ import Testing
             data: data
         )
         
-        let bytes = event.midi1SMFRawBytes(as: [UInt8].self)
+        let bytes = event.midi1FileRawBytes(as: [UInt8].self)
         
         #expect(
             bytes ==
@@ -104,7 +104,7 @@ import Testing
     }
     
     @Test
-    func Init_midi1SMFRawBytes_128Bytes() async throws {
+    func Init_midi1FileRawBytes_128Bytes() async throws {
         let data: [UInt8] = .init(repeating: 0x12, count: 128)
         
         let bytes: [UInt8] =
@@ -112,7 +112,7 @@ import Testing
              0x81, 0x00] // length: 128 bytes to follow
             + data       // data
         
-        let event = try MIDIFileEvent.UnrecognizedMeta(midi1SMFRawBytes: bytes)
+        let event = try MIDIFileEvent.UnrecognizedMeta(midi1FileRawBytes: bytes)
         
         #expect(event.metaType == 0x30)
         #expect(event.data == data)
@@ -127,7 +127,7 @@ import Testing
             data: data
         )
         
-        let bytes = event.midi1SMFRawBytes(as: [UInt8].self)
+        let bytes = event.midi1FileRawBytes(as: [UInt8].self)
         
         #expect(
             bytes ==

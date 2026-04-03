@@ -12,23 +12,23 @@ import Testing
     // swiftformat:disable spaceInsideParens spaceInsideBrackets spacearoundoperators
     
     @Test
-    func init_midi1SMFRawBytes_EmptyString() async throws {
+    func init_midi1FileRawBytes_EmptyString() async throws {
         let bytes: [UInt8] = [
             0xFF, 0x01, // header
             0x00        // length: 0 bytes
         ]
         
-        let event = try MIDIFileEvent.Text(midi1SMFRawBytes: bytes)
+        let event = try MIDIFileEvent.Text(midi1FileRawBytes: bytes)
         
         #expect(event.textType == .text)
         #expect(event.text == "")
     }
     
     @Test
-    func midi1SMFRawBytes_EmptyString() async {
+    func midi1FileRawBytes_EmptyString() async {
         let event = MIDIFileEvent.Text(type: .text, string: "")
         
-        let bytes = event.midi1SMFRawBytes(as: [UInt8].self)
+        let bytes = event.midi1FileRawBytes(as: [UInt8].self)
         
         #expect(bytes == [
             0xFF, 0x01, // header
@@ -37,24 +37,24 @@ import Testing
     }
     
     @Test
-    func init_midi1SMFRawBytes_WithString() async throws {
+    func init_midi1FileRawBytes_WithString() async throws {
         let bytes: [UInt8] = [
             0xFF, 0x01, // header
             0x04,       // length: 4 bytes
             0x61, 0x62, 0x63, 0x64 // string characters
         ]
         
-        let event = try MIDIFileEvent.Text(midi1SMFRawBytes: bytes)
+        let event = try MIDIFileEvent.Text(midi1FileRawBytes: bytes)
         
         #expect(event.textType == .text)
         #expect(event.text == "abcd")
     }
     
     @Test
-    func midi1SMFRawBytes_WithString() async {
+    func midi1FileRawBytes_WithString() async {
         let event = MIDIFileEvent.Text(type: .text, string: "abcd")
         
-        let bytes = event.midi1SMFRawBytes(as: [UInt8].self)
+        let bytes = event.midi1FileRawBytes(as: [UInt8].self)
         
         #expect(bytes == [
             0xFF, 0x01, // header
@@ -78,9 +78,9 @@ import Testing
             ]
             
             let event1 = MIDIFileEvent.Text(type: eventType, string: "a")
-            #expect(event1.midi1SMFRawBytes(as: [UInt8].self) == bytes)
+            #expect(event1.midi1FileRawBytes(as: [UInt8].self) == bytes)
             
-            let event2 = try MIDIFileEvent.Text(midi1SMFRawBytes: bytes)
+            let event2 = try MIDIFileEvent.Text(midi1FileRawBytes: bytes)
             #expect(event1 == event2)
         }
         
@@ -114,7 +114,7 @@ import Testing
             0x48, 0x65, 0x6C, 0x6C, 0x6F
         ]
         
-        let text = try MIDIFileEvent.Text(midi1SMFRawBytes: rawData)
+        let text = try MIDIFileEvent.Text(midi1FileRawBytes: rawData)
         
         // check string integrity
         let str = "Copyright © 2000 by Some Guy Hello"
@@ -133,7 +133,7 @@ import Testing
             0x6E, 0x79, 0x20, 0x44, 0x6F, 0x65, 0x0A
         ]
         
-        let text = try MIDIFileEvent.Text(midi1SMFRawBytes: rawData)
+        let text = try MIDIFileEvent.Text(midi1FileRawBytes: rawData)
         
         // check string integrity
         let str = "Sequenced by Mr. Johnny Doe\n"

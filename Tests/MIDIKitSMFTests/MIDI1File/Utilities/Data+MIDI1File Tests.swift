@@ -10,31 +10,31 @@ import Testing
 
 @Suite struct Data_MIDI1File_Tests {
     @Test
-    func byteArray_init_midi1SMFVariableLengthValue() async {
-        #expect([UInt8](midi1SMFVariableLengthValue: 0) == [0x00])
-        #expect([UInt8](midi1SMFVariableLengthValue: 1) == [0x01])
-        #expect([UInt8](midi1SMFVariableLengthValue: 64) == [0x40])
+    func byteArray_init_midi1FileVariableLengthValue() async {
+        #expect([UInt8](midi1FileVariableLengthValue: 0) == [0x00])
+        #expect([UInt8](midi1FileVariableLengthValue: 1) == [0x01])
+        #expect([UInt8](midi1FileVariableLengthValue: 64) == [0x40])
         
-        #expect([UInt8](midi1SMFVariableLengthValue: 127) == [0x7F])
-        #expect([UInt8](midi1SMFVariableLengthValue: 128) == [0x81, 0x00])
-        #expect([UInt8](midi1SMFVariableLengthValue: 129) == [0x81, 0x01])
+        #expect([UInt8](midi1FileVariableLengthValue: 127) == [0x7F])
+        #expect([UInt8](midi1FileVariableLengthValue: 128) == [0x81, 0x00])
+        #expect([UInt8](midi1FileVariableLengthValue: 129) == [0x81, 0x01])
         
-        #expect([UInt8](midi1SMFVariableLengthValue: 255) == [0x81, 0x7F])
-        #expect([UInt8](midi1SMFVariableLengthValue: 256) == [0x82, 0x00])
-        #expect([UInt8](midi1SMFVariableLengthValue: 257) == [0x82, 0x01])
+        #expect([UInt8](midi1FileVariableLengthValue: 255) == [0x81, 0x7F])
+        #expect([UInt8](midi1FileVariableLengthValue: 256) == [0x82, 0x00])
+        #expect([UInt8](midi1FileVariableLengthValue: 257) == [0x82, 0x01])
         
-        #expect([UInt8](midi1SMFVariableLengthValue: 16383) == [0xFF, 0x7F])
-        #expect([UInt8](midi1SMFVariableLengthValue: 16384) == [0x81, 0x80, 0x00])
-        #expect([UInt8](midi1SMFVariableLengthValue: 16385) == [0x81, 0x80, 0x01])
+        #expect([UInt8](midi1FileVariableLengthValue: 16383) == [0xFF, 0x7F])
+        #expect([UInt8](midi1FileVariableLengthValue: 16384) == [0x81, 0x80, 0x00])
+        #expect([UInt8](midi1FileVariableLengthValue: 16385) == [0x81, 0x80, 0x01])
     }
     
     @Test
-    func byteArray_midi1SMFVariableLengthValue_Empty() async {
-        #expect(([] as [UInt8]).midi1SMFVariableLengthValue() == nil)
+    func byteArray_midi1FileVariableLengthValue_Empty() async {
+        #expect(([] as [UInt8]).midi1FileVariableLengthValue() == nil)
     }
     
     @Test
-    func byteArray_midi1SMFVariableLengthValue() async {
+    func byteArray_midi1FileVariableLengthValue() async {
         // repeat the test for:
         //   1. empty trailing bytes (so input bytes comprise only the variable length value)
         //   2. one or more trailing bytes existing in the input buffer
@@ -43,7 +43,7 @@ import Testing
         let trailingBytesCases: [[UInt8]] = [[], [0x80], [0x12, 0x23]]
         
         for trailingBytes in trailingBytesCases {
-            let decode = { ($0 + trailingBytes).midi1SMFVariableLengthValue() }
+            let decode = { ($0 + trailingBytes).midi1FileVariableLengthValue() }
             
             // 1 byte: max 7-bit value
             
@@ -95,11 +95,11 @@ import Testing
     }
     
     @Test
-    func data_midi1SMFVariableLengthValue_data_pointer() async throws {
+    func data_midi1FileVariableLengthValue_data_pointer() async throws {
         // 1 byte: max 7-bit value
         
         try Data([0x7F, 0x00]).withContiguousStorageIfAvailable({
-            let result = try #require($0.midi1SMFVariableLengthValue())
+            let result = try #require($0.midi1FileVariableLengthValue())
             #expect(result.value == 127)
             #expect(result.byteLength == 1)
         })!
@@ -107,7 +107,7 @@ import Testing
         // 2 bytes: max 14-bit value
         
         try Data([0x81, 0x00]).withContiguousStorageIfAvailable({
-            let result = try #require($0.midi1SMFVariableLengthValue())
+            let result = try #require($0.midi1FileVariableLengthValue())
             #expect(result.value == 128)
             #expect(result.byteLength == 2)
         })!
@@ -115,7 +115,7 @@ import Testing
         // 3 bytes: max 21-bit value
         
         try Data([0x81, 0x80, 0x00]).withContiguousStorageIfAvailable({
-            let result = try #require($0.midi1SMFVariableLengthValue())
+            let result = try #require($0.midi1FileVariableLengthValue())
             #expect(result.value == 16384)
             #expect(result.byteLength == 3)
         })!
@@ -123,19 +123,19 @@ import Testing
         // 4 bytes: max 28-bit value
         
         try Data([0xFF, 0xFF, 0xFF, 0x7F]).withContiguousStorageIfAvailable({
-            let result = try #require($0.midi1SMFVariableLengthValue())
+            let result = try #require($0.midi1FileVariableLengthValue())
             #expect(result.value == 268_435_455)
             #expect(result.byteLength == 4)
         })!
     }
     
     @Test
-    func data_midi1SMFVariableLengthValue_uInt8Array_pointer_slice() async throws {
+    func data_midi1FileVariableLengthValue_uInt8Array_pointer_slice() async throws {
         // 1 byte: max 7-bit value
         
         try Data([0x01, 0x7F, 0x00]).withContiguousStorageIfAvailable({
             let slice = $0[1...]
-            let result = try #require(slice.midi1SMFVariableLengthValue())
+            let result = try #require(slice.midi1FileVariableLengthValue())
             #expect(result.value == 127)
             #expect(result.byteLength == 1)
         })!
@@ -144,7 +144,7 @@ import Testing
         
         try Data([0x01, 0x81, 0x00]).withContiguousStorageIfAvailable({
             let slice = $0[1...]
-            let result = try #require(slice.midi1SMFVariableLengthValue())
+            let result = try #require(slice.midi1FileVariableLengthValue())
             #expect(result.value == 128)
             #expect(result.byteLength == 2)
         })!
@@ -153,7 +153,7 @@ import Testing
         
         try Data([0x01, 0x81, 0x80, 0x00]).withContiguousStorageIfAvailable({
             let slice = $0[1...]
-            let result = try #require(slice.midi1SMFVariableLengthValue())
+            let result = try #require(slice.midi1FileVariableLengthValue())
             #expect(result.value == 16384)
             #expect(result.byteLength == 3)
         })!
@@ -162,16 +162,16 @@ import Testing
         
         try Data([0x01, 0xFF, 0xFF, 0xFF, 0x7F]).withContiguousStorageIfAvailable({
             let slice = $0[1...]
-            let result = try #require(slice.midi1SMFVariableLengthValue())
+            let result = try #require(slice.midi1FileVariableLengthValue())
             #expect(result.value == 268_435_455)
             #expect(result.byteLength == 4)
         })!
     }
     
     @Test
-    func byteArray_midi1SMFVariableLengthValue_EdgeCase() async {
+    func byteArray_midi1FileVariableLengthValue_EdgeCase() async {
         // ensure setting the top bit with no bytes following does not crash
         
-        #expect([0x80].midi1SMFVariableLengthValue() == nil)
+        #expect([0x80].midi1FileVariableLengthValue() == nil)
     }
 }

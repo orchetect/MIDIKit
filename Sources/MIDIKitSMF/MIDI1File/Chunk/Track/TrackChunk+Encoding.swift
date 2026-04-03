@@ -8,13 +8,13 @@ import Foundation
 import MIDIKitCore
 
 extension MIDI1File.TrackChunk {
-    public func midi1SMFRawBytes(
+    public func midi1FileRawBytes(
         using timebase: Timebase
     ) throws(MIDIFileEncodeError) -> Data {
-        try midi1SMFRawBytes(as: Data.self, using: timebase)
+        try midi1FileRawBytes(as: Data.self, using: timebase)
     }
     
-    public func midi1SMFRawBytes<D: MutableDataProtocol>(
+    public func midi1FileRawBytes<D: MutableDataProtocol>(
         as dataType: D.Type,
         using timebase: Timebase
     ) throws(MIDIFileEncodeError) -> D {
@@ -26,7 +26,7 @@ extension MIDI1File.TrackChunk {
             bodyData.append(deltaTime: event.delta.ticks(using: timebase))
             
             // TODO: support running status
-            bodyData.append(contentsOf: event.event.wrapped.midi1SMFRawBytes(as: D.self))
+            bodyData.append(contentsOf: event.event.wrapped.midi1FileRawBytes(as: D.self))
         }
         
         bodyData.append(deltaTime: deltaTimeBeforeEndOfTrack.ticks(using: timebase))

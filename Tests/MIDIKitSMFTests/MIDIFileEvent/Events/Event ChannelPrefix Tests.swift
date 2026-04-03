@@ -12,19 +12,19 @@ import Testing
     // swiftformat:disable spaceInsideParens spaceInsideBrackets spacearoundoperators
     
     @Test
-    func init_midi1SMFRawBytes() async throws {
+    func init_midi1FileRawBytes() async throws {
         let bytes: [UInt8] = [0xFF, 0x20, 0x01, 0x02]
         
-        let event = try MIDIFileEvent.ChannelPrefix(midi1SMFRawBytes: bytes)
+        let event = try MIDIFileEvent.ChannelPrefix(midi1FileRawBytes: bytes)
         
         #expect(event.channel == 2)
     }
     
     @Test
-    func midi1SMFRawBytes() async {
+    func midi1FileRawBytes() async {
         let event = MIDIFileEvent.ChannelPrefix(channel: 2)
         
-        let bytes = event.midi1SMFRawBytes(as: [UInt8].self)
+        let bytes = event.midi1FileRawBytes(as: [UInt8].self)
         
         #expect(bytes == [0xFF, 0x20, 0x01, 0x02])
     }

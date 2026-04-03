@@ -9,11 +9,11 @@ import MIDIKitCore
 internal import MIDIKitInternals
 
 extension MIDI1File.HeaderChunk {
-    public func midi1SMFRawBytes(withTrackCount trackCount: Int) throws(MIDIFileEncodeError) -> Data {
-        try midi1SMFRawBytes(as: Data.self, withTrackCount: trackCount)
+    public func midi1FileRawBytes(withTrackCount trackCount: Int) throws(MIDIFileEncodeError) -> Data {
+        try midi1FileRawBytes(as: Data.self, withTrackCount: trackCount)
     }
     
-    public func midi1SMFRawBytes<D: MutableDataProtocol>(as dataType: D.Type, withTrackCount trackCount: Int) throws(MIDIFileEncodeError) -> D {
+    public func midi1FileRawBytes<D: MutableDataProtocol>(as dataType: D.Type, withTrackCount trackCount: Int) throws(MIDIFileEncodeError) -> D {
         // The header chunk appears at the beginning of the file:
         //   4D 54 68 64    ASCII "MThd".
         //   00 00 00 06    4-byte size of the header; this will always be 6

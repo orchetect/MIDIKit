@@ -47,8 +47,8 @@ extension MIDI1FileFrameRate: CustomDebugStringConvertible {
 
 extension MIDI1FileFrameRate {
     /// Initialize from the frame rate encoded in a MIDI file SMPTE timebase header.
-    public init?(midi1SMFRawHeaderByte byte: UInt8) {
-        guard let match = Self.allCases.first(where: { byte == $0.midi1SMFRawFileHeaderByte })
+    public init?(midi1FileRawHeaderByte byte: UInt8) {
+        guard let match = Self.allCases.first(where: { byte == $0.midi1FileRawFileHeaderByte })
         else { return nil }
         self = match
     }
@@ -64,7 +64,7 @@ extension MIDI1FileFrameRate {
     /// - 25 fps: `0xE7`
     /// - 29.97 drop fps: `0xE3`
     /// - 30 fps: `0xE2`
-    public var midi1SMFRawFileHeaderByte: UInt8 {
+    public var midi1FileRawFileHeaderByte: UInt8 {
         switch self {
         case .fps24:     0b1101000 // 0xE8 when adding top bit of 1
         case .fps25:     0b1100111 // 0xE7 when adding top bit of 1
@@ -78,14 +78,14 @@ extension MIDI1FileFrameRate {
 
 extension MIDI1FileFrameRate {
     /// Initialize from the frame rate encoded in a MIDI file SMPTE offset track event.
-    public init?(midi1SMFRawTrackOffsetByte byte: UInt8) {
-        guard let match = Self.allCases.first(where: { byte == $0.midi1SMFRawTrackOffsetEventByte })
+    public init?(midi1FileRawTrackOffsetByte byte: UInt8) {
+        guard let match = Self.allCases.first(where: { byte == $0.midi1FileRawTrackOffsetEventByte })
         else { return nil }
         self = match
     }
     
     /// Returns the frame rate encoded for a MIDI file SMPTE offset track event.
-    public var midi1SMFRawTrackOffsetEventByte: UInt8 {
+    public var midi1FileRawTrackOffsetEventByte: UInt8 {
         switch self {
         case .fps24:     0b00 // 0 decimal
         case .fps25:     0b01 // 1 decimal

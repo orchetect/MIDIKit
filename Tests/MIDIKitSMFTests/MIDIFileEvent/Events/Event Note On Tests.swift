@@ -12,10 +12,10 @@ import Testing
     // swiftformat:disable spaceInsideParens spaceInsideBrackets spacearoundoperators
     
     @Test
-    func init_midi1SMFRawBytes_A() async throws {
+    func init_midi1FileRawBytes_A() async throws {
         let bytes: [UInt8] = [0x90, 0x01, 0x40]
         
-        let event = try MIDIFileEvent.NoteOn(midi1SMFRawBytes: bytes)
+        let event = try MIDIFileEvent.NoteOn(midi1FileRawBytes: bytes)
         
         #expect(event.note.number == 1)
         #expect(event.velocity == .midi1(0x40))
@@ -23,23 +23,23 @@ import Testing
     }
     
     @Test
-    func midi1SMFRawBytes_A() async {
+    func midi1FileRawBytes_A() async {
         let event = MIDIFileEvent.NoteOn(
             note: 1,
             velocity: .midi1(0x40),
             channel: 0
         )
         
-        let bytes = event.midi1SMFRawBytes(as: [UInt8].self)
+        let bytes = event.midi1FileRawBytes(as: [UInt8].self)
         
         #expect(bytes == [0x90, 0x01, 0x40])
     }
     
     @Test
-    func init_midi1SMFRawBytes_B() async throws {
+    func init_midi1FileRawBytes_B() async throws {
         let bytes: [UInt8] = [0x91, 0x3C, 0x7F]
         
-        let event = try MIDIFileEvent.NoteOn(midi1SMFRawBytes: bytes)
+        let event = try MIDIFileEvent.NoteOn(midi1FileRawBytes: bytes)
         
         #expect(event.note.number == 60)
         #expect(event.velocity == .midi1(0x7F))
@@ -47,14 +47,14 @@ import Testing
     }
     
     @Test
-    func midi1SMFRawBytes_B() async {
+    func midi1FileRawBytes_B() async {
         let event = MIDIFileEvent.NoteOn(
             note: 60,
             velocity: .midi1(0x7F),
             channel: 1
         )
         
-        let bytes = event.midi1SMFRawBytes(as: [UInt8].self)
+        let bytes = event.midi1FileRawBytes(as: [UInt8].self)
         
         #expect(bytes == [0x91, 0x3C, 0x7F])
     }
@@ -62,10 +62,10 @@ import Testing
     // MARK: - Edge Cases
     
     @Test
-    func init_midi1SMFRawBytes_Velocity0() async throws {
+    func init_midi1FileRawBytes_Velocity0() async throws {
         let bytes: [UInt8] = [0x90, 0x3C, 0x00]
         
-        let event = try MIDIFileEvent.NoteOn(midi1SMFRawBytes: bytes)
+        let event = try MIDIFileEvent.NoteOn(midi1FileRawBytes: bytes)
         
         #expect(event.note.number == 60)
         #expect(event.velocity == .midi1(0x00))
@@ -73,7 +73,7 @@ import Testing
     }
     
     @Test
-    func midi1SMFRawBytes_Velocity0_NoTranslation() async {
+    func midi1FileRawBytes_Velocity0_NoTranslation() async {
         let event = MIDIFileEvent.NoteOn(
             note: 60,
             velocity: .midi1(0x00),
@@ -81,13 +81,13 @@ import Testing
             midi1ZeroVelocityAsNoteOff: false
         )
         
-        let bytes = event.midi1SMFRawBytes(as: [UInt8].self)
+        let bytes = event.midi1FileRawBytes(as: [UInt8].self)
         
         #expect(bytes == [0x90, 0x3C, 0x00])
     }
     
     @Test
-    func midi1SMFRawBytes_Velocity0_TranslateOff() async {
+    func midi1FileRawBytes_Velocity0_TranslateOff() async {
         let event = MIDIFileEvent.NoteOn(
             note: 60,
             velocity: .midi1(0x00),
@@ -95,13 +95,13 @@ import Testing
             midi1ZeroVelocityAsNoteOff: true
         )
         
-        let bytes = event.midi1SMFRawBytes(as: [UInt8].self)
+        let bytes = event.midi1FileRawBytes(as: [UInt8].self)
         
         #expect(bytes == [0x80, 0x3C, 0x00]) // interpreted as Note Off
     }
     
     @Test
-    func midi1SMFRawBytes_Velocity1_TranslateOff() async {
+    func midi1FileRawBytes_Velocity1_TranslateOff() async {
         let event = MIDIFileEvent.NoteOn(
             note: 60,
             velocity: .midi1(0x01),
@@ -109,7 +109,7 @@ import Testing
             midi1ZeroVelocityAsNoteOff: true
         )
         
-        let bytes = event.midi1SMFRawBytes(as: [UInt8].self)
+        let bytes = event.midi1FileRawBytes(as: [UInt8].self)
         
         #expect(bytes == [0x90, 0x3C, 0x01])
     }

@@ -21,15 +21,15 @@ extension AnyMIDI1FileHeaderChunk {
     /// header bytes past the first 14 bytes and continue parsing as normal. Additional bytes are possible
     /// if/when there is an addition to the Standard MIDI File spec that formally defines them.
     /// (At which point, we can update our parser to parse the additional bytes.)
-    static var midi1SMFMinimumRawBytesLength: Int { 14 }
+    static var midi1FileMinimumRawBytesLength: Int { 14 }
     
     /// Init from MIDI file data stream.
     static func initFrom<D: DataProtocol>(
-        midi1SMFRawBytesStream stream: D,
+        midi1FileRawBytesStream stream: D,
         allowMultiTrackFormat0: Bool
     ) throws(MIDIFileDecodeError) -> (header: Self, trackCount: Int, bufferLength: Int) {
         // check for at least the minimum expected byte count
-        guard stream.count >= Self.midi1SMFMinimumRawBytesLength else {
+        guard stream.count >= Self.midi1FileMinimumRawBytesLength else {
             throw .malformed(
                 "File header length is not correct. File may not be a MIDI file."
             )
@@ -69,24 +69,24 @@ extension AnyMIDI1FileHeaderChunk {
                 malformedReason: "Not enough bytes found when attempting to read MIDI file header.",
                 try parser.read(bytes: entireHeaderLength)
             )
-            let (header, trackCount) = try initFrom(midi1SMFRawBytes: headerData, allowMultiTrackFormat0: allowMultiTrackFormat0)
+            let (header, trackCount) = try initFrom(midi1FileRawBytes: headerData, allowMultiTrackFormat0: allowMultiTrackFormat0)
             
             return (header: header, trackCount: trackCount, bufferLength: entireHeaderLength)
         }
     }
     
     static func initFrom<D: DataProtocol>(
-        midi1SMFRawBytes: D,
+        midi1FileRawBytes: D,
         allowMultiTrackFormat0: Bool
     ) throws(MIDIFileDecodeError) -> (header: Self, trackCount: Int) {
         // check for at least the minimum expected byte count
-        guard midi1SMFRawBytes.count >= Self.midi1SMFMinimumRawBytesLength else {
+        guard midi1FileRawBytes.count >= Self.midi1FileMinimumRawBytesLength else {
             throw .malformed(
                 "File header length is not correct. File may not be a MIDI file."
             )
         }
         
-        return try midi1SMFRawBytes.withDataParser { parser throws(MIDIFileDecodeError) in
+        return try midi1FileRawBytes.withDataParser { parser throws(MIDIFileDecodeError) in
             // Header descriptor
             
             guard (try? parser.read(bytes: 4).toUInt8Bytes()) == HeaderMIDI1FileChunkIdentifier().string.toASCIIBytes()

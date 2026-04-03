@@ -158,7 +158,7 @@ extension MIDIFileEvent.KeySignature: MIDIFileEventPayload {
     }
     
     public static func decode(
-        midi1SMFRawBytesStream stream: some DataProtocol,
+        midi1FileRawBytesStream stream: some DataProtocol,
         runningStatus: UInt8?
     ) -> MIDIFileEventDecodeResult<Self> {
         // Step 1: Check required byte count
@@ -240,7 +240,7 @@ extension MIDIFileEvent.KeySignature: MIDIFileEventPayload {
         )
     }
     
-    public func midi1SMFRawBytes<D: MutableDataProtocol>(as dataType: D.Type) -> D {
+    public func midi1FileRawBytes<D: MutableDataProtocol>(as dataType: D.Type) -> D {
         // FF 59 02(length) sf mi
         // sf is a byte specifying the number of flats (-ve) or sharps (+ve) that identifies the
         // key signature (-7 = 7 flats, -1 = 1 flat, 0 = key of C, 1 = 1 sharp, etc).
@@ -255,12 +255,12 @@ extension MIDIFileEvent.KeySignature: MIDIFileEventPayload {
         )
     }
     
-    public var smfDescription: String {
+    public var midiFileDescription: String {
         stringValue
     }
     
-    public var smfDebugDescription: String {
-        "KeySignature(" + smfDescription + ")"
+    public var midiFileDebugDescription: String {
+        "KeySignature(" + midiFileDescription + ")"
     }
 }
 

@@ -107,7 +107,7 @@ extension MIDIFileEvent.ChannelPrefix: MIDIFileEventPayload {
     }
     
     public static func decode(
-        midi1SMFRawBytesStream stream: some DataProtocol,
+        midi1FileRawBytesStream stream: some DataProtocol,
         runningStatus: UInt8?
     ) -> MIDIFileEventDecodeResult<Self> {
         // Step 1: Check required byte count
@@ -169,20 +169,20 @@ extension MIDIFileEvent.ChannelPrefix: MIDIFileEventPayload {
         )
     }
     
-    public func midi1SMFRawBytes<D: MutableDataProtocol>(as dataType: D.Type) -> D {
+    public func midi1FileRawBytes<D: MutableDataProtocol>(as dataType: D.Type) -> D {
         // FF 20 01 cc
         // cc is channel number (0...15)
         
         D(Self.prefixBytes + [channel.uInt8Value])
     }
     
-    public var smfDescription: String {
+    public var midiFileDescription: String {
         let chanString = channel.uInt8Value.hexString(padTo: 1, prefix: true)
 
         return "chanPrefix: \(chanString)"
     }
 
-    public var smfDebugDescription: String {
+    public var midiFileDebugDescription: String {
         let chanString = channel.uInt8Value.hexString(padTo: 1, prefix: true)
 
         return "ChannelPrefix(\(chanString))"

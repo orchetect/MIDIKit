@@ -12,13 +12,13 @@ import Testing
     // swiftformat:disable spaceInsideParens spaceInsideBrackets spacearoundoperators
     
     @Test
-    func init_midi1SMFRawBytes_A() async throws {
+    func init_midi1FileRawBytes_A() async throws {
         let bytes: [UInt8] = [
             0xFF, 0x51, 0x03, // header
             0x07, 0xA1, 0x20  // 24-bit tempo encoding
         ]
         
-        let event = try MIDIFileEvent.AnyTempo(midi1SMFRawBytes: bytes)
+        let event = try MIDIFileEvent.AnyTempo(midi1FileRawBytes: bytes)
         
         guard case let .musical(musicalTempo) = event else {
             Issue.record()
@@ -29,13 +29,13 @@ import Testing
     }
     
     @Test
-    func init_midi1SMFRawBytes_B() async throws {
+    func init_midi1FileRawBytes_B() async throws {
         let bytes: [UInt8] = [
             0xFF, 0x51, 0x03, // header
             0x0F, 0x42, 0x40  // 24-bit tempo encoding
         ]
         
-        let event = try MIDIFileEvent.AnyTempo(midi1SMFRawBytes: bytes)
+        let event = try MIDIFileEvent.AnyTempo(midi1FileRawBytes: bytes)
         
         guard case let .musical(musicalTempo) = event else {
             Issue.record()

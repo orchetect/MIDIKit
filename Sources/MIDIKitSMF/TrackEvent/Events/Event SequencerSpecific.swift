@@ -84,7 +84,7 @@ extension MIDIFileEvent.SequencerSpecific: MIDIFileEventPayload {
     }
     
     public static func decode(
-        midi1SMFRawBytesStream stream: some DataProtocol,
+        midi1FileRawBytesStream stream: some DataProtocol,
         runningStatus: UInt8?
     ) -> MIDIFileEventDecodeResult<Self> {
         // Step 1: Check required byte count
@@ -109,7 +109,7 @@ extension MIDIFileEvent.SequencerSpecific: MIDIFileEventPayload {
                     throw .malformed("Event does not start with expected bytes.")
                 }
                 
-                let length = try parser.decodeSMF1VariableLengthValue()
+                let length = try parser.midi1FileVariableLengthValue()
                 
                 guard parser.remainingByteCount >= length else {
                     throw .malformed(
@@ -141,21 +141,21 @@ extension MIDIFileEvent.SequencerSpecific: MIDIFileEventPayload {
         }
     }
     
-    public func midi1SMFRawBytes<D: MutableDataProtocol>(as dataType: D.Type) -> D {
+    public func midi1FileRawBytes<D: MutableDataProtocol>(as dataType: D.Type) -> D {
         // FF 7F length data
         
         D(Self.prefixBytes)
             // length of data
-            + D(midi1SMFVariableLengthValue: data.count)
+            + D(midi1FileVariableLengthValue: data.count)
             // data
             + D(data)
     }
     
-    public var smfDescription: String {
+    public var midiFileDescription: String {
         "sequencerSpecific: \(data.count) bytes"
     }
     
-    public var smfDebugDescription: String {
+    public var midiFileDebugDescription: String {
         let byteDump = data
             .hexString(padEachTo: 2, prefixes: true, separator: ", ")
         

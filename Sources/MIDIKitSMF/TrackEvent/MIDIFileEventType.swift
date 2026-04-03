@@ -142,7 +142,7 @@ extension MIDIFileEventType {
         }
         
         if data.starts(with: [0xF0]) { // (could be a sysex or universal sysex)
-            if let len = data.midi1SMFVariableLengthValue()?.byteLength {
+            if let len = data.midi1FileVariableLengthValue()?.byteLength {
                 let firstMsgByteOffset = len + 1
                 if firstMsgByteOffset < data.count {
                     let manufacturerByte1 = data[atOffset: firstMsgByteOffset]

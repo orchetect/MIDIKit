@@ -73,7 +73,7 @@ extension MIDIFileEvent.Tempo /* : MIDIFileEventPayload */ {
     // `var wrapped` needs to be implemented by the concrete type.
     
     public static func decode(
-        midi1SMFRawBytesStream stream: some DataProtocol,
+        midi1FileRawBytesStream stream: some DataProtocol,
         runningStatus: UInt8?
     ) -> MIDIFileEventDecodeResult<Self> {
         // Step 1: Check required byte count
@@ -124,7 +124,7 @@ extension MIDIFileEvent.Tempo /* : MIDIFileEventPayload */ {
         )
     }
     
-    public func midi1SMFRawBytes<D: MutableDataProtocol>(as dataType: D.Type) -> D {
+    public func midi1FileRawBytes<D: MutableDataProtocol>(as dataType: D.Type) -> D {
         // FF 51 03 xx xx xx
         // xx xx xx = 3-byte (24-bit) microseconds per MIDI quarter-note
         
@@ -140,12 +140,12 @@ extension MIDIFileEvent.Tempo /* : MIDIFileEventPayload */ {
     }
     
     // default implementation; each concrete type should override this
-    public var smfDescription: String {
+    public var midiFileDescription: String {
         "\(microsecondsPerQuarter) ms/qtr"
     }
     
     // default implementation; each concrete type should override this
-    public var smfDebugDescription: String {
-        "Tempo(\(smfDescription))"
+    public var midiFileDebugDescription: String {
+        "Tempo(\(midiFileDescription))"
     }
 }

@@ -13,11 +13,11 @@ import SwiftTimecodeCore
     // swiftformat:disable spaceInsideParens spaceInsideBrackets spacearoundoperators
     
     @Test
-    func init_midi1SMFRawBytes() async throws {
+    func init_midi1FileRawBytes() async throws {
         let bytes: [UInt8] = [0xFF, 0x54, 0x05,
                               0b00100001, 2, 3, 4, 5]
         
-        let event = try MIDIFileEvent.SMPTEOffset(midi1SMFRawBytes: bytes)
+        let event = try MIDIFileEvent.SMPTEOffset(midi1FileRawBytes: bytes)
         
         #expect(event.hours == 1)
         #expect(event.minutes == 2)
@@ -28,7 +28,7 @@ import SwiftTimecodeCore
     }
     
     @Test
-    func midi1SMFRawBytes() async {
+    func midi1FileRawBytes() async {
         let event = MIDIFileEvent.SMPTEOffset(
             hr: 1,
             min: 2,
@@ -38,7 +38,7 @@ import SwiftTimecodeCore
             rate: .fps25
         )
         
-        let bytes = event.midi1SMFRawBytes(as: [UInt8].self)
+        let bytes = event.midi1FileRawBytes(as: [UInt8].self)
         
         #expect(bytes == [0xFF, 0x54, 0x05,
                           0b00100001, 2, 3, 4, 5])
@@ -50,7 +50,7 @@ import SwiftTimecodeCore
             let rawData: [UInt8] = [0xFF, 0x54, 0x05,
                                     0b00000001, 2, 3, 4, 5]
             
-            let event = try MIDIFileEvent.SMPTEOffset(midi1SMFRawBytes: rawData)
+            let event = try MIDIFileEvent.SMPTEOffset(midi1FileRawBytes: rawData)
             
             #expect(event.frameRate == .fps24)
         }
@@ -59,7 +59,7 @@ import SwiftTimecodeCore
             let rawData: [UInt8] = [0xFF, 0x54, 0x05,
                                     0b00100001, 2, 3, 4, 5]
             
-            let event = try MIDIFileEvent.SMPTEOffset(midi1SMFRawBytes: rawData)
+            let event = try MIDIFileEvent.SMPTEOffset(midi1FileRawBytes: rawData)
             
             #expect(event.frameRate == .fps25)
         }
@@ -68,7 +68,7 @@ import SwiftTimecodeCore
             let rawData: [UInt8] = [0xFF, 0x54, 0x05,
                                     0b01000001, 2, 3, 4, 5]
             
-            let event = try MIDIFileEvent.SMPTEOffset(midi1SMFRawBytes: rawData)
+            let event = try MIDIFileEvent.SMPTEOffset(midi1FileRawBytes: rawData)
             
             #expect(event.frameRate == .fps29_97d)
         }
@@ -77,7 +77,7 @@ import SwiftTimecodeCore
             let rawData: [UInt8] = [0xFF, 0x54, 0x05,
                                     0b01100001, 2, 3, 4, 5]
             
-            let event = try MIDIFileEvent.SMPTEOffset(midi1SMFRawBytes: rawData)
+            let event = try MIDIFileEvent.SMPTEOffset(midi1FileRawBytes: rawData)
             
             #expect(event.frameRate == .fps30)
         }

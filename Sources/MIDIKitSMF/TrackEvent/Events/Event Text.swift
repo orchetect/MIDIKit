@@ -158,7 +158,7 @@ extension MIDIFileEvent.Text: MIDIFileEventPayload {
     }
     
     public static func decode(
-        midi1SMFRawBytesStream stream: some DataProtocol,
+        midi1FileRawBytesStream stream: some DataProtocol,
         runningStatus: UInt8?
     ) -> MIDIFileEventDecodeResult<Self> {
         // Step 1: Check required byte count
@@ -182,14 +182,14 @@ extension MIDIFileEvent.Text: MIDIFileEventPayload {
                     malformedReason: "Text is missing event header bytes.",
                     try parser.read(bytes: 2)
                 )
-                guard let textTypeMatch = EventType(midi1SMFRawBytes: headerBytes)
+                guard let textTypeMatch = EventType(midi1FileRawBytes: headerBytes)
                 else {
                     throw .malformed(
                         "Event is not a text event."
                     )
                 }
                 
-                let length = try parser.decodeSMF1VariableLengthValue()
+                let length = try parser.midi1FileVariableLengthValue()
                 
                 let byteSlice = try parser.toMIDIFileDecodeError(
                     malformedReason: "Text does not have enough bytes.",
@@ -218,24 +218,24 @@ extension MIDIFileEvent.Text: MIDIFileEventPayload {
         )
     }
     
-    public func midi1SMFRawBytes<D: MutableDataProtocol>(as dataType: D.Type) -> D {
+    public func midi1FileRawBytes<D: MutableDataProtocol>(as dataType: D.Type) -> D {
         // FF 01 length text
         
         let stringData = text.data(using: .nonLossyASCII) ?? Data()
         
         return textType.prefixBytes
             // length
-            + D(midi1SMFVariableLengthValue: stringData.count)
+            + D(midi1FileVariableLengthValue: stringData.count)
             // text
             + stringData
     }
     
-    public var smfDescription: String {
+    public var midiFileDescription: String {
         "\(textType): " + text.quoted
     }
     
-    public var smfDebugDescription: String {
-        "Text(" + smfDescription + ")"
+    public var midiFileDebugDescription: String {
+        "Text(" + midiFileDescription + ")"
     }
 }
 
@@ -305,7 +305,7 @@ extension MIDIFileEvent.Text.EventType: Sendable { }
 // MARK: - EventType init
 
 extension MIDIFileEvent.Text.EventType {
-    public init?(midi1SMFRawBytes rawBytes: some DataProtocol) {
+    public init?(midi1FileRawBytes rawBytes: some DataProtocol) {
         guard let match = Self.allCases.first(where: {
             $0.prefixBytes.elementsEqual(rawBytes)
         }) else { return nil }

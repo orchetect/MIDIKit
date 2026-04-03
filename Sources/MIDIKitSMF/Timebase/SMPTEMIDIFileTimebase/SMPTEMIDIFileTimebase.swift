@@ -130,7 +130,7 @@ extension SMPTEMIDIFileTimebase: MIDIFileTimebase {
         let byte1 = data[atOffset: 0]
         let byte2 = data[atOffset: 1]
         
-        guard let fr = MIDI1FileFrameRate(midi1SMFRawHeaderByte: byte1 & 0b01111111) else {
+        guard let fr = MIDI1FileFrameRate(midi1FileRawHeaderByte: byte1 & 0b01111111) else {
             return nil
         }
         let ticks = byte2
@@ -146,7 +146,7 @@ extension SMPTEMIDIFileTimebase: MIDIFileTimebase {
     
     public func rawData<D: MutableDataProtocol>(as dataType: D.Type) -> D {
         let data = [
-            frameRate.midi1SMFRawFileHeaderByte + 0b10000000,
+            frameRate.midi1FileRawFileHeaderByte + 0b10000000,
             ticksPerFrame
         ]
         

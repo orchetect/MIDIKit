@@ -8,11 +8,11 @@ import Foundation
 import MIDIKitCore
 
 extension MIDI1File.UndefinedChunk {
-    public func midi1SMFRawBytes() throws(MIDIFileEncodeError) -> Data {
-        try midi1SMFRawBytes(as: Data.self)
+    public func midi1FileRawBytes() throws(MIDIFileEncodeError) -> Data {
+        try midi1FileRawBytes(as: Data.self)
     }
     
-    public func midi1SMFRawBytes<D: MutableDataProtocol>(as dataType: D.Type) throws(MIDIFileEncodeError) -> D {
+    public func midi1FileRawBytes<D: MutableDataProtocol>(as dataType: D.Type) throws(MIDIFileEncodeError) -> D {
         // assemble track body without header or length
         
         let bodyData = rawData

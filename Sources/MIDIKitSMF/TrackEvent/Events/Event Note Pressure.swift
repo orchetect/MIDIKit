@@ -119,7 +119,7 @@ extension MIDIEvent.NotePressure: MIDIFileEventPayload {
     }
     
     public static func decode(
-        midi1SMFRawBytesStream stream: some DataProtocol,
+        midi1FileRawBytesStream stream: some DataProtocol,
         runningStatus: UInt8?
     ) -> MIDIFileEventDecodeResult<Self> {
         // Step 1: Check required byte count
@@ -204,21 +204,21 @@ extension MIDIEvent.NotePressure: MIDIFileEventPayload {
         }
     }
     
-    public func midi1SMFRawBytes<D: MutableDataProtocol>(as dataType: D.Type) -> D {
+    public func midi1FileRawBytes<D: MutableDataProtocol>(as dataType: D.Type) -> D {
         // An note pressure
         
         D(midi1RawBytes())
     }
     
-    static var midi1SMFFixedRawBytesLength: Int { 3 }
+    static var midi1FileFixedRawBytesLength: Int { 3 }
     
-    public var smfDescription: String {
+    public var midiFileDescription: String {
         let chanString = channel.uInt8Value.hexString(padTo: 1, prefix: true)
         
         return "note:\(note) pressure:\(amount) chan:\(chanString)"
     }
     
-    public var smfDebugDescription: String {
-        "PolyPressure(" + smfDescription + ")"
+    public var midiFileDebugDescription: String {
+        "PolyPressure(" + midiFileDescription + ")"
     }
 }

@@ -150,7 +150,7 @@ extension MIDIFileEvent.UnrecognizedMeta: MIDIFileEventPayload {
     }
     
     public static func decode(
-        midi1SMFRawBytesStream stream: some DataProtocol,
+        midi1FileRawBytesStream stream: some DataProtocol,
         runningStatus: UInt8?
     ) -> MIDIFileEventDecodeResult<Self> {
         // Step 1: Check required byte count
@@ -181,7 +181,7 @@ extension MIDIFileEvent.UnrecognizedMeta: MIDIFileEventPayload {
                 try parser.readByte()
             )
             
-            let length = try parser.decodeSMF1VariableLengthValue()
+            let length = try parser.midi1FileVariableLengthValue()
             
             let readData = try parser.toMIDIFileDecodeError(
                 malformedReason: "Meta event does not have enough data bytes.",
@@ -208,22 +208,22 @@ extension MIDIFileEvent.UnrecognizedMeta: MIDIFileEventPayload {
         )
     }
     
-    public func midi1SMFRawBytes<D: MutableDataProtocol>(as dataType: D.Type) -> D {
+    public func midi1FileRawBytes<D: MutableDataProtocol>(as dataType: D.Type) -> D {
         // FF <type> <length> <bytes>
         // type == UInt8 meta type (unrecognized)
 
         [0xFF, metaType]
             // length of data
-            + D(midi1SMFVariableLengthValue: data.count)
+            + D(midi1FileVariableLengthValue: data.count)
             // data
             + data
     }
     
-    public var smfDescription: String {
+    public var midiFileDescription: String {
         "meta: \(metaType), \(data.count) bytes"
     }
     
-    public var smfDebugDescription: String {
+    public var midiFileDebugDescription: String {
         let byteDump = data
             .hexString(padEachTo: 2, prefixes: true, separator: ", ")
         

@@ -322,7 +322,7 @@ extension MIDIFileEvent.SMPTEOffset: MIDIFileEventPayload {
     }
     
     public static func decode(
-        midi1SMFRawBytesStream stream: some DataProtocol,
+        midi1FileRawBytesStream stream: some DataProtocol,
         runningStatus: UInt8?
     ) -> MIDIFileEventDecodeResult<Self> {
         // Step 1: Check required byte count
@@ -376,7 +376,7 @@ extension MIDIFileEvent.SMPTEOffset: MIDIFileEventPayload {
         
         // Step 3: Validate and transform values
         do throws(MIDIFileDecodeError) {
-            guard let readFrameRate = MIDI1FileFrameRate(midi1SMFRawTrackOffsetByte: readFrameRateBits)
+            guard let readFrameRate = MIDI1FileFrameRate(midi1FileRawTrackOffsetByte: readFrameRateBits)
             else {
                 // this should never happen, but trap error any way
                 throw .malformed(
@@ -436,7 +436,7 @@ extension MIDIFileEvent.SMPTEOffset: MIDIFileEventPayload {
         }
     }
     
-    public func midi1SMFRawBytes<D: MutableDataProtocol>(as dataType: D.Type) -> D {
+    public func midi1FileRawBytes<D: MutableDataProtocol>(as dataType: D.Type) -> D {
         // FF 54 05 hr mn se fr ff
         //
         // 05 is length
@@ -457,7 +457,7 @@ extension MIDIFileEvent.SMPTEOffset: MIDIFileEventPayload {
         var data = D()
         
         data += Self.prefixBytes // start bytes
-        data += [(frameRate.midi1SMFRawTrackOffsetEventByte << 5) + hours] // hour & frame rate
+        data += [(frameRate.midi1FileRawTrackOffsetEventByte << 5) + hours] // hour & frame rate
         data += [minutes] // minutes
         data += [seconds] // seconds
         data += [frames] // frames
@@ -466,7 +466,7 @@ extension MIDIFileEvent.SMPTEOffset: MIDIFileEventPayload {
         return data
     }
     
-    public var smfDescription: String {
+    public var midiFileDescription: String {
         let time =
             hours.string(paddedTo: 1) + ":" +
             minutes.string(paddedTo: 2) + ":" +
@@ -478,8 +478,8 @@ extension MIDIFileEvent.SMPTEOffset: MIDIFileEventPayload {
         return "smpte: " + time
     }
     
-    public var smfDebugDescription: String {
-        "SMPTEOffset(" + smfDescription + ")"
+    public var midiFileDebugDescription: String {
+        "SMPTEOffset(" + midiFileDescription + ")"
     }
 }
 

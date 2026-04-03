@@ -12,7 +12,7 @@ import Testing
     // swiftformat:disable spaceInsideParens spaceInsideBrackets spacearoundoperators
     
     @Test
-    func init_midi1SMFRawBytes() async throws {
+    func init_midi1FileRawBytes() async throws {
         let bytes: [UInt8] = [
             0xFF, 0x58, 0x04, // header
             0x02, // numerator
@@ -21,7 +21,7 @@ import Testing
             0x08  // numberOf32ndNotesInAQuarterNote
         ]
         
-        let event = try MIDIFileEvent.TimeSignature(midi1SMFRawBytes: bytes)
+        let event = try MIDIFileEvent.TimeSignature(midi1FileRawBytes: bytes)
         
         #expect(event.numerator == 2)
         #expect(event.denominator == 1)
@@ -30,13 +30,13 @@ import Testing
     }
     
     @Test
-    func midi1SMFRawBytes() async {
+    func midi1FileRawBytes() async {
         let event = MIDIFileEvent.TimeSignature(
             numerator: 2,
             denominator: 1
         )
         
-        let bytes = event.midi1SMFRawBytes(as: [UInt8].self)
+        let bytes = event.midi1FileRawBytes(as: [UInt8].self)
         
         #expect(bytes == [
             0xFF, 0x58, 0x04, // header

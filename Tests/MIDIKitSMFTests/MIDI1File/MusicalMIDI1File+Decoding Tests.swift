@@ -620,7 +620,7 @@ import Testing
         let extraTrack = MusicalMIDI1File.TrackChunk(events: [
             .cc(delta: .none, controller: .breath, value: .midi1(42), channel: 0)
         ])
-        let extraTrackRawData = try extraTrack.midi1SMFRawBytes(as: [UInt8].self, using: midiFile.timebase)
+        let extraTrackRawData = try extraTrack.midi1FileRawBytes(as: [UInt8].self, using: midiFile.timebase)
         let rawDataExtraTrack = baseRawData + extraTrackRawData
         
         // ignoring spurious trailing bytes

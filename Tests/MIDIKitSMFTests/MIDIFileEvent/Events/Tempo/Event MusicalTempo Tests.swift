@@ -12,22 +12,22 @@ import Testing
     // swiftformat:disable spaceInsideParens spaceInsideBrackets spacearoundoperators
     
     @Test
-    func init_midi1SMFRawBytes_A() async throws {
+    func init_midi1FileRawBytes_A() async throws {
         let bytes: [UInt8] = [
             0xFF, 0x51, 0x03, // header
             0x07, 0xA1, 0x20  // 24-bit tempo encoding
         ]
         
-        let event = try MIDIFileEvent.MusicalTempo(midi1SMFRawBytes: bytes)
+        let event = try MIDIFileEvent.MusicalTempo(midi1FileRawBytes: bytes)
         
         #expect(event.bpm == 120.0)
     }
     
     @Test
-    func midi1SMFRawBytes_A() async {
+    func midi1FileRawBytes_A() async {
         let event = MIDIFileEvent.MusicalTempo(bpm: 120.0)
         
-        let bytes = event.midi1SMFRawBytes(as: [UInt8].self)
+        let bytes = event.midi1FileRawBytes(as: [UInt8].self)
         
         #expect(bytes == [
             0xFF, 0x51, 0x03, // header
@@ -36,22 +36,22 @@ import Testing
     }
     
     @Test
-    func init_midi1SMFRawBytes_B() async throws {
+    func init_midi1FileRawBytes_B() async throws {
         let bytes: [UInt8] = [
             0xFF, 0x51, 0x03, // header
             0x0F, 0x42, 0x40  // 24-bit tempo encoding
         ]
         
-        let event = try MIDIFileEvent.MusicalTempo(midi1SMFRawBytes: bytes)
+        let event = try MIDIFileEvent.MusicalTempo(midi1FileRawBytes: bytes)
         
         #expect(event.bpm == 60.0)
     }
     
     @Test
-    func midi1SMFRawBytes_B() async {
+    func midi1FileRawBytes_B() async {
         let event = MIDIFileEvent.MusicalTempo(bpm: 60.0)
         
-        let bytes = event.midi1SMFRawBytes(as: [UInt8].self)
+        let bytes = event.midi1FileRawBytes(as: [UInt8].self)
         
         #expect(bytes == [
             0xFF, 0x51, 0x03, // header

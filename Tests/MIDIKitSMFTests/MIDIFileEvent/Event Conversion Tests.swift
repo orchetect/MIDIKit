@@ -7,7 +7,7 @@
 import MIDIKitSMF
 import Testing
 
-@Suite struct Event_Conversion_EventToSMFEvent_Tests {
+@Suite struct Event_Conversion_EventToMIDIFileEvent_Tests {
     @Test
     func midi_Event_NoteOn_midiFileEvent() async throws {
         let event: MIDIEvent = .noteOn(

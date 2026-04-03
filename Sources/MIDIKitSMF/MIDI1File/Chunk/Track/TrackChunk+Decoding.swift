@@ -12,7 +12,7 @@ extension MIDI1File.TrackChunk {
     /// Init from MIDI file data stream.
     /// If the initializer returns `nil`, discard the track without throwing an error.
     public init?<D: DataProtocol>(
-        midi1SMFRawBytesStream stream: D,
+        midi1FileRawBytesStream stream: D,
         timebase: Timebase,
         options: MIDI1FileChunkDecodeOptions
     ) throws(MIDIFileDecodeError) {
@@ -60,7 +60,7 @@ extension MIDI1File.TrackChunk {
             // we can't pass pointer ranges outside of the data reader closure,
             // so we must use them within the closure
             return try Self(
-                midi1SMFRawBytes: readChunk,
+                midi1FileRawBytes: readChunk,
                 timebase: timebase,
                 options: options
             )
@@ -72,7 +72,7 @@ extension MIDI1File.TrackChunk {
     /// Init from raw data stream, excluding the header identifier and length.
     /// If the initializer returns `nil`, discard the track without throwing an error.
     init?<D: DataProtocol>(
-        midi1SMFRawBytes rawData: D,
+        midi1FileRawBytes rawData: D,
         timebase: Timebase,
         options: MIDI1FileChunkDecodeOptions
     ) throws(MIDIFileDecodeError) {
@@ -105,7 +105,7 @@ extension MIDI1File.TrackChunk {
                         try parser.read(bytes: 4, advance: false)
                     )
                     
-                    guard let eventDeltaTime = eventDeltaTimeRead.midi1SMFVariableLengthValue()
+                    guard let eventDeltaTime = eventDeltaTimeRead.midi1FileVariableLengthValue()
                     else {
                         throw .malformed(
                             "Delta time variable length value could not be read and may be malformed."
@@ -150,7 +150,7 @@ extension MIDI1File.TrackChunk {
                         detectParameterNumberSequence: false // parse out discrete events; RPN/NRPN events are bundled later
                     ) {
                         let result = eventType.concreteType.decodeTypeErased(
-                            midi1SMFRawBytesStream: readBuffer,
+                            midi1FileRawBytesStream: readBuffer,
                             runningStatus: effectiveRunningStatus
                         )
                         

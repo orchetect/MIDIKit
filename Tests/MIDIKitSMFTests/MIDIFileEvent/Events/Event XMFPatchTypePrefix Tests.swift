@@ -12,23 +12,23 @@ import Testing
     // swiftformat:disable spaceInsideParens spaceInsideBrackets spacearoundoperators
     
     @Test
-    func init_midi1SMFRawBytes_A() async throws {
+    func init_midi1FileRawBytes_A() async throws {
         let bytes: [UInt8] = [
             0xFF, 0x60, // header
             0x01,       // length (always 1)
             0x01        // param
         ]
         
-        let event = try MIDIFileEvent.XMFPatchTypePrefix(midi1SMFRawBytes: bytes)
+        let event = try MIDIFileEvent.XMFPatchTypePrefix(midi1FileRawBytes: bytes)
         
         #expect(event.patchSet == .generalMIDI1)
     }
     
     @Test
-    func midi1SMFRawBytes_A() async {
+    func midi1FileRawBytes_A() async {
         let event = MIDIFileEvent.XMFPatchTypePrefix(patchSet: .generalMIDI1)
         
-        let bytes = event.midi1SMFRawBytes(as: [UInt8].self)
+        let bytes = event.midi1FileRawBytes(as: [UInt8].self)
         
         #expect(bytes == [
             0xFF, 0x60, // header
@@ -38,23 +38,23 @@ import Testing
     }
     
     @Test
-    func init_midi1SMFRawBytes_B() async throws {
+    func init_midi1FileRawBytes_B() async throws {
         let bytes: [UInt8] = [
             0xFF, 0x60, // header
             0x01,       // length (always 1)
             0x02        // param
         ]
         
-        let event = try MIDIFileEvent.XMFPatchTypePrefix(midi1SMFRawBytes: bytes)
+        let event = try MIDIFileEvent.XMFPatchTypePrefix(midi1FileRawBytes: bytes)
         
         #expect(event.patchSet == .generalMIDI2)
     }
     
     @Test
-    func midi1SMFRawBytes_B() async {
+    func midi1FileRawBytes_B() async {
         let event = MIDIFileEvent.XMFPatchTypePrefix(patchSet: .generalMIDI2)
         
-        let bytes = event.midi1SMFRawBytes(as: [UInt8].self)
+        let bytes = event.midi1FileRawBytes(as: [UInt8].self)
         
         #expect(bytes == [
             0xFF, 0x60, // header
@@ -74,7 +74,7 @@ import Testing
         ]
         
         #expect(throws: (any Error).self) {
-            try MIDIFileEvent.XMFPatchTypePrefix(midi1SMFRawBytes: bytes)
+            try MIDIFileEvent.XMFPatchTypePrefix(midi1FileRawBytes: bytes)
         }
     }
 }

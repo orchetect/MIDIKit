@@ -10,7 +10,7 @@ import MIDIKitCore
 extension MutableDataProtocol {
     /// Utility:
     /// Returns variable length value encoded byte array.
-    init(midi1SMFVariableLengthValue number: some BinaryInteger) {
+    init(midi1FileVariableLengthValue number: some BinaryInteger) {
         var result = Self()
         var count = 0
         
@@ -51,7 +51,7 @@ extension MutableDataProtocol {
         // According to the Standard MIDI File 1.0 Spec, the entire delta-time should be at most 4
         // bytes long.
         
-        append(contentsOf: Self(midi1SMFVariableLengthValue: ticks))
+        append(contentsOf: Self(midi1FileVariableLengthValue: ticks))
     }
 }
 
@@ -61,7 +61,7 @@ extension DataProtocol {
     /// Returns nil if bytes is empty or variable length value could not be read in the expected
     /// format (ie: malformed or unexpected data)
     /// Currently returns nil if value overflows a 28-bit unsigned value.
-    func midi1SMFVariableLengthValue() -> (value: Int, byteLength: Int)? {
+    func midi1FileVariableLengthValue() -> (value: Int, byteLength: Int)? {
         let uInt28Max = 0b1111_11111111_11111111_11111111
         
         var result = 0 // don't cast as UInt32 yet, we need room to check for overflow

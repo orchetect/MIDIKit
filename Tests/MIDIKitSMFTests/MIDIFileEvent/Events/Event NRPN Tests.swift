@@ -14,7 +14,7 @@ import Testing
     // MARK: - With Data LSB
     
     @Test
-    func init_Event_init_midi1SMFRawBytes_SinglePacket_FullyFormedMessages() async throws {
+    func init_Event_init_midi1FileRawBytes_SinglePacket_FullyFormedMessages() async throws {
         let bytes: [UInt8] = [
             0x4D, 0x54, 0x72, 0x6B, // MTrk
             0x00, 0x00, 0x00, 0x14, // length: 20 bytes to follow
@@ -33,12 +33,12 @@ import Testing
         ]
         
         // (not implemented, so we need to test parsing using a track instead)
-        // let event = try MIDIFileEvent.NRPN(midi1SMFRawBytes: bytes)
+        // let event = try MIDIFileEvent.NRPN(midi1FileRawBytes: bytes)
         
         let timebase: MusicalMIDI1File.Timebase = .musical(ticksPerQuarterNote: 960)
         
         let parsedTrackA = try #require(try MusicalMIDI1File.TrackChunk(
-            midi1SMFRawBytesStream: bytes,
+            midi1FileRawBytesStream: bytes,
             timebase: timebase,
             options: .init(bundleRPNAndNRPNEvents: true)
         ))
@@ -55,7 +55,7 @@ import Testing
     }
     
     @Test
-    func init_Event_init_midi1SMFRawBytes_SinglePacket_RunningStatus() async throws {
+    func init_Event_init_midi1FileRawBytes_SinglePacket_RunningStatus() async throws {
         let bytes: [UInt8] = [
             0x4D, 0x54, 0x72, 0x6B, // MTrk
             0x00, 0x00, 0x00, 0x11, // length: 17 bytes to follow
@@ -74,12 +74,12 @@ import Testing
         ]
         
         // (not implemented, so we need to test parsing using a track instead)
-        // let event = try MIDIFileEvent.NRPN(midi1SMFRawBytes: bytes)
+        // let event = try MIDIFileEvent.NRPN(midi1FileRawBytes: bytes)
         
         let timebase: MusicalMIDI1File.Timebase = .musical(ticksPerQuarterNote: 960)
         
         let parsedTrackA = try #require(try MusicalMIDI1File.TrackChunk(
-            midi1SMFRawBytesStream: bytes,
+            midi1FileRawBytesStream: bytes,
             timebase: timebase,
             options: .init(bundleRPNAndNRPNEvents: true)
         ))
@@ -104,7 +104,7 @@ import Testing
         )
         
         // (first delta time is omitted as always, it synthesizes zero delta times for subsequent events)
-        let bytes = event.midi1SMFRawBytes(as: [UInt8].self)
+        let bytes = event.midi1FileRawBytes(as: [UInt8].self)
         
         #expect(bytes == [
             0xB1, 0x63, 0x00, // cc 99, chan 1
@@ -120,7 +120,7 @@ import Testing
     // MARK: - No Data LSB
     
     @Test
-    func init_Event_init_midi1SMFRawBytes_SinglePacket_FullyFormedMessages_NoDataLSB() async throws {
+    func init_Event_init_midi1FileRawBytes_SinglePacket_FullyFormedMessages_NoDataLSB() async throws {
         let bytes: [UInt8] = [
             0x4D, 0x54, 0x72, 0x6B, // MTrk
             0x00, 0x00, 0x00, 0x10, // length: 16 bytes to follow
@@ -137,12 +137,12 @@ import Testing
         ]
         
         // (not implemented, so we need to test parsing using a track instead)
-        // let event = try MIDIFileEvent.NRPN(midi1SMFRawBytes: bytes)
+        // let event = try MIDIFileEvent.NRPN(midi1FileRawBytes: bytes)
         
         let timebase: MusicalMIDI1File.Timebase = .musical(ticksPerQuarterNote: 960)
         
         let parsedTrackA = try #require(try MusicalMIDI1File.TrackChunk(
-            midi1SMFRawBytesStream: bytes,
+            midi1FileRawBytesStream: bytes,
             timebase: timebase,
             options: .init(bundleRPNAndNRPNEvents: true)
         ))
@@ -159,7 +159,7 @@ import Testing
     }
     
     @Test
-    func init_Event_init_midi1SMFRawBytes_SinglePacket_RunningStatus_NoDataLSB() async throws {
+    func init_Event_init_midi1FileRawBytes_SinglePacket_RunningStatus_NoDataLSB() async throws {
         let bytes: [UInt8] = [
             0x4D, 0x54, 0x72, 0x6B, // MTrk
             0x00, 0x00, 0x00, 0x0E, // length: 14 bytes to follow
@@ -176,12 +176,12 @@ import Testing
         ]
         
         // (not implemented, so we need to test parsing using a track instead)
-        // let event = try MIDIFileEvent.NRPN(midi1SMFRawBytes: bytes)
+        // let event = try MIDIFileEvent.NRPN(midi1FileRawBytes: bytes)
         
         let timebase: MusicalMIDI1File.Timebase = .musical(ticksPerQuarterNote: 960)
         
         let parsedTrackA = try #require(try MusicalMIDI1File.TrackChunk(
-            midi1SMFRawBytesStream: bytes,
+            midi1FileRawBytesStream: bytes,
             timebase: timebase,
             options: .init(bundleRPNAndNRPNEvents: true)
         ))
@@ -206,7 +206,7 @@ import Testing
         )
         
         // (first delta time is omitted as always, it synthesizes zero delta times for subsequent events)
-        let bytes = event.midi1SMFRawBytes(as: [UInt8].self)
+        let bytes = event.midi1FileRawBytes(as: [UInt8].self)
         
         #expect(bytes == [
             0xB2, 0x63, 0x05, // cc 99, chan 2
@@ -252,7 +252,7 @@ import Testing
         let rpnTotalTicks: UInt32 = 0x01 + 0x02 + 0x03 + 0x04
         
         let parsedTrackA = try #require(try MusicalMIDI1File.TrackChunk(
-            midi1SMFRawBytesStream: bytes,
+            midi1FileRawBytesStream: bytes,
             timebase: timebase,
             options: .init(bundleRPNAndNRPNEvents: true)
         ))
@@ -263,7 +263,7 @@ import Testing
         #expect(parsedTrackA.events[1].event.midiEvent() == .nrpn(nrpnEvent))
         
         let parsedTrackB = try #require(try MusicalMIDI1File.TrackChunk(
-            midi1SMFRawBytes: bytes[8...], // exclude header and length
+            midi1FileRawBytes: bytes[8...], // exclude header and length
             timebase: timebase,
             options: .init(bundleRPNAndNRPNEvents: true)
         ))

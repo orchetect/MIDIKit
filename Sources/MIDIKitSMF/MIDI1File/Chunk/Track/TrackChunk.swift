@@ -61,7 +61,7 @@ extension MIDI1File.TrackChunk: CustomStringConvertible {
             maxEventCount: maxEventCount,
             deltaPadLength: 15,
             deltaDesc: { $0.description },
-            eventDesc: { $0.smfDescription }
+            eventDesc: { $0.midiFileDescription }
         )
     }
 }
@@ -77,7 +77,7 @@ extension MIDI1File.TrackChunk: CustomDebugStringConvertible {
             maxEventCount: maxEventCount,
             deltaPadLength: 15 + 11,
             deltaDesc: { $0.debugDescription },
-            eventDesc: { $0.smfDebugDescription }
+            eventDesc: { $0.midiFileDebugDescription }
         )
     }
 }

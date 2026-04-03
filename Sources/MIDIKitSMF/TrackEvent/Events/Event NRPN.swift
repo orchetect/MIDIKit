@@ -66,25 +66,25 @@ extension MIDIEvent.NRPN: MIDIFileEventPayload {
     }
     
     public static func decode(
-        midi1SMFRawBytesStream stream: some DataProtocol,
+        midi1FileRawBytesStream stream: some DataProtocol,
         runningStatus: UInt8?
     ) -> MIDIFileEventDecodeResult<Self> {
         // stream parsing is not supported since it involves multiple MIDI file events with delta times
         return .unrecoverableError(error: .notImplemented)
     }
     
-    public func midi1SMFRawBytes<D: MutableDataProtocol>(as dataType: D.Type) -> D {
+    public func midi1FileRawBytes<D: MutableDataProtocol>(as dataType: D.Type) -> D {
         let events = parameter.midi1Events(channel: channel, group: group)
             .map { $0.midi1RawBytes() }
         let packed = events.joined(separator: [0x00]) // add delta time for all events after the first event
         return D(packed)
     }
     
-    public var smfDescription: String {
+    public var midiFileDescription: String {
         "nrpn:\(parameter)\(change == .absolute ? "" : " - relative")"
     }
     
-    public var smfDebugDescription: String {
-        "NRPN(" + smfDescription + ")"
+    public var midiFileDebugDescription: String {
+        "NRPN(" + midiFileDescription + ")"
     }
 }

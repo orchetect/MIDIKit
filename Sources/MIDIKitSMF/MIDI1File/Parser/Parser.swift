@@ -203,7 +203,7 @@ extension MIDI1File.Parser {
                 try parser.read(advance: false)
             )
             let (header, expectedTrackCount, headerLength) = try MIDI1File.HeaderChunk.initFrom(
-                midi1SMFRawBytesStream: headerStream,
+                midi1FileRawBytesStream: headerStream,
                 allowMultiTrackFormat0: options.allowMultiTrackFormat0
             )
             try parser.toMIDIFileDecodeError(
@@ -315,7 +315,7 @@ extension MIDI1File.Parser {
             switch chunkDescriptor.identifier {
             case is MIDI1File.TrackChunk.Identifier:
                 let track = try MIDI1File.TrackChunk(
-                    midi1SMFRawBytes: chunkData,
+                    midi1FileRawBytes: chunkData,
                     timebase: timebase,
                     options: options
                 )

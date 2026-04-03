@@ -44,11 +44,11 @@ extension MIDIFileEvent.SMPTETempo: MIDIFileEventPayload {
     
     // TODO: add specialized descriptions
     
-//    public var smfDescription: String {
+//    public var midiFileDescription: String {
 //
 //    }
 //    
-//    public var smfDebugDescription: String {
+//    public var midiFileDebugDescription: String {
 //
 //    }
 }

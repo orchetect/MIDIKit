@@ -88,7 +88,7 @@ extension MIDIEvent.PitchBend: MIDIFileEventPayload {
     }
     
     public static func decode(
-        midi1SMFRawBytesStream stream: some DataProtocol,
+        midi1FileRawBytesStream stream: some DataProtocol,
         runningStatus: UInt8?
     ) -> MIDIFileEventDecodeResult<Self> {
         // Step 1: Check required byte count
@@ -172,19 +172,19 @@ extension MIDIEvent.PitchBend: MIDIFileEventPayload {
         }
     }
     
-    public func midi1SMFRawBytes<D: MutableDataProtocol>(as dataType: D.Type) -> D {
+    public func midi1FileRawBytes<D: MutableDataProtocol>(as dataType: D.Type) -> D {
         // 3 bytes : En lsb msb
         
         D(midi1RawBytes())
     }
     
-    public var smfDescription: String {
+    public var midiFileDescription: String {
         let chanString = channel.uInt8Value.hexString(padTo: 1, prefix: true)
         
         return "bend:\(value) chan:\(chanString)"
     }
     
-    public var smfDebugDescription: String {
-        "PitchBend(" + smfDescription + ")"
+    public var midiFileDebugDescription: String {
+        "PitchBend(" + midiFileDescription + ")"
     }
 }

@@ -89,7 +89,7 @@ extension MIDIFileEvent.PortPrefix: MIDIFileEventPayload {
     }
     
     public static func decode(
-        midi1SMFRawBytesStream stream: some DataProtocol,
+        midi1FileRawBytesStream stream: some DataProtocol,
         runningStatus: UInt8?
     ) -> MIDIFileEventDecodeResult<Self> {
         // Step 1: Check required byte count
@@ -154,18 +154,18 @@ extension MIDIFileEvent.PortPrefix: MIDIFileEventPayload {
         }
     }
     
-    public func midi1SMFRawBytes<D: MutableDataProtocol>(as dataType: D.Type) -> D {
+    public func midi1FileRawBytes<D: MutableDataProtocol>(as dataType: D.Type) -> D {
         // FF 21 01 pp
         // pp is port number (0...127 assumably)
         
         D(Self.prefixBytes + [port.uInt8Value])
     }
     
-    public var smfDescription: String {
+    public var midiFileDescription: String {
         "port:\(port)"
     }
     
-    public var smfDebugDescription: String {
+    public var midiFileDebugDescription: String {
         "PortPrefix(\(port))"
     }
 }
