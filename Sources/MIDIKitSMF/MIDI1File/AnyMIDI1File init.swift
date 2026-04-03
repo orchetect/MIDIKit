@@ -124,7 +124,7 @@ extension AnyMIDI1File {
         options: MIDI1FileDecodeOptions,
         predicate: MIDI1File.DecodePredicate?
     ) throws(MIDIFileDecodeError) -> AnyMIDI1File {
-        let header = try AnyMIDI1FileHeaderChunk.initFrom(
+        let header = try AnyMIDI1FileHeaderChunk.decode(
             midi1FileRawBytesStream: data,
             allowMultiTrackFormat0: options.allowMultiTrackFormat0
         )
@@ -146,7 +146,7 @@ extension AnyMIDI1File {
         options: MIDI1FileDecodeOptions,
         predicate: MIDI1File.DecodePredicate?
     ) async throws(MIDIFileDecodeError) -> AnyMIDI1File {
-        let header = try AnyMIDI1FileHeaderChunk.initFrom(
+        let header = try AnyMIDI1FileHeaderChunk.decode(
             midi1FileRawBytesStream: data,
             allowMultiTrackFormat0: options.allowMultiTrackFormat0
         )

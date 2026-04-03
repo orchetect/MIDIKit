@@ -24,7 +24,7 @@ extension AnyMIDI1FileHeaderChunk {
     static var midi1FileMinimumRawBytesLength: Int { 14 }
     
     /// Init from MIDI file data stream.
-    static func initFrom<D: DataProtocol>(
+    static func decode<D: DataProtocol>(
         midi1FileRawBytesStream stream: D,
         allowMultiTrackFormat0: Bool
     ) throws(MIDIFileDecodeError) -> (header: Self, trackCount: Int, bufferLength: Int) {
@@ -60,7 +60,7 @@ extension AnyMIDI1FileHeaderChunk {
             }
             let headerLength = Int(headerLengthUInt32)
             
-            // we won't validate the header length here; that is done in the subsequent initFrom() function we pass the data to
+            // we won't validate the header length here; that is done in the subsequent decode() function we pass the data to
             
             // now that we know the header length, grab the entire header and pass it to the parser
             let entireHeaderLength = 4 + 4 + headerLength
