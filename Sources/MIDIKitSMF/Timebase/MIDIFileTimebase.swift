@@ -15,7 +15,7 @@ import MIDIKitCore
 /// The timebase determines how those ticks are used to calculate real wall-time duration.
 public protocol MIDIFileTimebase: Equatable, Hashable, Sendable, CustomStringConvertible, CustomDebugStringConvertible
 where DeltaTime.Timebase == Self {
-    associatedtype DeltaTime: MIDIFileTrackDeltaTime
+    associatedtype DeltaTime: MIDIFileDeltaTime
     
     /// Returns the timebase encoded as raw data.
     func midi1FileRawBytes() -> Data

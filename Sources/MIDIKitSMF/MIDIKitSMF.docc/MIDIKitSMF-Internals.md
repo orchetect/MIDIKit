@@ -14,7 +14,7 @@
 - ``AnyMIDI1File``
 - ``AnyMIDI1FileHeaderChunk``
 - ``AnyMIDIFileTimebase``
-- ``AnyMIDIFileTrackDeltaTime``
+- ``AnyMIDIFileDeltaTime``
 - ``AnyMIDIFileEventDecodeResult``
 - ``MIDIFileEvent/AnyTempo``
 
@@ -27,7 +27,7 @@
 - ``MIDI1FileChunk``
 - ``MIDI1FileChunkIdentifier``
 - ``MIDIFileTimebase``
-- ``MIDIFileTrackDeltaTime``
+- ``MIDIFileDeltaTime``
 - ``MIDIFileEventPayload``
 
 ### Timecode Related

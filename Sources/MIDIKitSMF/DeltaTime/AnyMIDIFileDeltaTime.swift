@@ -1,5 +1,5 @@
 //
-//  AnyMIDIFileTrackDeltaTime.swift
+//  AnyMIDIFileDeltaTime.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
@@ -8,27 +8,27 @@ import Foundation
 import MIDIKitCore
 
 /// Type-erased box containing a specialized instance of delta time in a MIDI file track (SMF1) or clip (SMF2).
-public enum AnyMIDIFileTrackDeltaTime {
-    case musical(_ delta: MusicalMIDIFileTrackDeltaTime)
-    case smpte(_ delta: SMPTEMIDIFileTrackDeltaTime)
+public enum AnyMIDIFileDeltaTime {
+    case musical(_ delta: MusicalMIDIFileDeltaTime)
+    case smpte(_ delta: SMPTEMIDIFileDeltaTime)
 }
 
-extension AnyMIDIFileTrackDeltaTime: Equatable {
-    // Note that using the `isEqual(to:using)` method is available in the `MIDIFileTrackDeltaTime`
+extension AnyMIDIFileDeltaTime: Equatable {
+    // Note that using the `isEqual(to:using)` method is available in the `MIDIFileDeltaTime`
     // protocol default implementation and is a better mechanism for testing equality between instances.
 }
 
-extension AnyMIDIFileTrackDeltaTime: Hashable { }
+extension AnyMIDIFileDeltaTime: Hashable { }
 
-extension AnyMIDIFileTrackDeltaTime: Sendable { }
+extension AnyMIDIFileDeltaTime: Sendable { }
 
-extension AnyMIDIFileTrackDeltaTime: CustomStringConvertible {
+extension AnyMIDIFileDeltaTime: CustomStringConvertible {
     public var description: String {
         wrapped.description
     }
 }
 
-extension AnyMIDIFileTrackDeltaTime: CustomDebugStringConvertible {
+extension AnyMIDIFileDeltaTime: CustomDebugStringConvertible {
     public var debugDescription: String {
         wrapped.debugDescription
     }
@@ -36,9 +36,9 @@ extension AnyMIDIFileTrackDeltaTime: CustomDebugStringConvertible {
 
 // MARK: - Properties
 
-extension AnyMIDIFileTrackDeltaTime {
-    /// Unwraps the enum case and returns the delta time contained within, typed as `any` ``MIDIFileTrackDeltaTime``.
-    public var wrapped: any MIDIFileTrackDeltaTime {
+extension AnyMIDIFileDeltaTime {
+    /// Unwraps the enum case and returns the delta time contained within, typed as `any` ``MIDIFileDeltaTime``.
+    public var wrapped: any MIDIFileDeltaTime {
         switch self {
         case let .musical(delta): delta
         case let .smpte(delta): delta
@@ -46,9 +46,9 @@ extension AnyMIDIFileTrackDeltaTime {
     }
 }
 
-// MARK: - MIDIFileTrackDeltaTime
+// MARK: - MIDIFileDeltaTime
 
-extension AnyMIDIFileTrackDeltaTime: MIDIFileTrackDeltaTime {
+extension AnyMIDIFileDeltaTime: MIDIFileDeltaTime {
     public typealias Timebase = AnyMIDIFileTimebase
     
     public func ticks(using timebase: Timebase) -> UInt32 {
@@ -63,7 +63,7 @@ extension AnyMIDIFileTrackDeltaTime: MIDIFileTrackDeltaTime {
         }
     }
     
-    public static func ticks(_ ticks: UInt32) -> AnyMIDIFileTrackDeltaTime {
+    public static func ticks(_ ticks: UInt32) -> AnyMIDIFileDeltaTime {
         // just default to musical timebase as it's by far the most common
         // TODO: this is a bit wonky but our hands are kind of tied with all the type erasure
         .musical(.ticks(ticks))

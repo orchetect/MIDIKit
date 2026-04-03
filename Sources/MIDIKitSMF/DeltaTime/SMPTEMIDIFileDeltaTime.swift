@@ -1,5 +1,5 @@
 //
-//  SMPTEMIDIFileTrackDeltaTime.swift
+//  SMPTEMIDIFileDeltaTime.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
@@ -7,7 +7,7 @@
 import SwiftTimecodeCore
 
 /// Delta time values appropriate for SMPTE timecode timebase MIDI file tracks (SMF1).
-public enum SMPTEMIDIFileTrackDeltaTime {
+public enum SMPTEMIDIFileDeltaTime {
     /// Construct delta time duration from frame count.
     case frames(_ frames: Double)
     
@@ -17,16 +17,16 @@ public enum SMPTEMIDIFileTrackDeltaTime {
     case ticks(_ ticks: UInt32)
 }
 
-extension SMPTEMIDIFileTrackDeltaTime: Equatable {
-    // Note that using the `isEqual(to:using)` method is available in the `MIDIFileTrackDeltaTime`
+extension SMPTEMIDIFileDeltaTime: Equatable {
+    // Note that using the `isEqual(to:using)` method is available in the `MIDIFileDeltaTime`
     // protocol default implementation and is a better mechanism for testing equality between instances.
 }
 
-extension SMPTEMIDIFileTrackDeltaTime: Hashable { }
+extension SMPTEMIDIFileDeltaTime: Hashable { }
 
-extension SMPTEMIDIFileTrackDeltaTime: Sendable { }
+extension SMPTEMIDIFileDeltaTime: Sendable { }
 
-extension SMPTEMIDIFileTrackDeltaTime: CustomStringConvertible {
+extension SMPTEMIDIFileDeltaTime: CustomStringConvertible {
     public var description: String {
         switch self {
         case let .frames(frames):
@@ -39,7 +39,7 @@ extension SMPTEMIDIFileTrackDeltaTime: CustomStringConvertible {
     }
 }
 
-extension SMPTEMIDIFileTrackDeltaTime: MIDIFileTrackDeltaTime {
+extension SMPTEMIDIFileDeltaTime: MIDIFileDeltaTime {
     public typealias Timebase = SMPTEMIDIFileTimebase
     
     public func ticks(using timebase: Timebase) -> UInt32 {
@@ -61,7 +61,7 @@ extension SMPTEMIDIFileTrackDeltaTime: MIDIFileTrackDeltaTime {
 
 // MARK: - Static Constructors
 
-extension SMPTEMIDIFileTrackDeltaTime {
+extension SMPTEMIDIFileDeltaTime {
     /// Construct delta time duration from SMPTE timecode.
     /// The frame rate should match the value specified in the MIDI file header.
     public static func offset(
@@ -92,7 +92,7 @@ extension SMPTEMIDIFileTrackDeltaTime {
 
 // MARK: - Methods
 
-extension SMPTEMIDIFileTrackDeltaTime {
+extension SMPTEMIDIFileDeltaTime {
     /// Returns the frame count of the delta time using the specified timebase.
     public func frames(using timebase: Timebase) -> Double {
         let tpf = timebase.ticksPerFrame

@@ -57,8 +57,8 @@ Refer to MIDIKit's own package documentation for information on using MIDI I/O a
 
 - ``MIDI1File/TrackChunk/Event``
 - ``MIDI1File/TrackChunk/DeltaTime``
-- ``MusicalMIDIFileTrackDeltaTime``
-- ``SMPTEMIDIFileTrackDeltaTime``
+- ``MusicalMIDIFileDeltaTime``
+- ``SMPTEMIDIFileDeltaTime``
 
 ### Errors
 

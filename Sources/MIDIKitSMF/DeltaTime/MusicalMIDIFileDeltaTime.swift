@@ -1,11 +1,11 @@
 //
-//  MusicalMIDIFileTrackDeltaTime.swift
+//  MusicalMIDIFileDeltaTime.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 /// Delta time values appropriate for musical MIDI file tracks (SMF1) or clips (SMF2).
-public enum MusicalMIDIFileTrackDeltaTime {
+public enum MusicalMIDIFileDeltaTime {
     /// Construct delta time of a whole note.
     case noteWhole
     
@@ -54,16 +54,16 @@ public enum MusicalMIDIFileTrackDeltaTime {
     case ticks(_ ticks: UInt32)
 }
 
-extension MusicalMIDIFileTrackDeltaTime: Equatable {
-    // Note that using the `isEqual(to:using)` method is available in the `MIDIFileTrackDeltaTime`
+extension MusicalMIDIFileDeltaTime: Equatable {
+    // Note that using the `isEqual(to:using)` method is available in the `MIDIFileDeltaTime`
     // protocol default implementation and is a better mechanism for testing equality between instances.
 }
 
-extension MusicalMIDIFileTrackDeltaTime: Hashable { }
+extension MusicalMIDIFileDeltaTime: Hashable { }
 
-extension MusicalMIDIFileTrackDeltaTime: Sendable { }
+extension MusicalMIDIFileDeltaTime: Sendable { }
 
-extension MusicalMIDIFileTrackDeltaTime: CustomStringConvertible {
+extension MusicalMIDIFileDeltaTime: CustomStringConvertible {
     public var description: String {
         switch self {
         case .noteWhole:
@@ -92,7 +92,7 @@ extension MusicalMIDIFileTrackDeltaTime: CustomStringConvertible {
     }
 }
 
-extension MusicalMIDIFileTrackDeltaTime: MIDIFileTrackDeltaTime {
+extension MusicalMIDIFileDeltaTime: MIDIFileDeltaTime {
     public typealias Timebase = MusicalMIDIFileTimebase
     
     public func ticks(using timebase: Timebase) -> UInt32 {
@@ -125,7 +125,7 @@ extension MusicalMIDIFileTrackDeltaTime: MIDIFileTrackDeltaTime {
 
 // MARK: - Static Constructors
 
-extension MusicalMIDIFileTrackDeltaTime {
+extension MusicalMIDIFileDeltaTime {
     // MARK: Defaulted Parameter Overloads
     
     /// Construct delta time of a 8th note.
@@ -149,7 +149,7 @@ extension MusicalMIDIFileTrackDeltaTime {
 
 // MARK: - Methods
 
-extension MusicalMIDIFileTrackDeltaTime {
+extension MusicalMIDIFileDeltaTime {
     /// Returns the musical beat duration of the delta time using the specified timebase.
     /// Ensure the `ppq` (ticks per quarter note) supplied is the same as used in the MIDI file.
     ///

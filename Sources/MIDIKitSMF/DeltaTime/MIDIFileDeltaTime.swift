@@ -1,5 +1,5 @@
 //
-//  MIDIFileTrackDeltaTime.swift
+//  MIDIFileDeltaTime.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
@@ -8,7 +8,7 @@ import Foundation
 import MIDIKitCore
 
 /// Delta time within a MIDI file track (SMF1) or clip (SMF2).
-public protocol MIDIFileTrackDeltaTime<Timebase>: Equatable, Hashable, Sendable,
+public protocol MIDIFileDeltaTime<Timebase>: Equatable, Hashable, Sendable,
     CustomStringConvertible,
     CustomDebugStringConvertible,
     ExpressibleByIntegerLiteral where IntegerLiteralType == UInt32,
@@ -37,7 +37,7 @@ public protocol MIDIFileTrackDeltaTime<Timebase>: Equatable, Hashable, Sendable,
 
 // MARK: - ExpressibleByIntegerLiteral Default Implementation
 
-extension MIDIFileTrackDeltaTime/* : ExpressibleByIntegerLiteral */ {
+extension MIDIFileDeltaTime/* : ExpressibleByIntegerLiteral */ {
     public init(integerLiteral value: UInt32) {
         self = .ticks(value)
     }
@@ -45,7 +45,7 @@ extension MIDIFileTrackDeltaTime/* : ExpressibleByIntegerLiteral */ {
 
 // MARK: - CustomDebugStringConvertible Default Implementation
 
-extension MIDIFileTrackDeltaTime/* : CustomDebugStringConvertible */ {
+extension MIDIFileDeltaTime/* : CustomDebugStringConvertible */ {
     public var debugDescription: String {
         "DeltaTime(" + description + ")"
     }
@@ -53,14 +53,14 @@ extension MIDIFileTrackDeltaTime/* : CustomDebugStringConvertible */ {
 
 // MARK: - Static Constructors Default Implementation
 
-extension MIDIFileTrackDeltaTime {
+extension MIDIFileDeltaTime {
     /// Construct zero delta time.
     public static var none: Self { .ticks(0) }
 }
 
 // MARK: - Methods Default Implementation
 
-extension MIDIFileTrackDeltaTime {
+extension MIDIFileDeltaTime {
     public func isEqual(to other: Self, using timebase: Timebase) -> Bool {
         ticks(using: timebase) == other.ticks(using: timebase)
     }
