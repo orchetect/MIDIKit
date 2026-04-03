@@ -126,7 +126,7 @@ extension MIDIFileEvent.TimeSignature {
 // MARK: - Encoding
 
 extension MIDIFileEvent.TimeSignature: MIDIFileEventPayload {
-    public static var smfEventType: MIDIFileEventType { .timeSignature }
+    public static var midiFileEventType: MIDIFileEventType { .timeSignature }
     
     public func asMIDIFileEvent() -> MIDIFileEvent {
         .timeSignature(self)

@@ -100,7 +100,7 @@ extension MIDIFileEvent.ChannelPrefix {
 // MARK: - Encoding
 
 extension MIDIFileEvent.ChannelPrefix: MIDIFileEventPayload {
-    public static var smfEventType: MIDIFileEventType { .channelPrefix }
+    public static var midiFileEventType: MIDIFileEventType { .channelPrefix }
     
     public func asMIDIFileEvent() -> MIDIFileEvent {
         .channelPrefix(self)

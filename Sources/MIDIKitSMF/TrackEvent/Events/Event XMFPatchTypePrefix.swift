@@ -131,7 +131,7 @@ extension MIDIFileEvent.XMFPatchTypePrefix {
 // MARK: - Encoding
 
 extension MIDIFileEvent.XMFPatchTypePrefix: MIDIFileEventPayload {
-    public static var smfEventType: MIDIFileEventType { .xmfPatchTypePrefix }
+    public static var midiFileEventType: MIDIFileEventType { .xmfPatchTypePrefix }
     
     public func asMIDIFileEvent() -> MIDIFileEvent {
         .xmfPatchTypePrefix(self)

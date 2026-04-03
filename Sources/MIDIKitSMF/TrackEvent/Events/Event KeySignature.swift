@@ -151,7 +151,7 @@ extension MIDIFileEvent.KeySignature {
 // MARK: - Encoding
 
 extension MIDIFileEvent.KeySignature: MIDIFileEventPayload {
-    public static var smfEventType: MIDIFileEventType { .keySignature }
+    public static var midiFileEventType: MIDIFileEventType { .keySignature }
     
     public func asMIDIFileEvent() -> MIDIFileEvent {
         .keySignature(self)

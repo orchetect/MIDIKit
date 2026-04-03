@@ -151,7 +151,7 @@ extension MIDI1File.TrackChunk.Event {
 // MARK: - Encoding
 
 extension MIDIFileEvent.Text: MIDIFileEventPayload {
-    public static var smfEventType: MIDIFileEventType { .text }
+    public static var midiFileEventType: MIDIFileEventType { .text }
     
     public func asMIDIFileEvent() -> MIDIFileEvent {
         .text(self)

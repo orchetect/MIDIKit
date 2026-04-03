@@ -315,7 +315,7 @@ extension MIDIFileEvent.SMPTEOffset {
 // MARK: - Encoding
 
 extension MIDIFileEvent.SMPTEOffset: MIDIFileEventPayload {
-    public static var smfEventType: MIDIFileEventType { .smpteOffset }
+    public static var midiFileEventType: MIDIFileEventType { .smpteOffset }
     
     public func asMIDIFileEvent() -> MIDIFileEvent {
         .smpteOffset(self)

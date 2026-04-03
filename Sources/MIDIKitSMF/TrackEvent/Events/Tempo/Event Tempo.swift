@@ -68,7 +68,7 @@ extension MIDIFileEvent.Tempo {
 // MARK: - MIDIFileEventPayload Default Implementation
 
 extension MIDIFileEvent.Tempo /* : MIDIFileEventPayload */ {
-    public static var smfEventType: MIDIFileEventType { .tempo }
+    public static var midiFileEventType: MIDIFileEventType { .tempo }
     
     // `var wrapped` needs to be implemented by the concrete type.
     

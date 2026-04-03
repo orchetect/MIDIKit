@@ -10,7 +10,7 @@ import MIDIKitCore
 /// Protocol describing a MIDI event payload for use in ``MIDIFileEvent`` cases.
 public protocol MIDIFileEventPayload: Equatable, Hashable, Sendable {
     /// MIDI File event type.
-    static var smfEventType: MIDIFileEventType { get }
+    static var midiFileEventType: MIDIFileEventType { get }
     
     /// Returns the MIDI file event payload wrapped in its corresponding ``MIDIFileEvent`` enum case.
     func asMIDIFileEvent() -> MIDIFileEvent
@@ -117,7 +117,7 @@ extension MIDIFileEventPayload {
     static func requiredByteLength(
         availableByteCount: Int
     ) throws(MIDIFileDecodeError) -> (byteCount: Int, isFixed: Bool) {
-        let (minFullByteCount, isFixed) = smfEventType.midi1ByteLength
+        let (minFullByteCount, isFixed) = midiFileEventType.midi1ByteLength
         
         let errorMessage = isFixed
             ? "Invalid number of bytes. Expected exactly \(minFullByteCount) but got \(availableByteCount)."
@@ -151,14 +151,14 @@ extension MIDIFileEventPayload {
         if isRunningStatusPresent {
             // this isn't an error, and parsing can continue
             assert(
-                smfEventType.isMIDI1RunningStatusSupported,
+                midiFileEventType.isMIDI1RunningStatusSupported,
                 "Running status byte was passed to \(type(of: self)) decoder that does not utilize running status."
             )
         }
         
         // because it's a data stream, we don't care if the event itself has a fixed length,
         // we only need to validate whether minimum required byte count is available
-        let (minFullByteCount, isFixed) = smfEventType.midi1ByteLength
+        let (minFullByteCount, isFixed) = midiFileEventType.midi1ByteLength
         
         let minRequiredStreamByteCount = minFullByteCount - (isRunningStatusPresent ? 1 : 0)
         let inputByteCountWithRunningStatus = availableByteCount + (isRunningStatusPresent ? 1 : 0)

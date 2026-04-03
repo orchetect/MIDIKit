@@ -82,7 +82,7 @@ extension MIDIFileEvent.PortPrefix {
 // MARK: - Encoding
 
 extension MIDIFileEvent.PortPrefix: MIDIFileEventPayload {
-    public static var smfEventType: MIDIFileEventType { .portPrefix }
+    public static var midiFileEventType: MIDIFileEventType { .portPrefix }
     
     public func asMIDIFileEvent() -> MIDIFileEvent {
         .portPrefix(self)

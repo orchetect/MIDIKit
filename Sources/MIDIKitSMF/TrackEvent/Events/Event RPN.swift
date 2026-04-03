@@ -59,7 +59,7 @@ extension MIDI1File.TrackChunk.Event {
 // MARK: - Encoding
 
 extension MIDIEvent.RPN: MIDIFileEventPayload {
-    public static var smfEventType: MIDIFileEventType { .rpn }
+    public static var midiFileEventType: MIDIFileEventType { .rpn }
     
     public func asMIDIFileEvent() -> MIDIFileEvent {
         .rpn(self)

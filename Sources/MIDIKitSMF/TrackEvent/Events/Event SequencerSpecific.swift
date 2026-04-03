@@ -77,7 +77,7 @@ extension MIDIFileEvent.SequencerSpecific {
 // MARK: - Encoding
 
 extension MIDIFileEvent.SequencerSpecific: MIDIFileEventPayload {
-    public static var smfEventType: MIDIFileEventType { .sequencerSpecific }
+    public static var midiFileEventType: MIDIFileEventType { .sequencerSpecific }
     
     public func asMIDIFileEvent() -> MIDIFileEvent {
         .sequencerSpecific(self)

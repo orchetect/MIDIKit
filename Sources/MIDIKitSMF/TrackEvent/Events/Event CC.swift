@@ -87,7 +87,7 @@ extension MIDI1File.TrackChunk.Event {
 // MARK: - Encoding
 
 extension MIDIEvent.CC: MIDIFileEventPayload {
-    public static let smfEventType: MIDIFileEventType = .cc
+    public static let midiFileEventType: MIDIFileEventType = .cc
     
     public func asMIDIFileEvent() -> MIDIFileEvent {
         .cc(self)

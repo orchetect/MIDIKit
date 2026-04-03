@@ -99,7 +99,7 @@ extension MIDIFileEvent.SequenceNumber {
 // MARK: - Encoding
 
 extension MIDIFileEvent.SequenceNumber: MIDIFileEventPayload {
-    public static var smfEventType: MIDIFileEventType { .sequenceNumber }
+    public static var midiFileEventType: MIDIFileEventType { .sequenceNumber }
     
     public func asMIDIFileEvent() -> MIDIFileEvent {
         .sequenceNumber(self)

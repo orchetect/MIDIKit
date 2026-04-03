@@ -112,7 +112,7 @@ extension MIDI1File.TrackChunk.Event {
 // MARK: - Encoding
 
 extension MIDIEvent.NotePressure: MIDIFileEventPayload {
-    public static var smfEventType: MIDIFileEventType { .notePressure }
+    public static var midiFileEventType: MIDIFileEventType { .notePressure }
     
     public func asMIDIFileEvent() -> MIDIFileEvent {
         .notePressure(self)
