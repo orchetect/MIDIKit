@@ -174,7 +174,7 @@ Add an event to first track:
 
 ```swift
 let event: MIDIFileEvent = .noteOn(note: 60, velocity: .midi1(127), channel: 0)
-midiFile.tracks[0].events.append(.init(delta: .note8th, event: event))
+midiFile.tracks[0].events.append(delta: .note8th, event: event)
 ```
 
 Add a new track:
