@@ -105,7 +105,7 @@ extension MIDI1File.TrackChunk {
                         try parser.read(bytes: 4, advance: false)
                     )
                     
-                    guard let eventDeltaTime = eventDeltaTimeRead.decodeSMF1VariableLengthValue()
+                    guard let eventDeltaTime = eventDeltaTimeRead.midi1SMFVariableLengthValue()
                     else {
                         throw .malformed(
                             "Delta time variable length value could not be read and may be malformed."

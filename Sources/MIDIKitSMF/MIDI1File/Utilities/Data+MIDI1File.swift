@@ -61,7 +61,7 @@ extension DataProtocol {
     /// Returns nil if bytes is empty or variable length value could not be read in the expected
     /// format (ie: malformed or unexpected data)
     /// Currently returns nil if value overflows a 28-bit unsigned value.
-    func decodeSMF1VariableLengthValue() -> (value: Int, byteLength: Int)? {
+    func midi1SMFVariableLengthValue() -> (value: Int, byteLength: Int)? {
         let uInt28Max = 0b1111_11111111_11111111_11111111
         
         var result = 0 // don't cast as UInt32 yet, we need room to check for overflow

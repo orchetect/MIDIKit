@@ -16,7 +16,7 @@ extension DataParserProtocol where DataRange: DataProtocol {
             malformedReason: "Could not extract variable-length value length.",
             try read(bytes: readAheadCount, advance: false)
         )
-        guard let valueAndLength = lengthBytes.decodeSMF1VariableLengthValue()
+        guard let valueAndLength = lengthBytes.midi1SMFVariableLengthValue()
         else {
             throw .malformed(
                 "Could not extract variable length."
