@@ -20,7 +20,7 @@ public struct MIDI1File<Timebase: MIDIFileTimebase> {
     // MARK: - Properties
     
     /// MIDI file header chunk.
-    public var header: HeaderChunk = HeaderChunk()
+    public var header: Header = Header()
     
     /// MIDI file format.
     public var format: MIDI1FileFormat {
@@ -38,7 +38,7 @@ public struct MIDI1File<Timebase: MIDIFileTimebase> {
     /// This includes tracks and non-track chunks if present.
     /// (If only tracks access is desired, accessing the ``tracks`` property to read and write track data is more convenient.)
     ///
-    /// The ``HeaderChunk`` chunk is managed automatically and is not included in this collection.
+    /// The ``Header`` chunk is managed automatically and is not included in this collection.
     /// Its properties can be accessed directly on the ``MIDI1File`` instance.
     public var chunks: [AnyChunk] {
         _read { yield _chunks }

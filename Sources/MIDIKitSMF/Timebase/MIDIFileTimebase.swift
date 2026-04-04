@@ -17,7 +17,7 @@ public protocol MIDIFileTimebase: Equatable, Hashable, Sendable, CustomStringCon
 where DeltaTime.Timebase == Self {
     associatedtype DeltaTime: MIDIFileDeltaTime
     
-    typealias HeaderChunk = MIDI1File<Self>.HeaderChunk
+    typealias Header = MIDI1File<Self>.Header
     
     /// Returns the timebase encoded as raw data.
     func midi1FileRawBytes() -> Data
@@ -29,13 +29,13 @@ where DeltaTime.Timebase == Self {
     static func decodeMIDI1FileHeader<D: DataProtocol>(
         midi1FileRawBytes: D,
         allowMultiTrackFormat0: Bool
-    ) throws(MIDIFileDecodeError) -> (header: HeaderChunk, trackCount: Int)
+    ) throws(MIDIFileDecodeError) -> (header: Header, trackCount: Int)
     
     /// Decode MIDI file header from raw data stream.
     static func decodeMIDI1FileHeader<D: DataProtocol>(
         midi1FileRawBytesStream stream: D,
         allowMultiTrackFormat0: Bool
-    ) throws(MIDIFileDecodeError) -> (header: HeaderChunk, trackCount: Int, bufferLength: Int)
+    ) throws(MIDIFileDecodeError) -> (header: Header, trackCount: Int, bufferLength: Int)
     
     /// Returns the timebase as a type-erased ``AnyMIDIFileTimebase`` instance.
     func asAnyMIDIFileTimebase() -> AnyMIDIFileTimebase

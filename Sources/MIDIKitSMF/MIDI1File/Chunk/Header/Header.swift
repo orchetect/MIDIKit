@@ -1,5 +1,5 @@
 //
-//  HeaderChunk.swift
+//  Header.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
@@ -81,7 +81,7 @@ extension MIDI1File {
     /// >
     /// > The header model omits the chunk (track) count property. It is automatically synthesized
     /// > based on the track count in the `MIDI1File.chunks` array when calling `MIDI1File.midi1FileRawBytes()`.
-    public struct HeaderChunk {
+    public struct Header {
         /// MIDI file format.
         public var format: MIDI1FileFormat
         
@@ -117,18 +117,18 @@ extension MIDI1File {
     }
 }
 
-extension MIDI1File.HeaderChunk: Equatable { }
+extension MIDI1File.Header: Equatable { }
 
-extension MIDI1File.HeaderChunk: Hashable { }
+extension MIDI1File.Header: Hashable { }
 
-extension MIDI1File.HeaderChunk: Sendable { }
+extension MIDI1File.Header: Sendable { }
 
 // MARK: - Properties
 
-extension MIDI1File.HeaderChunk {
-    /// Returns the header chunk as a type-erased `MIDI1File<AnyMIDIFileTimebase>.HeaderChunk` instance.
-    public func asAnyMIDI1FileHeaderChunk() -> MIDI1File<AnyMIDIFileTimebase>.HeaderChunk {
-        MIDI1File<AnyMIDIFileTimebase>.HeaderChunk(
+extension MIDI1File.Header {
+    /// Returns the header chunk as a type-erased `MIDI1File<AnyMIDIFileTimebase>.Header` instance.
+    public func asAnyMIDI1FileHeader() -> MIDI1File<AnyMIDIFileTimebase>.Header {
+        MIDI1File<AnyMIDIFileTimebase>.Header(
             format: format,
             timebase: timebase.asAnyMIDIFileTimebase(),
             additionalBytes: additionalBytes

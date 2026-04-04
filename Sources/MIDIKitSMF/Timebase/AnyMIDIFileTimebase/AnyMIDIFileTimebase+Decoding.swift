@@ -26,7 +26,7 @@ extension AnyMIDIFileTimebase {
     public static func decodeMIDI1FileHeader<D: DataProtocol>(
         midi1FileRawBytes: D,
         allowMultiTrackFormat0: Bool
-    ) throws(MIDIFileDecodeError) -> (header: HeaderChunk, trackCount: Int) {
+    ) throws(MIDIFileDecodeError) -> (header: Header, trackCount: Int) {
         // check for at least the minimum expected byte count
         guard midi1FileRawBytes.count >= Self.midi1FileMinimumRawBytesLength else {
             throw .malformed(
@@ -126,9 +126,9 @@ extension AnyMIDIFileTimebase {
             }
             
             let header = if let additionalBytes {
-                HeaderChunk(format: format, timebase: timebase, additionalBytes: additionalBytes)
+                Header(format: format, timebase: timebase, additionalBytes: additionalBytes)
             } else {
-                HeaderChunk(format: format, timebase: timebase)
+                Header(format: format, timebase: timebase)
             }
             return (header: header, trackCount: trackCount)
         }
@@ -137,7 +137,7 @@ extension AnyMIDIFileTimebase {
     public static func decodeMIDI1FileHeader<D: DataProtocol>(
         midi1FileRawBytesStream stream: D,
         allowMultiTrackFormat0: Bool
-    ) throws(MIDIFileDecodeError) -> (header: HeaderChunk, trackCount: Int, bufferLength: Int) {
+    ) throws(MIDIFileDecodeError) -> (header: Header, trackCount: Int, bufferLength: Int) {
         // check for at least the minimum expected byte count
         guard stream.count >= Self.midi1FileMinimumRawBytesLength else {
             throw .malformed(

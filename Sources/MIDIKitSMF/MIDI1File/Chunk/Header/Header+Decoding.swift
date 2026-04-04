@@ -1,5 +1,5 @@
 //
-//  HeaderChunk+Decoding.swift
+//  Header+Decoding.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
@@ -9,7 +9,7 @@ import MIDIKitCore
 internal import MIDIKitInternals
 internal import SwiftDataParsing
 
-extension MIDI1File.HeaderChunk {
+extension MIDI1File.Header {
     /// Init from MIDI file header data.
     static func decode<D: DataProtocol>(
         midi1FileRawBytes: D,

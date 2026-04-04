@@ -11,15 +11,15 @@ extension SMPTEMIDIFileTimebase {
     public static func decodeMIDI1FileHeader<D: DataProtocol>(
         midi1FileRawBytes: D,
         allowMultiTrackFormat0: Bool
-    ) throws(MIDIFileDecodeError) -> (header: HeaderChunk, trackCount: Int) {
-        let (anyHeader, trackCount) = try MIDI1File<AnyMIDIFileTimebase>.HeaderChunk.decode(
+    ) throws(MIDIFileDecodeError) -> (header: Header, trackCount: Int) {
+        let (anyHeader, trackCount) = try MIDI1File<AnyMIDIFileTimebase>.Header.decode(
             midi1FileRawBytes: midi1FileRawBytes,
             allowMultiTrackFormat0: allowMultiTrackFormat0
         )
         
         switch anyHeader.timebase {
         case let .smpte(timebase):
-            let header = HeaderChunk(format: anyHeader.format, timebase: timebase, additionalBytes: anyHeader.additionalBytes)
+            let header = Header(format: anyHeader.format, timebase: timebase, additionalBytes: anyHeader.additionalBytes)
             return (header: header, trackCount: trackCount)
             
         default:
@@ -30,7 +30,7 @@ extension SMPTEMIDIFileTimebase {
     public static func decodeMIDI1FileHeader<D: DataProtocol>(
         midi1FileRawBytesStream stream: D,
         allowMultiTrackFormat0: Bool
-    ) throws(MIDIFileDecodeError) -> (header: HeaderChunk, trackCount: Int, bufferLength: Int) {
+    ) throws(MIDIFileDecodeError) -> (header: Header, trackCount: Int, bufferLength: Int) {
         let (anyHeader, trackCount, bufferLength) = try AnyMIDIFileTimebase.decodeMIDI1FileHeader(
             midi1FileRawBytesStream: stream,
             allowMultiTrackFormat0: allowMultiTrackFormat0
@@ -38,7 +38,7 @@ extension SMPTEMIDIFileTimebase {
         
         switch anyHeader.timebase {
         case let .smpte(timebase):
-            let header = HeaderChunk(format: anyHeader.format, timebase: timebase, additionalBytes: anyHeader.additionalBytes)
+            let header = Header(format: anyHeader.format, timebase: timebase, additionalBytes: anyHeader.additionalBytes)
             return (header: header, trackCount: trackCount, bufferLength: bufferLength)
             
         default:
