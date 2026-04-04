@@ -47,11 +47,17 @@ extension MIDI1File.UndefinedChunk {
             return (identifierString: identifierString, dataBody.toData())
         }
         
-        guard !Self.Identifier.disallowedIdentifiers.contains(identifierString),
-              let identifier = Identifier(string: identifierString)
+        guard !MIDI1FileChunkIdentifier.definedIdentifiers.map(\.string).contains(identifierString)
         else {
             throw .malformed(
                 "Chunk type matches known identifier \(identifierString.quoted). Forming an undefined chunk using this identifier is not allowed."
+            )
+        }
+        
+        guard let identifier = MIDI1FileChunkIdentifier(string: identifierString)
+        else {
+            throw .malformed(
+                "Chunk type matches known identifier \(identifierString.quoted) contains invalid characters. Must be 4 ASCII characters."
             )
         }
         

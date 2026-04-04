@@ -74,7 +74,7 @@ extension MIDI1File.AnyChunk {
     }
     
     /// MIDI file chunk identifier.
-    public var identifier: any MIDI1FileChunkIdentifier {
+    public var identifier: MIDI1FileChunkIdentifier {
         switch self {
         case let .track(track): track.identifier
         case let .undefined(chunk): chunk.identifier

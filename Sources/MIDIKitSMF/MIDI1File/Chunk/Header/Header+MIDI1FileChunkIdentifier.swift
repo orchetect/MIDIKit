@@ -4,18 +4,11 @@
 //  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
-/// MIDI file header chunk identifier (`MThd`).
-public struct HeaderMIDI1FileChunkIdentifier: MIDI1FileChunkIdentifier {
-    public let string: String = "MThd"
-    
-    public init() { }
-}
-
 // MARK: - Static Constructor
 
-extension MIDI1FileChunkIdentifier where Self == HeaderMIDI1FileChunkIdentifier {
+extension MIDI1FileChunkIdentifier {
     /// MIDI file header chunk identifier (`MThd`).
-    public static var header: HeaderMIDI1FileChunkIdentifier {
-        HeaderMIDI1FileChunkIdentifier()
+    public static var header: MIDI1FileChunkIdentifier {
+        .init(unsafe: "MThd")
     }
 }

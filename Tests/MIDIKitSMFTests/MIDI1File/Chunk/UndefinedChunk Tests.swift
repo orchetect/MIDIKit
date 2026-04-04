@@ -16,7 +16,7 @@ import Testing
     
     @Test
     func emptyData() async throws {
-        let id: MusicalMIDI1File.UndefinedChunk.Identifier = .undefined(identifier: "ABCD")!
+        let id: MIDI1FileChunkIdentifier = try #require(.undefined(identifier: "ABCD"))
         
         let chunk = MusicalMIDI1File.UndefinedChunk(identifier: id)
         
@@ -44,7 +44,7 @@ import Testing
     func withData() async throws {
         let data: [UInt8] = [0x12, 0x34, 0x56, 0x78]
         
-        let id: MusicalMIDI1File.UndefinedChunk.Identifier = .undefined(identifier: "ABCD")!
+        let id: MIDI1FileChunkIdentifier = try #require(.undefined(identifier: "ABCD"))
         
         let chunk = MusicalMIDI1File.UndefinedChunk(
             identifier: id,

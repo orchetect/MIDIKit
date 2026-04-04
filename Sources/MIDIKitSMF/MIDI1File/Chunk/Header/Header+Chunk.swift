@@ -5,9 +5,7 @@
 //
 
 extension MIDI1File.Header: MIDI1FileChunk {
-    public typealias Identifier = HeaderMIDI1FileChunkIdentifier
+    public var identifier: MIDI1FileChunkIdentifier { Self.identifier }
     
-    public var identifier: Identifier { Self.identifier }
-    
-    public static var identifier: Identifier { .init() }
+    public static var identifier: MIDI1FileChunkIdentifier { .header }
 }

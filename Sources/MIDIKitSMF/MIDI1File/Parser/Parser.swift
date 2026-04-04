@@ -224,7 +224,7 @@ extension MIDI1File.Parser {
                     let chunkStartByteOffset = parser.readOffset
                     guard let identifierBytes = try? parser.read(bytes: 4),
                           let identifierString = identifierBytes.asciiDataToString(),
-                          let identifier = AnyMIDI1FileChunkIdentifier(string: identifierString)
+                          let identifier = MIDI1FileChunkIdentifier(string: identifierString)
                     else {
                         let offsetString = parser.readOffset.hexString(prefix: true)
                         throw .malformed(
@@ -270,7 +270,7 @@ extension MIDI1File.Parser {
                     // append chunk descriptor
                     if !discard {
                         let chunkDescriptor = ChunkDescriptor(
-                            identifier: identifier.wrapped,
+                            identifier: identifier,
                             startOffset: chunkStartByteOffset,
                             bodyByteStartOffset: dataBodyOffset,
                             bodyByteLength: Int(chunkLength)
@@ -313,7 +313,7 @@ extension MIDI1File.Parser {
     ) throws(MIDIFileDecodeError) -> MIDI1File.AnyChunk? {
         do throws(MIDIFileDecodeError) {
             switch chunkDescriptor.identifier {
-            case is MIDI1File.Track.Identifier:
+            case .track:
                 let track = try MIDI1File.Track(
                     midi1FileRawBytes: chunkData,
                     timebase: timebase,
@@ -321,20 +321,15 @@ extension MIDI1File.Parser {
                 )
                 return if let track { .track(track) } else { nil }
                 
-            case let identifier as MIDI1File.UndefinedChunk.Identifier:
+            default:
                 // as per Standard MIDI File 1.0 Spec:
                 // undefined chunks should be skipped and not throw an error
                 
                 let newUndefinedChunk = MIDI1File.UndefinedChunk(
-                    identifier: identifier,
+                    identifier: chunkDescriptor.identifier,
                     data: chunkData.toData()
                 )
                 return .undefined(newUndefinedChunk)
-                
-            default:
-                // TODO: this is where we would handle custom chunks implemented by end-users
-                assertionFailure("Unhandled chunk identifier: \(chunkDescriptor.identifier.string)")
-                return nil
             }
         } catch {
             // append some context for the error and rethrow it

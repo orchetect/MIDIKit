@@ -10,15 +10,17 @@ import MIDIKitCore
 extension MIDI1File {
     /// Unrecognized MIDI File Chunk.
     public struct UndefinedChunk {
-        public let identifier: Identifier
+        public let identifier: MIDI1FileChunkIdentifier
 
         /// Contains the raw bytes of the chunk's data portion
         /// (NOT including the 4-character identifier or the length integer.)
         public var rawData: Data
         
         /// Internal init.
-        public init(identifier: Identifier, data: Data? = nil) {
+        public init(identifier: MIDI1FileChunkIdentifier, data: Data? = nil) {
             // identifier validation
+            assert(identifier != .header, "Undefined chunk cannot use the identifier reserved for the MIDI file header chunk.")
+            assert(identifier != .track, "Undefined chunk cannot use the identifier reserved for MIDI file track chunks.")
             self.identifier = identifier
             
             // store raw data

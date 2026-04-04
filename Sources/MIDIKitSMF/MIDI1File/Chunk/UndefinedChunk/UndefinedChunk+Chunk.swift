@@ -7,18 +7,14 @@
 import Foundation
 internal import MIDIKitInternals
 
-extension MIDI1File.UndefinedChunk: MIDI1FileChunk {
-    public typealias Identifier = UndefinedMIDI1FileChunkIdentifier
-    
-    // `identifier` is a stored property
-}
+extension MIDI1File.UndefinedChunk: MIDI1FileChunk { }
 
 // MARK: - Static Constructors
 
 extension MIDI1File.AnyChunk {
     /// Undefined MIDI file chunk.
     public static func undefined(
-        identifier: MIDI1File<Timebase>.UndefinedChunk.Identifier,
+        identifier: MIDI1FileChunkIdentifier,
         data: Data? = nil
     ) -> Self {
         .undefined(.init(identifier: identifier, data: data))
@@ -30,7 +26,7 @@ extension MIDI1File.AnyChunk {
         identifier identifierString: String,
         data: Data? = nil
     ) -> Self? {
-        guard let id = MIDI1File<Timebase>.UndefinedChunk.Identifier(string: identifierString) else {
+        guard let id = MIDI1FileChunkIdentifier(string: identifierString) else {
             return nil
         }
         return .undefined(.init(identifier: id, data: data))

@@ -37,7 +37,7 @@ extension AnyMIDIFileTimebase {
         return try midi1FileRawBytes.withDataParser { parser throws(MIDIFileDecodeError) in
             // Header descriptor
             
-            guard (try? parser.read(bytes: 4).toUInt8Bytes()) == HeaderMIDI1FileChunkIdentifier().string.toASCIIBytes()
+            guard (try? parser.read(bytes: 4).toUInt8Bytes()) == MIDI1FileChunkIdentifier.header.string.toASCIIBytes()
             else {
                 throw .malformed(
                     "File header identifier is not correct. File may not be a MIDI file."
@@ -148,7 +148,7 @@ extension AnyMIDIFileTimebase {
         return try stream.withDataParser { parser throws(MIDIFileDecodeError) in
             // Header descriptor
             
-            guard (try? parser.read(bytes: 4).toUInt8Bytes()) == HeaderMIDI1FileChunkIdentifier().string.toASCIIBytes()
+            guard (try? parser.read(bytes: 4).toUInt8Bytes()) == MIDI1FileChunkIdentifier.header.string.toASCIIBytes()
             else {
                 throw .malformed(
                     "File header identifier is not correct. File may not be a MIDI file."

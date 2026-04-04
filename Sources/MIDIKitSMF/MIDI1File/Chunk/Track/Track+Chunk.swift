@@ -5,9 +5,22 @@
 //
 
 extension MIDI1File.Track: MIDI1FileChunk {
-    public typealias Identifier = TrackMIDI1FileChunkIdentifier
+    public var identifier: MIDI1FileChunkIdentifier { Self.identifier }
     
-    public var identifier: Identifier { Self.identifier }
+    public static var identifier: MIDI1FileChunkIdentifier { .track }
+}
+
+// MARK: - AnyChunk Static Constructors
+
+extension MIDI1File.AnyChunk {
+    /// MIDI file track chunk identifier (`MTrk`).
+    public static func track(_ events: [MIDI1File<Timebase>.Track.Event]) -> Self {
+        .track(.init(events: events))
+    }
     
-    public static var identifier: Identifier { .init() }
+    /// MIDI file track chunk identifier (`MTrk`).
+    @_disfavoredOverload
+    public static func track(_ events: some Sequence<MIDI1File<Timebase>.Track.Event>) -> Self {
+        .track(.init(events: events))
+    }
 }
