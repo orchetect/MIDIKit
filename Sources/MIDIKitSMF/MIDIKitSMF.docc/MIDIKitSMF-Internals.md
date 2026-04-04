@@ -12,7 +12,6 @@
 ### Type-Erasure
 
 - ``AnyMIDI1File``
-- ``AnyMIDI1FileHeaderChunk``
 - ``AnyMIDIFileTimebase``
 - ``AnyMIDIFileDeltaTime``
 - ``AnyMIDIFileEventDecodeResult``
