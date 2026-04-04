@@ -67,7 +67,7 @@ extension MIDIFileEvent {
     }
 }
 
-extension MIDI1File.TrackChunk.Event {
+extension MIDI1File.Track.Event {
     /// Channel Voice Message: Note Pressure (Polyphonic Aftertouch)
     ///
     /// Also known as:

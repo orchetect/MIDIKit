@@ -4,7 +4,7 @@
 //  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
-extension MIDI1File.TrackChunk {
+extension MIDI1File.Track {
     /// Track event with a delta time offset.
     public struct Event {
         // MARK: - Typealiases
@@ -33,19 +33,19 @@ extension MIDI1File.TrackChunk {
     }
 }
 
-extension MIDI1File.TrackChunk.Event: Equatable { }
+extension MIDI1File.Track.Event: Equatable { }
 
-extension MIDI1File.TrackChunk.Event: Hashable { }
+extension MIDI1File.Track.Event: Hashable { }
 
-extension MIDI1File.TrackChunk.Event: Sendable { }
+extension MIDI1File.Track.Event: Sendable { }
 
-extension MIDI1File.TrackChunk.Event: CustomStringConvertible {
+extension MIDI1File.Track.Event: CustomStringConvertible {
     public var description: String {
         "\(delta) - \(event)"
     }
 }
 
-extension MIDI1File.TrackChunk.Event: CustomDebugStringConvertible {
+extension MIDI1File.Track.Event: CustomDebugStringConvertible {
     public var debugDescription: String {
         description
     }

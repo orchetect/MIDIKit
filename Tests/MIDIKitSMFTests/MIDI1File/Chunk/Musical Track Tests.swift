@@ -16,9 +16,9 @@ import Testing
     
     @Test
     func emptyEvents() async throws {
-        let events: [MusicalMIDI1File.TrackChunk.Event] = []
+        let events: [MusicalMIDI1File.Track.Event] = []
         
-        let track = MusicalMIDI1File.TrackChunk(events: events)
+        let track = MusicalMIDI1File.Track(events: events)
         
         #expect(track.events == events)
         
@@ -38,14 +38,14 @@ import Testing
         
         // parse raw bytes
         
-        let parsedTrackA = try? MusicalMIDI1File.TrackChunk(
+        let parsedTrackA = try? MusicalMIDI1File.Track(
             midi1FileRawBytesStream: generatedData,
             timebase: timebase,
             options: .init(bundleRPNAndNRPNEvents: true)
         )
         #expect(parsedTrackA == track)
         
-        let parsedTrackB = try? MusicalMIDI1File.TrackChunk(
+        let parsedTrackB = try? MusicalMIDI1File.Track(
             midi1FileRawBytes: generatedData[8...], // exclude header and length
             timebase: timebase,
             options: .init(bundleRPNAndNRPNEvents: true)
@@ -55,12 +55,12 @@ import Testing
     
     @Test
     func withEvents() async throws {
-        let events: [MusicalMIDI1File.TrackChunk.Event] = [
+        let events: [MusicalMIDI1File.Track.Event] = [
             .init(delta: .none, event: .noteOn(note: 60, velocity: .midi1(64), channel: 0)),
             .init(delta: .ticks(240), event: .cc(controller: .expression, value: .midi1(20), channel: 1))
         ]
         
-        let track = MIDI1File.TrackChunk(events: events)
+        let track = MIDI1File.Track(events: events)
         
         #expect(track.events == events)
         
@@ -84,14 +84,14 @@ import Testing
         
         // parse raw bytes
         
-        let parsedTrackA = try? MusicalMIDI1File.TrackChunk(
+        let parsedTrackA = try? MusicalMIDI1File.Track(
             midi1FileRawBytesStream: generatedData,
             timebase: timebase,
             options: .init(bundleRPNAndNRPNEvents: true)
         )
         #expect(parsedTrackA == track)
         
-        let parsedTrackB = try? MusicalMIDI1File.TrackChunk(
+        let parsedTrackB = try? MusicalMIDI1File.Track(
             midi1FileRawBytes: generatedData[8...], // exclude header and length
             timebase: timebase,
             options: .init(bundleRPNAndNRPNEvents: true)
@@ -102,9 +102,9 @@ import Testing
     /// Encode and decode non-zero delta time before end-of-track bytes.
     @Test
     func deltaTimeBeforeEndOfTrack() async throws {
-        let events: [MusicalMIDI1File.TrackChunk.Event] = []
+        let events: [MusicalMIDI1File.Track.Event] = []
         
-        var track = MusicalMIDI1File.TrackChunk(events: events)
+        var track = MusicalMIDI1File.Track(events: events)
         track.deltaTimeBeforeEndOfTrack = .ticks(960)
         
         #expect(track.events == events)
@@ -125,14 +125,14 @@ import Testing
         
         // parse raw bytes
         
-        let parsedTrackA = try? MusicalMIDI1File.TrackChunk(
+        let parsedTrackA = try? MusicalMIDI1File.Track(
             midi1FileRawBytesStream: generatedData,
             timebase: timebase,
             options: .init(bundleRPNAndNRPNEvents: true)
         )
         #expect(parsedTrackA == track)
         
-        let parsedTrackB = try? MusicalMIDI1File.TrackChunk(
+        let parsedTrackB = try? MusicalMIDI1File.Track(
             midi1FileRawBytes: generatedData[8...], // exclude header and length
             timebase: timebase,
             options: .init(bundleRPNAndNRPNEvents: true)
@@ -222,14 +222,14 @@ import Testing
     
     @Test
     func maxEventCount() async throws {
-        let events: [MusicalMIDI1File.TrackChunk.Event] = [
+        let events: [MusicalMIDI1File.Track.Event] = [
             .noteOn(delta: .none, note: 60, velocity: .midi1(64), channel: 0),
             .cc(delta: .ticks(240), controller: .expression, value: .midi1(20), channel: 0),
             .cc(delta: .ticks(240), controller: .expression, value: .midi1(40), channel: 0),
             .noteOff(delta: .none, note: 60, velocity: .midi1(0), channel: 0)
         ]
         
-        let track = MusicalMIDI1File.TrackChunk(events: events)
+        let track = MusicalMIDI1File.Track(events: events)
         
         // generate raw bytes
         
@@ -238,18 +238,18 @@ import Testing
         
         // create comparison track
         
-        let limitedTrack = MusicalMIDI1File.TrackChunk(events: events[0 ... 1])
+        let limitedTrack = MusicalMIDI1File.Track(events: events[0 ... 1])
         
         // parse raw bytes and check event count
         
-        let parsedTrackA = try? MusicalMIDI1File.TrackChunk(
+        let parsedTrackA = try? MusicalMIDI1File.Track(
             midi1FileRawBytesStream: generatedData,
             timebase: timebase,
             options: .init(bundleRPNAndNRPNEvents: true, maxEventCount: 2)
         )
         #expect(parsedTrackA == limitedTrack)
         
-        let parsedTrackB = try? MusicalMIDI1File.TrackChunk(
+        let parsedTrackB = try? MusicalMIDI1File.Track(
             midi1FileRawBytes: generatedData[8...], // exclude header and length
             timebase: timebase,
             options: .init(bundleRPNAndNRPNEvents: true, maxEventCount: 2)
@@ -273,7 +273,7 @@ import Testing
         )
         #expect(textString.count == textCharCount)
         let textEventPayload: MIDIFileEvent.Text = .init(text: textString)
-        let textEvent: MusicalMIDI1File.TrackChunk.Event = .init(delta: .none, event: textEventPayload.asMIDIFileEvent())
+        let textEvent: MusicalMIDI1File.Track.Event = .init(delta: .none, event: textEventPayload.asMIDIFileEvent())
         
         // sequencer-specific event
         let seqSpecificByteCount = Int.random(in: 10000 ... 20000)
@@ -281,11 +281,11 @@ import Testing
             .map { _ in UInt8.random(in: UInt8.min ... UInt8.max) }
         #expect(seqSpecificData.count == seqSpecificByteCount)
         let seqSpecificEventPayload: MIDIFileEvent.SequencerSpecific = .init(data: seqSpecificData)
-        let seqSpecificEvent: MusicalMIDI1File.TrackChunk.Event = .init(delta: .none, event: seqSpecificEventPayload.asMIDIFileEvent())
+        let seqSpecificEvent: MusicalMIDI1File.Track.Event = .init(delta: .none, event: seqSpecificEventPayload.asMIDIFileEvent())
         
         // author MIDI file
-        let events: [MusicalMIDI1File.TrackChunk.Event] = [textEvent, seqSpecificEvent]
-        let track = MusicalMIDI1File.TrackChunk(events: events)
+        let events: [MusicalMIDI1File.Track.Event] = [textEvent, seqSpecificEvent]
+        let track = MusicalMIDI1File.Track(events: events)
         let midiFile = MusicalMIDI1File(format: .singleTrack, timebase: .musical(ticksPerQuarterNote: 480), chunks: [.track(track)])
         
         // encode and decode
@@ -311,51 +311,51 @@ import Testing
     
     @Test
     func initialTempo_emptyTrack() async throws {
-        let track = MusicalMIDI1File.TrackChunk(events: [])
+        let track = MusicalMIDI1File.Track(events: [])
         #expect(track.initialTempo == nil)
     }
     
     @Test
     func initialTempo_eventsWithoutTempo() async throws {
-        let events: [MusicalMIDI1File.TrackChunk.Event] = [
+        let events: [MusicalMIDI1File.Track.Event] = [
             .keySignature(delta: .none, key: .bMajor),
             .timeSignature(delta: .none, numerator: 2, denominator: 2),
             .cc(delta: .note8th, controller: 1, value: .midi1(127), channel: 0)
         ]
         
-        let track = MusicalMIDI1File.TrackChunk(events: events)
+        let track = MusicalMIDI1File.Track(events: events)
         #expect(track.initialTempo == nil)
     }
     
     @Test
     func initialTempo_eventsWithTempoAtStart() async throws {
-        let events: [MusicalMIDI1File.TrackChunk.Event] = [
+        let events: [MusicalMIDI1File.Track.Event] = [
             .keySignature(delta: .none, key: .bMajor),
             .timeSignature(delta: .none, numerator: 2, denominator: 2),
             .tempo(delta: .none, bpm: 160.0),
             .cc(delta: .note8th, controller: 1, value: .midi1(127), channel: 0)
         ]
         
-        let track = MusicalMIDI1File.TrackChunk(events: events)
+        let track = MusicalMIDI1File.Track(events: events)
         #expect(track.initialTempo == .init(bpm: 160.0))
     }
     
     @Test
     func initialTempo_eventsWithTempoAfterStart() async throws {
-        let events: [MusicalMIDI1File.TrackChunk.Event] = [
+        let events: [MusicalMIDI1File.Track.Event] = [
             .keySignature(delta: .none, key: .bMajor),
             .timeSignature(delta: .none, numerator: 2, denominator: 2),
             .cc(delta: .note8th, controller: 1, value: .midi1(127), channel: 0),
             .tempo(delta: .none, bpm: 160.0)
         ]
         
-        let track = MusicalMIDI1File.TrackChunk(events: events)
+        let track = MusicalMIDI1File.Track(events: events)
         #expect(track.initialTempo == .init(bpm: 160.0))
     }
     
     @Test
     func initialTempo_eventsWithMultipleTempoEvents() async throws {
-        let events: [MusicalMIDI1File.TrackChunk.Event] = [
+        let events: [MusicalMIDI1File.Track.Event] = [
             .keySignature(delta: .none, key: .bMajor),
             .timeSignature(delta: .none, numerator: 2, denominator: 2),
             .tempo(delta: .none, bpm: 140.0),
@@ -363,7 +363,7 @@ import Testing
             .tempo(delta: .none, bpm: 160.0)
         ]
         
-        let track = MusicalMIDI1File.TrackChunk(events: events)
+        let track = MusicalMIDI1File.Track(events: events)
         #expect(track.initialTempo == .init(bpm: 140.0))
     }
 }

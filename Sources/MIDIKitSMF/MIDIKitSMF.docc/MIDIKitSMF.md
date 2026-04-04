@@ -50,13 +50,13 @@ Refer to MIDIKit's own package documentation for information on using MIDI I/O a
 ### MIDI File Chunks (SMF1)
 
 - ``MIDI1File/AnyChunk``
-- ``MIDI1File/TrackChunk``
+- ``MIDI1File/Track``
 - ``MIDI1File/UndefinedChunk``
 
 ### MIDI File Track Chunk (SMF1)
 
-- ``MIDI1File/TrackChunk/Event``
-- ``MIDI1File/TrackChunk/DeltaTime``
+- ``MIDI1File/Track/Event``
+- ``MIDI1File/Track/DeltaTime``
 - ``MusicalMIDIFileDeltaTime``
 - ``SMPTEMIDIFileDeltaTime``
 

@@ -48,7 +48,7 @@ extension MIDIFileEvent {
     }
 }
 
-extension MIDI1File.TrackChunk.Event {
+extension MIDI1File.Track.Event {
     /// Channel Voice Message: Pitch Bend
     public static func pitchBend(
         delta: DeltaTime = .none,

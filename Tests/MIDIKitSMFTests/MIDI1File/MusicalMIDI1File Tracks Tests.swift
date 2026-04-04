@@ -11,15 +11,15 @@ import Testing
 @Suite struct MusicalMIDI1File_Tracks_Tests {
     @Test
     func tracksProperty_NoOtherChunksPresent() async throws {
-        let trackA = MusicalMIDI1File.TrackChunk(events: [
+        let trackA = MusicalMIDI1File.Track(events: [
             .noteOn(note: 60, velocity: .midi1(64))
         ])
         
-        let trackB = MusicalMIDI1File.TrackChunk(events: [
+        let trackB = MusicalMIDI1File.Track(events: [
             .noteOn(note: 61, velocity: .midi1(75))
         ])
         
-        let trackC = MusicalMIDI1File.TrackChunk(events: [
+        let trackC = MusicalMIDI1File.Track(events: [
             .noteOn(note: 62, velocity: .midi1(80))
         ])
         
@@ -50,19 +50,19 @@ import Testing
     
     @Test
     func tracksProperty_WithOtherChunksPresent() async throws {
-        let trackA = MusicalMIDI1File.TrackChunk(events: [
+        let trackA = MusicalMIDI1File.Track(events: [
             .noteOn(note: 60, velocity: .midi1(64))
         ])
         
-        let trackB = MusicalMIDI1File.TrackChunk(events: [
+        let trackB = MusicalMIDI1File.Track(events: [
             .noteOn(note: 61, velocity: .midi1(75))
         ])
         
-        let trackC = MusicalMIDI1File.TrackChunk(events: [
+        let trackC = MusicalMIDI1File.Track(events: [
             .noteOn(note: 62, velocity: .midi1(80))
         ])
         
-        let trackD = MusicalMIDI1File.TrackChunk(events: [
+        let trackD = MusicalMIDI1File.Track(events: [
             .noteOn(note: 63, velocity: .midi1(85))
         ])
         
@@ -138,7 +138,7 @@ import Testing
     
     @Test
     func initialTempo_oneTrack_emptyTrack() async throws {
-        let track = MusicalMIDI1File.TrackChunk(events: [])
+        let track = MusicalMIDI1File.Track(events: [])
         let midiFile = MusicalMIDI1File(
             format: .multipleTracksSynchronous,
             timebase: .musical(ticksPerQuarterNote: 480),
@@ -149,12 +149,12 @@ import Testing
     
     @Test
     func initialTempo_oneTrack_eventsWithoutTempo() async throws {
-        let events: [MusicalMIDI1File.TrackChunk.Event] = [
+        let events: [MusicalMIDI1File.Track.Event] = [
             .keySignature(delta: .none, key: .bMajor),
             .timeSignature(delta: .none, numerator: 2, denominator: 2),
             .cc(delta: .note8th, controller: 1, value: .midi1(127), channel: 0)
         ]
-        let track = MusicalMIDI1File.TrackChunk(events: events)
+        let track = MusicalMIDI1File.Track(events: events)
         let midiFile = MusicalMIDI1File(
             format: .multipleTracksSynchronous,
             timebase: .musical(ticksPerQuarterNote: 480),
@@ -165,13 +165,13 @@ import Testing
     
     @Test
     func initialTempo_oneTrack_eventsWithTempoAtStart() async throws {
-        let events: [MusicalMIDI1File.TrackChunk.Event] = [
+        let events: [MusicalMIDI1File.Track.Event] = [
             .keySignature(delta: .none, key: .bMajor),
             .timeSignature(delta: .none, numerator: 2, denominator: 2),
             .tempo(delta: .none, bpm: 160.0),
             .cc(delta: .note8th, controller: 1, value: .midi1(127), channel: 0)
         ]
-        let track = MusicalMIDI1File.TrackChunk(events: events)
+        let track = MusicalMIDI1File.Track(events: events)
         let midiFile = MusicalMIDI1File(
             format: .multipleTracksSynchronous,
             timebase: .musical(ticksPerQuarterNote: 480),
@@ -182,13 +182,13 @@ import Testing
     
     @Test
     func initialTempo_oneTrack_eventsWithTempoAfterStart() async throws {
-        let events: [MusicalMIDI1File.TrackChunk.Event] = [
+        let events: [MusicalMIDI1File.Track.Event] = [
             .keySignature(delta: .none, key: .bMajor),
             .timeSignature(delta: .none, numerator: 2, denominator: 2),
             .cc(delta: .note8th, controller: 1, value: .midi1(127), channel: 0),
             .tempo(delta: .none, bpm: 160.0)
         ]
-        let track = MusicalMIDI1File.TrackChunk(events: events)
+        let track = MusicalMIDI1File.Track(events: events)
         let midiFile = MusicalMIDI1File(
             format: .multipleTracksSynchronous,
             timebase: .musical(ticksPerQuarterNote: 480),
@@ -199,14 +199,14 @@ import Testing
     
     @Test
     func initialTempo_oneTrack_eventsWithMultipleTempoEvents() async throws {
-        let events: [MusicalMIDI1File.TrackChunk.Event] = [
+        let events: [MusicalMIDI1File.Track.Event] = [
             .keySignature(delta: .none, key: .bMajor),
             .timeSignature(delta: .none, numerator: 2, denominator: 2),
             .tempo(delta: .none, bpm: 140.0),
             .cc(delta: .note8th, controller: 1, value: .midi1(127), channel: 0),
             .tempo(delta: .none, bpm: 160.0)
         ]
-        let track = MusicalMIDI1File.TrackChunk(events: events)
+        let track = MusicalMIDI1File.Track(events: events)
         let midiFile = MusicalMIDI1File(
             format: .multipleTracksSynchronous,
             timebase: .musical(ticksPerQuarterNote: 480),
@@ -217,21 +217,21 @@ import Testing
     
     @Test
     func initialTempo_multipleTracks_eventsWithMultipleTempoEvents() async throws {
-        let track0Events: [MusicalMIDI1File.TrackChunk.Event] = [
+        let track0Events: [MusicalMIDI1File.Track.Event] = [
             .keySignature(delta: .none, key: .bMajor),
             .timeSignature(delta: .none, numerator: 2, denominator: 2),
             .cc(delta: .note8th, controller: 1, value: .midi1(127), channel: 0),
         ]
-        let track0 = MusicalMIDI1File.TrackChunk(events: track0Events)
+        let track0 = MusicalMIDI1File.Track(events: track0Events)
         
-        let track1Events: [MusicalMIDI1File.TrackChunk.Event] = [
+        let track1Events: [MusicalMIDI1File.Track.Event] = [
             .keySignature(delta: .none, key: .bMajor),
             .timeSignature(delta: .none, numerator: 2, denominator: 2),
             .tempo(delta: .none, bpm: 140.0),
             .cc(delta: .note8th, controller: 1, value: .midi1(127), channel: 0),
             .tempo(delta: .none, bpm: 160.0)
         ]
-        let track1 = MusicalMIDI1File.TrackChunk(events: track1Events)
+        let track1 = MusicalMIDI1File.Track(events: track1Events)
         
         let midiFile = MusicalMIDI1File(
             format: .multipleTracksSynchronous,

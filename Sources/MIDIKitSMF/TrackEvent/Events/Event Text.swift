@@ -128,7 +128,7 @@ extension MIDIFileEvent {
     }
 }
 
-extension MIDI1File.TrackChunk.Event {
+extension MIDI1File.Track.Event {
     /// Text event.
     /// Includes copyright, marker, cue point, track/sequence name, instrument name, generic text,
     /// program name, device name, or lyric.

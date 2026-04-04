@@ -52,7 +52,7 @@ extension MIDIFileEvent {
     }
 }
 
-extension MIDI1File.TrackChunk.Event {
+extension MIDI1File.Track.Event {
     /// Channel Voice Message: Note On
     public static func noteOn(
         delta: DeltaTime = .none,

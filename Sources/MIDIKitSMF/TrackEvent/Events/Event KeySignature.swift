@@ -111,7 +111,7 @@ extension MIDIFileEvent {
     }
 }
 
-extension MIDI1File.TrackChunk.Event {
+extension MIDI1File.Track.Event {
     /// Key Signature event.
     ///
     /// For a format 1 MIDI file, Key Signature Meta events should only occur within the first

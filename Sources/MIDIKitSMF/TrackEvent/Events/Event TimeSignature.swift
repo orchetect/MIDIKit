@@ -93,7 +93,7 @@ extension MIDIFileEvent {
     }
 }
 
-extension MIDI1File.TrackChunk.Event {
+extension MIDI1File.Track.Event {
     /// Time Signature event.
     /// For a format 1 MIDI file, Time Signature meta events should only occur within the first
     /// `MTrk` chunk.

@@ -59,7 +59,7 @@ extension MIDIFileEvent {
     // TODO: add specialized constructor(s)
 }
 
-extension MIDI1File.TrackChunk.Event where Timebase == SMPTEMIDIFileTimebase {
+extension MIDI1File.Track.Event where Timebase == SMPTEMIDIFileTimebase {
     // TODO: add specialized constructor(s)
 }
 

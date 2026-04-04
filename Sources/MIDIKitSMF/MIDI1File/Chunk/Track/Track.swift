@@ -1,5 +1,5 @@
 //
-//  TrackChunk.swift
+//  Track.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
@@ -13,7 +13,7 @@ internal import SwiftDataParsing
 
 extension MIDI1File {
     /// Track: `MTrk` chunk type.
-    public struct TrackChunk {
+    public struct Track {
         // MARK: - Typealiases
         
         /// Delta time advancement within a MIDI file track.
@@ -44,13 +44,13 @@ extension MIDI1File {
     }
 }
 
-extension MIDI1File.TrackChunk: Equatable { }
+extension MIDI1File.Track: Equatable { }
 
-extension MIDI1File.TrackChunk: Hashable { }
+extension MIDI1File.Track: Hashable { }
 
-extension MIDI1File.TrackChunk: Sendable { }
+extension MIDI1File.Track: Sendable { }
 
-extension MIDI1File.TrackChunk: CustomStringConvertible {
+extension MIDI1File.Track: CustomStringConvertible {
     public var description: String {
         description(maxEventCount: 10) // by default, limit number of events
     }
@@ -66,7 +66,7 @@ extension MIDI1File.TrackChunk: CustomStringConvertible {
     }
 }
 
-extension MIDI1File.TrackChunk: CustomDebugStringConvertible {
+extension MIDI1File.Track: CustomDebugStringConvertible {
     public var debugDescription: String {
         debugDescription(maxEventCount: 10) // by default, limit number of events
     }
@@ -82,7 +82,7 @@ extension MIDI1File.TrackChunk: CustomDebugStringConvertible {
     }
 }
 
-extension MIDI1File.TrackChunk {
+extension MIDI1File.Track {
     func descriptionBuilder(
         maxEventCount: Int?,
         deltaPadLength: Int,
@@ -132,14 +132,14 @@ extension MIDI1File.TrackChunk {
 
 // MARK: - Static
 
-extension MIDI1File.TrackChunk {
+extension MIDI1File.Track {
     /// The 3-byte sequence that must appear at the end of every track.
     public static var trackEndByes: [UInt8] { [0xFF, 0x2F, 0x00] }
 }
 
 // MARK: - Properties
 
-extension MIDI1File.TrackChunk {
+extension MIDI1File.Track {
     /// Returns all ``events`` that have a delta time of zero from the start of the track.
     public var eventsAtStart: [MIDIFileEvent] {
         events

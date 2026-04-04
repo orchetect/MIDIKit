@@ -56,7 +56,7 @@ extension MIDIFileEvent {
     }
 }
 
-extension MIDI1File.TrackChunk.Event {
+extension MIDI1File.Track.Event {
     /// MIDI Port Prefix event.
     ///
     /// Specifies out of which MIDI Port (ie, buss) the MIDI events in the MIDI track go.

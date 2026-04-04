@@ -49,7 +49,7 @@ extension MIDIFileEvent {
     }
 }
 
-extension MIDI1File.TrackChunk.Event {
+extension MIDI1File.Track.Event {
     /// Channel Voice Message: Channel Pressure (Aftertouch)
     ///
     /// Also known as:

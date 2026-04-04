@@ -180,14 +180,14 @@ midiFile.tracks[0].events.append(delta: .note8th, event: event)
 Add a new track:
 
 ```swift
-let newTrack = MusicalMIDI1File.TrackChunk()
+let newTrack = MusicalMIDI1File.Track()
 midiFile.tracks.append(newTrack)
 ```
 
 Replace a track:
 
 ```swift
-let newTrack = MusicalMIDI1File.TrackChunk()
+let newTrack = MusicalMIDI1File.Track()
 midiFile.tracks[0] = newTrack
 ```
 
@@ -204,7 +204,7 @@ Alternatively, all chunks (including non-track chunks) can be accessed through t
 ```swift
 for chunk in midiFile.chunks {
     switch chunk {
-    case let .track(track): // `track` is `MusicalMIDI1File.TrackChunk`
+    case let .track(track): // `track` is `MusicalMIDI1File.Track`
         // chunk is a track
     case let .undefined(chunk): // `chunk` is `MusicalMIDI1File.UndefinedChunk`
         // chunk is a non-track chunk

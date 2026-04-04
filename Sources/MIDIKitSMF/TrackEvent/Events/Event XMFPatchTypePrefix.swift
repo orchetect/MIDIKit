@@ -89,7 +89,7 @@ extension MIDIFileEvent {
     }
 }
 
-extension MIDI1File.TrackChunk.Event {
+extension MIDI1File.Track.Event {
     /// XMF Patch Type Prefix event.
     ///
     /// > Standard MIDI File 1.0 Spec:

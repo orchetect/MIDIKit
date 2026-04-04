@@ -52,7 +52,7 @@ extension MIDIFileEvent {
     }
 }
 
-extension MIDI1File.TrackChunk.Event {
+extension MIDI1File.Track.Event {
     /// Channel Voice Message: Control Change (CC)
     public static func cc(
         delta: DeltaTime = .none,

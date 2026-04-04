@@ -1,5 +1,5 @@
 //
-//  TrackChunk+SMPTE.swift
+//  Track+SMPTE.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
@@ -8,7 +8,7 @@ import SwiftTimecodeCore
 
 // MARK: - Methods
 
-extension MIDI1File.TrackChunk where Timebase == SMPTEMIDIFileTimebase {
+extension MIDI1File.Track where Timebase == SMPTEMIDIFileTimebase {
     /// Returns ``events`` mapped to their SMPTE timecode locations.
     /// Ensure the frame rate and `ticksPerFrame` value are the same values specified in the MIDI file header.
     /// 

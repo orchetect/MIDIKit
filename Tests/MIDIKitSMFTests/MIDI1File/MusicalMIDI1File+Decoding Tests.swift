@@ -160,17 +160,17 @@ import Testing
     
     @Test
     func chunkDecodeOptions_errorStrategy_malformedEvent_invalidStatusByte() async throws {
-        let track1 = MusicalMIDI1File.TrackChunk(events: [
+        let track1 = MusicalMIDI1File.Track(events: [
             .noteOn(delta: .none, note: 0x3C, velocity: .midi1(0x40), channel: 0),
             .cc(delta: .ticks(240), controller: 0x0B, value: .midi1(0x14), channel: 1)
         ])
         
-        let partialTrack2 = MusicalMIDI1File.TrackChunk(events: [
+        let partialTrack2 = MusicalMIDI1File.Track(events: [
             .noteOn(delta: .none, note: 0x3C, velocity: .midi1(0x40), channel: 0)
             // a malformed status byte here means that track decoding can't continue, so all remaining events are lost
         ])
         
-        let track3 = MusicalMIDI1File.TrackChunk(events: [
+        let track3 = MusicalMIDI1File.Track(events: [
             .noteOn(delta: .none, note: 0x3D, velocity: .midi1(0x41), channel: 2),
         ])
         
@@ -244,18 +244,18 @@ import Testing
     
     @Test
     func chunkDecodeOptions_errorStrategy_malformedEvent_invalidDataByte() async throws {
-        let track1 = MusicalMIDI1File.TrackChunk(events: [
+        let track1 = MusicalMIDI1File.Track(events: [
             .noteOn(delta: .none, note: 0x3C, velocity: .midi1(0x40), channel: 0),
             .cc(delta: .ticks(240), controller: 0x0B, value: .midi1(0x14), channel: 1)
         ])
         
-        let partialTrack2 = MusicalMIDI1File.TrackChunk(events: [
+        let partialTrack2 = MusicalMIDI1File.Track(events: [
             .noteOn(delta: .none, note: 0x3C, velocity: .midi1(0x40), channel: 0),
             // < malformed CC event skipped over here >
             .cc(delta: .ticks(15), controller: 0x0C, value: .midi1(0x15), channel: 1)
         ])
         
-        let track3 = MusicalMIDI1File.TrackChunk(events: [
+        let track3 = MusicalMIDI1File.Track(events: [
             .noteOn(delta: .none, note: 0x3D, velocity: .midi1(0x41), channel: 2),
         ])
         
@@ -329,12 +329,12 @@ import Testing
     
     @Test
     func chunkDecodeOptions_errorStrategy_truncatedTrack() async throws {
-        let track1 = MusicalMIDI1File.TrackChunk(events: [
+        let track1 = MusicalMIDI1File.Track(events: [
             .noteOn(delta: .none, note: 0x3C, velocity: .midi1(0x40), channel: 0),
             .cc(delta: .ticks(240), controller: 0x0B, value: .midi1(0x14), channel: 1)
         ])
         
-        let partialTrack2 = MusicalMIDI1File.TrackChunk(events: [
+        let partialTrack2 = MusicalMIDI1File.Track(events: [
             .noteOn(delta: .none, note: 0x3C, velocity: .midi1(0x40), channel: 0),
             .cc(delta: .ticks(240), controller: 0x0C, value: .midi1(0x24), channel: 0)
         ])
@@ -448,10 +448,10 @@ import Testing
             .raw(parameter: .init(msb: 0x05, lsb: 0x10), dataEntryMSB: 0x08, dataEntryLSB: 0x07),
             channel: 2
         )
-        let event: MusicalMIDI1File.TrackChunk.Event = .init(delta: .none, event: .rpn(rpnPayload))
-        let events: [MusicalMIDI1File.TrackChunk.Event] = [event]
+        let event: MusicalMIDI1File.Track.Event = .init(delta: .none, event: .rpn(rpnPayload))
+        let events: [MusicalMIDI1File.Track.Event] = [event]
         
-        let track = MusicalMIDI1File.TrackChunk(events: events)
+        let track = MusicalMIDI1File.Track(events: events)
         let midiFile = MusicalMIDI1File(chunks: [.track(track)])
         
         let rawData = try await midiFile.rawData()
@@ -617,7 +617,7 @@ import Testing
         let midiFile = try await MusicalMIDI1File(data: kMIDI1File.customChunk)
         let baseRawData: [UInt8] = try await midiFile.rawData(as: [UInt8].self)
         
-        let extraTrack = MusicalMIDI1File.TrackChunk(events: [
+        let extraTrack = MusicalMIDI1File.Track(events: [
             .cc(delta: .none, controller: .breath, value: .midi1(42), channel: 0)
         ])
         let extraTrackRawData = try extraTrack.midi1FileRawBytes(as: [UInt8].self, using: midiFile.timebase)

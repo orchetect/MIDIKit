@@ -53,7 +53,7 @@ extension MIDIFileEvent {
     }
 }
 
-extension MIDI1File.TrackChunk.Event {
+extension MIDI1File.Track.Event {
     /// Sequencer-specific data.
     /// Typically begins with a 1 or 3 byte manufacturer ID, similar to SysEx.
     public static func sequencerSpecific(

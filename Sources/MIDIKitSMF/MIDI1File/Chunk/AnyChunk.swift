@@ -17,7 +17,7 @@ extension MIDI1File {
     /// The ``Header`` chunk is managed automatically and is not included in this collection.
     /// Its properties can be accessed directly on the ``MIDI1File`` instance.
     public enum AnyChunk {
-        case track(_ track: TrackChunk)
+        case track(_ track: Track)
         case undefined(_ chunk: UndefinedChunk)
     }
 }
@@ -82,7 +82,7 @@ extension MIDI1File.AnyChunk {
     }
     
     /// Returns `true` if the chunk is a track.
-    public var isTrackChunk: Bool {
+    public var isTrack: Bool {
         switch self {
         case .track: true
         default: false

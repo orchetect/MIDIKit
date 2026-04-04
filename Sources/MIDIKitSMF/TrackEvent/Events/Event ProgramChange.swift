@@ -48,7 +48,7 @@ extension MIDIFileEvent {
     }
 }
 
-extension MIDI1File.TrackChunk.Event {
+extension MIDI1File.Track.Event {
     /// Channel Voice Message: Program Change
     ///
     /// > Note: When decoding, bank information is not decoded as part of the Program Change event

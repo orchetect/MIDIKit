@@ -12,7 +12,7 @@ extension Array {
     /// Updates tracks in-place with new tracks. If the number of tracks differ, outstanding tracks will be
     /// appended or removed as necessary.
     mutating func updateTracks<Timebase: MIDIFileTimebase>(
-        with newTracks: [MIDI1File<Timebase>.TrackChunk]
+        with newTracks: [MIDI1File<Timebase>.Track]
     ) where Element == MIDI1File<Timebase>.AnyChunk {
         let oldTracksIndices = trackIndices()
         let newTracksIndices = newTracks.indices

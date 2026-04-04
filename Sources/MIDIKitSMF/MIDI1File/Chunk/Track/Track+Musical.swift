@@ -1,12 +1,12 @@
 //
-//  TrackChunk+Musical.swift
+//  Track+Musical.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 // MARK: - Methods
 
-extension MIDI1File.TrackChunk where Timebase == MusicalMIDIFileTimebase {
+extension MIDI1File.Track where Timebase == MusicalMIDIFileTimebase {
     /// Returns ``events`` mapped to their quarter-note beat position from the start of the track.
     /// Ensure the timebase `ppq` (ticks per quarter note) value is the same value specified in the MIDI file header.
     ///

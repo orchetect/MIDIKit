@@ -70,7 +70,7 @@ extension MIDIFileEvent {
     }
 }
 
-extension MIDI1File.TrackChunk.Event {
+extension MIDI1File.Track.Event {
     /// Sequence Number event.
     ///
     /// - For MIDI file type 0/1, this should only be on the first track. This is used to identify

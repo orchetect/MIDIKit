@@ -23,14 +23,14 @@ import Testing
     
     @Test
     func midiFile_CheckContents() async throws {
-        let track1 = SMPTEMIDI1File.TrackChunk(events: [
+        let track1 = SMPTEMIDI1File.Track(events: [
             .cc(delta: .ticks(1000), controller: 1, value: .midi1(0x40), channel: 0)
         ])
-        let track2 = SMPTEMIDI1File.TrackChunk(events: [
+        let track2 = SMPTEMIDI1File.Track(events: [
             .cc(delta: .ticks(2500), controller: 2, value: .midi1(0x46), channel: 0),
             .cc(delta: .ticks(500), controller: 2, value: .midi1(0x4B), channel: 0),
         ])
-        let track3 = SMPTEMIDI1File.TrackChunk(events: [
+        let track3 = SMPTEMIDI1File.Track(events: [
             .noteOn(delta: .none, note: 0x30, velocity: .midi1(0x05), channel: 0)
         ])
         let tracks = [track1, track2, track3]
@@ -48,14 +48,14 @@ import Testing
     
     @Test
     func midiFile_eventsAtTimecodeLocations() async throws {
-        let track1 = SMPTEMIDI1File.TrackChunk(events: [
+        let track1 = SMPTEMIDI1File.Track(events: [
             .cc(delta: .ticks(1000), controller: 1, value: .midi1(0x40), channel: 0)
         ])
-        let track2 = SMPTEMIDI1File.TrackChunk(events: [
+        let track2 = SMPTEMIDI1File.Track(events: [
             .cc(delta: .ticks(2500), controller: 2, value: .midi1(0x46), channel: 0),
             .cc(delta: .ticks(500), controller: 2, value: .midi1(0x4B), channel: 0),
         ])
-        let track3 = SMPTEMIDI1File.TrackChunk(events: [
+        let track3 = SMPTEMIDI1File.Track(events: [
             .noteOn(delta: .none, note: 0x30, velocity: .midi1(0x05), channel: 0)
         ])
         let tracks = [track1, track2, track3]
@@ -74,7 +74,7 @@ import Testing
 
 @Suite struct SMPTEMIDI1File_DeltaTime_Tests {
     typealias Offset = MIDIFileEvent.SMPTEOffset
-    typealias Delta = SMPTEMIDI1File.TrackChunk.DeltaTime
+    typealias Delta = SMPTEMIDI1File.Track.DeltaTime
     
     @Test
     func deltaTime_25fps_40tpf() async throws {

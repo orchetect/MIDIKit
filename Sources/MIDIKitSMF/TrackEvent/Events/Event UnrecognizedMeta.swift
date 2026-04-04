@@ -104,7 +104,7 @@ extension MIDIFileEvent {
     }
 }
 
-extension MIDI1File.TrackChunk.Event {
+extension MIDI1File.Track.Event {
     /// Unrecognized Meta Event
     ///
     /// > Note: This is not designed to be instanced, but is instead a placeholder for unrecognized

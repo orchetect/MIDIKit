@@ -53,7 +53,7 @@ extension MIDIFileEvent {
     }
 }
 
-extension MIDI1File.TrackChunk.Event {
+extension MIDI1File.Track.Event {
     /// System Exclusive: Manufacturer-specific (7-bit)
     ///
     /// - Throws: `MIDIEvent.ParseError` if any data bytes overflow 7 bits.
@@ -223,7 +223,7 @@ extension MIDIFileEvent {
     }
 }
 
-extension MIDI1File.TrackChunk.Event {
+extension MIDI1File.Track.Event {
     /// Universal System Exclusive (7-bit)
     ///
     /// Some standard Universal System Exclusive messages have been defined by the MIDI Spec. See

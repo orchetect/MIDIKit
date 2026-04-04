@@ -313,8 +313,8 @@ extension MIDI1File.Parser {
     ) throws(MIDIFileDecodeError) -> MIDI1File.AnyChunk? {
         do throws(MIDIFileDecodeError) {
             switch chunkDescriptor.identifier {
-            case is MIDI1File.TrackChunk.Identifier:
-                let track = try MIDI1File.TrackChunk(
+            case is MIDI1File.Track.Identifier:
+                let track = try MIDI1File.Track(
                     midi1FileRawBytes: chunkData,
                     timebase: timebase,
                     options: options

@@ -57,7 +57,7 @@ public struct MIDI1File<Timebase: MIDIFileTimebase> {
     /// Indexes are rebased to zero when accessing this collection.
     /// 
     /// Updating this collection automatically updates the corresponding track chunks in ``chunks``.
-    public var tracks: [TrackChunk] {
+    public var tracks: [Track] {
         _read { yield _tracks }
         _modify {
             yield &_tracks
@@ -68,7 +68,7 @@ public struct MIDI1File<Timebase: MIDIFileTimebase> {
             _chunks.updateTracks(with: newValue)
         }
     }
-    private var _tracks: [TrackChunk] = []
+    private var _tracks: [Track] = []
         
     // Identifiable protocol conformance implementation
     public let id: UUID = .init()
@@ -102,7 +102,7 @@ public struct MIDI1File<Timebase: MIDIFileTimebase> {
     public init(
         format: MIDI1FileFormat = .multipleTracksSynchronous,
         timebase: Timebase = .default(),
-        tracks: [TrackChunk]
+        tracks: [Track]
     ) {
         self.format = format
         self.timebase = timebase
@@ -114,7 +114,7 @@ public struct MIDI1File<Timebase: MIDIFileTimebase> {
     public init(
         format: MIDI1FileFormat = .multipleTracksSynchronous,
         timebase: Timebase = .default(),
-        tracks: some Sequence<TrackChunk>
+        tracks: some Sequence<Track>
     ) {
         self.format = format
         self.timebase = timebase

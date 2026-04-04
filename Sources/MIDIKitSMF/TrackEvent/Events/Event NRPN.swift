@@ -38,7 +38,7 @@ extension MIDIFileEvent {
     }
 }
 
-extension MIDI1File.TrackChunk.Event {
+extension MIDI1File.Track.Event {
     /// Channel Voice Message: NRPN (Non-Registered Parameter Number),
     /// also referred to as Assignable Controller in MIDI 2.0.
     public static func nrpn(

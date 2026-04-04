@@ -38,7 +38,7 @@ import Testing
         
         let timebase: MusicalMIDI1File.Timebase = .musical(ticksPerQuarterNote: 960)
         
-        let parsedTrackA = try #require(try MusicalMIDI1File.TrackChunk(
+        let parsedTrackA = try #require(try MusicalMIDI1File.Track(
             midi1FileRawBytesStream: bytes,
             timebase: timebase,
             options: .init(bundleRPNAndNRPNEvents: true)
@@ -76,7 +76,7 @@ import Testing
         
         let timebase: MusicalMIDI1File.Timebase = .musical(ticksPerQuarterNote: 960)
         
-        let parsedTrackA = try #require(try MusicalMIDI1File.TrackChunk(
+        let parsedTrackA = try #require(try MusicalMIDI1File.Track(
             midi1FileRawBytesStream: bytes,
             timebase: timebase,
             options: .init(bundleRPNAndNRPNEvents: true)
@@ -136,7 +136,7 @@ import Testing
         
         let timebase: MusicalMIDI1File.Timebase = .musical(ticksPerQuarterNote: 960)
         
-        let parsedTrackA = try #require(try MusicalMIDI1File.TrackChunk(
+        let parsedTrackA = try #require(try MusicalMIDI1File.Track(
             midi1FileRawBytesStream: bytes,
             timebase: timebase,
             options: .init(bundleRPNAndNRPNEvents: true)
@@ -175,7 +175,7 @@ import Testing
         
         let timebase: MusicalMIDI1File.Timebase = .musical(ticksPerQuarterNote: 960)
         
-        let parsedTrackA = try #require(try MusicalMIDI1File.TrackChunk(
+        let parsedTrackA = try #require(try MusicalMIDI1File.Track(
             midi1FileRawBytesStream: bytes,
             timebase: timebase,
             options: .init(bundleRPNAndNRPNEvents: true)
@@ -246,7 +246,7 @@ import Testing
         let timebase: MusicalMIDI1File.Timebase = .musical(ticksPerQuarterNote: 960)
         let rpnTotalTicks: UInt32 = 0x01 + 0x02 + 0x03 + 0x04
         
-        let parsedTrackA = try #require(try MusicalMIDI1File.TrackChunk(
+        let parsedTrackA = try #require(try MusicalMIDI1File.Track(
             midi1FileRawBytesStream: bytes,
             timebase: timebase,
             options: .init(bundleRPNAndNRPNEvents: true)
@@ -257,7 +257,7 @@ import Testing
         #expect(parsedTrackA.events[1].delta == .ticks(rpnTotalTicks))
         #expect(parsedTrackA.events[1].event.midiEvent() == .rpn(rpnEvent))
         
-        let parsedTrackB = try #require(try MusicalMIDI1File.TrackChunk(
+        let parsedTrackB = try #require(try MusicalMIDI1File.Track(
             midi1FileRawBytes: bytes[8...], // exclude header and length
             timebase: timebase,
             options: .init(bundleRPNAndNRPNEvents: true)

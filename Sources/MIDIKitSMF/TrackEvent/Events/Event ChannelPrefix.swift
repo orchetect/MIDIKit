@@ -68,7 +68,7 @@ extension MIDIFileEvent {
     }
 }
 
-extension MIDI1File.TrackChunk.Event {
+extension MIDI1File.Track.Event {
     /// MIDI Channel Prefix event.
     ///
     /// > Standard MIDI File 1.0 Spec:

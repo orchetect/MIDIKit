@@ -17,7 +17,7 @@ import Testing
     /// Test the Musical timebase-specific static constructors on `DeltaTime`.
     @Test
     func musicalStaticConstructors_240ppq() async throws {
-        typealias Delta = MusicalMIDI1File.TrackChunk.DeltaTime
+        typealias Delta = MusicalMIDI1File.Track.DeltaTime
         let timebase: Delta.Timebase = .musical(ticksPerQuarterNote: 240)
         
         // triplet == false (default)
@@ -42,7 +42,7 @@ import Testing
     
     @Test
     func musicalStaticConstructors_480ppq() async throws {
-        typealias Delta = MusicalMIDI1File.TrackChunk.DeltaTime
+        typealias Delta = MusicalMIDI1File.Track.DeltaTime
         let timebase: Delta.Timebase = .musical(ticksPerQuarterNote: 480)
         
         // triplet == false (default)
@@ -67,7 +67,7 @@ import Testing
     
     @Test
     func musicalStaticConstructors_960ppq() async throws {
-        typealias Delta = MusicalMIDI1File.TrackChunk.DeltaTime
+        typealias Delta = MusicalMIDI1File.Track.DeltaTime
         let timebase: Delta.Timebase = .musical(ticksPerQuarterNote: 960)
         
         // triplet == false (default)
@@ -92,7 +92,7 @@ import Testing
     
     @Test
     func musicalStaticConstructors_beats() async throws {
-        typealias Delta = MusicalMIDI1File.TrackChunk.DeltaTime
+        typealias Delta = MusicalMIDI1File.Track.DeltaTime
         let timebase: Delta.Timebase = .musical(ticksPerQuarterNote: 480)
         
         #expect(Delta.beats(-1.0).ticks(using: timebase) == 0)
@@ -105,7 +105,7 @@ import Testing
     
     @Test
     func musicalStaticConstructors_edgeCases() async throws {
-        typealias Delta = MusicalMIDI1File.TrackChunk.DeltaTime
+        typealias Delta = MusicalMIDI1File.Track.DeltaTime
         let timebase: Delta.Timebase = .default()
         
         #expect(Delta.ticks(UInt32.min).ticks(using: timebase) == UInt32.min)
@@ -124,7 +124,7 @@ import Testing
     /// Test the SMPTE timebase-specific static constructors on `DeltaTime`.
     @Test
     func smpteStaticConstructors_fromSMPTEOffset_25fps_20tpf() async throws {
-        typealias Delta = SMPTEMIDI1File.TrackChunk.DeltaTime
+        typealias Delta = SMPTEMIDI1File.Track.DeltaTime
         let timebase: Delta.Timebase = .smpte(frameRate: .fps25, ticksPerFrame: 20)
         
         #expect(Delta.offset(MIDIFileEvent.SMPTEOffset(hr: 00, min: 00, sec: 00, fr: 00, rate: .fps25)).ticks(using: timebase) == 0)
@@ -134,7 +134,7 @@ import Testing
     
     @Test
     func smpteStaticConstructors_fromSMPTEOffset_25fps_40tpf() async throws {
-        typealias Delta = SMPTEMIDI1File.TrackChunk.DeltaTime
+        typealias Delta = SMPTEMIDI1File.Track.DeltaTime
         let timebase: Delta.Timebase = .smpte(frameRate: .fps25, ticksPerFrame: 40)
         
         #expect(Delta.offset(MIDIFileEvent.SMPTEOffset(hr: 00, min: 00, sec: 00, fr: 00, rate: .fps25)).ticks(using: timebase) == 0)
@@ -144,7 +144,7 @@ import Testing
     
     @Test
     func smpteStaticConstructors_frames_25fps_20tpf() async throws {
-        typealias Delta = SMPTEMIDI1File.TrackChunk.DeltaTime
+        typealias Delta = SMPTEMIDI1File.Track.DeltaTime
         let timebase: Delta.Timebase = .smpte(frameRate: .fps25, ticksPerFrame: 20)
         
         #expect(Delta.frames(0).ticks(using: timebase) == 0)
@@ -156,7 +156,7 @@ import Testing
     
     @Test
     func smpteStaticConstructors_frames_25fps_40tpf() async throws {
-        typealias Delta = SMPTEMIDI1File.TrackChunk.DeltaTime
+        typealias Delta = SMPTEMIDI1File.Track.DeltaTime
         let timebase: Delta.Timebase = .smpte(frameRate: .fps25, ticksPerFrame: 40)
         
         #expect(Delta.frames(0).ticks(using: timebase) == 0)
@@ -168,7 +168,7 @@ import Testing
     
     @Test
     func smpteStaticConstructors_offset_25fps_20tpf() async throws {
-        typealias Delta = SMPTEMIDI1File.TrackChunk.DeltaTime
+        typealias Delta = SMPTEMIDI1File.Track.DeltaTime
         let timebase: Delta.Timebase = .smpte(frameRate: .fps25, ticksPerFrame: 20)
         
         #expect(Delta.offset(hr: 00, min: 00, sec: 00, fr: 00, rate: .fps25).ticks(using: timebase) == 0)
@@ -178,7 +178,7 @@ import Testing
     
     @Test
     func smpteStaticConstructors_offset_25fps_40tpf() async throws {
-        typealias Delta = SMPTEMIDI1File.TrackChunk.DeltaTime
+        typealias Delta = SMPTEMIDI1File.Track.DeltaTime
         let timebase: Delta.Timebase = .smpte(frameRate: .fps25, ticksPerFrame: 40)
         
         #expect(Delta.offset(hr: 00, min: 00, sec: 00, fr: 00, rate: .fps25).ticks(using: timebase) == 0)
@@ -188,7 +188,7 @@ import Testing
     
     @Test
     func smpteStaticConstructors_offset_edgeCases_25fps_0tpf() async throws {
-        typealias Delta = SMPTEMIDI1File.TrackChunk.DeltaTime
+        typealias Delta = SMPTEMIDI1File.Track.DeltaTime
         let timebase: Delta.Timebase = .smpte(frameRate: .fps25, ticksPerFrame: 0)
         
         #expect(Delta.offset(hr: 00, min: 00, sec: 00, fr: 00, rate: .fps25).ticks(using: timebase) == 0)
@@ -198,7 +198,7 @@ import Testing
     
     @Test
     func smpteStaticConstructors_offset_edgeCases_25fps_1tpf() async throws {
-        typealias Delta = SMPTEMIDI1File.TrackChunk.DeltaTime
+        typealias Delta = SMPTEMIDI1File.Track.DeltaTime
         let timebase: Delta.Timebase = .smpte(frameRate: .fps25, ticksPerFrame: 1)
         
         #expect(Delta.offset(hr: 00, min: 00, sec: 00, fr: 00, rate: .fps25).ticks(using: timebase) == 0)
@@ -208,7 +208,7 @@ import Testing
     
     @Test
     func smpteStaticConstructors_offset_edgeCases_25fps_255tpf() async throws {
-        typealias Delta = SMPTEMIDI1File.TrackChunk.DeltaTime
+        typealias Delta = SMPTEMIDI1File.Track.DeltaTime
         let timebase: Delta.Timebase = .smpte(frameRate: .fps25, ticksPerFrame: UInt8.max)
         
         #expect(Delta.offset(hr: 00, min: 00, sec: 00, fr: 00, rate: .fps25).ticks(using: timebase) == 0)

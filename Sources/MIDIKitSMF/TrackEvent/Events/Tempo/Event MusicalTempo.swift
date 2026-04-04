@@ -72,7 +72,7 @@ extension MIDIFileEvent {
     }
 }
 
-extension MIDI1File.TrackChunk.Event where Timebase == MusicalMIDIFileTimebase {
+extension MIDI1File.Track.Event where Timebase == MusicalMIDIFileTimebase {
     /// Tempo event for MIDI file tracks using musical timebase.
     /// For a format 1 MIDI file, Tempo events should only occur within the first `MTrk` chunk.
     /// Minimum possible is 3.58 bpm and maximum is 60,000,000 bpm.
