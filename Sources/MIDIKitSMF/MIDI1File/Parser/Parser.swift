@@ -222,13 +222,19 @@ extension MIDI1File.Parser {
                 do throws(MIDIFileDecodeError) {
                     // chunk header
                     let chunkStartByteOffset = parser.readOffset
-                    guard let identifierBytes = try? parser.read(bytes: 4),
-                          let identifierString = identifierBytes.asciiDataToString(),
+                    guard let identifierBytes = try? parser.read(bytes: 4)
+                    else {
+                        let offsetString = chunkStartByteOffset.hexString(prefix: true)
+                        throw .malformed(
+                            "There was a problem reading chunk header at byte offset \(offsetString). Encountered end of file early."
+                        )
+                    }
+                    guard let identifierString = identifierBytes.asciiDataToString(),
                           let identifier = MIDI1FileChunkIdentifier(string: identifierString)
                     else {
-                        let offsetString = parser.readOffset.hexString(prefix: true)
+                        let offsetString = chunkStartByteOffset.hexString(prefix: true)
                         throw .malformed(
-                            "There was a problem reading chunk header at byte offset \(offsetString). Encountered end of file early or chunk identifier may be malformed."
+                            "There was a problem reading chunk header at byte offset \(offsetString). Chunk identifier may be malformed."
                         )
                     }
                     
