@@ -5,7 +5,7 @@
 //
 
 /// Protocol defining a Standard MIDI File chunk.
-public protocol MIDI1FileChunk: Equatable, Hashable, Sendable { // TODO: refactor under MIDI1File namespace?
+public protocol MIDI1FileChunk: Equatable, Hashable, Sendable {
     /// MIDI file chunk identifier type.
     associatedtype Identifier: MIDI1FileChunkIdentifier
     
