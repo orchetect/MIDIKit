@@ -1,5 +1,5 @@
 //
-//  HeaderChunk+Decoding+AnyMIDIFileTimebase.swift
+//  AnyMIDIFileTimebase+Decoding.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
@@ -9,7 +9,7 @@ import MIDIKitCore
 internal import MIDIKitInternals
 internal import SwiftDataParsing
 
-extension MIDI1File.HeaderChunk where Timebase == AnyMIDIFileTimebase {
+extension AnyMIDIFileTimebase {
     /// The original Standard MIDI File spec defines the header as 14 bytes:
     /// - MThd (4 bytes)
     /// - header length (4 bytes)
@@ -23,62 +23,10 @@ extension MIDI1File.HeaderChunk where Timebase == AnyMIDIFileTimebase {
     /// (At which point, we can update our parser to parse the additional bytes.)
     static var midi1FileMinimumRawBytesLength: Int { 14 }
     
-    /// Init from MIDI file data stream.
-    static func decodeAny<D: DataProtocol>(
-        midi1FileRawBytesStream stream: D,
-        allowMultiTrackFormat0: Bool
-    ) throws(MIDIFileDecodeError) -> (header: Self, trackCount: Int, bufferLength: Int) {
-        // check for at least the minimum expected byte count
-        guard stream.count >= Self.midi1FileMinimumRawBytesLength else {
-            throw .malformed(
-                "File header length is not correct. File may not be a MIDI file."
-            )
-        }
-        
-        return try stream.withDataParser { parser throws(MIDIFileDecodeError) in
-            // Header descriptor
-            
-            guard (try? parser.read(bytes: 4).toUInt8Bytes()) == HeaderMIDI1FileChunkIdentifier().string.toASCIIBytes()
-            else {
-                throw .malformed(
-                    "File header identifier is not correct. File may not be a MIDI file."
-                )
-            }
-            
-            guard let rawHeaderLengthBytes = try? parser.read(bytes: 4)
-            else {
-                throw .malformed(
-                    "Not enough bytes found when attempting to read MIDI file header length."
-                )
-            }
-            
-            guard let headerLengthUInt32 = rawHeaderLengthBytes.toInt32(from: .bigEndian)
-            else {
-                throw .malformed(
-                    "Could not read MIDI file header length."
-                )
-            }
-            let headerLength = Int(headerLengthUInt32)
-            
-            // we won't validate the header length here; that is done in the subsequent decode() function we pass the data to
-            
-            // now that we know the header length, grab the entire header and pass it to the parser
-            let entireHeaderLength = 4 + 4 + headerLength
-            parser.seekToStart()
-            let headerData = try parser.toMIDIFileDecodeError(
-                malformedReason: "Not enough bytes found when attempting to read MIDI file header.",
-                try parser.read(bytes: entireHeaderLength)
-            )
-            let (header, trackCount) = try decode(midi1FileRawBytes: headerData, allowMultiTrackFormat0: allowMultiTrackFormat0)
-            
-            return (header: header, trackCount: trackCount, bufferLength: entireHeaderLength)
-        }
-    }
-    
-    static func decodeAny<D: DataProtocol>(
+    public static func decodeMIDI1FileHeader<D: DataProtocol>(
         midi1FileRawBytes: D,
         allowMultiTrackFormat0: Bool
-    ) throws(MIDIFileDecodeError) -> (header: Self, trackCount: Int) {
+    ) throws(MIDIFileDecodeError) -> (header: HeaderChunk, trackCount: Int) {
         // check for at least the minimum expected byte count
         guard midi1FileRawBytes.count >= Self.midi1FileMinimumRawBytesLength else {
             throw .malformed(
@@ -178,11 +126,65 @@ extension MIDI1File.HeaderChunk where Timebase == AnyMIDIFileTimebase {
             }
             
             let header = if let additionalBytes {
-                Self(format: format, timebase: timebase, additionalBytes: additionalBytes)
+                HeaderChunk(format: format, timebase: timebase, additionalBytes: additionalBytes)
             } else {
-                Self(format: format, timebase: timebase)
+                HeaderChunk(format: format, timebase: timebase)
             }
             return (header: header, trackCount: trackCount)
+        }
+    }
+    
+    public static func decodeMIDI1FileHeader<D: DataProtocol>(
+        midi1FileRawBytesStream stream: D,
+        allowMultiTrackFormat0: Bool
+    ) throws(MIDIFileDecodeError) -> (header: HeaderChunk, trackCount: Int, bufferLength: Int) {
+        // check for at least the minimum expected byte count
+        guard stream.count >= Self.midi1FileMinimumRawBytesLength else {
+            throw .malformed(
+                "File header length is not correct. File may not be a MIDI file."
+            )
+        }
+        
+        return try stream.withDataParser { parser throws(MIDIFileDecodeError) in
+            // Header descriptor
+            
+            guard (try? parser.read(bytes: 4).toUInt8Bytes()) == HeaderMIDI1FileChunkIdentifier().string.toASCIIBytes()
+            else {
+                throw .malformed(
+                    "File header identifier is not correct. File may not be a MIDI file."
+                )
+            }
+            
+            guard let rawHeaderLengthBytes = try? parser.read(bytes: 4)
+            else {
+                throw .malformed(
+                    "Not enough bytes found when attempting to read MIDI file header length."
+                )
+            }
+            
+            guard let headerLengthUInt32 = rawHeaderLengthBytes.toInt32(from: .bigEndian)
+            else {
+                throw .malformed(
+                    "Could not read MIDI file header length."
+                )
+            }
+            let headerLength = Int(headerLengthUInt32)
+            
+            // we won't validate the header length here; that is done in the subsequent decode() function we pass the data to
+            
+            // now that we know the header length, grab the entire header and pass it to the parser
+            let entireHeaderLength = 4 + 4 + headerLength
+            parser.seekToStart()
+            let headerData = try parser.toMIDIFileDecodeError(
+                malformedReason: "Not enough bytes found when attempting to read MIDI file header.",
+                try parser.read(bytes: entireHeaderLength)
+            )
+            let (header, trackCount) = try decodeMIDI1FileHeader(
+                midi1FileRawBytes: headerData,
+                allowMultiTrackFormat0: allowMultiTrackFormat0
+            )
+            
+            return (header: header, trackCount: trackCount, bufferLength: entireHeaderLength)
         }
     }
 }
