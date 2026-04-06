@@ -8,8 +8,8 @@ let package = Package(
     platforms: [
         .macOS(.v10_13),
         .iOS(.v12),
-        .tvOS(.v12), // builds, but no MIDI features
-        .watchOS(.v4) // builds, but no MIDI features
+        .tvOS(.v12), // builds, but no MIDI I/O features are available on the platform
+        .watchOS(.v4) // builds, but no MIDI I/O features are available on the platform
     ],
     products: [
         .library(
@@ -151,6 +151,6 @@ let package = Package(
 /// Conditionally opt-in to Swift DocC Plugin when an environment flag is present.
 func doccPluginDependency() -> [Package.Dependency] {
     ProcessInfo.processInfo.environment["ENABLE_DOCC_PLUGIN"] != nil
-        ? [.package(url: "https://github.com/apple/swift-docc-plugin.git", from: "1.4.5")]
+        ? [.package(url: "https://github.com/swiftlang/swift-docc-plugin.git", from: "1.4.5")]
         : []
 }
