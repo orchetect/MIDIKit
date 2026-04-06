@@ -8,8 +8,8 @@ let package = Package(
     platforms: [
         .macOS(.v10_13),
         .iOS(.v12),
-        .tvOS(.v12), // builds, but no MIDI I/O features are available on the platform
-        .watchOS(.v4) // builds, but no MIDI I/O features are available on the platform
+        .tvOS(.v12), // builds, but no MIDI features
+        .watchOS(.v4) // builds, but no MIDI features
     ],
     products: [
         .library(
