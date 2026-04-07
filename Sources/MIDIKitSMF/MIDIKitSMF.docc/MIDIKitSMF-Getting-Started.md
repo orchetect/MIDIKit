@@ -24,22 +24,22 @@ As a baseline, the Standard MIDI File 1.0 spec defines two timebases for MIDI fi
 >
 > Nearly all software manufacturers exclusively implement musical timebase. SMPTE timebase is extremely rare and almost never used. However, since both are defined in the specification, both are supported by MIDIKit.
 >
-> It is reasonable that you may opt to use the `MusicalMIDIFile` (`MIDIFile<MusicalMIDIFileTimebase>`) type exclusively.
+> It is reasonable that you may opt to use the `MusicalMIDI1File` (`MIDI1File<MusicalMIDIFileTimebase>`) type exclusively.
 
-If you are unsure which timebase a MIDI file uses, the type-erased `AnyMIDIFile` is provided which will decode a file into its specialized `MIDIFile` type.
+If you are unsure which timebase a MIDI file uses, the type-erased `AnyMIDI1File` is provided which will decode a file into its specialized `MIDIFile` type.
 
 ```swift
-let anyMIDIFile = try AnyMIDIFile(url: url)
+let anyMIDIFile = try AnyMIDI1File(url: url)
 
 switch midiFile.wrapped {
 case let .musical(midiFile):
-    // midiFile is `MIDIFile<MusicalMIDIFileTimebase>`, typealiased as `MusicalMIDIFile`
+    // midiFile is `MIDI1File<MusicalMIDIFileTimebase>`, typealiased as `MusicalMIDI1File`
 case let .smpte(midiFile):
-    // midiFile is `MIDIFile<SMPTEMIDIFileTimebase>`, typealiased as `SMPTEMIDIFile`
+    // midiFile is `MIDI1File<SMPTEMIDIFileTimebase>`, typealiased as `SMPTEMIDI1File`
 }
 ```
 
-See ``AnyMIDIFile``, ``MusicalMIDIFile`` and ``SMPTEMIDIFile``.
+See ``AnyMIDI1File``, ``MusicalMIDI1File`` and ``SMPTEMIDI1File``.
 
 ## Read a MIDI File
 
@@ -51,14 +51,14 @@ Using a file URL:
 
 ```swift
 let url = URL(fileURLWithPath: "/Users/user/Desktop/test.mid")
-let midiFile = try MusicalMIDIFile(url: url)
+let midiFile = try MusicalMIDI1File(url: url)
 print(midiFile.description) // prints human-readable debug output of the file
 ```
 Using a file path:
 
 ```swift
 let path = "/Users/user/Desktop/test.mid"
-let midiFile = try MusicalMIDIFile(path: path)
+let midiFile = try MusicalMIDI1File(path: path)
 print(midiFile.description) // prints human-readable debug output of the file
 ```
 
@@ -68,7 +68,7 @@ Using raw MIDI file contents:
 
 ```swift
 let data = Data( ... )
-let midiFile = try MusicalMIDIFile(data: data)
+let midiFile = try MusicalMIDI1File(data: data)
 ```
 
 ### Async vs non-Async Decoding
@@ -80,7 +80,7 @@ MIDI file decoding initializers are offered in two flavors: async and non-async.
 > Where possible, it is highly recommended to use the `async` variant, as it implements multi-threaded file decoding which can be *significantly* faster than the non-async method.
 
 ```swift
-let midiFile = try await MusicalMIDIFile(data: data)
+let midiFile = try await MusicalMIDI1File(data: data)
 ```
 
 ### Decoding Options
@@ -90,20 +90,20 @@ Decoding options may be supplied to the initializer.
 The default options allow for the widest compatibility and error recoverability, but you may customize the options as desired.
 
 ```swift
-let options = MIDIFileDecodeOptions(
+let options = MIDI1FileDecodeOptions(
     allowMultiTrackFormat0: true,
     ignoreBytesPastEOF: true,
-    chunkDecodeOptions: MIDIFileChunkDecodeOptions(
+    chunkDecodeOptions: MIDI1FileChunkDecodeOptions(
         bundleRPNAndNRPNEvents: true,
         maxEventCount: nil,
         errorStrategy: .allowLossyRecovery
     )
 )
 
-let midiFile = try MusicalMIDIFile(url: url, options: options)
+let midiFile = try MusicalMIDI1File(url: url, options: options)
 ```
 
-See ``MIDIFileDecodeOptions`` and ``MIDIFileChunkDecodeOptions``.
+See ``MIDI1FileDecodeOptions`` and ``MIDI1FileChunkDecodeOptions``.
 
 ## Write a MIDI File to Disk
 
@@ -155,10 +155,10 @@ case let .noteOff(delta, payload):
 }
 ```
 
-Read all events on a track at their beat position (elapsed quarter-notes as a floating-point value):
+Read all events on a track at their beat positions (elapsed quarter-notes as a floating-point value):
 
 ```swift
-for (beat, event) in midiFile.tracks[0].eventsAtQuarterNotePositions(using: midiFile.timebase) {
+for (beat, event) in midiFile.tracks[0].eventsAtBeatPositions(using: midiFile.timebase) {
     switch event {
     case let .noteOff(payload):
         print(beat, payload.note.number.uInt8Value, payload.velocity.midi1Value, payload.channel.uInt8Value)
@@ -173,21 +173,21 @@ for (beat, event) in midiFile.tracks[0].eventsAtQuarterNotePositions(using: midi
 Add an event to first track:
 
 ```swift
-let event: MIDIFileTrackEvent = .noteOn(note: 60, velocity: .midi1(127), channel: 0)
-midiFile.tracks[0].events.append(.init(delta: .note8th, event: event))
+let event: MIDIFileEvent = .noteOn(note: 60, velocity: .midi1(127), channel: 0)
+midiFile.tracks[0].events.append(delta: .note8th, event: event)
 ```
 
 Add a new track:
 
 ```swift
-let newTrack = MusicalMIDIFile.TrackChunk()
+let newTrack = MusicalMIDI1File.Track()
 midiFile.tracks.append(newTrack)
 ```
 
 Replace a track:
 
 ```swift
-let newTrack = MusicalMIDIFile.TrackChunk()
+let newTrack = MusicalMIDI1File.Track()
 midiFile.tracks[0] = newTrack
 ```
 
@@ -204,9 +204,9 @@ Alternatively, all chunks (including non-track chunks) can be accessed through t
 ```swift
 for chunk in midiFile.chunks {
     switch chunk {
-    case let .track(track): // `track` is `MusicalMIDIFile.TrackChunk`
+    case let .track(track): // `track` is `MusicalMIDI1File.Track`
         // chunk is a track
-    case let .undefined(chunk): // `chunk` is `MusicalMIDIFile.UndefinedChunk`
+    case let .undefined(chunk): // `chunk` is `MusicalMIDI1File.UndefinedChunk`
         // chunk is a non-track chunk
     }
 }

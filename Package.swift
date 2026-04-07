@@ -1,5 +1,4 @@
 // swift-tools-version: 6.0
-// (be sure to update the .swift-version file when this Swift version changes)
 
 import Foundation
 import PackageDescription
@@ -43,7 +42,7 @@ let package = Package(
         )
     ],
     dependencies: [
-        .package(url: "https://github.com/orchetect/swift-data-parsing", from: "0.1.1"),
+        .package(url: "https://github.com/orchetect/swift-data-parsing", from: "0.1.2"),
         .package(url: "https://github.com/orchetect/swift-timecode", from: "3.1.0")
     ] + doccPluginDependency(),
     targets: [
@@ -152,6 +151,6 @@ let package = Package(
 /// Conditionally opt-in to Swift DocC Plugin when an environment flag is present.
 func doccPluginDependency() -> [Package.Dependency] {
     ProcessInfo.processInfo.environment["ENABLE_DOCC_PLUGIN"] != nil
-        ? [.package(url: "https://github.com/apple/swift-docc-plugin.git", from: "1.4.5")]
+        ? [.package(url: "https://github.com/swiftlang/swift-docc-plugin.git", from: "1.4.5")]
         : []
 }
