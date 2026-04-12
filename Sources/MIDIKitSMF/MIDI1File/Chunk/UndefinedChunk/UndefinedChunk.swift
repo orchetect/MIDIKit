@@ -10,6 +10,12 @@ import MIDIKitCore
 extension MIDI1File {
     /// Unrecognized MIDI File Chunk.
     public struct UndefinedChunk {
+        // MARK: - Identifiable
+        
+        public let id = UUID()
+        
+        // MARK: - Properties
+        
         public let identifier: MIDI1FileChunkIdentifier
 
         /// Contains the raw bytes of the chunk's data portion
@@ -32,6 +38,10 @@ extension MIDI1File {
 extension MIDI1File.UndefinedChunk: Equatable { }
 
 extension MIDI1File.UndefinedChunk: Hashable { }
+
+extension MIDI1File.UndefinedChunk: Identifiable {
+    // `id` is a stored instance property
+}
 
 extension MIDI1File.UndefinedChunk: Sendable { }
 

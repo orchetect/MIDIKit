@@ -26,6 +26,15 @@ extension MIDI1File.AnyChunk: Equatable { }
 
 extension MIDI1File.AnyChunk: Hashable { }
 
+extension MIDI1File.AnyChunk: Identifiable {
+    public var id: UUID {
+        switch self {
+        case let .track(track): track.id
+        case let .undefined(chunk): chunk.id
+        }
+    }
+}
+
 extension MIDI1File.AnyChunk: Sendable { }
 
 extension MIDI1File.AnyChunk: CustomStringConvertible {

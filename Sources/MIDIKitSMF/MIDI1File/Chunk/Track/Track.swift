@@ -19,27 +19,35 @@ extension MIDI1File {
         /// Delta time advancement within a MIDI file track.
         public typealias DeltaTime = Timebase.DeltaTime
         
+        // MARK: - Identifiable
+        
+        public let id: UUID
+        
         // MARK: - Properties
         
         /// Storage for events in the track.
-        public var events: [Event] = []
+        public var events: [Event]
         
         /// The delta time after the final event, just before the end-of-track.
         /// Typically this is `0`. A non-zero value is tantamount to empty track length prior to the end-of-track.
-        public var deltaTimeBeforeEndOfTrack: DeltaTime = .none
+        public var deltaTimeBeforeEndOfTrack: DeltaTime
         
         /// Instance a new empty MIDI file track.
-        public init() { }
+        public init() {
+            self.init(events: [])
+        }
         
         /// Instance a new MIDI file track with events.
         public init(events: [Event]) {
+            id = UUID()
             self.events = events
+            deltaTimeBeforeEndOfTrack = .none
         }
         
         /// Instance a new MIDI file track with events.
         @_disfavoredOverload
         public init(events: some Sequence<Event>) {
-            self.events = Array(events)
+            self.init(events: Array(events))
         }
     }
 }
@@ -47,6 +55,10 @@ extension MIDI1File {
 extension MIDI1File.Track: Equatable { }
 
 extension MIDI1File.Track: Hashable { }
+
+extension MIDI1File.Track: Identifiable {
+    // `id` is a stored instance property
+}
 
 extension MIDI1File.Track: Sendable { }
 

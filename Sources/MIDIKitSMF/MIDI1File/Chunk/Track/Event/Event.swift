@@ -4,6 +4,8 @@
 //  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
+import Foundation
+
 extension MIDI1File.Track {
     /// Track event with a delta time offset.
     public struct Event {
@@ -11,6 +13,10 @@ extension MIDI1File.Track {
         
         /// Delta time advancement within a MIDI file track.
         public typealias DeltaTime = Timebase.DeltaTime
+        
+        // MARK: - Identifiable
+        
+        public let id = UUID()
         
         // MARK: - Properties
         
@@ -36,6 +42,10 @@ extension MIDI1File.Track {
 extension MIDI1File.Track.Event: Equatable { }
 
 extension MIDI1File.Track.Event: Hashable { }
+
+extension MIDI1File.Track.Event: Identifiable {
+    // `id` is a stored instance property
+}
 
 extension MIDI1File.Track.Event: Sendable { }
 
