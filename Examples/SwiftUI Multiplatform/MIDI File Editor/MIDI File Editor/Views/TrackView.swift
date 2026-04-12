@@ -39,7 +39,7 @@ struct TrackView: View {
                 Button { addNewEvent() } label: { Text("Add Event") }
                 
                 Button { removeSelectedEvents() } label: { Text(removeEventsLabel) }
-                    .disabled(selectedEventIDs.isEmpty)
+                    .disabled(selectedEventIDs.isEmpty) // TODO: doesn't update when selecting a different chunk in the sidebar
             }
         }
     }

@@ -23,24 +23,16 @@ struct MIDIFileView: View {
                 }
 
                 Section("Chunks") {
-                    ForEach($document.midiFile.chunks) { $chunk in
-                        NavigationLink {
-                            AnyChunkView(chunk: $chunk)
-                            #if os(macOS)
-                            .navigationSubtitle(chunk.title)
-                            #else
-                            .navigationTitle(chunk.title)
-                            #endif
-                        } label: {
+                    ForEach(document.midiFile.chunks) { chunk in
+                        NavigationLink(value: chunk.id) {
                             chunk.label
                                 .badge(chunk.trackEventCount ?? 0)
                         }
-                        .tag($chunk.id)
+                        .tag(chunk.id)
                     }
                     .onMove { source, destination in
                         document.midiFile.chunks.move(fromOffsets: source, toOffset: destination)
                     }
-                    .navigationBarBackButtonHidden()
                 }
             }
             .navigationLinkIndicatorVisibility(.visible)
@@ -60,8 +52,20 @@ struct MIDIFileView: View {
                 }
             }
         } detail: {
-            Text("Select a chunk.")
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
+            if let selectedChunkID,
+               let index = document.midiFile.chunks.index(ofID: selectedChunkID)
+            {
+                let chunk = $document.midiFile.chunks[index]
+                AnyChunkView(chunk: chunk)
+                    #if os(macOS)
+                    .navigationSubtitle(chunk.wrappedValue.title)
+                    #else
+                    .navigationTitle(chunk.wrappedValue.title)
+                    #endif
+            } else {
+                Text("Select a chunk.")
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+            }
         }
         .navigationSplitViewStyle(.balanced)
         #if os(macOS)
