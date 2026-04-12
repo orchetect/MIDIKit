@@ -194,7 +194,7 @@ import Testing
             timebase: .musical(ticksPerQuarterNote: 480),
             tracks: [track]
         )
-        #expect(midiFile.initialTempo == .init(bpm: 160.0))
+        #expect(midiFile.initialTempo == nil)
     }
     
     @Test

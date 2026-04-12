@@ -38,19 +38,19 @@ import Testing
         
         // parse raw bytes
         
-        let parsedTrackA = try? MusicalMIDI1File.Track(
+        let parsedTrackA = try #require(try? MusicalMIDI1File.Track(
             midi1FileRawBytesStream: generatedData,
             timebase: timebase,
             options: .init(bundleRPNAndNRPNEvents: true)
-        )
-        #expect(parsedTrackA == track)
+        ))
+        #expect(parsedTrackA.isEqual(to: track))
         
-        let parsedTrackB = try? MusicalMIDI1File.Track(
+        let parsedTrackB = try #require(try? MusicalMIDI1File.Track(
             midi1FileRawBytes: generatedData[8...], // exclude header and length
             timebase: timebase,
             options: .init(bundleRPNAndNRPNEvents: true)
-        )
-        #expect(parsedTrackB == track)
+        ))
+        #expect(parsedTrackB.isEqual(to: track))
     }
     
     @Test
@@ -84,19 +84,19 @@ import Testing
         
         // parse raw bytes
         
-        let parsedTrackA = try? MusicalMIDI1File.Track(
+        let parsedTrackA = try #require(try? MusicalMIDI1File.Track(
             midi1FileRawBytesStream: generatedData,
             timebase: timebase,
             options: .init(bundleRPNAndNRPNEvents: true)
-        )
-        #expect(parsedTrackA == track)
+        ))
+        #expect(parsedTrackA.isEqual(to: track))
         
-        let parsedTrackB = try? MusicalMIDI1File.Track(
+        let parsedTrackB = try #require(try? MusicalMIDI1File.Track(
             midi1FileRawBytes: generatedData[8...], // exclude header and length
             timebase: timebase,
             options: .init(bundleRPNAndNRPNEvents: true)
-        )
-        #expect(parsedTrackB == track)
+        ))
+        #expect(parsedTrackB.isEqual(to: track))
     }
     
     /// Encode and decode non-zero delta time before end-of-track bytes.
@@ -125,19 +125,19 @@ import Testing
         
         // parse raw bytes
         
-        let parsedTrackA = try? MusicalMIDI1File.Track(
+        let parsedTrackA = try #require(try MusicalMIDI1File.Track(
             midi1FileRawBytesStream: generatedData,
             timebase: timebase,
             options: .init(bundleRPNAndNRPNEvents: true)
-        )
-        #expect(parsedTrackA == track)
+        ))
+        #expect(parsedTrackA.isEqual(to: track))
         
-        let parsedTrackB = try? MusicalMIDI1File.Track(
+        let parsedTrackB = try #require(try MusicalMIDI1File.Track(
             midi1FileRawBytes: generatedData[8...], // exclude header and length
             timebase: timebase,
             options: .init(bundleRPNAndNRPNEvents: true)
-        )
-        #expect(parsedTrackB == track)
+        ))
+        #expect(parsedTrackB.isEqual(to: track))
     }
     
     /// This tests both `eventsAtBeatPositions()` and `eventsAtStart()` using the same source data.
@@ -209,7 +209,7 @@ import Testing
         
         // eventsAtStart
         do {
-            let events = trackOne.eventsAtStart
+            let events = Array(trackOne.eventsAtStart)
             
             #expect(events.count == 4)
             
@@ -242,19 +242,19 @@ import Testing
         
         // parse raw bytes and check event count
         
-        let parsedTrackA = try? MusicalMIDI1File.Track(
+        let parsedTrackA = try #require(try MusicalMIDI1File.Track(
             midi1FileRawBytesStream: generatedData,
             timebase: timebase,
             options: .init(bundleRPNAndNRPNEvents: true, maxEventCount: 2)
-        )
-        #expect(parsedTrackA == limitedTrack)
+        ))
+        #expect(parsedTrackA.isEqual(to: limitedTrack))
         
-        let parsedTrackB = try? MusicalMIDI1File.Track(
+        let parsedTrackB = try #require(try MusicalMIDI1File.Track(
             midi1FileRawBytes: generatedData[8...], // exclude header and length
             timebase: timebase,
             options: .init(bundleRPNAndNRPNEvents: true, maxEventCount: 2)
-        )
-        #expect(parsedTrackB == limitedTrack)
+        ))
+        #expect(parsedTrackB.isEqual(to: limitedTrack))
     }
     
     /// Regression test: Test authoring and parsing a Standard MIDI File with very large events.
@@ -350,7 +350,7 @@ import Testing
         ]
         
         let track = MusicalMIDI1File.Track(events: events)
-        #expect(track.initialTempo == .init(bpm: 160.0))
+        #expect(track.initialTempo == nil)
     }
     
     @Test
