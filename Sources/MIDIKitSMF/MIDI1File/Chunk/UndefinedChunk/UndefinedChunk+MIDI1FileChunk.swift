@@ -1,5 +1,5 @@
 //
-//  UndefinedChunk+Chunk.swift
+//  UndefinedChunk+MIDI1FileChunk.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
@@ -7,7 +7,14 @@
 import Foundation
 internal import MIDIKitInternals
 
-extension MIDI1File.UndefinedChunk: MIDI1FileChunk { }
+extension MIDI1File.UndefinedChunk: MIDI1FileChunk {
+    // `identifier` is a stored instance property
+    
+    public func isEqual(to other: Self) -> Bool {
+        identifier == other.identifier
+            && rawData == other.rawData
+    }
+}
 
 // MARK: - Static Constructors
 

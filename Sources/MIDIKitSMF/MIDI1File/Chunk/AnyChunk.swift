@@ -82,14 +82,6 @@ extension MIDI1File.AnyChunk {
         }
     }
     
-    /// MIDI file chunk identifier.
-    public var identifier: MIDI1FileChunkIdentifier {
-        switch self {
-        case let .track(track): track.identifier
-        case let .undefined(chunk): chunk.identifier
-        }
-    }
-    
     /// Returns `true` if the chunk is a track.
     public var isTrack: Bool {
         switch self {

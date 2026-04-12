@@ -39,7 +39,14 @@ extension MIDI1File.Track {
     }
 }
 
-extension MIDI1File.Track.Event: Equatable { }
+extension MIDI1File.Track.Event: Equatable {
+    /// Returns `true` if the content of the event is equal to another event.
+    /// (Omits ``id`` from the comparison.)
+    public func isEqual(to other: Self) -> Bool {
+        delta == other.delta
+            && event == other.event
+    }
+}
 
 extension MIDI1File.Track.Event: Hashable { }
 
