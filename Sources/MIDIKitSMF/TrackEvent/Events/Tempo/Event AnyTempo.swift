@@ -94,6 +94,17 @@ extension MIDIFileEvent.AnyTempo: MIDIFileEventPayload {
     public func asMIDIFileEvent() -> MIDIFileEvent {
         .tempo(self)
     }
+    
+    public var midiFileDescription: String {
+        switch self {
+        case let .musical(tempo): tempo.midiFileDescription
+        case let .smpte(tempo): tempo.midiFileDescription
+        }
+    }
+    
+    public var midiFileDebugDescription: String {
+        "AnyTempo(\(midiFileDescription))"
+    }
 }
 
 // MARK: - Properties
