@@ -49,11 +49,11 @@ extension MIDIFileEvent.MusicalTempo: MIDIFileEventPayload {
     }
     
     public var midiFileDescription: String {
-        "\(bpm.rounded(decimalPlaces: 3))bpm"
+        "\(bpm.rounded(decimalPlaces: 3)) bpm"
     }
     
     public var midiFileDebugDescription: String {
-        "Tempo(\(bpm)bpm)"
+        "Tempo(\(bpm) bpm)"
     }
 }
 

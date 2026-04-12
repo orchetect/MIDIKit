@@ -43,7 +43,7 @@ import Testing
         try #require(midiFile.chunks.count == 3)
         try #require(midiFile.tracks.count == 3)
         
-        #expect(midiFile.tracks == tracks)
+        #expect(midiFile.tracks.isEqual(to: tracks))
     }
     
     @Test
@@ -68,7 +68,7 @@ import Testing
         try #require(midiFile.chunks.count == 3)
         try #require(midiFile.tracks.count == 3)
         
-        #expect(midiFile.tracks == tracks)
+        #expect(midiFile.tracks.isEqual(to: tracks))
     }
 }
 

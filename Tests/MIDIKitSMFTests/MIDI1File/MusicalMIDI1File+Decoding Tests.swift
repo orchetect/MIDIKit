@@ -223,8 +223,8 @@ import Testing
             #expect(midiFile.timebase == .musical(ticksPerQuarterNote: 720))
             #expect(midiFile.chunks.count == 2)
             #expect(midiFile.tracks.count == 2)
-            #expect(midiFile.tracks[0] == track1)
-            #expect(midiFile.tracks[1] == track3)
+            #expect(midiFile.tracks[0].isEqual(to: track1))
+            #expect(midiFile.tracks[1].isEqual(to: track3))
         }
         
         // allowLossyRecovery
@@ -236,9 +236,9 @@ import Testing
             #expect(midiFile.timebase == .musical(ticksPerQuarterNote: 720))
             #expect(midiFile.chunks.count == 3)
             #expect(midiFile.tracks.count == 3)
-            #expect(midiFile.tracks[0] == track1)
-            #expect(midiFile.tracks[1] == partialTrack2)
-            #expect(midiFile.tracks[2] == track3)
+            #expect(midiFile.tracks[0].isEqual(to: track1))
+            #expect(midiFile.tracks[1].isEqual(to: partialTrack2))
+            #expect(midiFile.tracks[2].isEqual(to: track3))
         }
     }
     
@@ -308,8 +308,8 @@ import Testing
             #expect(midiFile.timebase == .musical(ticksPerQuarterNote: 720))
             #expect(midiFile.chunks.count == 2)
             #expect(midiFile.tracks.count == 2)
-            #expect(midiFile.tracks[0] == track1)
-            #expect(midiFile.tracks[1] == track3)
+            #expect(midiFile.tracks[0].isEqual(to: track1))
+            #expect(midiFile.tracks[1].isEqual(to: track3))
         }
         
         // allowLossyRecovery
@@ -321,9 +321,9 @@ import Testing
             #expect(midiFile.timebase == .musical(ticksPerQuarterNote: 720))
             #expect(midiFile.chunks.count == 3)
             #expect(midiFile.tracks.count == 3)
-            #expect(midiFile.tracks[0] == track1)
-            #expect(midiFile.tracks[1] == partialTrack2)
-            #expect(midiFile.tracks[2] == track3)
+            #expect(midiFile.tracks[0].isEqual(to: track1))
+            #expect(midiFile.tracks[1].isEqual(to: partialTrack2))
+            #expect(midiFile.tracks[2].isEqual(to: track3))
         }
     }
     
@@ -381,7 +381,7 @@ import Testing
             #expect(midiFile.timebase == .musical(ticksPerQuarterNote: 720))
             #expect(midiFile.chunks.count == 1)
             #expect(midiFile.tracks.count == 1)
-            #expect(midiFile.tracks[0] == track1)
+            #expect(midiFile.tracks[0].isEqual(to: track1))
         }
         
         // allowLossyRecovery
@@ -393,8 +393,8 @@ import Testing
             #expect(midiFile.timebase == .musical(ticksPerQuarterNote: 720))
             #expect(midiFile.chunks.count == 2)
             #expect(midiFile.tracks.count == 2)
-            #expect(midiFile.tracks[0] == track1)
-            #expect(midiFile.tracks[1] == partialTrack2)
+            #expect(midiFile.tracks[0].isEqual(to: track1))
+            #expect(midiFile.tracks[1].isEqual(to: partialTrack2))
         }
     }
     
@@ -463,12 +463,12 @@ import Testing
             #expect(decodedMIDIFile.tracks.count == 1)
             let decodedTrack = decodedMIDIFile.tracks[0]
             #expect(decodedTrack.events.count == 4)
-            #expect(decodedTrack.events == [
+            #expect(decodedTrack.events.isEqual(to: [
                 .cc(delta: .none, controller: .rpnMSB, value: .midi1(0x05), channel: 2),
                 .cc(delta: .none, controller: .rpnLSB, value: .midi1(0x10), channel: 2),
                 .cc(delta: .none, controller: .dataEntry, value: .midi1(0x08), channel: 2),
                 .cc(delta: .none, controller: .lsb(for: .dataEntry), value: .midi1(0x07), channel: 2)
-            ])
+            ]))
         }
         
         // decode with bundleRPNAndNRPNEvents
@@ -478,7 +478,7 @@ import Testing
             #expect(decodedMIDIFile.tracks.count == 1)
             let decodedTrack = decodedMIDIFile.tracks[0]
             #expect(decodedTrack.events.count == 1)
-            #expect(decodedTrack.events == events)
+            #expect(decodedTrack.events.isEqual(to: events))
         }
     }
     
@@ -499,25 +499,25 @@ import Testing
             let options = MIDI1FileDecodeOptions(ignoreBytesPastEOF: true, chunkDecodeOptions: .init(errorStrategy: .allowLossyRecovery))
             
             let rawDataCR = baseRawData + [0x0D]
-            #expect(try await MusicalMIDI1File(data: rawDataCR, options: options) == midiFile)
+            #expect(try await MusicalMIDI1File(data: rawDataCR, options: options).isEqual(to:  midiFile))
             
             let rawDataLF = baseRawData + [0x0A]
-            #expect(try await MusicalMIDI1File(data: rawDataLF, options: options) == midiFile)
+            #expect(try await MusicalMIDI1File(data: rawDataLF, options: options).isEqual(to: midiFile))
             
             let rawDataCRLF = baseRawData + [0x0D, 0x0A]
-            #expect(try await MusicalMIDI1File(data: rawDataCRLF, options: options) == midiFile)
+            #expect(try await MusicalMIDI1File(data: rawDataCRLF, options: options).isEqual(to: midiFile))
             
             let rawDataCRLF_CRLF = baseRawData + [0x0D, 0x0A]
-            #expect(try await MusicalMIDI1File(data: rawDataCRLF_CRLF, options: options) == midiFile)
+            #expect(try await MusicalMIDI1File(data: rawDataCRLF_CRLF, options: options).isEqual(to: midiFile))
             
             let rawDataSpace = baseRawData + [0x20] // space char
-            #expect(try await MusicalMIDI1File(data: rawDataSpace, options: options) == midiFile)
+            #expect(try await MusicalMIDI1File(data: rawDataSpace, options: options).isEqual(to: midiFile))
             
             let rawData4Bytes = baseRawData + [0x43, 0x12, 0x01, 0x78]
-            #expect(try await MusicalMIDI1File(data: rawData4Bytes, options: options) == midiFile)
+            #expect(try await MusicalMIDI1File(data: rawData4Bytes, options: options).isEqual(to: midiFile))
             
             let rawData8Bytes = baseRawData + [0x43, 0x12, 0x01, 0x78, 0x00, 0x09, 0x10, 0x58]
-            #expect(try await MusicalMIDI1File(data: rawData8Bytes, options: options) == salvagedMIDIFile)
+            #expect(try await MusicalMIDI1File(data: rawData8Bytes, options: options).isEqual(to: salvagedMIDIFile))
         }
         
         // NOT ignoring spurious trailing bytes
@@ -544,7 +544,7 @@ import Testing
             await #expect(throws: (any Error).self) { try await MusicalMIDI1File(data: rawData4Bytes, options: options) }
             
             let rawData8Bytes = baseRawData + [0x43, 0x12, 0x01, 0x78, 0x00, 0x09, 0x10, 0x58]
-            #expect(try await MusicalMIDI1File(data: rawData8Bytes, options: options) == salvagedMIDIFile)
+            #expect(try await MusicalMIDI1File(data: rawData8Bytes, options: options).isEqual(to: salvagedMIDIFile))
         }
     }
     
@@ -561,25 +561,25 @@ import Testing
             let options = MIDI1FileDecodeOptions(ignoreBytesPastEOF: true, chunkDecodeOptions: .init(errorStrategy: .throwOnError))
             
             let rawDataCR = baseRawData + [0x0D]
-            #expect(try await MusicalMIDI1File(data: rawDataCR, options: options) == midiFile)
+            #expect(try await MusicalMIDI1File(data: rawDataCR, options: options).isEqual(to: midiFile))
             
             let rawDataLF = baseRawData + [0x0A]
-            #expect(try await MusicalMIDI1File(data: rawDataLF, options: options) == midiFile)
+            #expect(try await MusicalMIDI1File(data: rawDataLF, options: options).isEqual(to: midiFile))
             
             let rawDataCRLF = baseRawData + [0x0D, 0x0A]
-            #expect(try await MusicalMIDI1File(data: rawDataCRLF, options: options) == midiFile)
+            #expect(try await MusicalMIDI1File(data: rawDataCRLF, options: options).isEqual(to: midiFile))
             
             let rawDataCRLF_CRLF = baseRawData + [0x0D, 0x0A]
-            #expect(try await MusicalMIDI1File(data: rawDataCRLF_CRLF, options: options) == midiFile)
+            #expect(try await MusicalMIDI1File(data: rawDataCRLF_CRLF, options: options).isEqual(to: midiFile))
             
             let rawDataSpace = baseRawData + [0x20] // space char
-            #expect(try await MusicalMIDI1File(data: rawDataSpace, options: options) == midiFile)
+            #expect(try await MusicalMIDI1File(data: rawDataSpace, options: options).isEqual(to: midiFile))
             
             let rawData4Bytes = baseRawData + [0x43, 0x12, 0x01, 0x78]
-            #expect(try await MusicalMIDI1File(data: rawData4Bytes, options: options) == midiFile)
+            #expect(try await MusicalMIDI1File(data: rawData4Bytes, options: options).isEqual(to: midiFile))
             
             let rawData8Bytes = baseRawData + [0x43, 0x12, 0x01, 0x78, 0x00, 0x09, 0x10, 0x58]
-            #expect(try await MusicalMIDI1File(data: rawData8Bytes, options: options) == midiFile)
+            #expect(try await MusicalMIDI1File(data: rawData8Bytes, options: options).isEqual(to: midiFile))
         }
         
         // NOT ignoring spurious trailing bytes
@@ -629,10 +629,10 @@ import Testing
             let decodedMIDIFile = try await MusicalMIDI1File(data: rawDataExtraTrack, options: options)
             
             #expect(decodedMIDIFile.chunks.count == 3)
-            #expect(decodedMIDIFile.chunks == midiFile.chunks + [.track(extraTrack)])
+            #expect(decodedMIDIFile.chunks.isEqual(to: midiFile.chunks + [.track(extraTrack)]))
             
             #expect(decodedMIDIFile.tracks.count == 2)
-            #expect(decodedMIDIFile.tracks == midiFile.tracks + [extraTrack])
+            #expect(decodedMIDIFile.tracks.isEqual(to: midiFile.tracks + [extraTrack]))
         }
         
         // NOT ignoring spurious trailing bytes
@@ -642,10 +642,10 @@ import Testing
             let decodedMIDIFile = try await MusicalMIDI1File(data: rawDataExtraTrack, options: options)
             
             #expect(decodedMIDIFile.chunks.count == 3)
-            #expect(decodedMIDIFile.chunks == midiFile.chunks + [.track(extraTrack)])
+            #expect(decodedMIDIFile.chunks.isEqual(to: midiFile.chunks + [.track(extraTrack)]))
             
             #expect(decodedMIDIFile.tracks.count == 2)
-            #expect(decodedMIDIFile.tracks == midiFile.tracks + [extraTrack])
+            #expect(decodedMIDIFile.tracks.isEqual(to: midiFile.tracks + [extraTrack]))
         }
     }
 }

@@ -1,5 +1,5 @@
 //
-//  Track+Chunk.swift
+//  Track+MIDI1FileChunk.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
@@ -8,6 +8,11 @@ extension MIDI1File.Track: MIDI1FileChunk {
     public var identifier: MIDI1FileChunkIdentifier { Self.identifier }
     
     public static var identifier: MIDI1FileChunkIdentifier { .track }
+    
+    public func isEqual(to other: Self) -> Bool {
+        events.isEqual(to: other.events)
+            && deltaTimeBeforeEndOfTrack == other.deltaTimeBeforeEndOfTrack
+    }
 }
 
 // MARK: - AnyChunk Static Constructors

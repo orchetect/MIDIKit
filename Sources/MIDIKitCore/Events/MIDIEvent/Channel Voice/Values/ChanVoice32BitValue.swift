@@ -58,6 +58,24 @@ extension MIDIEvent.ChanVoice32BitValue: Hashable { }
 
 extension MIDIEvent.ChanVoice32BitValue: Sendable { }
 
+extension MIDIEvent.ChanVoice32BitValue: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case let .unitInterval(interval): interval.description
+        case let .midi2(uInt32): "midi2(\(uInt32.description))"
+        }
+    }
+}
+
+extension MIDIEvent.ChanVoice32BitValue: CustomDebugStringConvertible {
+    public var debugDescription: String {
+        switch self {
+        case let .unitInterval(interval): interval.debugDescription
+        case let .midi2(uInt32): "midi2(UInt32(\(uInt32)))"
+        }
+    }
+}
+
 extension MIDIEvent.ChanVoice32BitValue {
     /// Returns value as protocol-agnostic unit interval, converting if necessary.
     public var unitIntervalValue: Double {

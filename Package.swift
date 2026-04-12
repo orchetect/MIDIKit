@@ -39,11 +39,11 @@ let package = Package(
         .library(
             name: "MIDIKitUI",
             targets: ["MIDIKitUI"]
-        ),
+        )
     ],
     dependencies: [
         .package(url: "https://github.com/orchetect/swift-data-parsing", from: "0.1.2"),
-        .package(url: "https://github.com/orchetect/swift-timecode", from: "3.1.0"),
+        .package(url: "https://github.com/orchetect/swift-timecode", from: "3.1.0")
     ],
     targets: [
         .target(
@@ -144,7 +144,7 @@ let package = Package(
             dependencies: [
                 .target(name: "MIDIKitSync"),
             ]
-        ),
+        )
     ]
 )
 
@@ -177,7 +177,7 @@ let package = Package(
     // Conditionally opt-in to Swift DocC Plugin when an environment flag is present.
     if isEnvironmentVarTrue("ENABLE_DOCC_PLUGIN") {
         package.dependencies += [
-            .package(url: "https://github.com/swiftlang/swift-docc-plugin.git", from: "1.4.5"),
+            .package(url: "https://github.com/swiftlang/swift-docc-plugin.git", from: "1.4.5")
         ]
     }
 
