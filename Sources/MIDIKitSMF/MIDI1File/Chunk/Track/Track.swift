@@ -153,7 +153,7 @@ extension MIDI1File.Track {
 
 extension MIDI1File.Track {
     /// Returns all ``events`` that have a delta time of zero from the start of the track.
-    public var eventsAtStart: some Sequence<MIDIFileEvent> {
+    public var eventsAtStart: LazyMapSequence<LazyPrefixWhileSequence<LazySequence<[Event]>.Elements>.Elements, MIDIFileEvent> {
         events
             .lazy
             .prefix(while: { $0.delta == .none })
