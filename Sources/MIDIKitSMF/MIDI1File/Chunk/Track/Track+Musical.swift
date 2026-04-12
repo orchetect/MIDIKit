@@ -4,6 +4,8 @@
 //  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
+import SwiftTimecodeCore
+
 // MARK: - Methods
 
 extension MIDI1File.Track where Timebase == MusicalMIDIFileTimebase {
@@ -19,20 +21,21 @@ extension MIDI1File.Track where Timebase == MusicalMIDIFileTimebase {
         }
     }
     
-    /// Returns the first tempo event found in the track's events.
+    /// Returns the first **tempo** event found at time zero.
+    /// If no such event exists, `nil` is returned.
     ///
     /// > Note:
     /// >
     /// > If no tempo event is found, the Standard MIDI File 1.0 spec specifies that 120 bpm is the default that should be used.
     public var initialTempo: MIDIFileEvent.MusicalTempo? {
-        for event in events {
-            if case let .tempo(anyTempo) = event.event,
-               case let .musical(tempo) = anyTempo
-            {
+        eventsAtStart
+            .lazy
+            .compactMap { event -> MIDIFileEvent.MusicalTempo? in
+                guard case let .tempo(anyTempo) = event,
+                      case let .musical(tempo) = anyTempo
+                else { return nil }
                 return tempo
             }
-        }
-        
-        return nil
+            .first
     }
 }

@@ -28,7 +28,7 @@ extension MIDI1File.Track where Timebase == SMPTEMIDIFileTimebase {
         // if a SMPTE offset event appears at time==0 in the track, use it
         // but could be overridden by a `originTimecode: Timecode` parameter to this method to force an origin offset
         let origin: Timecode = if let originOverride { originOverride } else {
-            if let origin,
+            if let origin = initialSMPTEOffset,
                let originConvertedIfNeeded = try? origin.converted(to: timebase.frameRate.timecodeRate)
             {
                 originConvertedIfNeeded

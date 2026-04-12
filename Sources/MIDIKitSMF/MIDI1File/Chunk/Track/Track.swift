@@ -149,24 +149,41 @@ extension MIDI1File.Track {
     public static var trackEndByes: [UInt8] { [0xFF, 0x2F, 0x00] }
 }
 
-// MARK: - Properties
+// MARK: - Common Methods Across all Timebases
 
 extension MIDI1File.Track {
     /// Returns all ``events`` that have a delta time of zero from the start of the track.
-    public var eventsAtStart: [MIDIFileEvent] {
+    public var eventsAtStart: some Sequence<MIDIFileEvent> {
         events
+            .lazy
             .prefix(while: { $0.delta == .none })
             .map(\.event)
     }
     
-    /// Returns the timecode represented by the SMPTE offset event that appears at delta time 0 (start of track),
-    /// if such an event exists.
-    public var origin: Timecode? {
-        guard let event = eventsAtStart.filter({ $0.eventType == .smpteOffset }).first,
-              case let .smpteOffset(payload) = event
-        else {
-            return nil
-        }
-        return payload.timecode
+    /// Returns the first **Track Or Sequence Name** text event found at time zero, trimming whitespace.
+    /// If no such event exists, `nil` is returned.
+    public var initialTrackOrSequenceName: String? {
+        eventsAtStart
+            .lazy
+            .compactMap { event -> MIDIFileEvent.Text? in
+                guard case let .text(text) = event else { return nil }
+                return text
+            }
+            .first(where: { $0.textType == .trackOrSequenceName })?
+            .text
+            .trimmingCharacters(in: .whitespaces)
+    }
+    
+    /// Returns the timecode represented by the SMPTE offset event found at time zero.
+    /// If no such event exists, `nil` is returned.
+    public var initialSMPTEOffset: Timecode? {
+        eventsAtStart
+            .lazy
+            .compactMap { event -> MIDIFileEvent.SMPTEOffset? in
+                guard case let .smpteOffset(offset) = event else { return nil }
+                return offset
+            }
+            .first?
+            .timecode
     }
 }
