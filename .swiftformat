@@ -1,13 +1,14 @@
 --header "\n {file}\n MIDIKit • https://github.com/orchetect/MIDIKit\n © {year} Steffan Andrews • Licensed under MIT License\n"
 --allow-partial-wrapping false
+--binary-grouping 8,8
 --call-site-paren balanced
 --complex-attributes prev-line
 --computed-var-attributes prev-line
 --empty-braces spaced
 --extension-acl on-declarations
 --func-attributes prev-line
+--max-width 140
 --ifdef preserve
---maxwidth 140
 --indent-strings true
 --property-types explicit
 --stored-var-attributes preserve
