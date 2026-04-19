@@ -18,5 +18,5 @@
 --wrap-arguments before-first
 --wrap-collections before-first
 --wrap-parameters before-first
---disable docComments,modifierOrder,modifiersOnSameLine,redundantMemberwiseInit,redundantPattern,redundantRawValues,redundantSendable,redundantSwiftTestingSuite,redundantVariable,swiftTestingTestCaseNames,unusedArguments
---enable preferSwiftTesting,wrapMultilineFunctionChains
+--disable docComments,modifierOrder,modifiersOnSameLine,redundantMemberwiseInit,redundantPattern,redundantRawValues,redundantSendable,redundantVariable,unusedArguments
+--enable wrapMultilineFunctionChains
