@@ -7,9 +7,9 @@
 --empty-braces spaced
 --extension-acl on-declarations
 --func-attributes prev-line
---max-width 140
 --ifdef preserve
 --indent-strings true
+--max-width 140
 --property-types explicit
 --stored-var-attributes preserve
 --strip-unused-args unnamed-only
