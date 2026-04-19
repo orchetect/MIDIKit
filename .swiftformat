@@ -15,5 +15,8 @@
 --strip-unused-args unnamed-only
 --trailing-commas never
 --type-attributes prev-line
+--wrap-arguments before-first
+--wrap-collections before-first
+--wrap-parameters before-first
 --disable docComments,modifierOrder,modifiersOnSameLine,redundantMemberwiseInit,redundantPattern,redundantRawValues,redundantSendable,redundantSwiftTestingSuite,redundantVariable,swiftTestingTestCaseNames,unusedArguments
 --enable preferSwiftTesting,wrapMultilineFunctionChains
