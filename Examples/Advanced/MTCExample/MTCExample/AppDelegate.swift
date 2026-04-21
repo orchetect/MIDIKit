@@ -44,7 +44,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 height: 450
             ),
             styleMask: [.titled, .resizable, .fullSizeContentView],
-            backing: .buffered, defer: false
+            backing: .buffered,
+            defer: false
         )
         mtcGenWindow?.isReleasedWhenClosed = true
         mtcGenWindow?.setFrameAutosaveName("MTC Generator")
@@ -70,7 +71,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 height: 375
             ),
             styleMask: [.titled, .resizable, .fullSizeContentView],
-            backing: .buffered, defer: false
+            backing: .buffered,
+            defer: false
         )
         mtcRecWindow?.isReleasedWhenClosed = true
         mtcRecWindow?.setFrameAutosaveName("MTC Receiver")

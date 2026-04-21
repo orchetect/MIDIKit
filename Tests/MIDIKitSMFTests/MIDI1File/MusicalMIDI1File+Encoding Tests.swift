@@ -85,42 +85,40 @@ import Testing
                     string: "Unlocked Marker 1_00_04_00"
                 )
             ]),
-            
-                .track([
-                    .text(
-                        delta: .none,
-                        type: .trackOrSequenceName,
-                        string: "MIDI-1"
-                    ),
-                    .noteOn(
-                        delta: .ticks(3_458_935),
-                        note: 59,
-                        velocity: .midi1(64),
-                        channel: 0
-                    ),
-                    .noteOff(
-                        delta: .ticks(864),
-                        note: 59,
-                        velocity: .midi1(64),
-                        channel: 0
-                    )
-                ]),
-            
-                .track([
-                    .text(
-                        delta: .none,
-                        type: .trackOrSequenceName,
-                        string: "MIDI-2"
-                    ),
-                    .channelPrefix(delta: .none, channel: 0)
-                ])
+            .track([
+                .text(
+                    delta: .none,
+                    type: .trackOrSequenceName,
+                    string: "MIDI-1"
+                ),
+                .noteOn(
+                    delta: .ticks(3_458_935),
+                    note: 59,
+                    velocity: .midi1(64),
+                    channel: 0
+                ),
+                .noteOff(
+                    delta: .ticks(864),
+                    note: 59,
+                    velocity: .midi1(64),
+                    channel: 0
+                )
+            ]),
+            .track([
+                .text(
+                    delta: .none,
+                    type: .trackOrSequenceName,
+                    string: "MIDI-2"
+                ),
+                .channelPrefix(delta: .none, channel: 0)
+            ])
         ]
         
         // test if midiFile structs are equal by way of Equatable
         
         // Note: It's ok if this throws a deprecation warning. We need to test this specific method.
         let dp8MarkersRawData = try /* NOT AWAIT! */ MusicalMIDI1File(data: kMIDI1File.dp8Markers)
-        #expect(midiFile == dp8MarkersRawData)
+        #expect(midiFile.isEqual(to: dp8MarkersRawData))
         
         // test if raw data is equal
         
@@ -221,7 +219,7 @@ import Testing
         // test if midiFile structs are equal by way of Equatable
         
         let dp8MarkersRawData = try await MusicalMIDI1File(data: kMIDI1File.dp8Markers)
-        #expect(midiFile == dp8MarkersRawData)
+        #expect(midiFile.isEqual(to: dp8MarkersRawData))
         
         // test if raw data is equal
         

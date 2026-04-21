@@ -139,13 +139,7 @@ extension MIDIFileEvent.Tempo /* : MIDIFileEventPayload */ {
         return data
     }
     
-    // default implementation; each concrete type should override this
-    public var midiFileDescription: String {
-        "\(microsecondsPerQuarter) ms/qtr"
-    }
+    // `var midiFileDescription` needs to be implemented by the concrete type.
     
-    // default implementation; each concrete type should override this
-    public var midiFileDebugDescription: String {
-        "Tempo(\(midiFileDescription))"
-    }
+    // `var midiFileDebugDescription` needs to be implemented by the concrete type.
 }

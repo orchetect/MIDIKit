@@ -211,3 +211,7 @@ for chunk in midiFile.chunks {
     }
 }
 ```
+
+## Example Project
+
+See the **MIDI File Editor** example project for a demonstration of reading and writing MIDI files.

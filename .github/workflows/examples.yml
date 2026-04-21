@@ -121,6 +121,13 @@ jobs:
     - name: EventParsing - Build (macOS)
       run: xcodebuild build -project "Examples/SwiftUI Multiplatform/EventParsing/EventParsing.xcodeproj" -scheme "EventParsing" -destination "generic/platform=macOS" | xcbeautify --renderer github-actions && exit ${PIPESTATUS[0]}
       
+    - name: MIDI File Editor - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
+      run: xcodebuild -project "Examples/SwiftUI Multiplatform/MIDI File Editor/MIDI File Editor.xcodeproj" -resolvePackageDependencies | xcbeautify --renderer github-actions && exit ${PIPESTATUS[0]}
+    - name: MIDI File Editor - Build (iOS) # by targeting a simulator device, we bypass requiring a Developer Team ID
+      run: xcodebuild build -project "Examples/SwiftUI Multiplatform/MIDI File Editor/MIDI File Editor.xcodeproj" -scheme "MIDI File Editor" -destination "generic/platform=iOS Simulator,name=Any iOS Simulator Device" | xcbeautify --renderer github-actions && exit ${PIPESTATUS[0]}
+    - name: MIDI File Editor - Build (macOS)
+      run: xcodebuild build -project "Examples/SwiftUI Multiplatform/MIDI File Editor/MIDI File Editor.xcodeproj" -scheme "MIDI File Editor" -destination "generic/platform=macOS" | xcbeautify --renderer github-actions && exit ${PIPESTATUS[0]}
+      
     - name: MIDIKitUIExample - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
       run: xcodebuild -project "Examples/SwiftUI Multiplatform/MIDIKitUIExample/MIDIKitUIExample.xcodeproj" -resolvePackageDependencies | xcbeautify --renderer github-actions && exit ${PIPESTATUS[0]}
     - name: MIDIKitUIExample - Build (iOS) # by targeting a simulator device, we bypass requiring a Developer Team ID

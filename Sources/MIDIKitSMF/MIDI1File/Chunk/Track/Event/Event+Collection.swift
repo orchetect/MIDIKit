@@ -26,3 +26,17 @@ extension RangeReplaceableCollection {
         insert(timedEvent, at: i)
     }
 }
+
+extension Collection {
+    /// Returns `true` if the content of the MIDI file track event collection is equal to another collection.
+    /// (Omits ``id`` properties from the comparison.)
+    public func isEqual<Timebase: MIDIFileTimebase>(to other: some Collection<Element>) -> Bool
+    where Element == MIDI1File<Timebase>.Track.Event {
+        guard count == other.count else { return false }
+        
+        for (lhs, rhs) in zip(self, other) {
+            guard lhs.isEqual(to: rhs) else { return false }
+        }
+        return true
+    }
+}

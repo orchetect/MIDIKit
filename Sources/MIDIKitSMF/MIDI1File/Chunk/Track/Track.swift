@@ -19,27 +19,35 @@ extension MIDI1File {
         /// Delta time advancement within a MIDI file track.
         public typealias DeltaTime = Timebase.DeltaTime
         
+        // MARK: - Identifiable
+        
+        public let id: UUID
+        
         // MARK: - Properties
         
         /// Storage for events in the track.
-        public var events: [Event] = []
+        public var events: [Event]
         
         /// The delta time after the final event, just before the end-of-track.
         /// Typically this is `0`. A non-zero value is tantamount to empty track length prior to the end-of-track.
-        public var deltaTimeBeforeEndOfTrack: DeltaTime = .none
+        public var deltaTimeBeforeEndOfTrack: DeltaTime
         
         /// Instance a new empty MIDI file track.
-        public init() { }
+        public init() {
+            self.init(events: [])
+        }
         
         /// Instance a new MIDI file track with events.
         public init(events: [Event]) {
+            id = UUID()
             self.events = events
+            deltaTimeBeforeEndOfTrack = .none
         }
         
         /// Instance a new MIDI file track with events.
         @_disfavoredOverload
         public init(events: some Sequence<Event>) {
-            self.events = Array(events)
+            self.init(events: Array(events))
         }
     }
 }
@@ -47,6 +55,10 @@ extension MIDI1File {
 extension MIDI1File.Track: Equatable { }
 
 extension MIDI1File.Track: Hashable { }
+
+extension MIDI1File.Track: Identifiable {
+    // `id` is a stored instance property
+}
 
 extension MIDI1File.Track: Sendable { }
 
@@ -137,24 +149,41 @@ extension MIDI1File.Track {
     public static var trackEndByes: [UInt8] { [0xFF, 0x2F, 0x00] }
 }
 
-// MARK: - Properties
+// MARK: - Common Methods Across all Timebases
 
 extension MIDI1File.Track {
     /// Returns all ``events`` that have a delta time of zero from the start of the track.
-    public var eventsAtStart: [MIDIFileEvent] {
+    public var eventsAtStart: LazyMapSequence<LazyPrefixWhileSequence<LazySequence<[Event]>.Elements>.Elements, MIDIFileEvent> {
         events
+            .lazy
             .prefix(while: { $0.delta == .none })
             .map(\.event)
     }
     
-    /// Returns the timecode represented by the SMPTE offset event that appears at delta time 0 (start of track),
-    /// if such an event exists.
-    public var origin: Timecode? {
-        guard let event = eventsAtStart.filter({ $0.eventType == .smpteOffset }).first,
-              case let .smpteOffset(payload) = event
-        else {
-            return nil
-        }
-        return payload.timecode
+    /// Returns the first **Track Or Sequence Name** text event found at time zero, trimming whitespace.
+    /// If no such event exists, `nil` is returned.
+    public var initialTrackOrSequenceName: String? {
+        eventsAtStart
+            .lazy
+            .compactMap { event -> MIDIFileEvent.Text? in
+                guard case let .text(text) = event else { return nil }
+                return text
+            }
+            .first(where: { $0.textType == .trackOrSequenceName })?
+            .text
+            .trimmingCharacters(in: .whitespaces)
+    }
+    
+    /// Returns the timecode represented by the SMPTE offset event found at time zero.
+    /// If no such event exists, `nil` is returned.
+    public var initialSMPTEOffset: Timecode? {
+        eventsAtStart
+            .lazy
+            .compactMap { event -> MIDIFileEvent.SMPTEOffset? in
+                guard case let .smpteOffset(offset) = event else { return nil }
+                return offset
+            }
+            .first?
+            .timecode
     }
 }

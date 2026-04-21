@@ -44,13 +44,13 @@ extension MIDIFileEvent.SMPTETempo: MIDIFileEventPayload {
     
     // TODO: add specialized descriptions
     
-//    public var midiFileDescription: String {
-//
-//    }
-//    
-//    public var midiFileDebugDescription: String {
-//
-//    }
+    public var midiFileDescription: String {
+        "\(microsecondsPerQuarter) ms/qtr" // TODO: replace with more specialized units
+    }
+    
+    public var midiFileDebugDescription: String {
+        "SMPTETempo(\(midiFileDescription))"
+    }
 }
 
 // MARK: - Static Constructors

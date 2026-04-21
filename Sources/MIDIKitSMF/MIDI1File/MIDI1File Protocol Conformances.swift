@@ -11,6 +11,13 @@ extension MIDI1File: Equatable {
         lhs.header == rhs.header &&
             lhs.chunks == rhs.chunks
     }
+    
+    /// Returns `true` if the content of the MIDI file is equal to another MIDI file.
+    /// (Omits ``id`` properties of chunks and track events from the comparison.)
+    public func isEqual(to other: Self) -> Bool {
+        header == other.header
+            && chunks.isEqual(to: other.chunks)
+    }
 }
 
 extension MIDI1File: Hashable {
