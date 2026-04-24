@@ -7,9 +7,9 @@ body:
   attributes:
     label: Please Confirm
     options:
-      - label: I have reviewed the **[MIDIKit Documentation](https://orchetect.github.io/MIDIKit)** which contains descriptive guides and extensive API reference
+      - label: I have reviewed the **[SwiftMIDI Documentation](https://swiftpackageindex.com/orchetect/swift-midi/main/documentation)** which contains descriptive guides and extensive API reference
         required: true
-      - label: I have searched **[Issues](https://github.com/orchetect/MIDIKit/issues?q=is%3Aissue)** and **[Discussions](https://github.com/orchetect/MIDIKit/discussions)** to see if the same question has already been asked
+      - label: I have searched **[Issues](https://github.com/orchetect/swift-midi/issues?q=is%3Aissue)** and **[Discussions](https://github.com/orchetect/swift-midi/discussions)** to see if the same question has already been asked
         required: true
 - type: dropdown
   id: operating-system
