@@ -100,7 +100,6 @@ Please do not email maintainers for technical support. Several options are avail
 
 - Questions and feature ideas can be posted to [Discussions](https://github.com/orchetect/swift-midi/discussions).
 - If an issue is a verifiable bug with reproducible steps it may be posted in [Issues](https://github.com/orchetect/swift-midi/issues).
-- The [AudioKit](https://github.com/AudioKit/AudioKit) discord `#midikit` channel is also a place to find help if Discussions and documentation don't contain an answer. (Invitation is necessary)
 
 ## Contributions
 
