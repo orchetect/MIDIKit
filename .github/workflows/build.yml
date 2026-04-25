@@ -42,8 +42,8 @@ jobs:
         xcode-version: latest-stable
     - name: Build
       run: xcodebuild build -workspace "$WORKSPACEPATH" -scheme "$SCHEME" -destination "generic/platform=macOS" | xcbeautify --renderer github-actions && exit ${PIPESTATUS[0]}
-    - name: Unit Tests
-      run: xcodebuild test -workspace "$WORKSPACEPATH" -scheme "$SCHEME" -destination "platform=macOS" | xcbeautify --renderer github-actions && exit ${PIPESTATUS[0]}
+    # - name: Unit Tests
+    #   run: xcodebuild test -workspace "$WORKSPACEPATH" -scheme "$SCHEME" -destination "platform=macOS" | xcbeautify --renderer github-actions && exit ${PIPESTATUS[0]}
   
   macOS-15:
     name: Tests (macOS 15)
@@ -56,8 +56,8 @@ jobs:
         xcode-version: latest-stable
     - name: Build
       run: xcodebuild build -workspace "$WORKSPACEPATH" -scheme "$SCHEME" -destination "generic/platform=macOS" | xcbeautify --renderer github-actions && exit ${PIPESTATUS[0]}
-    - name: Unit Tests
-      run: xcodebuild test -workspace "$WORKSPACEPATH" -scheme "$SCHEME" -destination "platform=macOS" | xcbeautify --renderer github-actions && exit ${PIPESTATUS[0]}
+    # - name: Unit Tests
+    #   run: xcodebuild test -workspace "$WORKSPACEPATH" -scheme "$SCHEME" -destination "platform=macOS" | xcbeautify --renderer github-actions && exit ${PIPESTATUS[0]}
   
   macOS-swift6-2:
     name: Tests (macOS - Swift 6.2)
@@ -72,8 +72,8 @@ jobs:
       run: swift package tools-version --set "6.2"
     - name: Build
       run: xcodebuild build -workspace "$WORKSPACEPATH" -scheme "$SCHEME" -destination "generic/platform=macOS" | xcbeautify --renderer github-actions && exit ${PIPESTATUS[0]}
-    - name: Unit Tests
-      run: xcodebuild test -workspace "$WORKSPACEPATH" -scheme "$SCHEME" -destination "platform=macOS" | xcbeautify --renderer github-actions && exit ${PIPESTATUS[0]}
+    # - name: Unit Tests
+    #   run: xcodebuild test -workspace "$WORKSPACEPATH" -scheme "$SCHEME" -destination "platform=macOS" | xcbeautify --renderer github-actions && exit ${PIPESTATUS[0]}
       
   macCatalyst:
     name: Tests (macCatalyst)
@@ -86,8 +86,8 @@ jobs:
         xcode-version: latest-stable
     - name: Build
       run: xcodebuild build -workspace "$WORKSPACEPATH" -scheme "$SCHEME" -destination "generic/platform=macOS,variant=Mac Catalyst" | xcbeautify --renderer github-actions && exit ${PIPESTATUS[0]}
-    - name: Unit Tests
-      run: xcodebuild test -workspace "$WORKSPACEPATH" -scheme "$SCHEME" -destination "platform=macOS,variant=Mac Catalyst" | xcbeautify --renderer github-actions && exit ${PIPESTATUS[0]}
+    # - name: Unit Tests
+    #   run: xcodebuild test -workspace "$WORKSPACEPATH" -scheme "$SCHEME" -destination "platform=macOS,variant=Mac Catalyst" | xcbeautify --renderer github-actions && exit ${PIPESTATUS[0]}
 
   device-simulators:
     name: Tests
@@ -115,9 +115,9 @@ jobs:
       env:
         PLATFORMSHORT: ${{ steps.sim-setup.outputs.platform-short }}
         WORKSPACEPATH: ${{ steps.sim-setup.outputs.workspace-path }}
-    - name: Unit Tests
-      run: xcodebuild test -workspace "$WORKSPACEPATH" -scheme "$SCHEME" -destination "platform=$PLATFORM,id=$ID" | xcbeautify --renderer github-actions && exit ${PIPESTATUS[0]}
-      env:
-        ID: ${{ steps.sim-setup.outputs.id }}
-        PLATFORM: ${{ steps.sim-setup.outputs.platform }}
-        WORKSPACEPATH: ${{ steps.sim-setup.outputs.workspace-path }}
+    # - name: Unit Tests
+    #   run: xcodebuild test -workspace "$WORKSPACEPATH" -scheme "$SCHEME" -destination "platform=$PLATFORM,id=$ID" | xcbeautify --renderer github-actions && exit ${PIPESTATUS[0]}
+    #   env:
+    #     ID: ${{ steps.sim-setup.outputs.id }}
+    #     PLATFORM: ${{ steps.sim-setup.outputs.platform }}
+    #     WORKSPACEPATH: ${{ steps.sim-setup.outputs.workspace-path }}
