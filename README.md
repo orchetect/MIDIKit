@@ -1,6 +1,6 @@
 ![swift-midi](Images/swift-midi-banner.png)
 
-# swift-midi
+# SwiftMIDI
 
 [![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Forchetect%2Fswift-midi%2Fbadge%3Ftype%3Dplatforms)](https://swiftpackageindex.com/orchetect/swift-midi) [![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Forchetect%2Fswift-midi%2Fbadge%3Ftype%3Dswift-versions)](https://swiftpackageindex.com/orchetect/swift-midi) [![License: MIT](http://img.shields.io/badge/License-MIT-lightgrey.svg?style=flat)](https://github.com/orchetect/swift-midi/blob/main/LICENSE)
 
@@ -21,7 +21,7 @@ A modern multi-platform modular MIDI toolkit written in pure Swift supporting MI
 | [swift-midi-core](https://github.com/orchetect/swift-midi-core) | MIDI events & types * |   🟢   |  🚧 †  |   🚧 †   |    -    |
 | [swift-midi-io](https://github.com/orchetect/swift-midi-io)  | MIDI I/O extension    |  🟢 ‡  |   -   |    -    |    -    |
 
-`*` All repositories depend on **swift-midi-core**.
+`*` All repositories depend on **SwiftMIDI Core**.
 
 `†` Support for indicated platforms is either planned or WIP.
 
@@ -92,7 +92,7 @@ Licensed under the MIT license. See [LICENSE](https://github.com/orchetect/swift
 
 ## Sponsoring
 
-If you enjoy using **swift-midi** and want to contribute to open-source financially, GitHub sponsorship is much appreciated. Feedback and code contributions are also welcome.
+If you enjoy using **SwiftMIDI** and want to contribute to open-source financially, GitHub sponsorship is much appreciated. Feedback and code contributions are also welcome.
 
 ## Community & Support
 
