@@ -14,14 +14,13 @@ There are many more features and aspects to the library that can be discovered t
 
 ## Table of Contents
 
-1. [Import the Library](#1-Import-the-Library)
-2. [Events and Value Types](#2-Events-and-Value-Types)
-3. [Setting up I/O](#3-Setting-up-IO)
-4. [Examples](#4-Examples)
-5. [Additional Features](#5-Additional-Features)
-6. [Additional Topics](#6-Additional-Topics)
+- [Import the Library](#Import-the-Library)
+- [Events and Value Types](#Events-and-Value-Types)
+- [Setting up I/O](#Setting-up-IO)
+- [Examples](#Examples)
+- [Troubleshooting](#Troubleshooting)
 
-## 1. Import the Library
+## Import the Library
 
 Add the `SwiftMIDI` package product to your project, and import it.
 
@@ -41,6 +40,14 @@ This will import the whole library and make available all extensions:
 > Tip:
 >
 > SwiftMIDI is a modular set of repositories. Using the main `swift-midi` umbrella repository as a dependency will implicitly import all extensions. If only a subset of features is required, consider importing only the specific packages that are needed instead.
+
+## Events and Value Types
+
+See the [SwiftMIDI Core documentation](https://swiftpackageindex.com/orchetect/swift-midi-core/main/documentation/swiftmidicore/getting-started) for a getting started guide on MIDI events and value types.
+
+## Setting up I/O
+
+See the [SwiftMIDI I/O documentation](https://swiftpackageindex.com/orchetect/swift-midi-io/main/documentation/swiftmidiio/getting-started) for a getting started guide on MIDI events and value types.
 
 ## Examples
 
