@@ -1,4 +1,4 @@
---header "\n {file}\n swift-midi • https://github.com/orchetect/swift-midi\n © {year} Steffan Andrews • Licensed under MIT License\n"
+--header "\n {file}\n SwiftMIDI • https://github.com/orchetect/swift-midi\n © {year} Steffan Andrews • Licensed under MIT License\n"
 --allow-partial-wrapping false
 --binary-grouping 8,8
 --call-site-paren balanced
