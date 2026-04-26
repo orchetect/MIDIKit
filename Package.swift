@@ -65,15 +65,6 @@ let package = Package(
         return ["true", "yes", "1"].contains(value.lowercased())
     }
 
-    // MARK: - DocC Dependency
-
-    // Conditionally opt-in to Swift DocC Plugin when an environment flag is present.
-    if isEnvironmentVarTrue("ENABLE_DOCC_PLUGIN") {
-        package.dependencies += [
-            .package(url: "https://github.com/swiftlang/swift-docc-plugin.git", from: "1.4.5")
-        ]
-    }
-
     // MARK: - CI Pipeline
 
     if isEnvironmentVarTrue("GITHUB_ACTIONS") {
