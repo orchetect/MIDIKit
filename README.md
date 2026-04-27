@@ -4,7 +4,7 @@
 
 [![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Forchetect%2Fswift-midi%2Fbadge%3Ftype%3Dplatforms)](https://swiftpackageindex.com/orchetect/swift-midi) [![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Forchetect%2Fswift-midi%2Fbadge%3Ftype%3Dswift-versions)](https://swiftpackageindex.com/orchetect/swift-midi) [![License: MIT](http://img.shields.io/badge/License-MIT-lightgrey.svg?style=flat)](https://github.com/orchetect/swift-midi/blob/main/LICENSE)
 
-A modern multi-platform modular MIDI toolkit written in pure Swift supporting MIDI 1.0 and MIDI 2.0.
+A modular multi-platform MIDI toolkit written in pure Swift supporting MIDI 1.0 and MIDI 2.0.
 
 - Strongly-typed MIDI events that seamlessly interoperate between MIDI 1.0 and MIDI 2.0
 - Modular, user-friendly I/O with automatic MIDI endpoint connection management and identity persistence
