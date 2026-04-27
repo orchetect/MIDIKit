@@ -31,12 +31,12 @@ A modular multi-platform MIDI toolkit written in pure Swift supporting MIDI 1.0 
 
 Extensions add optional features.
 
-| Repository                                                   | Description                               | Apple | Linux | Android | Windows |
-| :----------------------------------------------------------- | :---------------------------------------- | :---: | :---: | :-----: | :-----: |
-| [swift-midi-controlsurfaces](https://github.com/orchetect/swift-midi-controlsurfaces) | Control surfaces extension (HUI, etc.)    |   🟢   |  🚧 †  |   🚧 †   |    -    |
-| [swift-midi-file](https://github.com/orchetect/swift-midi-file) | Standard MIDI File extension              |   🟢   |  🚧 †  |   🚧 †   |    -    |
-| [swift-midi-sync](https://github.com/orchetect/swift-midi-sync) | Sync extension (MTC, etc.)                |   🟢   |  🚧 †  |   🚧 †   |    -    |
-| [swift-midi-ui](https://github.com/orchetect/swift-midi-ui)  | SwiftUI user interface controls extension |   🟢   |   -   |    -    |    -    |
+| Repository                                                   | Description                           | Apple | Linux | Android | Windows |
+| :----------------------------------------------------------- | :------------------------------------ | :---: | :---: | :-----: | :-----: |
+| [swift-midi-controlsurfaces](https://github.com/orchetect/swift-midi-controlsurfaces) | Control surface protocols (HUI, etc.) |   🟢   |  🚧 †  |   🚧 †   |    -    |
+| [swift-midi-file](https://github.com/orchetect/swift-midi-file) | Standard MIDI File read/write         |   🟢   |  🚧 †  |   🚧 †   |    -    |
+| [swift-midi-sync](https://github.com/orchetect/swift-midi-sync) | Sync extensions (MTC, etc.)           |   🟢   |  🚧 †  |   🚧 †   |    -    |
+| [swift-midi-ui](https://github.com/orchetect/swift-midi-ui)  | SwiftUI user interface controls       |   🟢   |   -   |    -    |    -    |
 
 `†` Support for indicated platforms is either planned or WIP.
 
