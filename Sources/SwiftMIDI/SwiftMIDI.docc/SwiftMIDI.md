@@ -56,4 +56,4 @@ See the [example projects](https://github.com/orchetect/swift-midi-examples) for
 ## Troubleshooting
 
 - term **Example projects build but do not run**: Ensure the project's scheme is selected in Xcode first.
-- term **Errors building for React Native**: [See this thread](https://github.com/orchetect/MIDIKit/issues/91) if you are having build errors.
+- term **Errors building for React Native**: [See this thread](https://github.com/orchetect/swift-midi/issues/91) if you are having build errors.
