@@ -107,7 +107,7 @@ jobs:
       uses: orchetect/setup-xcode-simulator@v1
       with:
         refresh: true
-        download: true
+        download: false # skip simulator download since we aren't running unit tests
         scheme: ${{ env.SCHEME }}
         target: ${{ matrix.target }}
     - name: Build
