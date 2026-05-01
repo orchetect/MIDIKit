@@ -66,7 +66,7 @@ To get started with all extensions:
    import SwiftMIDI
    ```
 
-4. See the [getting started guide](https://swiftpackageindex.com/orchetect/swift-midi/main/documentation) and the dedicated [code examples](https://github.com/orchetect/swift-midi-examples) repository to see the library in action.
+4. See the [getting started guide](https://swiftpackageindex.com/orchetect/swift-midi/main/documentation) and the Examples folder within each repository to see the library in action.
 
 ### Individual Extensions
 
@@ -76,7 +76,7 @@ To use only specific features without importing all extensions, use the extensio
 
 Full online documentation is available for all of the extension repositories. Check the README in each repository for a link to its documentation.
 
-For new users, see the [getting started guide](https://swiftpackageindex.com/orchetect/swift-midi/main/documentation) and the dedicated [code examples](https://github.com/orchetect/swift-midi-examples) repository to see the library in action.
+For new users, see the [getting started guide](https://swiftpackageindex.com/orchetect/swift-midi/main/documentation) and the Examples folder within each repository to see the library in action.
 
 ## Roadmap
 
