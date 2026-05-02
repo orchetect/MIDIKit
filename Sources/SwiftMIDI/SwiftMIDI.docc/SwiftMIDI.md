@@ -51,7 +51,7 @@ See the [SwiftMIDI I/O documentation](https://swiftpackageindex.com/orchetect/sw
 
 ## Examples
 
-See the [example projects](https://github.com/orchetect/swift-midi-examples) for demonstration of best practises in using SwiftMIDI.
+See the Examples folder within each extension repository for a demonstration of best practises in using SwiftMIDI.
 
 ## Troubleshooting
 
