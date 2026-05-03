@@ -18,12 +18,12 @@ let package = Package(
         )
     ],
     dependencies: [
-        .package(url: "https://github.com/orchetect/swift-midi-controlsurfaces", exact: "1.0.0"),
-        .package(url: "https://github.com/orchetect/swift-midi-core", exact: "1.0.0"),
-        .package(url: "https://github.com/orchetect/swift-midi-file", exact: "1.0.0"),
-        .package(url: "https://github.com/orchetect/swift-midi-io", exact: "1.0.0"),
-        .package(url: "https://github.com/orchetect/swift-midi-sync", exact: "1.0.0"),
-        .package(url: "https://github.com/orchetect/swift-midi-ui", exact: "1.0.0")
+        .package(url: "https://github.com/orchetect/swift-midi-controlsurfaces", exact: "1.0.1"),
+        .package(url: "https://github.com/orchetect/swift-midi-core", exact: "1.0.1"),
+        .package(url: "https://github.com/orchetect/swift-midi-file", exact: "1.0.1"),
+        .package(url: "https://github.com/orchetect/swift-midi-io", exact: "1.1.0"),
+        .package(url: "https://github.com/orchetect/swift-midi-sync", exact: "1.0.1"),
+        .package(url: "https://github.com/orchetect/swift-midi-ui", exact: "1.1.0")
     ],
     targets: [
         .target(
