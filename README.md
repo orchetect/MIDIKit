@@ -18,24 +18,25 @@ A modular multi-platform MIDI toolkit written in pure Swift supporting MIDI 1.0 
 
 All extension repositories depend on **SwiftMIDI Core**. It provides event types, value types, and parsing logic.
 
-| Repository                                                   | Description         | Apple | Linux  | Android | Windows |
-| :----------------------------------------------------------- | :------------------ | :---: | :----: | :-----: | :-----: |
-| [swift-midi-core](https://github.com/orchetect/swift-midi-core) | MIDI events & types |   🟢   | 🚧 [^1] | 🚧 [^1]  |    -    |
+| Repository                                                   | Description         | Apple | Linux  | Android |  WASM  | Windows |
+| :----------------------------------------------------------- | :------------------ | :---: | :----: | :-----: | :----: | :-----: |
+| [swift-midi-core](https://github.com/orchetect/swift-midi-core) | MIDI events & types |   🟢   | 🚧 [^1] | 🚧 [^1]  | 🚧 [^1] |    -    |
 
 ## Extension Repositories
 
 Extensions add optional features.
 
-| Repository                                                   | Description                           | Apple | Linux | Android | Windows |
-| :----------------------------------------------------------- | :------------------------------------ | :---: | :---: | :-----: | :-----: |
-| [swift-midi-controlsurfaces](https://github.com/orchetect/swift-midi-controlsurfaces) | Control surface protocols (HUI, etc.) |   🟢   |  🚧 [^1]  |   🚧 [^1]   |    -    |
-| [swift-midi-file](https://github.com/orchetect/swift-midi-file) | Standard MIDI File read/write         |   🟢   |  🚧 [^1]  |   🚧 [^1]   |    -    |
-| [swift-midi-io](https://github.com/orchetect/swift-midi-io)  | MIDI I/O extension    |  🟢 [^2]  |   -   |    -    |    -    |
-| [swift-midi-sync](https://github.com/orchetect/swift-midi-sync) | Sync extensions (MTC, etc.)           |   🟢   |  🚧 [^1]  |   🚧 [^1]   |    -    |
-| [swift-midi-ui](https://github.com/orchetect/swift-midi-ui)  | SwiftUI user interface controls       |   🟢   |   -   |    -    |    -    |
+| Repository                                                   | Description                           | Apple | Linux | Android | WASM | Windows |
+| :----------------------------------------------------------- | :------------------------------------ | :---: | :---: | :-----: | :-----: | :----------------------------------------------------------: |
+| [swift-midi-controlsurfaces](https://github.com/orchetect/swift-midi-controlsurfaces) | Control surface protocols (HUI, etc.) |   🟢   |  🚧 [^1]  |   🚧 [^1]   |    -    | - |
+| [swift-midi-file](https://github.com/orchetect/swift-midi-file) | Standard MIDI File read/write         |   🟢   |  🚧 [^1]  |   🚧 [^1]   |    🚧 [^1]    | - |
+| [swift-midi-io](https://github.com/orchetect/swift-midi-io)  | MIDI I/O extension    |  🟢 [^3]  |   -[^2]   |    -[^2]    |    -[^2]    | - |
+| [swift-midi-sync](https://github.com/orchetect/swift-midi-sync) | Sync extensions (MTC, etc.)           |   🟢   |  🚧 [^1]  |   🚧 [^1]   |    -    | - |
+| [swift-midi-ui](https://github.com/orchetect/swift-midi-ui)  | SwiftUI user interface controls       |   🟢   |   -   |    -    |    -    | - |
 
 [^1]: Support for indicated platforms is either planned or WIP.
-[^2]: macOS, iOS, and visionOS have CoreMIDI I/O support in the operating system. tvOS and watchOS do not have MIDI I/O.
+[^2]: Support for indicated platforms is not planned but may be added in future.
+[^3]: macOS, iOS, and visionOS have CoreMIDI I/O support in the operating system. tvOS and watchOS do not have MIDI I/O.
 
 ## Getting Started
 
